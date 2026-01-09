@@ -7,19 +7,22 @@ import {
   CheckSquare,
   BookOpen,
   FolderKanban,
-  Droplet
+  Droplet,
+  Settings,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavItem {
   icon: React.ElementType;
   label: string;
   href: string;
-  active?: boolean;
 }
 
 const mainNavItems: NavItem[] = [
-  { icon: Home, label: "Início", href: "/", active: true },
+  { icon: Home, label: "Início", href: "/" },
   { icon: Layers, label: "Fase", href: "/fase" },
   { icon: TrendingUp, label: "Progresso", href: "/progresso" },
   { icon: Users, label: "Comunidade", href: "/comunidade" },
@@ -33,6 +36,15 @@ const secondaryNavItems: NavItem[] = [
 ];
 
 export function Sidebar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col py-6 z-50">
       {/* Logo */}
@@ -54,7 +66,7 @@ export function Sidebar() {
                 href={item.href}
                 className={cn(
                   "sidebar-item",
-                  item.active && "active"
+                  location.pathname === item.href && "active"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -75,7 +87,7 @@ export function Sidebar() {
                 href={item.href}
                 className={cn(
                   "sidebar-item",
-                  item.active && "active"
+                  location.pathname === item.href && "active"
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -86,8 +98,29 @@ export function Sidebar() {
         </ul>
       </nav>
 
+      {/* Footer Actions */}
+      <div className="px-3 space-y-1">
+        <a
+          href="/configuracoes"
+          className={cn(
+            "sidebar-item",
+            location.pathname === "/configuracoes" && "active"
+          )}
+        >
+          <Settings className="h-5 w-5" />
+          <span className="font-medium">Configurações</span>
+        </a>
+        <button
+          onClick={handleSignOut}
+          className="sidebar-item w-full text-left hover:text-destructive"
+        >
+          <LogOut className="h-5 w-5" />
+          <span className="font-medium">Sair</span>
+        </button>
+      </div>
+
       {/* Footer */}
-      <div className="px-6 pt-4 border-t border-sidebar-border">
+      <div className="px-6 pt-4 border-t border-sidebar-border mt-4">
         <p className="text-xs text-muted-foreground">
           © 2025 Migrei
         </p>

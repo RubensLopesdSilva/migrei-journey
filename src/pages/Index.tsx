@@ -20,7 +20,7 @@ const Index = () => {
         <main className="p-8">
           <div className="grid grid-cols-12 gap-8">
             {/* Center - Migrei Circle */}
-            <div className="col-span-8 flex items-center justify-center">
+            <div className="col-span-8 flex items-start justify-center">
               <div className="card-elevated p-12 w-full flex justify-center">
                 <MigreiCircle />
               </div>

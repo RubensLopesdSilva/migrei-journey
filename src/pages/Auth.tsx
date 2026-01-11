@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Droplet, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -383,6 +384,7 @@ export default function Auth() {
                   {errors.password && (
                     <p className="text-sm text-destructive">{errors.password}</p>
                   )}
+                  {!isLogin && <PasswordStrengthIndicator password={password} />}
                 </div>
 
                 <Button

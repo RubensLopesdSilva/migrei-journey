@@ -9,7 +9,7 @@ import {
   LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 
 interface NavItem {
@@ -54,8 +54,8 @@ export function Sidebar() {
         <ul className="space-y-1">
           {mainNavItems.map((item) => (
             <li key={item.label}>
-              <a
-                href={item.href}
+              <Link
+                to={item.href}
                 className={cn(
                   "sidebar-item",
                   location.pathname === item.href && "active"
@@ -63,7 +63,7 @@ export function Sidebar() {
               >
                 <item.icon className="h-5 w-5" />
                 <span className="font-medium">{item.label}</span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -72,8 +72,8 @@ export function Sidebar() {
 
       {/* Footer Actions */}
       <div className="px-3 space-y-1">
-        <a
-          href="/configuracoes"
+        <Link
+          to="/configuracoes"
           className={cn(
             "sidebar-item",
             location.pathname === "/configuracoes" && "active"
@@ -81,7 +81,7 @@ export function Sidebar() {
         >
           <Settings className="h-5 w-5" />
           <span className="font-medium">Configurações</span>
-        </a>
+        </Link>
         <button
           onClick={handleSignOut}
           className="sidebar-item w-full text-left hover:text-destructive"

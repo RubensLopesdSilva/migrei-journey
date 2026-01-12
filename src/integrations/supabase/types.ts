@@ -171,6 +171,8 @@ export type Database = {
       }
       mentoring_sessions: {
         Row: {
+          cancelled_at: string | null
+          counts_towards_limit: boolean
           created_at: string
           duration_minutes: number
           id: string
@@ -178,11 +180,14 @@ export type Database = {
           mentee_id: string
           mentor_id: string
           notes: string | null
+          rescheduled_from: string | null
           scheduled_at: string
           status: string
           updated_at: string
         }
         Insert: {
+          cancelled_at?: string | null
+          counts_towards_limit?: boolean
           created_at?: string
           duration_minutes?: number
           id?: string
@@ -190,11 +195,14 @@ export type Database = {
           mentee_id: string
           mentor_id: string
           notes?: string | null
+          rescheduled_from?: string | null
           scheduled_at: string
           status?: string
           updated_at?: string
         }
         Update: {
+          cancelled_at?: string | null
+          counts_towards_limit?: boolean
           created_at?: string
           duration_minutes?: number
           id?: string
@@ -202,6 +210,7 @@ export type Database = {
           mentee_id?: string
           mentor_id?: string
           notes?: string | null
+          rescheduled_from?: string | null
           scheduled_at?: string
           status?: string
           updated_at?: string
@@ -212,6 +221,13 @@ export type Database = {
             columns: ["mentor_id"]
             isOneToOne: false
             referencedRelation: "mentors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentoring_sessions_rescheduled_from_fkey"
+            columns: ["rescheduled_from"]
+            isOneToOne: false
+            referencedRelation: "mentoring_sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -437,6 +453,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_monthly_cancellations: {
+        Row: {
+          created_at: string
+          free_cancellations_used: number
+          id: string
+          month_year: string
+          paid_cancellations: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          free_cancellations_used?: number
+          id?: string
+          month_year: string
+          paid_cancellations?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          free_cancellations_used?: number
+          id?: string
+          month_year?: string
+          paid_cancellations?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_plans: {
         Row: {
           created_at: string
@@ -535,6 +581,20 @@ export type Database = {
     }
     Functions: {
       count_monthly_sessions: { Args: { user_uuid: string }; Returns: number }
+      get_mentor_booked_slots: {
+        Args: { p_end_date: string; p_mentor_id: string; p_start_date: string }
+        Returns: {
+          scheduled_at: string
+        }[]
+      }
+      get_monthly_cancellation_info: {
+        Args: { p_user_id: string }
+        Returns: {
+          can_cancel_free: boolean
+          free_cancellations_used: number
+          paid_cancellations: number
+        }[]
+      }
       get_user_feature: {
         Args: { p_feature_key: string; p_user_id: string }
         Returns: Json
@@ -542,6 +602,14 @@ export type Database = {
       get_user_plan_slug: { Args: { p_user_id: string }; Returns: string }
       has_active_subscription: { Args: { p_user_id: string }; Returns: boolean }
       has_premium_plan: { Args: { user_uuid: string }; Returns: boolean }
+      is_slot_available: {
+        Args: {
+          p_exclude_session_id?: string
+          p_mentor_id: string
+          p_scheduled_at: string
+        }
+        Returns: boolean
+      }
       validate_coupon: {
         Args: { p_code: string; p_plan_id?: string; p_user_id: string }
         Returns: {

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useMentoring, Mentor } from "@/hooks/useMentoring";
@@ -11,20 +12,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Progress } from "@/components/ui/progress";
 import { 
   Users, 
   Calendar, 
   Crown,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Lock,
+  AlertCircle,
+  Zap
 } from "lucide-react";
 
 export default function Mentoring() {
+  const navigate = useNavigate();
   const {
     mentors,
     mySessions,
-    isPremium,
+    sessionLimit,
     remainingSessions,
+    canBookSessions,
+    planSlug,
+    planName,
+    isSubscribed,
+    hasAIAssistant,
+    hasPrioritySupport,
     loading,
     fetchMentorAvailability,
     bookSession,
@@ -35,8 +47,15 @@ export default function Mentoring() {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
 
   const handleSchedule = (mentor: Mentor) => {
+    if (!canBookSessions) {
+      return;
+    }
     setSelectedMentor(mentor);
     setScheduleModalOpen(true);
+  };
+
+  const handleUpgrade = () => {
+    navigate("/configuracoes");
   };
 
   const upcomingSessions = mySessions.filter(
@@ -45,6 +64,15 @@ export default function Mentoring() {
   const pastSessions = mySessions.filter(
     (s) => s.status !== "scheduled" || new Date(s.scheduled_at) < new Date()
   );
+
+  const isPremiumPlan = planSlug === "premium";
+  const isEssentialPlan = planSlug === "essential";
+  const isFreePlan = planSlug === "free" || !planSlug;
+
+  // Calculate session usage percentage
+  const sessionUsagePercent = sessionLimit > 0 
+    ? ((sessionLimit - remainingSessions) / sessionLimit) * 100 
+    : 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,30 +90,105 @@ export default function Mentoring() {
                 </p>
               </div>
 
-              {isPremium ? (
-                <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-lg border border-yellow-500/20">
-                  <Crown className="h-5 w-5 text-yellow-600" />
-                  <div>
-                    <p className="text-sm font-medium">Plano Premium</p>
-                    <p className="text-xs text-muted-foreground">
-                      {remainingSessions} {remainingSessions === 1 ? "mentoria restante" : "mentorias restantes"} este mês
-                    </p>
+              {/* Plan Status Badge */}
+              {isPremiumPlan ? (
+                <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-500/10 to-orange-500/10 rounded-lg border border-amber-500/20">
+                  <Crown className="h-5 w-5 text-amber-600" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-amber-700">Plano Premium</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Progress value={sessionUsagePercent} className="h-1.5 w-24" />
+                      <span className="text-xs text-muted-foreground">
+                        {remainingSessions}/{sessionLimit} sessões
+                      </span>
+                    </div>
                   </div>
                 </div>
+              ) : isEssentialPlan ? (
+                <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-blue-500/10 to-blue-600/10 rounded-lg border border-blue-500/20">
+                  <Sparkles className="h-5 w-5 text-blue-600" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-blue-700">Plano Essencial</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Progress value={sessionUsagePercent} className="h-1.5 w-24" />
+                      <span className="text-xs text-muted-foreground">
+                        {remainingSessions}/{sessionLimit} sessões
+                      </span>
+                    </div>
+                  </div>
+                  <Button 
+                    size="sm" 
+                    onClick={handleUpgrade}
+                    className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
+                  >
+                    <Crown className="h-3 w-3 mr-1" />
+                    Premium
+                  </Button>
+                </div>
               ) : (
-                <Button className="gap-2">
-                  <Sparkles className="h-4 w-4" />
-                  Upgrade para Premium
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+                <div className="flex items-center gap-3">
+                  <div className="px-3 py-1.5 bg-muted rounded-lg">
+                    <p className="text-sm text-muted-foreground">Plano Gratuito</p>
+                  </div>
+                  <Button onClick={handleUpgrade} className="gap-2 btn-primary-gradient">
+                    <Sparkles className="h-4 w-4" />
+                    Fazer Upgrade
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
               )}
             </div>
 
-            {/* Roda Migrei Section - Available for all */}
-            <RodaMigreiSection isPremium={isPremium} />
+            {/* Session Limit Warning */}
+            {sessionLimit > 0 && remainingSessions === 0 && (
+              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-amber-600 shrink-0" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-amber-700">
+                    Você atingiu o limite de sessões deste mês
+                  </p>
+                  <p className="text-xs text-amber-600/80 mt-0.5">
+                    {isPremiumPlan 
+                      ? "Aguarde a renovação do seu plano para novas sessões."
+                      : "Faça upgrade para o Premium e tenha mais sessões de mentoria."}
+                  </p>
+                </div>
+                {!isPremiumPlan && (
+                  <Button size="sm" onClick={handleUpgrade} variant="outline" className="border-amber-500/50 text-amber-700 hover:bg-amber-500/10">
+                    <Zap className="h-3 w-3 mr-1" />
+                    Upgrade
+                  </Button>
+                )}
+              </div>
+            )}
 
-            {/* Mentors Section - Premium Only */}
-            <Card>
+            {/* Roda Migrei Section - Available for all */}
+            <RodaMigreiSection isPremium={!isFreePlan} />
+
+            {/* Mentors Section */}
+            <Card className={isFreePlan ? "relative" : ""}>
+              {/* Overlay for free users */}
+              {isFreePlan && (
+                <div className="absolute inset-0 z-10 bg-background/80 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center p-6">
+                  <div className="text-center max-w-md">
+                    <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Lock className="h-8 w-8 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2">Mentorias Exclusivas</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Faça upgrade para o plano Essencial ou Premium para acessar mentorias 
+                      individuais com profissionais experientes que já passaram pela transição de carreira.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Button onClick={handleUpgrade} className="gap-2 btn-primary-gradient">
+                        <Sparkles className="h-4 w-4" />
+                        Ver Planos
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -97,10 +200,15 @@ export default function Mentoring() {
                       Converse com profissionais que já passaram pela transição
                     </p>
                   </div>
-                  <Badge variant="outline" className="gap-1">
-                    <Crown className="h-3 w-3" />
-                    Premium
-                  </Badge>
+                  {!isFreePlan && (
+                    <Badge 
+                      variant="outline" 
+                      className={`gap-1 ${isPremiumPlan ? "border-amber-500/50 text-amber-600" : "border-blue-500/50 text-blue-600"}`}
+                    >
+                      {isPremiumPlan ? <Crown className="h-3 w-3" /> : <Sparkles className="h-3 w-3" />}
+                      {planName}
+                    </Badge>
+                  )}
                 </div>
               </CardHeader>
               <CardContent>
@@ -137,8 +245,16 @@ export default function Mentoring() {
                       <MentorCard
                         key={mentor.id}
                         mentor={mentor}
-                        isPremium={isPremium}
+                        isPremium={canBookSessions}
                         onSchedule={handleSchedule}
+                        disabled={!canBookSessions}
+                        disabledReason={
+                          isFreePlan 
+                            ? "Faça upgrade para agendar" 
+                            : remainingSessions === 0 
+                              ? "Limite de sessões atingido"
+                              : undefined
+                        }
                       />
                     ))}
                   </div>
@@ -146,8 +262,8 @@ export default function Mentoring() {
               </CardContent>
             </Card>
 
-            {/* My Sessions - Premium Only */}
-            {isPremium && (
+            {/* My Sessions - Only for paid users */}
+            {!isFreePlan && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center gap-2">
@@ -174,9 +290,15 @@ export default function Mentoring() {
                         <div className="text-center py-8 text-muted-foreground">
                           <Calendar className="h-10 w-10 mx-auto mb-3 opacity-50" />
                           <p>Você não tem mentorias agendadas.</p>
-                          <p className="text-sm mt-1">
-                            Escolha um mentor acima para agendar uma sessão.
-                          </p>
+                          {canBookSessions ? (
+                            <p className="text-sm mt-1">
+                              Escolha um mentor acima para agendar uma sessão.
+                            </p>
+                          ) : (
+                            <p className="text-sm mt-1">
+                              Você atingiu o limite de sessões deste mês.
+                            </p>
+                          )}
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -209,6 +331,32 @@ export default function Mentoring() {
                       )}
                     </TabsContent>
                   </Tabs>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Upgrade CTA for Essential users */}
+            {isEssentialPlan && (
+              <Card className="bg-gradient-to-r from-amber-500/5 to-orange-500/5 border-amber-500/20">
+                <CardContent className="p-6">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center shrink-0">
+                      <Crown className="h-6 w-6 text-white" />
+                    </div>
+                    <div className="flex-1 text-center sm:text-left">
+                      <h3 className="font-semibold text-lg">Quer mais sessões de mentoria?</h3>
+                      <p className="text-muted-foreground text-sm">
+                        Com o plano Premium você tem 4 sessões por mês, suporte prioritário e conteúdo exclusivo.
+                      </p>
+                    </div>
+                    <Button 
+                      onClick={handleUpgrade}
+                      className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 gap-2"
+                    >
+                      <Crown className="h-4 w-4" />
+                      Upgrade para Premium
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             )}

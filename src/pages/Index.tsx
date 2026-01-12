@@ -1,9 +1,11 @@
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { SkillsCard } from "@/components/dashboard/SkillsCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
+import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
+import { QuickStatsBar } from "@/components/dashboard/QuickStatsBar";
+import { NextActionCard } from "@/components/dashboard/NextActionCard";
 
 const Index = () => {
   return (
@@ -13,24 +15,36 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="pl-64">
-        {/* Header */}
-        <Header />
+        {/* Main Dashboard Content */}
+        <main className="p-8 space-y-8">
+          {/* Hero Motivacional */}
+          <HeroMotivational />
 
-        {/* Dashboard Content */}
-        <main className="p-8">
+          {/* Quick Stats Bar */}
+          <QuickStatsBar />
+
+          {/* Próxima Ação em Destaque */}
+          <NextActionCard />
+
+          {/* Main Grid: Círculo + Cards */}
           <div className="grid grid-cols-12 gap-8">
             {/* Center - Migrei Circle */}
-            <div className="col-span-8 flex items-start justify-center">
-              <div className="card-elevated p-12 w-full flex justify-center">
+            <div className="col-span-7 flex items-start justify-center">
+              <div className="card-elevated p-8 w-full flex justify-center">
                 <MigreiCircle />
               </div>
             </div>
 
-            {/* Right Sidebar - Cards */}
-            <div className="col-span-4 space-y-6">
+            {/* Right Sidebar - Reorganized Cards */}
+            <div className="col-span-5 space-y-6">
+              {/* Missões - Card Principal (maior) */}
               <MissionCard />
-              <SkillsCard />
-              <NetworkingCard />
+
+              {/* Skills e Networking lado a lado */}
+              <div className="grid grid-cols-2 gap-4">
+                <SkillsCard />
+                <NetworkingCard />
+              </div>
             </div>
           </div>
         </main>

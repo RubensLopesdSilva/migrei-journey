@@ -1,63 +1,64 @@
 import { Users, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 interface Connection {
-  id: string;
   name: string;
   initials: string;
-  phase: string;
+  color: string;
 }
 
-const recentConnections: Connection[] = [
-  { id: "1", name: "Ana Silva", initials: "AS", phase: "Descobrir" },
-  { id: "2", name: "Carlos O.", initials: "CO", phase: "Despertar" },
-  { id: "3", name: "Marina S.", initials: "MS", phase: "Decidir" },
+const connections: Connection[] = [
+  { name: "Ana Silva", initials: "AS", color: "bg-pink-500" },
+  { name: "Carlos M.", initials: "CM", color: "bg-blue-500" },
 ];
 
 export function NetworkingCard() {
   return (
-    <div className="card-elevated h-full p-5 flex flex-col">
+    <div className="bg-card border border-border rounded-2xl p-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-phase-deslanchar/10 flex items-center justify-center">
-            <Users className="h-5 w-5 text-phase-deslanchar" />
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Users className="h-3.5 w-3.5 text-primary" />
           </div>
-          <div>
-            <h3 className="font-semibold text-foreground">Networking</h3>
-            <p className="text-xs text-muted-foreground">15 conexões</p>
-          </div>
+          <h3 className="font-semibold text-sm text-foreground">Networking</h3>
         </div>
+        <Link 
+          to="/comunidade"
+          className="text-primary hover:text-primary/80 transition-colors"
+        >
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
-      {/* Stacked Avatars */}
-      <div className="flex items-center mb-4">
-        <div className="flex -space-x-3">
-          {recentConnections.map((connection) => (
-            <Avatar 
-              key={connection.id} 
-              className="h-9 w-9 border-2 border-background ring-2 ring-card"
-            >
-              <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-xs font-medium">
+      {/* Connections */}
+      <div className="space-y-2 mb-3">
+        {connections.map((connection, index) => (
+          <div 
+            key={index}
+            className="flex items-center gap-2 p-2 rounded-lg bg-muted/30"
+          >
+            <Avatar className="h-7 w-7">
+              <AvatarFallback className={`${connection.color} text-white text-xs`}>
                 {connection.initials}
               </AvatarFallback>
             </Avatar>
-          ))}
-          <div className="h-9 w-9 rounded-full bg-muted border-2 border-background ring-2 ring-card flex items-center justify-center">
-            <span className="text-xs font-medium text-muted-foreground">+12</span>
+            <span className="text-xs text-foreground">{connection.name}</span>
           </div>
-        </div>
+        ))}
       </div>
 
       {/* CTA */}
-      <Link 
-        to="/comunidade"
-        className="mt-auto flex items-center justify-between p-3 rounded-xl bg-muted/50 hover:bg-muted transition-colors group"
+      <Button 
+        variant="default" 
+        size="sm" 
+        className="w-full text-xs"
+        asChild
       >
-        <span className="text-sm font-medium text-foreground">Ver comunidade</span>
-        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-      </Link>
+        <Link to="/comunidade">Ver conexões</Link>
+      </Button>
     </div>
   );
 }

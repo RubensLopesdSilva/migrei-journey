@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { StatsBar } from "./StatsBar";
+import { RightStatsCards } from "./RightStatsCards";
 
 export function HeaderSection() {
   const { user } = useAuth();
@@ -40,10 +40,8 @@ export function HeaderSection() {
         </p>
       </div>
 
-      {/* Right - Stats */}
-      <div className="flex-1">
-        <StatsBar />
-      </div>
+      {/* Right - Stats Cards */}
+      <RightStatsCards />
     </div>
   );
 }

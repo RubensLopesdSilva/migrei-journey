@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useToast } from "@/hooks/use-toast";
 
 export interface Mentor {
   id: string;
-  user_id: string;
+  user_id: string | null;
   name: string;
   title: string;
   bio: string | null;
@@ -36,22 +37,32 @@ export interface MentoringSession {
   mentor?: Mentor;
 }
 
-export interface UserPlan {
-  id: string;
-  user_id: string;
-  plan: "free" | "premium";
-}
-
-const MONTHLY_SESSION_LIMIT = 2;
-
 export function useMentoring() {
   const [mentors, setMentors] = useState<Mentor[]>([]);
-  const [userPlan, setUserPlan] = useState<UserPlan | null>(null);
   const [mySessions, setMySessions] = useState<MentoringSession[]>([]);
   const [monthlySessionCount, setMonthlySessionCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
+  
+  // Use the new subscription system
+  const {
+    isSubscribed,
+    planSlug,
+    planName,
+    features,
+    hasFeature,
+    getFeatureValue,
+    isLoading: subscriptionLoading,
+  } = useSubscription();
+
+  // Get session limit from subscription features
+  const sessionLimit = getFeatureValue<number>("mentoring_sessions_limit", 0);
+  const remainingSessions = Math.max(0, sessionLimit - monthlySessionCount);
+  const canBookSessions = sessionLimit > 0 && remainingSessions > 0;
+  const hasAIAssistant = hasFeature("ai_assistant");
+  const hasPrioritySupport = hasFeature("priority_support");
+  const hasExclusiveContent = hasFeature("exclusive_content");
 
   const fetchMentors = useCallback(async () => {
     const { data, error } = await supabase
@@ -66,23 +77,6 @@ export function useMentoring() {
 
     setMentors(data || []);
   }, []);
-
-  const fetchUserPlan = useCallback(async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("user_plans")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
-
-    if (error && error.code !== "PGRST116") {
-      console.error("Error fetching user plan:", error);
-      return;
-    }
-
-    setUserPlan(data);
-  }, [user]);
 
   const fetchMySessions = useCallback(async () => {
     if (!user) return;
@@ -143,19 +137,19 @@ export function useMentoring() {
       return false;
     }
 
-    if (!userPlan || userPlan.plan !== "premium") {
+    if (sessionLimit === 0) {
       toast({
-        title: "Plano Premium necessário",
-        description: "Atualize para o plano Premium para agendar mentorias.",
+        title: "Plano não permite mentorias",
+        description: "Faça upgrade para um plano que inclua sessões de mentoria.",
         variant: "destructive",
       });
       return false;
     }
 
-    if (monthlySessionCount >= MONTHLY_SESSION_LIMIT) {
+    if (monthlySessionCount >= sessionLimit) {
       toast({
         title: "Limite atingido",
-        description: `Você já utilizou suas ${MONTHLY_SESSION_LIMIT} mentorias deste mês.`,
+        description: `Você já utilizou suas ${sessionLimit} mentorias deste mês. Faça upgrade para ter mais sessões.`,
         variant: "destructive",
       });
       return false;
@@ -224,24 +218,38 @@ export function useMentoring() {
       setLoading(true);
       await Promise.all([
         fetchMentors(),
-        fetchUserPlan(),
         fetchMySessions(),
         fetchMonthlyCount(),
       ]);
       setLoading(false);
     };
 
-    loadData();
-  }, [fetchMentors, fetchUserPlan, fetchMySessions, fetchMonthlyCount]);
+    if (user) {
+      loadData();
+    } else {
+      // Still fetch mentors for non-logged users
+      fetchMentors().then(() => setLoading(false));
+    }
+  }, [user, fetchMentors, fetchMySessions, fetchMonthlyCount]);
 
   return {
     mentors,
-    userPlan,
     mySessions,
     monthlySessionCount,
-    remainingSessions: MONTHLY_SESSION_LIMIT - monthlySessionCount,
-    isPremium: userPlan?.plan === "premium",
-    loading,
+    sessionLimit,
+    remainingSessions,
+    canBookSessions,
+    // Plan info
+    planSlug,
+    planName,
+    isSubscribed,
+    // Feature flags
+    hasAIAssistant,
+    hasPrioritySupport,
+    hasExclusiveContent,
+    // Loading state
+    loading: loading || subscriptionLoading,
+    // Actions
     fetchMentorAvailability,
     bookSession,
     cancelSession,

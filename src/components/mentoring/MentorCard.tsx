@@ -3,21 +3,39 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Calendar, Linkedin, Briefcase } from "lucide-react";
+import { Calendar, Linkedin, Briefcase, Lock } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface MentorCardProps {
   mentor: Mentor;
   isPremium: boolean;
   onSchedule: (mentor: Mentor) => void;
+  disabled?: boolean;
+  disabledReason?: string;
 }
 
-export function MentorCard({ mentor, isPremium, onSchedule }: MentorCardProps) {
+export function MentorCard({ 
+  mentor, 
+  isPremium, 
+  onSchedule, 
+  disabled = false,
+  disabledReason 
+}: MentorCardProps) {
   const initials = mentor.name
     .split(" ")
     .map((n) => n[0])
     .join("")
     .toUpperCase()
     .slice(0, 2);
+
+  const isDisabled = disabled || !isPremium;
+  const buttonText = isDisabled
+    ? disabledReason || "Premium Necessário"
+    : "Agendar Mentoria";
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -77,15 +95,35 @@ export function MentorCard({ mentor, isPremium, onSchedule }: MentorCardProps) {
       </CardContent>
 
       <CardFooter className="p-6 pt-0">
-        <Button
-          onClick={() => onSchedule(mentor)}
-          disabled={!isPremium}
-          className="w-full gap-2"
-          variant={isPremium ? "default" : "outline"}
-        >
-          <Calendar className="h-4 w-4" />
-          {isPremium ? "Agendar Mentoria" : "Premium Necessário"}
-        </Button>
+        {isDisabled && disabledReason ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="w-full">
+                <Button
+                  disabled
+                  className="w-full gap-2"
+                  variant="outline"
+                >
+                  <Lock className="h-4 w-4" />
+                  {buttonText}
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{disabledReason}</p>
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <Button
+            onClick={() => onSchedule(mentor)}
+            disabled={isDisabled}
+            className="w-full gap-2"
+            variant={isPremium && !disabled ? "default" : "outline"}
+          >
+            {isDisabled ? <Lock className="h-4 w-4" /> : <Calendar className="h-4 w-4" />}
+            {buttonText}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

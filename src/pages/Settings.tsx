@@ -10,9 +10,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Lock, Camera, Save, Loader2 } from "lucide-react";
+import { User, Lock, Camera, Save, Loader2, CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
@@ -275,8 +276,12 @@ export default function Settings() {
               Configurações
             </h1>
 
-            <Tabs defaultValue="profile" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2">
+            <Tabs defaultValue="subscription" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="subscription" className="gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Assinatura
+                </TabsTrigger>
                 <TabsTrigger value="profile" className="gap-2">
                   <User className="h-4 w-4" />
                   Perfil
@@ -286,6 +291,11 @@ export default function Settings() {
                   Segurança
                 </TabsTrigger>
               </TabsList>
+
+              {/* Subscription Tab */}
+              <TabsContent value="subscription">
+                <SubscriptionCard />
+              </TabsContent>
 
               {/* Profile Tab */}
               <TabsContent value="profile" className="space-y-6">

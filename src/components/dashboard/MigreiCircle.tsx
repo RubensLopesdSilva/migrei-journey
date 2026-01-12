@@ -88,11 +88,11 @@ export function MigreiCircle() {
   const [activePhase, setActivePhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  const size = 380;
+  const size = 320;
   const center = size / 2;
-  const outerRadius = 170;
-  const innerRadius = 70;
-  const gapAngle = 4;
+  const outerRadius = 150;
+  const innerRadius = 55;
+  const gapAngle = 6; // ~5mm gap between segments
 
   const createSegmentPath = (startAngle: number, endAngle: number, outer: number, inner: number) => {
     const startRad = (startAngle - 90) * (Math.PI / 180);
@@ -118,22 +118,13 @@ export function MigreiCircle() {
     };
   };
 
-  const getLabelPosition = (angle: number) => {
-    const labelRadius = outerRadius + 35;
-    const rad = (angle + 30 - 90) * (Math.PI / 180);
-    return {
-      x: center + labelRadius * Math.cos(rad),
-      y: center + labelRadius * Math.sin(rad),
-    };
-  };
-
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-6">
       <div className="relative">
         <svg 
-          width={size + 100} 
-          height={size + 100} 
-          viewBox={`-50 -50 ${size + 100} ${size + 100}`}
+          width={size} 
+          height={size} 
+          viewBox={`0 0 ${size} ${size}`}
           className="animate-scale-in"
         >
           {/* Segments */}
@@ -143,7 +134,6 @@ export function MigreiCircle() {
             const isActive = activePhase === phase.id;
             const isHovered = hoveredPhase === phase.id;
             const iconPos = getIconPosition(phase.angle, (outerRadius + innerRadius) / 2);
-            const labelPos = getLabelPosition(phase.angle);
 
             return (
               <g key={phase.id}>
@@ -175,10 +165,10 @@ export function MigreiCircle() {
 
                 {/* Phase Icon */}
                 <foreignObject
-                  x={iconPos.x - 18}
-                  y={iconPos.y - 18}
-                  width={36}
-                  height={36}
+                  x={iconPos.x - 16}
+                  y={iconPos.y - 16}
+                  width={32}
+                  height={32}
                   className="pointer-events-none"
                 >
                   <div 
@@ -189,31 +179,10 @@ export function MigreiCircle() {
                     }}
                   >
                     <phase.icon 
-                      className="h-5 w-5" 
+                      className="h-4 w-4" 
                       style={{ color: phase.textColor }}
                       strokeWidth={2.5}
                     />
-                  </div>
-                </foreignObject>
-
-                {/* Phase Label (outside) */}
-                <foreignObject
-                  x={labelPos.x - 45}
-                  y={labelPos.y - 12}
-                  width={90}
-                  height={24}
-                  className="pointer-events-none"
-                >
-                  <div className="flex items-center justify-center h-full">
-                    <span 
-                      className="text-xs font-semibold text-center whitespace-nowrap px-2 py-1 rounded-full transition-all duration-200"
-                      style={{ 
-                        color: isHovered || isActive ? phase.hoverColor : 'hsl(var(--muted-foreground))',
-                        backgroundColor: isHovered || isActive ? `${phase.bgColor}15` : 'transparent',
-                      }}
-                    >
-                      {phase.name}
-                    </span>
                   </div>
                 </foreignObject>
               </g>
@@ -224,7 +193,7 @@ export function MigreiCircle() {
           <circle
             cx={center}
             cy={center}
-            r={innerRadius - 8}
+            r={innerRadius - 6}
             fill="hsl(var(--card))"
             stroke="hsl(var(--border))"
             strokeWidth="2"
@@ -233,14 +202,14 @@ export function MigreiCircle() {
 
           {/* Center content */}
           <foreignObject
-            x={center - 30}
-            y={center - 30}
-            width={60}
-            height={60}
+            x={center - 24}
+            y={center - 24}
+            width={48}
+            height={48}
           >
             <div className="flex items-center justify-center h-full">
-              <div className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary/20 flex items-center justify-center">
-                <User className="h-7 w-7 text-primary" />
+              <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary/20 flex items-center justify-center">
+                <User className="h-5 w-5 text-primary" />
               </div>
             </div>
           </foreignObject>
@@ -249,46 +218,49 @@ export function MigreiCircle() {
         {/* Tooltip on hover/active */}
         {(hoveredPhase || activePhase) && (
           <div 
-            className="absolute left-1/2 -translate-x-1/2 bg-card border border-border rounded-xl px-5 py-3 shadow-lg animate-fade-in z-10"
-            style={{ bottom: '-20px' }}
+            className="absolute left-1/2 -translate-x-1/2 bg-card border border-border rounded-xl px-4 py-2 shadow-lg animate-fade-in z-10"
+            style={{ bottom: '-16px' }}
           >
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2">
               <div 
-                className="w-3 h-3 rounded-full"
+                className="w-2.5 h-2.5 rounded-full"
                 style={{ backgroundColor: phases.find(p => p.id === (hoveredPhase || activePhase))?.bgColor }}
               />
-              <p className="font-semibold text-foreground">
+              <p className="font-semibold text-foreground text-sm">
                 {phases.find(p => p.id === (hoveredPhase || activePhase))?.name}
               </p>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground mt-0.5">
               {phases.find(p => p.id === (hoveredPhase || activePhase))?.description}
             </p>
           </div>
         )}
       </div>
 
-      {/* Legend */}
-      <div className="mt-10 flex flex-wrap justify-center gap-2 max-w-md">
+      {/* Legend - horizontal aligned */}
+      <div className="grid grid-cols-6 gap-1 w-full max-w-sm">
         {phases.map((phase) => (
           <button
             key={phase.id}
             onClick={() => setActivePhase(activePhase === phase.id ? null : phase.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 border ${
+            className={`flex flex-col items-center gap-1 px-1 py-2 rounded-lg text-center transition-all duration-200 ${
               activePhase === phase.id 
-                ? 'border-current shadow-sm' 
-                : 'border-transparent hover:border-border'
+                ? 'bg-secondary shadow-sm' 
+                : 'hover:bg-secondary/50'
             }`}
-            style={{ 
-              color: activePhase === phase.id ? phase.hoverColor : 'hsl(var(--muted-foreground))',
-              backgroundColor: activePhase === phase.id ? `${phase.bgColor}15` : 'transparent',
-            }}
           >
             <div 
-              className="w-2.5 h-2.5 rounded-full"
+              className="w-3 h-3 rounded-full"
               style={{ backgroundColor: phase.bgColor }}
             />
-            {phase.name}
+            <span 
+              className="text-[10px] font-medium leading-tight"
+              style={{ 
+                color: activePhase === phase.id ? phase.hoverColor : 'hsl(var(--muted-foreground))',
+              }}
+            >
+              {phase.name}
+            </span>
           </button>
         ))}
       </div>

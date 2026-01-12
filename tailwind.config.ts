@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        heading: ['Lexend Deca', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -87,40 +87,102 @@ const phases: Phase[] = [
 export function MigreiCircle() {
   const [activePhase, setActivePhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
-  const [showInitialPulse, setShowInitialPulse] = useState(true);
+  const [pulseOpacity, setPulseOpacity] = useState(0.6);
 
-  // Stop pulsing after user interaction or after 5 seconds
+  // Subtle pulsing effect for Despertar
   useEffect(() => {
+    const interval = setInterval(() => {
+      setPulseOpacity(prev => prev === 0.6 ? 0.85 : 0.6);
+    }, 1500);
+    
     const timer = setTimeout(() => {
-      setShowInitialPulse(false);
-    }, 5000);
-    return () => clearTimeout(timer);
+      clearInterval(interval);
+      setPulseOpacity(1);
+    }, 6000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
   }, []);
 
   const size = 420;
   const center = size / 2;
   const outerRadius = 195;
   const innerRadius = 70;
-  const gapDegrees = 3; // Equal gap between all segments
+  const numSegments = 6;
+  const segmentAngle = 360 / numSegments; // 60 degrees each
+  const gapAngle = 4; // Gap in degrees between segments
+  const cornerRadius = 8; // Rounded corners
 
-  const createSegmentPath = (startAngle: number, endAngle: number, outer: number, inner: number) => {
+  // Create rounded segment path
+  const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {
+    const startAngle = index * segmentAngle + gapAngle / 2;
+    const endAngle = (index + 1) * segmentAngle - gapAngle / 2;
+    
+    // Convert to radians and offset by -90 to start from top
     const startRad = (startAngle - 90) * (Math.PI / 180);
     const endRad = (endAngle - 90) * (Math.PI / 180);
+    
+    // Calculate corner offset based on radius
+    const outerCornerOffset = cornerRadius / outer;
+    const innerCornerOffset = cornerRadius / inner;
+    
+    // Outer arc points with corner offsets
+    const outerStart = {
+      x: center + outer * Math.cos(startRad + outerCornerOffset),
+      y: center + outer * Math.sin(startRad + outerCornerOffset)
+    };
+    const outerEnd = {
+      x: center + outer * Math.cos(endRad - outerCornerOffset),
+      y: center + outer * Math.sin(endRad - outerCornerOffset)
+    };
+    
+    // Inner arc points with corner offsets
+    const innerStart = {
+      x: center + inner * Math.cos(endRad - innerCornerOffset),
+      y: center + inner * Math.sin(endRad - innerCornerOffset)
+    };
+    const innerEnd = {
+      x: center + inner * Math.cos(startRad + innerCornerOffset),
+      y: center + inner * Math.sin(startRad + innerCornerOffset)
+    };
+    
+    // Corner control points
+    const outerStartCorner = {
+      x: center + outer * Math.cos(startRad),
+      y: center + outer * Math.sin(startRad)
+    };
+    const outerEndCorner = {
+      x: center + outer * Math.cos(endRad),
+      y: center + outer * Math.sin(endRad)
+    };
+    const innerStartCorner = {
+      x: center + inner * Math.cos(endRad),
+      y: center + inner * Math.sin(endRad)
+    };
+    const innerEndCorner = {
+      x: center + inner * Math.cos(startRad),
+      y: center + inner * Math.sin(startRad)
+    };
 
-    const x1 = center + outer * Math.cos(startRad);
-    const y1 = center + outer * Math.sin(startRad);
-    const x2 = center + outer * Math.cos(endRad);
-    const y2 = center + outer * Math.sin(endRad);
-    const x3 = center + inner * Math.cos(endRad);
-    const y3 = center + inner * Math.sin(endRad);
-    const x4 = center + inner * Math.cos(startRad);
-    const y4 = center + inner * Math.sin(startRad);
-
-    return `M ${x1} ${y1} A ${outer} ${outer} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${inner} ${inner} 0 0 0 ${x4} ${y4} Z`;
+    return `
+      M ${outerStart.x} ${outerStart.y}
+      A ${outer} ${outer} 0 0 1 ${outerEnd.x} ${outerEnd.y}
+      Q ${outerEndCorner.x} ${outerEndCorner.y} ${center + (outer - cornerRadius) * Math.cos(endRad)} ${center + (outer - cornerRadius) * Math.sin(endRad)}
+      L ${center + (inner + cornerRadius) * Math.cos(endRad)} ${center + (inner + cornerRadius) * Math.sin(endRad)}
+      Q ${innerStartCorner.x} ${innerStartCorner.y} ${innerStart.x} ${innerStart.y}
+      A ${inner} ${inner} 0 0 0 ${innerEnd.x} ${innerEnd.y}
+      Q ${innerEndCorner.x} ${innerEndCorner.y} ${center + (inner + cornerRadius) * Math.cos(startRad)} ${center + (inner + cornerRadius) * Math.sin(startRad)}
+      L ${center + (outer - cornerRadius) * Math.cos(startRad)} ${center + (outer - cornerRadius) * Math.sin(startRad)}
+      Q ${outerStartCorner.x} ${outerStartCorner.y} ${outerStart.x} ${outerStart.y}
+      Z
+    `;
   };
 
-  const getIconPosition = (angle: number, radius: number) => {
-    const rad = (angle + 30 - 90) * (Math.PI / 180);
+  const getIconPosition = (index: number, radius: number) => {
+    const angle = index * segmentAngle + segmentAngle / 2;
+    const rad = (angle - 90) * (Math.PI / 180);
     return {
       x: center + radius * Math.cos(rad),
       y: center + radius * Math.sin(rad),
@@ -128,7 +190,7 @@ export function MigreiCircle() {
   };
 
   const handlePhaseClick = (phaseId: string) => {
-    setShowInitialPulse(false);
+    setPulseOpacity(1);
     setActivePhase(activePhase === phaseId ? null : phaseId);
   };
 
@@ -143,37 +205,25 @@ export function MigreiCircle() {
         >
           {/* Segments */}
           {phases.map((phase, index) => {
-            const segmentSize = 60; // 360 / 6 phases
-            const startAngle = index * segmentSize + gapDegrees / 2;
-            const endAngle = (index + 1) * segmentSize - gapDegrees / 2;
             const isActive = activePhase === phase.id;
             const isHovered = hoveredPhase === phase.id;
             const isDespertar = phase.id === "despertar";
-            const shouldPulse = isDespertar && showInitialPulse && !activePhase;
-            const iconPos = getIconPosition(index * segmentSize, (outerRadius + innerRadius) / 2);
+            const shouldPulse = isDespertar && !activePhase && pulseOpacity < 1;
+            const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
 
             return (
               <g key={phase.id}>
-                {/* Pulse glow for Despertar */}
-                {shouldPulse && (
-                  <path
-                    d={createSegmentPath(startAngle, endAngle, outerRadius + 8, innerRadius - 4)}
-                    fill={phase.bgColor}
-                    opacity={0.3}
-                    className="animate-pulse"
-                  />
-                )}
-
                 {/* Segment */}
                 <path
-                  d={createSegmentPath(startAngle, endAngle, outerRadius, innerRadius)}
+                  d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
                   fill={isHovered || isActive ? phase.hoverColor : phase.bgColor}
-                  className={`cursor-pointer transition-all duration-200 ${shouldPulse ? 'animate-pulse' : ''}`}
+                  className="cursor-pointer transition-all duration-300"
                   style={{
+                    opacity: shouldPulse ? pulseOpacity : 1,
                     filter: isHovered || isActive 
                       ? 'drop-shadow(0 6px 16px rgba(0,0,0,0.3))' 
                       : shouldPulse 
-                        ? 'drop-shadow(0 4px 12px rgba(245, 158, 11, 0.4))'
+                        ? 'drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25))'
                         : 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))',
                     transform: isHovered ? `scale(1.03)` : isActive ? 'scale(1.02)' : 'scale(1)',
                     transformOrigin: `${center}px ${center}px`,
@@ -186,9 +236,9 @@ export function MigreiCircle() {
                 {/* Active ring indicator */}
                 {isActive && (
                   <path
-                    d={createSegmentPath(startAngle, endAngle, outerRadius + 5, outerRadius + 2)}
+                    d={createRoundedSegmentPath(index, outerRadius + 5, outerRadius + 2)}
                     fill={phase.hoverColor}
-                    className="animate-pulse"
+                    opacity={0.7}
                   />
                 )}
 

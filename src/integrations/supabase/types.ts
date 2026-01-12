@@ -14,6 +14,65 @@ export type Database = {
   }
   public: {
     Tables: {
+      badges: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          icon_name: string
+          id: string
+          is_master_badge: boolean
+          is_phase_completion: boolean
+          name: string
+          phase_id: string | null
+          rarity: string
+          requirement_type: string
+          requirement_value: Json
+          sort_order: number
+          xp_reward: number
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description: string
+          icon_name: string
+          id?: string
+          is_master_badge?: boolean
+          is_phase_completion?: boolean
+          name: string
+          phase_id?: string | null
+          rarity?: string
+          requirement_type: string
+          requirement_value?: Json
+          sort_order?: number
+          xp_reward?: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          icon_name?: string
+          id?: string
+          is_master_badge?: boolean
+          is_phase_completion?: boolean
+          name?: string
+          phase_id?: string | null
+          rarity?: string
+          requirement_type?: string
+          requirement_value?: Json
+          sort_order?: number
+          xp_reward?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "badges_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coupon_redemptions: {
         Row: {
           coupon_id: string
@@ -277,6 +336,117 @@ export type Database = {
         }
         Relationships: []
       }
+      migrei_phases: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon_name: string | null
+          id: string
+          level_description: string | null
+          level_name: string
+          name: string
+          objective: string | null
+          phase_number: number
+          slug: string
+          sort_order: number
+          xp_to_complete: number
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon_name?: string | null
+          id?: string
+          level_description?: string | null
+          level_name: string
+          name: string
+          objective?: string | null
+          phase_number: number
+          slug: string
+          sort_order?: number
+          xp_to_complete?: number
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon_name?: string | null
+          id?: string
+          level_description?: string | null
+          level_name?: string
+          name?: string
+          objective?: string | null
+          phase_number?: number
+          slug?: string
+          sort_order?: number
+          xp_to_complete?: number
+        }
+        Relationships: []
+      }
+      missions: {
+        Row: {
+          badge_id: string | null
+          created_at: string
+          description: string
+          ends_at: string | null
+          id: string
+          is_active: boolean
+          mission_type: Database["public"]["Enums"]["mission_type"]
+          phase_id: string | null
+          requirement_type: string
+          requirement_value: Json
+          starts_at: string | null
+          title: string
+          xp_reward: number
+        }
+        Insert: {
+          badge_id?: string | null
+          created_at?: string
+          description: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          mission_type?: Database["public"]["Enums"]["mission_type"]
+          phase_id?: string | null
+          requirement_type: string
+          requirement_value?: Json
+          starts_at?: string | null
+          title: string
+          xp_reward?: number
+        }
+        Update: {
+          badge_id?: string | null
+          created_at?: string
+          description?: string
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean
+          mission_type?: Database["public"]["Enums"]["mission_type"]
+          phase_id?: string | null
+          requirement_type?: string
+          requirement_value?: Json
+          starts_at?: string | null
+          title?: string
+          xp_reward?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "missions_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "missions_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_events: {
         Row: {
           created_at: string
@@ -321,6 +491,62 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      phase_activities: {
+        Row: {
+          activity_type: Database["public"]["Enums"]["activity_type"]
+          content_url: string | null
+          created_at: string
+          description: string | null
+          estimated_minutes: number | null
+          id: string
+          is_checkpoint: boolean
+          is_required: boolean
+          metadata: Json | null
+          phase_id: string
+          sort_order: number
+          title: string
+          xp_reward: number
+        }
+        Insert: {
+          activity_type?: Database["public"]["Enums"]["activity_type"]
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          is_checkpoint?: boolean
+          is_required?: boolean
+          metadata?: Json | null
+          phase_id: string
+          sort_order?: number
+          title: string
+          xp_reward?: number
+        }
+        Update: {
+          activity_type?: Database["public"]["Enums"]["activity_type"]
+          content_url?: string | null
+          created_at?: string
+          description?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          is_checkpoint?: boolean
+          is_required?: boolean
+          metadata?: Json | null
+          phase_id?: string
+          sort_order?: number
+          title?: string
+          xp_reward?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "phase_activities_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plan_features: {
         Row: {
@@ -393,6 +619,41 @@ export type Database = {
         }
         Relationships: []
       }
+      progress_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          phase_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          phase_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          phase_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "progress_events_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscription_plans: {
         Row: {
           created_at: string
@@ -453,6 +714,127 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_completions: {
+        Row: {
+          activity_id: string
+          completed_at: string
+          id: string
+          notes: string | null
+          phase_id: string
+          time_spent_minutes: number | null
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          activity_id: string
+          completed_at?: string
+          id?: string
+          notes?: string | null
+          phase_id: string
+          time_spent_minutes?: number | null
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          activity_id?: string
+          completed_at?: string
+          id?: string
+          notes?: string | null
+          phase_id?: string
+          time_spent_minutes?: number | null
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_completions_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "phase_activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_completions_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_missions: {
+        Row: {
+          assigned_at: string
+          completed_at: string | null
+          expires_at: string | null
+          id: string
+          is_completed: boolean
+          mission_id: string
+          progress: number
+          target: number
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          completed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_completed?: boolean
+          mission_id: string
+          progress?: number
+          target?: number
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          completed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_completed?: boolean
+          mission_id?: string
+          progress?: number
+          target?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_missions_mission_id_fkey"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_monthly_cancellations: {
         Row: {
           created_at: string
@@ -483,6 +865,56 @@ export type Database = {
         }
         Relationships: []
       }
+      user_phase_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          phase_id: string
+          progress_percentage: number
+          started_at: string | null
+          status: Database["public"]["Enums"]["phase_status"]
+          time_spent_minutes: number
+          updated_at: string
+          user_id: string
+          xp_earned: number
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          phase_id: string
+          progress_percentage?: number
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["phase_status"]
+          time_spent_minutes?: number
+          updated_at?: string
+          user_id: string
+          xp_earned?: number
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          phase_id?: string
+          progress_percentage?: number
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["phase_status"]
+          time_spent_minutes?: number
+          updated_at?: string
+          user_id?: string
+          xp_earned?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_phase_progress_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_plans: {
         Row: {
           created_at: string
@@ -506,6 +938,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_progress: {
+        Row: {
+          created_at: string
+          current_level: number
+          current_phase_id: string | null
+          current_phase_number: number
+          id: string
+          journey_started_at: string
+          last_activity_at: string | null
+          longest_streak: number
+          streak_days: number
+          total_xp: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_level?: number
+          current_phase_id?: string | null
+          current_phase_number?: number
+          id?: string
+          journey_started_at?: string
+          last_activity_at?: string | null
+          longest_streak?: number
+          streak_days?: number
+          total_xp?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_level?: number
+          current_phase_id?: string | null
+          current_phase_number?: number
+          id?: string
+          journey_started_at?: string
+          last_activity_at?: string | null
+          longest_streak?: number
+          streak_days?: number
+          total_xp?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_current_phase_id_fkey"
+            columns: ["current_phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_subscriptions: {
         Row: {
@@ -575,6 +1060,47 @@ export type Database = {
           },
         ]
       }
+      xp_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          id: string
+          phase_id: string | null
+          source_id: string | null
+          source_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          phase_id?: string | null
+          source_id?: string | null
+          source_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          phase_id?: string | null
+          source_id?: string | null
+          source_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "xp_transactions_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -622,12 +1148,19 @@ export type Database = {
       }
     }
     Enums: {
+      activity_type:
+        | "lesson"
+        | "exercise"
+        | "checkpoint"
+        | "quiz"
+        | "reflection"
       coupon_eligibility:
         | "all_plans"
         | "specific_plans"
         | "new_users_only"
         | "upgrade_only"
       coupon_type: "percentage" | "fixed_amount" | "trial_extension"
+      mission_type: "daily" | "weekly" | "phase" | "special"
       payment_event_type:
         | "payment_succeeded"
         | "payment_failed"
@@ -639,6 +1172,7 @@ export type Database = {
         | "invoice_payment_failed"
         | "customer_created"
         | "refund_processed"
+      phase_status: "locked" | "available" | "in_progress" | "completed"
       subscription_plan: "free" | "premium"
       subscription_status:
         | "active"
@@ -776,6 +1310,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      activity_type: ["lesson", "exercise", "checkpoint", "quiz", "reflection"],
       coupon_eligibility: [
         "all_plans",
         "specific_plans",
@@ -783,6 +1318,7 @@ export const Constants = {
         "upgrade_only",
       ],
       coupon_type: ["percentage", "fixed_amount", "trial_extension"],
+      mission_type: ["daily", "weekly", "phase", "special"],
       payment_event_type: [
         "payment_succeeded",
         "payment_failed",
@@ -795,6 +1331,7 @@ export const Constants = {
         "customer_created",
         "refund_processed",
       ],
+      phase_status: ["locked", "available", "in_progress", "completed"],
       subscription_plan: ["free", "premium"],
       subscription_status: [
         "active",

@@ -6,7 +6,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Star, Sparkles, ArrowRight } from "lucide-react";
 import { LevelInfo } from "@/types/progress";
-import confetti from "canvas-confetti";
 
 interface LevelUpModalProps {
   isOpen: boolean;
@@ -25,11 +24,13 @@ export function LevelUpModal({
 
   useEffect(() => {
     if (isOpen) {
-      // Trigger confetti
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
+      // Trigger confetti effect using dynamic import
+      import('canvas-confetti').then(({ default: confetti }) => {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
       });
 
       // Show content with delay

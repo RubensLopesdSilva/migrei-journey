@@ -28,7 +28,7 @@ interface BadgesGalleryProps {
 const iconMap: Record<string, React.ElementType> = {
   Crown,
   Flame,
-  Fire,
+  Fire: Flame,
   Zap,
   Medal,
   Award,

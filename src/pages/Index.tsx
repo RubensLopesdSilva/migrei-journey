@@ -3,9 +3,8 @@ import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { SkillsCard } from "@/components/dashboard/SkillsCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
-import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
-import { QuickStatsBar } from "@/components/dashboard/QuickStatsBar";
 import { NextActionCard } from "@/components/dashboard/NextActionCard";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
 
 const Index = () => {
   return (
@@ -15,45 +14,49 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="pl-64">
-        {/* Main Dashboard Content */}
-        <main className="p-8 space-y-8">
-          {/* Hero Motivacional - Compacto */}
-          <HeroMotivational />
-
-          {/* Layout Principal: Roda em Destaque Central */}
-          <div className="grid grid-cols-12 gap-6">
-            {/* Coluna Esquerda - Próxima Ação + Skills */}
-            <div className="col-span-3 space-y-4">
-              <NextActionCard />
-              <SkillsCard />
-            </div>
-
-            {/* Centro - RODA MIGREI EM DESTAQUE */}
-            <div className="col-span-6">
-              <div className="card-elevated p-6 relative overflow-hidden">
-                {/* Glow effect behind circle */}
+        <main className="p-8">
+          {/* HERO SECTION - Roda em Destaque Absoluto */}
+          <section className="mb-8">
+            <DashboardHero />
+            
+            {/* Roda Migrei - Hero Central */}
+            <div className="mt-8 flex justify-center">
+              <div className="relative">
+                {/* Glow effect */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-[500px] h-[500px] rounded-full bg-gradient-radial from-primary/10 via-transparent to-transparent blur-3xl" />
+                  <div className="w-[600px] h-[600px] rounded-full bg-gradient-radial from-primary/8 via-primary/3 to-transparent blur-3xl" />
                 </div>
                 
-                {/* Circle centered */}
-                <div className="relative flex justify-center">
+                {/* Card container for the circle */}
+                <div className="relative card-elevated p-10 rounded-3xl">
                   <MigreiCircle />
                 </div>
               </div>
+            </div>
+          </section>
 
-              {/* Quick Stats abaixo da roda */}
-              <div className="mt-6">
-                <QuickStatsBar />
-              </div>
+          {/* CARDS SECTION - Suporte à Jornada */}
+          <section className="grid grid-cols-4 gap-5">
+            {/* Próxima Ação - Destaque secundário */}
+            <div className="col-span-1">
+              <NextActionCard />
             </div>
 
-            {/* Coluna Direita - Missões + Networking */}
-            <div className="col-span-3 space-y-4">
+            {/* Missões do Dia */}
+            <div className="col-span-1">
               <MissionCard />
+            </div>
+
+            {/* Skills */}
+            <div className="col-span-1">
+              <SkillsCard />
+            </div>
+
+            {/* Networking */}
+            <div className="col-span-1">
               <NetworkingCard />
             </div>
-          </div>
+          </section>
         </main>
       </div>
     </div>

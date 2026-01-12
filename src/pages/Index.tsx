@@ -1,7 +1,9 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
-import { MissionCard } from "@/components/dashboard/MissionCard";
-import { WelcomePanel } from "@/components/dashboard/WelcomePanel";
+import { HeaderSection } from "@/components/dashboard/HeaderSection";
+import { StatsBar } from "@/components/dashboard/StatsBar";
+import { MissionsCard } from "@/components/dashboard/MissionsCard";
+import { SoftSkillsCard } from "@/components/dashboard/SoftSkillsCard";
 
 const Index = () => {
   return (
@@ -9,31 +11,32 @@ const Index = () => {
       <Sidebar />
 
       <div className="pl-64 min-h-screen">
-        <main className="p-10 min-h-screen flex flex-col">
-          {/* Hero Section - Asymmetric Split */}
-          <div className="flex-1 flex items-center gap-16">
-            {/* Left Panel - Welcome & Context */}
-            <div className="w-[420px] flex-shrink-0 space-y-8">
-              <WelcomePanel />
-              
-              {/* Mission Card - Below Welcome */}
-              <MissionCard />
-            </div>
+        <main className="p-8 space-y-6">
+          {/* Header - Greeting + Phase Badge + Achievement */}
+          <HeaderSection />
 
-            {/* Right - Roda Migrei Hero (Emphasis) */}
-            <div className="flex-1 flex items-center justify-center -mt-8">
+          {/* Stats Bar - 5 stat cards */}
+          <StatsBar />
+
+          {/* Main Content - Circle + Side Cards */}
+          <div className="flex gap-6 items-start">
+            {/* Left - Roda Migrei (Hero) */}
+            <div className="flex-1 flex justify-center py-4">
               <div className="relative">
                 {/* Soft ambient glow */}
-                <div className="absolute -inset-32 bg-gradient-radial from-primary/5 via-transparent to-transparent blur-3xl pointer-events-none" />
+                <div className="absolute -inset-24 bg-gradient-radial from-primary/4 via-transparent to-transparent blur-3xl pointer-events-none" />
                 
-                {/* Inner glow */}
-                <div className="absolute -inset-16 bg-gradient-radial from-accent/3 via-transparent to-transparent blur-2xl pointer-events-none" />
-                
-                {/* The Circle - Hero Element */}
-                <div className="relative transform scale-110">
+                {/* The Circle */}
+                <div className="relative">
                   <MigreiCircle />
                 </div>
               </div>
+            </div>
+
+            {/* Right - Side Cards */}
+            <div className="w-80 flex-shrink-0 space-y-4">
+              <MissionsCard />
+              <SoftSkillsCard />
             </div>
           </div>
         </main>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Mentor, MentorAvailability } from "@/hooks/useMentoring";
+import { MentoringSession, MentorAvailability } from "@/hooks/useMentoring";
 import {
   Dialog,
   DialogContent,
@@ -17,45 +17,45 @@ import { format, addDays, addHours, setHours, setMinutes, isBefore, parseISO } f
 import { ptBR } from "date-fns/locale";
 import { BookedSlot } from "@/hooks/useMentoringBooking";
 
-interface ScheduleModalProps {
-  mentor: Mentor | null;
+interface RescheduleModalProps {
+  session: MentoringSession | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onBook: (mentorId: string, scheduledAt: Date) => Promise<boolean>;
+  onReschedule: (sessionId: string, mentorId: string, newScheduledAt: Date) => Promise<boolean>;
   fetchAvailability: (mentorId: string) => Promise<MentorAvailability[]>;
   fetchBookedSlots: (mentorId: string, startDate: Date, endDate: Date) => Promise<BookedSlot[]>;
-  remainingSessions: number;
   minAdvanceHours: number;
 }
 
 const dayNames = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
 
-export function ScheduleModal({
-  mentor,
+export function RescheduleModal({
+  session,
   open,
   onOpenChange,
-  onBook,
+  onReschedule,
   fetchAvailability,
   fetchBookedSlots,
-  remainingSessions,
   minAdvanceHours,
-}: ScheduleModalProps) {
+}: RescheduleModalProps) {
   const [availability, setAvailability] = useState<MentorAvailability[]>([]);
   const [bookedSlots, setBookedSlots] = useState<BookedSlot[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [booking, setBooking] = useState(false);
+  const [rescheduling, setRescheduling] = useState(false);
+
+  const mentor = session?.mentor;
 
   useEffect(() => {
-    if (mentor && open) {
+    if (session?.mentor && open) {
       setLoading(true);
       const startDate = new Date();
       const endDate = addDays(startDate, 30);
       
       Promise.all([
-        fetchAvailability(mentor.id),
-        fetchBookedSlots(mentor.id, startDate, endDate),
+        fetchAvailability(session.mentor_id),
+        fetchBookedSlots(session.mentor_id, startDate, endDate),
       ]).then(([availData, bookedData]) => {
         setAvailability(availData);
         setBookedSlots(bookedData);
@@ -65,7 +65,7 @@ export function ScheduleModal({
       setSelectedDate(undefined);
       setSelectedTime(null);
     }
-  }, [mentor, open, fetchAvailability, fetchBookedSlots]);
+  }, [session, open, fetchAvailability, fetchBookedSlots]);
 
   const isSlotBooked = (date: Date, time: string): boolean => {
     const [hours, minutes] = time.split(":").map(Number);
@@ -73,7 +73,11 @@ export function ScheduleModal({
     
     return bookedSlots.some((slot) => {
       const bookedDate = parseISO(slot.scheduled_at);
-      return bookedDate.getTime() === slotDate.getTime();
+      return (
+        bookedDate.getTime() === slotDate.getTime() &&
+        // Exclude current session from "booked" check
+        slot.scheduled_at !== session?.scheduled_at
+      );
     });
   };
 
@@ -94,7 +98,7 @@ export function ScheduleModal({
         const timeStr = `${String(currentHour).padStart(2, "0")}:${String(currentMin).padStart(2, "0")}`;
         const slotDate = setMinutes(setHours(date, currentHour), currentMin);
         
-        // Check minimum advance time (48h) and if slot is booked
+        // Check minimum advance time and if slot is booked
         const isAfterMinAdvance = !isBefore(slotDate, minBookingTime);
         const isBooked = isSlotBooked(date, timeStr);
 
@@ -102,7 +106,7 @@ export function ScheduleModal({
           times.push({ time: timeStr, available: !isBooked });
         }
 
-        currentMin += 60; // 1 hour slots
+        currentMin += 60;
         if (currentMin >= 60) {
           currentHour += 1;
           currentMin = 0;
@@ -118,22 +122,22 @@ export function ScheduleModal({
     return availability.some((a) => a.day_of_week === dayOfWeek);
   };
 
-  const handleBook = async () => {
-    if (!mentor || !selectedDate || !selectedTime) return;
+  const handleReschedule = async () => {
+    if (!session || !selectedDate || !selectedTime) return;
 
-    setBooking(true);
+    setRescheduling(true);
     const [hours, minutes] = selectedTime.split(":").map(Number);
-    const scheduledAt = setMinutes(setHours(selectedDate, hours), minutes);
+    const newScheduledAt = setMinutes(setHours(selectedDate, hours), minutes);
 
-    const success = await onBook(mentor.id, scheduledAt);
-    setBooking(false);
+    const success = await onReschedule(session.id, session.mentor_id, newScheduledAt);
+    setRescheduling(false);
 
     if (success) {
       onOpenChange(false);
     }
   };
 
-  if (!mentor) return null;
+  if (!session || !mentor) return null;
 
   const initials = mentor.name
     .split(" ")
@@ -143,14 +147,15 @@ export function ScheduleModal({
     .slice(0, 2);
 
   const availableTimes = selectedDate ? getAvailableTimesForDate(selectedDate) : [];
+  const currentScheduled = new Date(session.scheduled_at);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Agendar Mentoria</DialogTitle>
+          <DialogTitle>Reagendar Mentoria</DialogTitle>
           <DialogDescription>
-            Escolha uma data e horário disponível para sua sessão de mentoria.
+            Escolha uma nova data e horário para sua sessão.
           </DialogDescription>
         </DialogHeader>
 
@@ -161,19 +166,22 @@ export function ScheduleModal({
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div>
+          <div className="flex-1">
             <p className="font-semibold">{mentor.name}</p>
             <p className="text-sm text-muted-foreground">{mentor.title}</p>
           </div>
-          <Badge variant="outline" className="ml-auto">
-            {remainingSessions} {remainingSessions === 1 ? "sessão restante" : "sessões restantes"}
-          </Badge>
+          <div className="text-right">
+            <p className="text-xs text-muted-foreground">Agendamento atual:</p>
+            <p className="text-sm font-medium">
+              {format(currentScheduled, "dd/MM 'às' HH:mm", { locale: ptBR })}
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-sm">
           <AlertCircle className="h-4 w-4 text-amber-600 shrink-0" />
           <span className="text-amber-700">
-            Agendamentos devem ser feitos com no mínimo {minAdvanceHours}h de antecedência.
+            Reagendamentos devem ser feitos com no mínimo {minAdvanceHours}h de antecedência.
           </span>
         </div>
 
@@ -185,12 +193,11 @@ export function ScheduleModal({
           <div className="text-center py-12 text-muted-foreground">
             <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>Este mentor ainda não definiu horários disponíveis.</p>
-            <p className="text-sm mt-2">Tente novamente mais tarde.</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <p className="text-sm font-medium mb-2">Selecione uma data</p>
+              <p className="text-sm font-medium mb-2">Selecione uma nova data</p>
               <Calendar
                 mode="single"
                 selected={selectedDate}
@@ -256,16 +263,16 @@ export function ScheduleModal({
             Cancelar
           </Button>
           <Button
-            onClick={handleBook}
-            disabled={!selectedDate || !selectedTime || booking}
+            onClick={handleReschedule}
+            disabled={!selectedDate || !selectedTime || rescheduling}
           >
-            {booking ? (
+            {rescheduling ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                Agendando...
+                Reagendando...
               </>
             ) : (
-              "Confirmar Agendamento"
+              "Confirmar Reagendamento"
             )}
           </Button>
         </div>

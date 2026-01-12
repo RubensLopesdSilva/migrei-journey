@@ -1,15 +1,29 @@
 import { MentoringSession, Mentor } from "@/hooks/useMentoring";
+import { CancellationInfo } from "@/hooks/useMentoringBooking";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Video, X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Calendar, Clock, Video, X, RefreshCw, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface SessionCardProps {
   session: MentoringSession;
   onCancel: (sessionId: string) => void;
+  onReschedule?: (session: MentoringSession) => void;
+  cancellationInfo?: CancellationInfo;
 }
 
 const statusLabels: Record<string, { label: string; variant: "default" | "secondary" | "destructive" }> = {
@@ -18,12 +32,12 @@ const statusLabels: Record<string, { label: string; variant: "default" | "second
   cancelled: { label: "Cancelada", variant: "destructive" },
 };
 
-export function SessionCard({ session, onCancel }: SessionCardProps) {
+export function SessionCard({ session, onCancel, onReschedule, cancellationInfo }: SessionCardProps) {
   const mentor = session.mentor as Mentor | undefined;
   const status = statusLabels[session.status];
   const scheduledDate = new Date(session.scheduled_at);
   const isPast = scheduledDate < new Date();
-  const canCancel = session.status === "scheduled" && !isPast;
+  const canModify = session.status === "scheduled" && !isPast;
 
   const initials = mentor
     ? mentor.name
@@ -33,6 +47,9 @@ export function SessionCard({ session, onCancel }: SessionCardProps) {
         .toUpperCase()
         .slice(0, 2)
     : "??";
+
+  // Generate Google Meet link if no meeting URL
+  const meetingUrl = session.meeting_url || generateMeetingUrl(session);
 
   return (
     <Card className={session.status === "cancelled" ? "opacity-60" : ""}>
@@ -68,29 +85,89 @@ export function SessionCard({ session, onCancel }: SessionCardProps) {
           <div className="flex flex-col items-end gap-2">
             <Badge variant={status.variant}>{status.label}</Badge>
 
-            {session.meeting_url && session.status === "scheduled" && !isPast && (
+            {/* Join button with meeting URL */}
+            {session.status === "scheduled" && !isPast && (
               <Button size="sm" variant="outline" className="gap-1" asChild>
-                <a href={session.meeting_url} target="_blank" rel="noopener noreferrer">
+                <a href={meetingUrl} target="_blank" rel="noopener noreferrer">
                   <Video className="h-3 w-3" />
                   Entrar
+                  <ExternalLink className="h-3 w-3" />
                 </a>
               </Button>
             )}
 
-            {canCancel && (
-              <Button
-                size="sm"
-                variant="ghost"
-                className="text-destructive hover:text-destructive gap-1"
-                onClick={() => onCancel(session.id)}
-              >
-                <X className="h-3 w-3" />
-                Cancelar
-              </Button>
+            {/* Action buttons for modifiable sessions */}
+            {canModify && (
+              <div className="flex gap-1">
+                {/* Reschedule button */}
+                {onReschedule && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-primary hover:text-primary gap-1"
+                    onClick={() => onReschedule(session)}
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    Reagendar
+                  </Button>
+                )}
+
+                {/* Cancel button with confirmation */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="text-destructive hover:text-destructive gap-1"
+                    >
+                      <X className="h-3 w-3" />
+                      Cancelar
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Cancelar Mentoria</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {cancellationInfo && !cancellationInfo.canCancelFree ? (
+                          <>
+                            <span className="text-amber-600 font-medium">Atenção:</span> Você já usou seu cancelamento gratuito deste mês. 
+                            Este cancelamento será descontado do seu limite de sessões mensais.
+                          </>
+                        ) : (
+                          "Tem certeza que deseja cancelar esta mentoria? Este é seu cancelamento gratuito do mês."
+                        )}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Manter agendamento</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => onCancel(session.id)}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                      >
+                        Confirmar cancelamento
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
             )}
           </div>
         </div>
       </CardContent>
     </Card>
   );
+}
+
+// Helper to generate a Google Meet link placeholder
+function generateMeetingUrl(session: MentoringSession): string {
+  // Generate a Google Calendar event link that creates a Meet
+  const scheduledDate = new Date(session.scheduled_at);
+  const endDate = new Date(scheduledDate.getTime() + 60 * 60 * 1000); // 1 hour later
+  
+  const formatDate = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  
+  const title = encodeURIComponent(`Mentoria - ${session.mentor?.name || 'Mentor'}`);
+  const dates = `${formatDate(scheduledDate)}/${formatDate(endDate)}`;
+  
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=Mentoria+individual&add=meet`;
 }

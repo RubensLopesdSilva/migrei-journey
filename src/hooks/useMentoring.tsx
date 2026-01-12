@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useToast } from "@/hooks/use-toast";
+import { useMentoringBooking } from "@/hooks/useMentoringBooking";
 
 export interface Mentor {
   id: string;
@@ -34,6 +34,9 @@ export interface MentoringSession {
   status: string;
   notes: string | null;
   meeting_url: string | null;
+  cancelled_at?: string | null;
+  rescheduled_from?: string | null;
+  counts_towards_limit?: boolean;
   mentor?: Mentor;
 }
 
@@ -43,14 +46,12 @@ export function useMentoring() {
   const [monthlySessionCount, setMonthlySessionCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const { toast } = useToast();
   
   // Use the new subscription system
   const {
     isSubscribed,
     planSlug,
     planName,
-    features,
     hasFeature,
     getFeatureValue,
     isLoading: subscriptionLoading,
@@ -63,6 +64,17 @@ export function useMentoring() {
   const hasAIAssistant = hasFeature("ai_assistant");
   const hasPrioritySupport = hasFeature("priority_support");
   const hasExclusiveContent = hasFeature("exclusive_content");
+
+  // Refetch function
+  const refetchSessions = useCallback(async () => {
+    await Promise.all([
+      fetchMySessions(),
+      fetchMonthlyCount(),
+    ]);
+  }, []);
+
+  // Use the booking hook with all the booking logic
+  const bookingHook = useMentoringBooking(sessionLimit, monthlySessionCount, refetchSessions);
 
   const fetchMentors = useCallback(async () => {
     const { data, error } = await supabase
@@ -127,92 +139,6 @@ export function useMentoring() {
     return data || [];
   };
 
-  const bookSession = async (mentorId: string, scheduledAt: Date): Promise<boolean> => {
-    if (!user) {
-      toast({
-        title: "Erro",
-        description: "Você precisa estar logado para agendar uma mentoria.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    if (sessionLimit === 0) {
-      toast({
-        title: "Plano não permite mentorias",
-        description: "Faça upgrade para um plano que inclua sessões de mentoria.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    if (monthlySessionCount >= sessionLimit) {
-      toast({
-        title: "Limite atingido",
-        description: `Você já utilizou suas ${sessionLimit} mentorias deste mês. Faça upgrade para ter mais sessões.`,
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    const { error } = await supabase
-      .from("mentoring_sessions")
-      .insert({
-        mentor_id: mentorId,
-        mentee_id: user.id,
-        scheduled_at: scheduledAt.toISOString(),
-        duration_minutes: 60,
-        status: "scheduled",
-      });
-
-    if (error) {
-      console.error("Error booking session:", error);
-      toast({
-        title: "Erro ao agendar",
-        description: "Não foi possível agendar a mentoria. Tente novamente.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    toast({
-      title: "Mentoria agendada!",
-      description: "Você receberá um email com os detalhes da sessão.",
-    });
-
-    await fetchMySessions();
-    await fetchMonthlyCount();
-
-    return true;
-  };
-
-  const cancelSession = async (sessionId: string): Promise<boolean> => {
-    const { error } = await supabase
-      .from("mentoring_sessions")
-      .update({ status: "cancelled" })
-      .eq("id", sessionId);
-
-    if (error) {
-      console.error("Error cancelling session:", error);
-      toast({
-        title: "Erro ao cancelar",
-        description: "Não foi possível cancelar a mentoria.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    toast({
-      title: "Mentoria cancelada",
-      description: "A sessão foi cancelada com sucesso.",
-    });
-
-    await fetchMySessions();
-    await fetchMonthlyCount();
-
-    return true;
-  };
-
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -220,6 +146,7 @@ export function useMentoring() {
         fetchMentors(),
         fetchMySessions(),
         fetchMonthlyCount(),
+        bookingHook.fetchCancellationInfo(),
       ]);
       setLoading(false);
     };
@@ -230,7 +157,7 @@ export function useMentoring() {
       // Still fetch mentors for non-logged users
       fetchMentors().then(() => setLoading(false));
     }
-  }, [user, fetchMentors, fetchMySessions, fetchMonthlyCount]);
+  }, [user, fetchMentors, fetchMySessions, fetchMonthlyCount, bookingHook.fetchCancellationInfo]);
 
   return {
     mentors,
@@ -249,15 +176,22 @@ export function useMentoring() {
     hasExclusiveContent,
     // Loading state
     loading: loading || subscriptionLoading,
-    // Actions
+    // Mentor availability
     fetchMentorAvailability,
-    bookSession,
-    cancelSession,
+    // Booking functions from the booking hook
+    fetchBookedSlots: bookingHook.fetchBookedSlots,
+    bookSession: bookingHook.bookSession,
+    cancelSession: bookingHook.cancelSession,
+    rescheduleSession: bookingHook.rescheduleSession,
+    cancellationInfo: bookingHook.cancellationInfo,
+    minAdvanceHours: bookingHook.minAdvanceHours,
+    // Refetch
     refetch: async () => {
       await Promise.all([
         fetchMentors(),
         fetchMySessions(),
         fetchMonthlyCount(),
+        bookingHook.fetchCancellationInfo(),
       ]);
     },
   };

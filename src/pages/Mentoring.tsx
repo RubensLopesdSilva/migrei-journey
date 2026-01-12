@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { useMentoring, Mentor } from "@/hooks/useMentoring";
+import { useMentoring, Mentor, MentoringSession } from "@/hooks/useMentoring";
 import { MentorCard } from "@/components/mentoring/MentorCard";
 import { ScheduleModal } from "@/components/mentoring/ScheduleModal";
+import { RescheduleModal } from "@/components/mentoring/RescheduleModal";
 import { SessionCard } from "@/components/mentoring/SessionCard";
 import { RodaMigreiSection } from "@/components/mentoring/RodaMigreiSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,7 +22,8 @@ import {
   ArrowRight,
   Lock,
   AlertCircle,
-  Zap
+  Zap,
+  Info
 } from "lucide-react";
 
 export default function Mentoring() {
@@ -39,12 +41,18 @@ export default function Mentoring() {
     hasPrioritySupport,
     loading,
     fetchMentorAvailability,
+    fetchBookedSlots,
     bookSession,
     cancelSession,
+    rescheduleSession,
+    cancellationInfo,
+    minAdvanceHours,
   } = useMentoring();
 
   const [selectedMentor, setSelectedMentor] = useState<Mentor | null>(null);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+  const [sessionToReschedule, setSessionToReschedule] = useState<MentoringSession | null>(null);
 
   const handleSchedule = (mentor: Mentor) => {
     if (!canBookSessions) {
@@ -52,6 +60,15 @@ export default function Mentoring() {
     }
     setSelectedMentor(mentor);
     setScheduleModalOpen(true);
+  };
+
+  const handleReschedule = (session: MentoringSession) => {
+    setSessionToReschedule(session);
+    setRescheduleModalOpen(true);
+  };
+
+  const handleCancelSession = async (sessionId: string) => {
+    await cancelSession(sessionId);
   };
 
   const handleUpgrade = () => {
@@ -159,6 +176,19 @@ export default function Mentoring() {
                     Upgrade
                   </Button>
                 )}
+              </div>
+            )}
+
+            {/* Cancellation Info */}
+            {!isFreePlan && cancellationInfo && (
+              <div className="p-3 bg-muted/50 rounded-lg flex items-center gap-3 text-sm">
+                <Info className="h-4 w-4 text-muted-foreground shrink-0" />
+                <span className="text-muted-foreground">
+                  {cancellationInfo.canCancelFree 
+                    ? "Você tem 1 cancelamento gratuito disponível este mês."
+                    : `Cancelamentos adicionais serão descontados do seu plano. (${cancellationInfo.paidCancellations} cancelamento(s) pago(s) este mês)`
+                  }
+                </span>
               </div>
             )}
 
@@ -306,7 +336,9 @@ export default function Mentoring() {
                             <SessionCard
                               key={session.id}
                               session={session}
-                              onCancel={cancelSession}
+                              onCancel={handleCancelSession}
+                              onReschedule={handleReschedule}
+                              cancellationInfo={cancellationInfo}
                             />
                           ))}
                         </div>
@@ -324,7 +356,8 @@ export default function Mentoring() {
                             <SessionCard
                               key={session.id}
                               session={session}
-                              onCancel={cancelSession}
+                              onCancel={handleCancelSession}
+                              cancellationInfo={cancellationInfo}
                             />
                           ))}
                         </div>
@@ -370,7 +403,19 @@ export default function Mentoring() {
         onOpenChange={setScheduleModalOpen}
         onBook={bookSession}
         fetchAvailability={fetchMentorAvailability}
+        fetchBookedSlots={fetchBookedSlots}
         remainingSessions={remainingSessions}
+        minAdvanceHours={minAdvanceHours}
+      />
+
+      <RescheduleModal
+        session={sessionToReschedule}
+        open={rescheduleModalOpen}
+        onOpenChange={setRescheduleModalOpen}
+        onReschedule={rescheduleSession}
+        fetchAvailability={fetchMentorAvailability}
+        fetchBookedSlots={fetchBookedSlots}
+        minAdvanceHours={minAdvanceHours}
       />
     </div>
   );

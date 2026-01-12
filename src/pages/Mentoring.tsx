@@ -48,10 +48,10 @@ export default function Mentoring() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6 lg:p-8">
+      <Sidebar />
+      <div className="pl-64">
+        <Header />
+        <main className="p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

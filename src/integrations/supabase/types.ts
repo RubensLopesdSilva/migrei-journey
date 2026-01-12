@@ -73,6 +73,240 @@ export type Database = {
           },
         ]
       }
+      community_events: {
+        Row: {
+          created_at: string
+          description: string
+          ends_at: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          id: string
+          is_active: boolean
+          max_participants: number | null
+          meeting_url: string | null
+          phase_id: string | null
+          starts_at: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          ends_at: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_active?: boolean
+          max_participants?: number | null
+          meeting_url?: string | null
+          phase_id?: string | null
+          starts_at: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          ends_at?: string
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_active?: boolean
+          max_participants?: number | null
+          meeting_url?: string | null
+          phase_id?: string | null
+          starts_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      community_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          reference_id: string | null
+          reference_type: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          reference_id?: string | null
+          reference_type?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      community_posts: {
+        Row: {
+          comments_count: number
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_pinned: boolean
+          likes_count: number
+          phase_id: string
+          post_type: Database["public"]["Enums"]["post_type"]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_pinned?: boolean
+          likes_count?: number
+          phase_id: string
+          post_type?: Database["public"]["Enums"]["post_type"]
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comments_count?: number
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_pinned?: boolean
+          likes_count?: number
+          phase_id?: string
+          post_type?: Database["public"]["Enums"]["post_type"]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      community_xp_actions: {
+        Row: {
+          action_type: string
+          daily_limit: number | null
+          description: string | null
+          id: string
+          xp_reward: number
+        }
+        Insert: {
+          action_type: string
+          daily_limit?: number | null
+          description?: string | null
+          id?: string
+          xp_reward?: number
+        }
+        Update: {
+          action_type?: string
+          daily_limit?: number | null
+          description?: string | null
+          id?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
+      content_reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      conversation_requests: {
+        Row: {
+          created_at: string
+          feedback_requested: string | null
+          feedback_requester: string | null
+          id: string
+          meeting_url: string | null
+          rating_requested: number | null
+          rating_requester: number | null
+          reason: string
+          requested_id: string
+          requester_id: string
+          scheduled_at: string | null
+          status: Database["public"]["Enums"]["conversation_status"]
+          suggested_duration: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_requested?: string | null
+          feedback_requester?: string | null
+          id?: string
+          meeting_url?: string | null
+          rating_requested?: number | null
+          rating_requester?: number | null
+          reason: string
+          requested_id: string
+          requester_id: string
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["conversation_status"]
+          suggested_duration?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          feedback_requested?: string | null
+          feedback_requester?: string | null
+          id?: string
+          meeting_url?: string | null
+          rating_requested?: number | null
+          rating_requester?: number | null
+          reason?: string
+          requested_id?: string
+          requester_id?: string
+          scheduled_at?: string | null
+          status?: Database["public"]["Enums"]["conversation_status"]
+          suggested_duration?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       coupon_redemptions: {
         Row: {
           coupon_id: string
@@ -187,6 +421,154 @@ export type Database = {
           updated_at?: string
           valid_from?: string
           valid_until?: string | null
+        }
+        Relationships: []
+      }
+      event_registrations: {
+        Row: {
+          attended: boolean | null
+          created_at: string
+          event_id: string
+          feedback: string | null
+          id: string
+          rating: number | null
+          user_id: string
+        }
+        Insert: {
+          attended?: boolean | null
+          created_at?: string
+          event_id: string
+          feedback?: string | null
+          id?: string
+          rating?: number | null
+          user_id: string
+        }
+        Update: {
+          attended?: boolean | null
+          created_at?: string
+          event_id?: string
+          feedback?: string | null
+          id?: string
+          rating?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "community_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      give_ask_posts: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          phase_id: string | null
+          responses_count: number
+          skills_related: string[] | null
+          title: string
+          type: Database["public"]["Enums"]["give_ask_type"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          is_active?: boolean
+          phase_id?: string | null
+          responses_count?: number
+          skills_related?: string[] | null
+          title: string
+          type: Database["public"]["Enums"]["give_ask_type"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          phase_id?: string | null
+          responses_count?: number
+          skills_related?: string[] | null
+          title?: string
+          type?: Database["public"]["Enums"]["give_ask_type"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      give_ask_responses: {
+        Row: {
+          created_at: string
+          id: string
+          is_accepted: boolean | null
+          message: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_accepted?: boolean | null
+          message: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_accepted?: boolean | null
+          message?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "give_ask_responses_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "give_ask_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      match_suggestions: {
+        Row: {
+          created_at: string
+          id: string
+          match_reasons: Json
+          match_score: number
+          status: string
+          suggested_user_id: string
+          user_id: string
+          week_of: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_reasons?: Json
+          match_score?: number
+          status?: string
+          suggested_user_id: string
+          user_id: string
+          week_of: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_reasons?: Json
+          match_score?: number
+          status?: string
+          suggested_user_id?: string
+          user_id?: string
+          week_of?: string
         }
         Relationships: []
       }
@@ -586,6 +968,70 @@ export type Database = {
           },
         ]
       }
+      post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -791,6 +1237,60 @@ export type Database = {
           },
         ]
       }
+      user_blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      user_connections: {
+        Row: {
+          created_at: string
+          id: string
+          match_reason: string | null
+          requested_id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["connection_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_reason?: string | null
+          requested_id: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["connection_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_reason?: string | null
+          requested_id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["connection_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_missions: {
         Row: {
           assigned_at: string
@@ -862,6 +1362,51 @@ export type Database = {
           paid_cancellations?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_networking_profiles: {
+        Row: {
+          career_objective: string | null
+          created_at: string
+          id: string
+          interest_areas: string[] | null
+          is_public: boolean
+          linkedin_url: string | null
+          previous_experience: string | null
+          skills: string[] | null
+          updated_at: string
+          user_id: string
+          what_offering: string | null
+          what_seeking: string | null
+        }
+        Insert: {
+          career_objective?: string | null
+          created_at?: string
+          id?: string
+          interest_areas?: string[] | null
+          is_public?: boolean
+          linkedin_url?: string | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id: string
+          what_offering?: string | null
+          what_seeking?: string | null
+        }
+        Update: {
+          career_objective?: string | null
+          created_at?: string
+          id?: string
+          interest_areas?: string[] | null
+          is_public?: boolean
+          linkedin_url?: string | null
+          previous_experience?: string | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id?: string
+          what_offering?: string | null
+          what_seeking?: string | null
         }
         Relationships: []
       }
@@ -1154,12 +1699,25 @@ export type Database = {
         | "checkpoint"
         | "quiz"
         | "reflection"
+      connection_status: "pending" | "accepted" | "rejected" | "blocked"
+      conversation_status:
+        | "pending"
+        | "accepted"
+        | "declined"
+        | "completed"
+        | "cancelled"
       coupon_eligibility:
         | "all_plans"
         | "specific_plans"
         | "new_users_only"
         | "upgrade_only"
       coupon_type: "percentage" | "fixed_amount" | "trial_extension"
+      event_type:
+        | "networking_round"
+        | "workshop"
+        | "q_and_a"
+        | "mentoring_group"
+      give_ask_type: "give" | "ask"
       mission_type: "daily" | "weekly" | "phase" | "special"
       payment_event_type:
         | "payment_succeeded"
@@ -1173,6 +1731,13 @@ export type Database = {
         | "customer_created"
         | "refund_processed"
       phase_status: "locked" | "available" | "in_progress" | "completed"
+      post_type:
+        | "stuck_at"
+        | "completed_phase"
+        | "need_help"
+        | "can_help"
+        | "opportunity"
+        | "general"
       subscription_plan: "free" | "premium"
       subscription_status:
         | "active"
@@ -1311,6 +1876,14 @@ export const Constants = {
   public: {
     Enums: {
       activity_type: ["lesson", "exercise", "checkpoint", "quiz", "reflection"],
+      connection_status: ["pending", "accepted", "rejected", "blocked"],
+      conversation_status: [
+        "pending",
+        "accepted",
+        "declined",
+        "completed",
+        "cancelled",
+      ],
       coupon_eligibility: [
         "all_plans",
         "specific_plans",
@@ -1318,6 +1891,13 @@ export const Constants = {
         "upgrade_only",
       ],
       coupon_type: ["percentage", "fixed_amount", "trial_extension"],
+      event_type: [
+        "networking_round",
+        "workshop",
+        "q_and_a",
+        "mentoring_group",
+      ],
+      give_ask_type: ["give", "ask"],
       mission_type: ["daily", "weekly", "phase", "special"],
       payment_event_type: [
         "payment_succeeded",
@@ -1332,6 +1912,14 @@ export const Constants = {
         "refund_processed",
       ],
       phase_status: ["locked", "available", "in_progress", "completed"],
+      post_type: [
+        "stuck_at",
+        "completed_phase",
+        "need_help",
+        "can_help",
+        "opportunity",
+        "general",
+      ],
       subscription_plan: ["free", "premium"],
       subscription_status: [
         "active",

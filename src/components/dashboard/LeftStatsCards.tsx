@@ -6,22 +6,26 @@ interface StatCardProps {
   label: string;
   color: string;
   progress?: number;
+  delay?: number;
 }
 
-function StatCard({ icon: Icon, value, label, color, progress }: StatCardProps) {
+function StatCard({ icon: Icon, value, label, color, progress, delay = 0 }: StatCardProps) {
   return (
-    <div className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center justify-center text-center min-h-[100px]">
+    <div 
+      className="bg-card border border-border rounded-2xl p-5 flex flex-col items-center justify-center text-center hover:border-primary/20 hover:shadow-md transition-all duration-300 animate-fade-in"
+      style={{ animationDelay: `${delay}ms` }}
+    >
       <div 
-        className="h-9 w-9 rounded-xl flex items-center justify-center mb-2"
-        style={{ backgroundColor: `${color}15` }}
+        className="h-10 w-10 rounded-xl flex items-center justify-center mb-3"
+        style={{ backgroundColor: `color-mix(in srgb, ${color} 15%, transparent)` }}
       >
-        <Icon className="h-4.5 w-4.5" style={{ color }} />
+        <Icon className="h-5 w-5" style={{ color }} />
       </div>
-      <span className="text-2xl font-bold text-foreground leading-tight">{value}</span>
+      <span className="text-2xl font-bold text-foreground leading-none">{value}</span>
       {progress !== undefined && (
-        <div className="w-full h-1.5 bg-muted rounded-full mt-2 overflow-hidden">
+        <div className="w-full h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
           <div 
-            className="h-full rounded-full transition-all duration-500"
+            className="h-full rounded-full transition-all duration-700 ease-out"
             style={{ 
               width: `${progress}%`,
               backgroundColor: color 
@@ -29,20 +33,21 @@ function StatCard({ icon: Icon, value, label, color, progress }: StatCardProps) 
           />
         </div>
       )}
-      <span className="text-xs text-muted-foreground mt-1.5 leading-tight">{label}</span>
+      <span className="text-[11px] text-muted-foreground mt-2 leading-tight font-medium">{label}</span>
     </div>
   );
 }
 
 export function LeftStatsCards() {
   return (
-    <div className="flex flex-col gap-3 w-32">
+    <div className="flex flex-col gap-3 w-[140px]">
       <StatCard 
         icon={TrendingUp} 
         value="60%" 
         label="Progresso semanal" 
         color="hsl(var(--primary))"
         progress={60}
+        delay={0}
       />
       <StatCard 
         icon={Zap} 
@@ -50,12 +55,14 @@ export function LeftStatsCards() {
         label="Energia" 
         color="hsl(var(--phase-descobrir))"
         progress={75}
+        delay={100}
       />
       <StatCard 
         icon={Flame} 
         value="30" 
         label="Pontos XP" 
         color="hsl(var(--phase-despertar))"
+        delay={200}
       />
     </div>
   );

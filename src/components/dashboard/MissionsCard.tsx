@@ -21,46 +21,47 @@ export function MissionsCard() {
   const earnedXP = dailyMissions.filter(m => m.completed).reduce((acc, m) => acc + m.xp, 0);
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-4">
+    <div className="bg-card border border-border rounded-2xl p-4 hover:border-primary/20 transition-all duration-300 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Target className="h-3.5 w-3.5 text-primary" />
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Target className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-foreground">Missões do dia</h3>
+            <h3 className="font-semibold text-sm text-foreground leading-tight">Missões do dia</h3>
             <p className="text-[10px] text-muted-foreground">
-              {completedCount}/{dailyMissions.length} completas • +{earnedXP}/{totalXP} XP
+              {completedCount}/{dailyMissions.length} • +{earnedXP}/{totalXP} XP
             </p>
           </div>
         </div>
         <Link 
           to="/progresso"
-          className="text-primary hover:text-primary/80 transition-colors"
+          className="h-7 w-7 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
         >
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
 
       {/* Missions List */}
       <div className="space-y-1.5">
-        {dailyMissions.map((mission) => (
+        {dailyMissions.map((mission, index) => (
           <div 
             key={mission.id}
-            className={`flex items-center justify-between p-2 rounded-lg transition-all cursor-pointer ${
+            className={`flex items-center justify-between p-2.5 rounded-xl transition-all duration-200 cursor-pointer group ${
               mission.completed 
-                ? 'bg-primary/5' 
-                : 'bg-muted/30 hover:bg-muted/50'
+                ? 'bg-primary/5 border border-primary/10' 
+                : 'bg-muted/30 border border-transparent hover:bg-muted/50 hover:border-border'
             }`}
+            style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               {mission.completed ? (
                 <CheckCircle2 className="h-4 w-4 text-primary" />
               ) : (
-                <Circle className="h-4 w-4 text-muted-foreground" />
+                <Circle className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
               )}
-              <span className={`text-xs ${
+              <span className={`text-xs leading-tight ${
                 mission.completed 
                   ? 'text-muted-foreground line-through' 
                   : 'text-foreground'
@@ -68,10 +69,10 @@ export function MissionsCard() {
                 {mission.title}
               </span>
             </div>
-            <span className={`text-[10px] font-medium ${
+            <span className={`text-[10px] font-semibold ${
               mission.completed ? 'text-primary' : 'text-muted-foreground'
             }`}>
-              +{mission.xp} XP
+              +{mission.xp}
             </span>
           </div>
         ))}

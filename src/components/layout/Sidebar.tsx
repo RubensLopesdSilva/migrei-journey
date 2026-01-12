@@ -4,9 +4,6 @@ import {
   TrendingUp, 
   Users, 
   GraduationCap,
-  CheckSquare,
-  BookOpen,
-  FolderKanban,
   Droplet,
   Settings,
   LogOut
@@ -29,11 +26,6 @@ const mainNavItems: NavItem[] = [
   { icon: GraduationCap, label: "Mentoria", href: "/mentoria" },
 ];
 
-const secondaryNavItems: NavItem[] = [
-  { icon: CheckSquare, label: "Tarefas", href: "/tarefas" },
-  { icon: BookOpen, label: "Conteúdo", href: "/conteudo" },
-  { icon: FolderKanban, label: "Projetos", href: "/projetos" },
-];
 
 export function Sidebar() {
   const location = useLocation();
@@ -76,26 +68,6 @@ export function Sidebar() {
           ))}
         </ul>
 
-        {/* Divider */}
-        <div className="my-6 border-t border-sidebar-border" />
-
-        {/* Secondary Navigation */}
-        <ul className="space-y-1">
-          {secondaryNavItems.map((item) => (
-            <li key={item.label}>
-              <a
-                href={item.href}
-                className={cn(
-                  "sidebar-item",
-                  location.pathname === item.href && "active"
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                <span className="font-medium">{item.label}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </nav>
 
       {/* Footer Actions */}

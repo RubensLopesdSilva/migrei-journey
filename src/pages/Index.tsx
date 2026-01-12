@@ -1,8 +1,6 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
-import { SkillsCard } from "@/components/dashboard/SkillsCard";
-import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
 import { WelcomePanel } from "@/components/dashboard/WelcomePanel";
 
 const Index = () => {
@@ -11,41 +9,31 @@ const Index = () => {
       <Sidebar />
 
       <div className="pl-64 min-h-screen">
-        <main className="p-8 min-h-screen flex flex-col">
-          {/* Hero Section - Split Layout */}
-          <div className="flex-1 flex items-center gap-12 mb-8">
-            {/* Left Panel - Welcome & Actions */}
-            <div className="w-[380px] flex-shrink-0">
+        <main className="p-10 min-h-screen flex flex-col">
+          {/* Hero Section - Asymmetric Split */}
+          <div className="flex-1 flex items-center gap-16">
+            {/* Left Panel - Welcome & Context */}
+            <div className="w-[420px] flex-shrink-0 space-y-8">
               <WelcomePanel />
+              
+              {/* Mission Card - Below Welcome */}
+              <MissionCard />
             </div>
 
-            {/* Right - Roda Migrei Hero */}
-            <div className="flex-1 flex items-center justify-center">
+            {/* Right - Roda Migrei Hero (Emphasis) */}
+            <div className="flex-1 flex items-center justify-center -mt-8">
               <div className="relative">
-                {/* Ambient glow */}
-                <div className="absolute -inset-20 bg-gradient-radial from-primary/6 via-transparent to-transparent blur-3xl pointer-events-none" />
+                {/* Soft ambient glow */}
+                <div className="absolute -inset-32 bg-gradient-radial from-primary/5 via-transparent to-transparent blur-3xl pointer-events-none" />
                 
-                {/* Secondary glow */}
-                <div className="absolute -inset-10 bg-gradient-radial from-accent/4 via-transparent to-transparent blur-2xl pointer-events-none" />
+                {/* Inner glow */}
+                <div className="absolute -inset-16 bg-gradient-radial from-accent/3 via-transparent to-transparent blur-2xl pointer-events-none" />
                 
-                {/* The Circle */}
-                <div className="relative">
+                {/* The Circle - Hero Element */}
+                <div className="relative transform scale-110">
                   <MigreiCircle />
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Bottom Cards - Flowing Layout */}
-          <div className="flex gap-4 items-stretch">
-            <div className="flex-1">
-              <MissionCard />
-            </div>
-            <div className="w-64">
-              <SkillsCard />
-            </div>
-            <div className="w-64">
-              <NetworkingCard />
             </div>
           </div>
         </main>

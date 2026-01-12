@@ -17,34 +17,41 @@ const Index = () => {
       <div className="pl-64">
         {/* Main Dashboard Content */}
         <main className="p-8 space-y-8">
-          {/* Hero Motivacional */}
+          {/* Hero Motivacional - Compacto */}
           <HeroMotivational />
 
-          {/* Quick Stats Bar */}
-          <QuickStatsBar />
+          {/* Layout Principal: Roda em Destaque Central */}
+          <div className="grid grid-cols-12 gap-6">
+            {/* Coluna Esquerda - Próxima Ação + Skills */}
+            <div className="col-span-3 space-y-4">
+              <NextActionCard />
+              <SkillsCard />
+            </div>
 
-          {/* Próxima Ação em Destaque */}
-          <NextActionCard />
+            {/* Centro - RODA MIGREI EM DESTAQUE */}
+            <div className="col-span-6">
+              <div className="card-elevated p-6 relative overflow-hidden">
+                {/* Glow effect behind circle */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-[500px] h-[500px] rounded-full bg-gradient-radial from-primary/10 via-transparent to-transparent blur-3xl" />
+                </div>
+                
+                {/* Circle centered */}
+                <div className="relative flex justify-center">
+                  <MigreiCircle />
+                </div>
+              </div>
 
-          {/* Main Grid: Círculo + Cards */}
-          <div className="grid grid-cols-12 gap-8">
-            {/* Center - Migrei Circle */}
-            <div className="col-span-7 flex items-start justify-center">
-              <div className="card-elevated p-8 w-full flex justify-center">
-                <MigreiCircle />
+              {/* Quick Stats abaixo da roda */}
+              <div className="mt-6">
+                <QuickStatsBar />
               </div>
             </div>
 
-            {/* Right Sidebar - Reorganized Cards */}
-            <div className="col-span-5 space-y-6">
-              {/* Missões - Card Principal (maior) */}
+            {/* Coluna Direita - Missões + Networking */}
+            <div className="col-span-3 space-y-4">
               <MissionCard />
-
-              {/* Skills e Networking lado a lado */}
-              <div className="grid grid-cols-2 gap-4">
-                <SkillsCard />
-                <NetworkingCard />
-              </div>
+              <NetworkingCard />
             </div>
           </div>
         </main>

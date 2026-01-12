@@ -16,36 +16,36 @@ const connections: Connection[] = [
 
 export function NetworkingCard() {
   return (
-    <div className="bg-card border border-border rounded-2xl p-4">
+    <div className="bg-card border border-border rounded-2xl p-4 hover:border-primary/20 transition-all duration-300 animate-fade-in" style={{ animationDelay: '200ms' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Users className="h-3.5 w-3.5 text-primary" />
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-[hsl(var(--phase-deslanchar))]/10 flex items-center justify-center">
+            <Users className="h-4 w-4 text-[hsl(var(--phase-deslanchar))]" />
           </div>
           <h3 className="font-semibold text-sm text-foreground">Networking</h3>
         </div>
         <Link 
           to="/comunidade"
-          className="text-primary hover:text-primary/80 transition-colors"
+          className="h-7 w-7 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
         >
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>
 
       {/* Connections */}
-      <div className="space-y-2 mb-3">
+      <div className="space-y-1.5 mb-3">
         {connections.map((connection, index) => (
           <div 
             key={index}
-            className="flex items-center gap-2 p-2 rounded-lg bg-muted/30"
+            className="flex items-center gap-2.5 p-2 rounded-xl bg-muted/30 border border-transparent hover:border-border transition-all cursor-pointer"
           >
             <Avatar className="h-7 w-7">
-              <AvatarFallback className={`${connection.color} text-white text-xs`}>
+              <AvatarFallback className={`${connection.color} text-white text-[10px] font-semibold`}>
                 {connection.initials}
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs text-foreground">{connection.name}</span>
+            <span className="text-xs text-foreground font-medium">{connection.name}</span>
           </div>
         ))}
       </div>
@@ -54,7 +54,7 @@ export function NetworkingCard() {
       <Button 
         variant="default" 
         size="sm" 
-        className="w-full text-xs"
+        className="w-full text-xs h-8"
         asChild
       >
         <Link to="/comunidade">Ver conexões</Link>

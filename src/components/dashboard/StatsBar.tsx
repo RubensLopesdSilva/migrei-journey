@@ -19,23 +19,18 @@ const stats: StatItem[] = [
 
 export function StatsBar() {
   return (
-    <div className="grid grid-cols-5 gap-3">
+    <div className="grid grid-cols-5 gap-2">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
           <div
             key={index}
-            className="bg-card border border-border rounded-2xl p-4 flex flex-col items-center justify-center text-center transition-all hover:shadow-md hover:border-primary/20"
+            className="bg-card border border-border rounded-xl px-3 py-2.5 flex flex-col items-center justify-center text-center transition-all hover:shadow-sm hover:border-primary/20"
           >
-            <div 
-              className="h-10 w-10 rounded-xl flex items-center justify-center mb-2"
-              style={{ backgroundColor: `${stat.color}15` }}
-            >
-              <Icon className="h-5 w-5" style={{ color: stat.color }} />
-            </div>
-            <span className="text-xl font-bold text-foreground">{stat.value}</span>
+            <Icon className="h-4 w-4 mb-1" style={{ color: stat.color }} />
+            <span className="text-lg font-bold text-foreground leading-tight">{stat.value}</span>
             {stat.hasProgress && (
-              <div className="w-full h-1.5 bg-muted rounded-full mt-1.5 overflow-hidden">
+              <div className="w-full h-1 bg-muted rounded-full mt-1 overflow-hidden">
                 <div 
                   className="h-full rounded-full transition-all"
                   style={{ 
@@ -45,7 +40,7 @@ export function StatsBar() {
                 />
               </div>
             )}
-            <span className="text-xs text-muted-foreground mt-1">{stat.label}</span>
+            <span className="text-[10px] text-muted-foreground mt-0.5 leading-tight">{stat.label}</span>
           </div>
         );
       })}

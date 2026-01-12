@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Lightbulb, 
   Search, 
@@ -87,12 +87,21 @@ const phases: Phase[] = [
 export function MigreiCircle() {
   const [activePhase, setActivePhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
+  const [showInitialPulse, setShowInitialPulse] = useState(true);
 
-  const size = 320;
+  // Stop pulsing after user interaction or after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowInitialPulse(false);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const size = 420;
   const center = size / 2;
-  const outerRadius = 150;
-  const innerRadius = 55;
-  const gapAngle = 6; // ~5mm gap between segments
+  const outerRadius = 195;
+  const innerRadius = 70;
+  const gapDegrees = 3; // Equal gap between all segments
 
   const createSegmentPath = (startAngle: number, endAngle: number, outer: number, inner: number) => {
     const startRad = (startAngle - 90) * (Math.PI / 180);
@@ -118,8 +127,13 @@ export function MigreiCircle() {
     };
   };
 
+  const handlePhaseClick = (phaseId: string) => {
+    setShowInitialPulse(false);
+    setActivePhase(activePhase === phaseId ? null : phaseId);
+  };
+
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-8">
       <div className="relative">
         <svg 
           width={size} 
@@ -128,36 +142,51 @@ export function MigreiCircle() {
           className="animate-scale-in"
         >
           {/* Segments */}
-          {phases.map((phase) => {
-            const startAngle = phase.angle + gapAngle / 2;
-            const endAngle = phase.angle + 60 - gapAngle / 2;
+          {phases.map((phase, index) => {
+            const segmentSize = 60; // 360 / 6 phases
+            const startAngle = index * segmentSize + gapDegrees / 2;
+            const endAngle = (index + 1) * segmentSize - gapDegrees / 2;
             const isActive = activePhase === phase.id;
             const isHovered = hoveredPhase === phase.id;
-            const iconPos = getIconPosition(phase.angle, (outerRadius + innerRadius) / 2);
+            const isDespertar = phase.id === "despertar";
+            const shouldPulse = isDespertar && showInitialPulse && !activePhase;
+            const iconPos = getIconPosition(index * segmentSize, (outerRadius + innerRadius) / 2);
 
             return (
               <g key={phase.id}>
+                {/* Pulse glow for Despertar */}
+                {shouldPulse && (
+                  <path
+                    d={createSegmentPath(startAngle, endAngle, outerRadius + 8, innerRadius - 4)}
+                    fill={phase.bgColor}
+                    opacity={0.3}
+                    className="animate-pulse"
+                  />
+                )}
+
                 {/* Segment */}
                 <path
                   d={createSegmentPath(startAngle, endAngle, outerRadius, innerRadius)}
                   fill={isHovered || isActive ? phase.hoverColor : phase.bgColor}
-                  className="cursor-pointer transition-all duration-200"
+                  className={`cursor-pointer transition-all duration-200 ${shouldPulse ? 'animate-pulse' : ''}`}
                   style={{
                     filter: isHovered || isActive 
-                      ? 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' 
-                      : 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))',
+                      ? 'drop-shadow(0 6px 16px rgba(0,0,0,0.3))' 
+                      : shouldPulse 
+                        ? 'drop-shadow(0 4px 12px rgba(245, 158, 11, 0.4))'
+                        : 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))',
                     transform: isHovered ? `scale(1.03)` : isActive ? 'scale(1.02)' : 'scale(1)',
                     transformOrigin: `${center}px ${center}px`,
                   }}
                   onMouseEnter={() => setHoveredPhase(phase.id)}
                   onMouseLeave={() => setHoveredPhase(null)}
-                  onClick={() => setActivePhase(activePhase === phase.id ? null : phase.id)}
+                  onClick={() => handlePhaseClick(phase.id)}
                 />
                 
                 {/* Active ring indicator */}
                 {isActive && (
                   <path
-                    d={createSegmentPath(startAngle, endAngle, outerRadius + 4, outerRadius + 2)}
+                    d={createSegmentPath(startAngle, endAngle, outerRadius + 5, outerRadius + 2)}
                     fill={phase.hoverColor}
                     className="animate-pulse"
                   />
@@ -165,21 +194,21 @@ export function MigreiCircle() {
 
                 {/* Phase Icon */}
                 <foreignObject
-                  x={iconPos.x - 16}
-                  y={iconPos.y - 16}
-                  width={32}
-                  height={32}
+                  x={iconPos.x - 20}
+                  y={iconPos.y - 20}
+                  width={40}
+                  height={40}
                   className="pointer-events-none"
                 >
                   <div 
                     className="flex items-center justify-center h-full w-full rounded-full"
                     style={{ 
-                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      backgroundColor: 'rgba(255,255,255,0.25)',
                       backdropFilter: 'blur(4px)'
                     }}
                   >
                     <phase.icon 
-                      className="h-4 w-4" 
+                      className="h-5 w-5" 
                       style={{ color: phase.textColor }}
                       strokeWidth={2.5}
                     />
@@ -193,7 +222,7 @@ export function MigreiCircle() {
           <circle
             cx={center}
             cy={center}
-            r={innerRadius - 6}
+            r={innerRadius - 8}
             fill="hsl(var(--card))"
             stroke="hsl(var(--border))"
             strokeWidth="2"
@@ -202,14 +231,14 @@ export function MigreiCircle() {
 
           {/* Center content */}
           <foreignObject
-            x={center - 24}
-            y={center - 24}
-            width={48}
-            height={48}
+            x={center - 28}
+            y={center - 28}
+            width={56}
+            height={56}
           >
             <div className="flex items-center justify-center h-full">
-              <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary/20 flex items-center justify-center">
-                <User className="h-5 w-5 text-primary" />
+              <div className="h-13 w-13 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border-2 border-primary/20 flex items-center justify-center">
+                <User className="h-6 w-6 text-primary" />
               </div>
             </div>
           </foreignObject>
@@ -218,19 +247,19 @@ export function MigreiCircle() {
         {/* Tooltip on hover/active */}
         {(hoveredPhase || activePhase) && (
           <div 
-            className="absolute left-1/2 -translate-x-1/2 bg-card border border-border rounded-xl px-4 py-2 shadow-lg animate-fade-in z-10"
-            style={{ bottom: '-16px' }}
+            className="absolute left-1/2 -translate-x-1/2 bg-card border border-border rounded-xl px-5 py-3 shadow-lg animate-fade-in z-10"
+            style={{ bottom: '-24px' }}
           >
             <div className="flex items-center gap-2">
               <div 
-                className="w-2.5 h-2.5 rounded-full"
+                className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: phases.find(p => p.id === (hoveredPhase || activePhase))?.bgColor }}
               />
-              <p className="font-semibold text-foreground text-sm">
+              <p className="font-semibold text-foreground">
                 {phases.find(p => p.id === (hoveredPhase || activePhase))?.name}
               </p>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-sm text-muted-foreground mt-1">
               {phases.find(p => p.id === (hoveredPhase || activePhase))?.description}
             </p>
           </div>
@@ -238,23 +267,23 @@ export function MigreiCircle() {
       </div>
 
       {/* Legend - horizontal aligned */}
-      <div className="grid grid-cols-6 gap-1 w-full max-w-sm">
+      <div className="grid grid-cols-6 gap-2 w-full max-w-md">
         {phases.map((phase) => (
           <button
             key={phase.id}
-            onClick={() => setActivePhase(activePhase === phase.id ? null : phase.id)}
-            className={`flex flex-col items-center gap-1 px-1 py-2 rounded-lg text-center transition-all duration-200 ${
+            onClick={() => handlePhaseClick(phase.id)}
+            className={`flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-lg text-center transition-all duration-200 ${
               activePhase === phase.id 
                 ? 'bg-secondary shadow-sm' 
                 : 'hover:bg-secondary/50'
             }`}
           >
             <div 
-              className="w-3 h-3 rounded-full"
+              className="w-3.5 h-3.5 rounded-full"
               style={{ backgroundColor: phase.bgColor }}
             />
             <span 
-              className="text-[10px] font-medium leading-tight"
+              className="text-xs font-medium leading-tight"
               style={{ 
                 color: activePhase === phase.id ? phase.hoverColor : 'hsl(var(--muted-foreground))',
               }}

@@ -1,4 +1,4 @@
-import { Star, Calendar, Trophy, Zap, TrendingUp } from "lucide-react";
+import { Star, Calendar, Trophy, Zap, TrendingUp, Flame } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 interface QuickStatsBarProps {
@@ -7,6 +7,7 @@ interface QuickStatsBarProps {
   ranking?: number;
   energy?: number;
   weeklyProgress?: number;
+  streakDays?: number;
 }
 
 export function QuickStatsBar({ 
@@ -14,7 +15,8 @@ export function QuickStatsBar({
   days = 100, 
   ranking = 1, 
   energy = 75,
-  weeklyProgress = 60 
+  weeklyProgress = 60,
+  streakDays = 7
 }: QuickStatsBarProps) {
   const stats = [
     {
@@ -23,6 +25,13 @@ export function QuickStatsBar({
       value: points.toLocaleString(),
       color: "hsl(var(--phase-despertar))",
       bgColor: "hsl(var(--phase-despertar) / 0.15)"
+    },
+    {
+      icon: Flame,
+      label: "Dias seguidos",
+      value: streakDays.toString(),
+      color: "hsl(var(--accent))",
+      bgColor: "hsl(var(--accent) / 0.15)"
     },
     {
       icon: Calendar,
@@ -59,7 +68,7 @@ export function QuickStatsBar({
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-3 animate-fade-in">
+    <div className="grid grid-cols-6 gap-3 animate-fade-in">
       {stats.map((stat, index) => (
         <div 
           key={stat.label}

@@ -9,7 +9,7 @@ import {
   User,
   ArrowRight
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Phase {
   id: string;
@@ -20,6 +20,8 @@ interface Phase {
   textColor: string;
   description: string;
   angle: number;
+  route: string;
+  available: boolean;
 }
 
 // Cores otimizadas para contraste e legibilidade
@@ -32,7 +34,9 @@ const phases: Phase[] = [
     hoverColor: "#D97706", // Amber 600
     textColor: "#1F2937", // Gray 800 - escuro para contraste
     description: "Percepção da necessidade de mudança",
-    angle: 0 
+    angle: 0,
+    route: "/fase/despertar",
+    available: true
   },
   { 
     id: "descobrir", 
@@ -42,7 +46,9 @@ const phases: Phase[] = [
     hoverColor: "#059669", // Emerald 600
     textColor: "#FFFFFF",
     description: "Autoconhecimento e clareza de propósito",
-    angle: 60 
+    angle: 60,
+    route: "/fase/descobrir",
+    available: false
   },
   { 
     id: "decidir", 
@@ -52,7 +58,9 @@ const phases: Phase[] = [
     hoverColor: "#2563EB", // Blue 600
     textColor: "#FFFFFF",
     description: "Definição estratégica da rota e metas",
-    angle: 120 
+    angle: 120,
+    route: "/fase/decidir",
+    available: false
   },
   { 
     id: "desenvolver", 
@@ -62,7 +70,9 @@ const phases: Phase[] = [
     hoverColor: "#7C3AED", // Violet 600
     textColor: "#FFFFFF",
     description: "Construção de competências",
-    angle: 180 
+    angle: 180,
+    route: "/fase/desenvolver",
+    available: false
   },
   { 
     id: "deslanchar", 
@@ -72,7 +82,9 @@ const phases: Phase[] = [
     hoverColor: "#DB2777", // Pink 600
     textColor: "#FFFFFF",
     description: "Execução prática e networking",
-    angle: 240 
+    angle: 240,
+    route: "/fase/deslanchar",
+    available: false
   },
   { 
     id: "desfrutar", 
@@ -82,11 +94,14 @@ const phases: Phase[] = [
     hoverColor: "#EA580C", // Orange 600
     textColor: "#FFFFFF",
     description: "Consolidação e celebração",
-    angle: 300 
+    angle: 300,
+    route: "/fase/desfrutar",
+    available: false
   },
 ];
 
 export function MigreiCircle() {
+  const navigate = useNavigate();
   const [activePhase, setActivePhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
   const [pulseOpacity, setPulseOpacity] = useState(0.6);
@@ -191,9 +206,13 @@ export function MigreiCircle() {
     };
   };
 
-  const handlePhaseClick = (phaseId: string) => {
+  const handlePhaseClick = (phase: Phase) => {
     setPulseOpacity(1);
-    setActivePhase(activePhase === phaseId ? null : phaseId);
+    if (phase.available) {
+      navigate(phase.route);
+    } else {
+      setActivePhase(activePhase === phase.id ? null : phase.id);
+    }
   };
 
   return (
@@ -219,20 +238,20 @@ export function MigreiCircle() {
                 <path
                   d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
                   fill={isHovered || isActive ? phase.hoverColor : phase.bgColor}
-                  className="cursor-pointer transition-all duration-300"
+                  className={phase.available ? "cursor-pointer transition-all duration-300" : "cursor-not-allowed transition-all duration-300"}
                   style={{
-                    opacity: shouldPulse ? pulseOpacity : 1,
+                    opacity: !phase.available && !isDespertar ? 0.5 : (shouldPulse ? pulseOpacity : 1),
                     filter: isHovered || isActive 
                       ? 'drop-shadow(0 6px 16px rgba(0,0,0,0.3))' 
                       : shouldPulse 
                         ? 'drop-shadow(0 2px 8px rgba(245, 158, 11, 0.25))'
                         : 'drop-shadow(0 2px 6px rgba(0,0,0,0.12))',
-                    transform: isHovered ? `scale(1.03)` : isActive ? 'scale(1.02)' : 'scale(1)',
+                    transform: isHovered && phase.available ? `scale(1.03)` : isActive ? 'scale(1.02)' : 'scale(1)',
                     transformOrigin: `${center}px ${center}px`,
                   }}
                   onMouseEnter={() => setHoveredPhase(phase.id)}
                   onMouseLeave={() => setHoveredPhase(null)}
-                  onClick={() => handlePhaseClick(phase.id)}
+                  onClick={() => handlePhaseClick(phase)}
                 />
                 
                 {/* Active ring indicator */}
@@ -343,11 +362,11 @@ export function MigreiCircle() {
         {phases.map((phase) => (
           <button
             key={phase.id}
-            onClick={() => handlePhaseClick(phase.id)}
+            onClick={() => handlePhaseClick(phase)}
             className={`flex flex-col items-center gap-1.5 px-2 py-2.5 rounded-lg text-center transition-all duration-200 ${
               activePhase === phase.id 
                 ? 'bg-secondary shadow-sm' 
-                : 'hover:bg-secondary/50'
+                : phase.available ? 'hover:bg-secondary/50' : 'opacity-50 cursor-not-allowed'
             }`}
           >
             <div 

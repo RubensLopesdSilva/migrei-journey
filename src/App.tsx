@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Mentoring from "./pages/Mentoring";
 import Progress from "./pages/Progress";
 import Community from "./pages/Community";
+import Fase1Despertar from "./pages/Fase1Despertar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,8 @@ const App = () => (
               <Route path="/mentoria" element={<Mentoring />} />
               <Route path="/progresso" element={<Progress />} />
               <Route path="/comunidade" element={<Community />} />
+              <Route path="/fase" element={<Fase1Despertar />} />
+              <Route path="/fase/despertar" element={<Fase1Despertar />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

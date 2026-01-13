@@ -73,6 +73,75 @@ export type Database = {
           },
         ]
       }
+      career_wheel_assessments: {
+        Row: {
+          created_at: string
+          current_rating: number
+          desired_rating: number
+          dimension: string
+          id: string
+          notes: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_rating?: number
+          desired_rating?: number
+          dimension: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_rating?: number
+          desired_rating?: number
+          dimension?: string
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      clarity_reports: {
+        Row: {
+          areas_to_develop: Json | null
+          core_motivators: Json | null
+          generated_at: string
+          id: string
+          professional_identity: string | null
+          recommended_routes: Json | null
+          top_competencies: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          areas_to_develop?: Json | null
+          core_motivators?: Json | null
+          generated_at?: string
+          id?: string
+          professional_identity?: string | null
+          recommended_routes?: Json | null
+          top_competencies?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          areas_to_develop?: Json | null
+          core_motivators?: Json | null
+          generated_at?: string
+          id?: string
+          professional_identity?: string | null
+          recommended_routes?: Json | null
+          top_competencies?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       coach_conversations: {
         Row: {
           context_type: string
@@ -282,6 +351,45 @@ export type Database = {
           description?: string | null
           id?: string
           xp_reward?: number
+        }
+        Relationships: []
+      }
+      competency_assessments: {
+        Row: {
+          category: string
+          competency_name: string
+          created_at: string
+          evidence: string | null
+          id: string
+          is_neglected: boolean | null
+          is_top_strength: boolean | null
+          self_rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          competency_name: string
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          is_neglected?: boolean | null
+          is_top_strength?: boolean | null
+          self_rating?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          competency_name?: string
+          created_at?: string
+          evidence?: string | null
+          id?: string
+          is_neglected?: boolean | null
+          is_top_strength?: boolean | null
+          self_rating?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -519,6 +627,78 @@ export type Database = {
           updated_at?: string
           valid_from?: string
           valid_until?: string | null
+        }
+        Relationships: []
+      }
+      diagnostic_results: {
+        Row: {
+          answers: Json
+          completed_at: string | null
+          created_at: string
+          diagnostic_type: string
+          id: string
+          result_summary: string | null
+          scores: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          diagnostic_type: string
+          id?: string
+          result_summary?: string | null
+          scores?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          diagnostic_type?: string
+          id?: string
+          result_summary?: string | null
+          scores?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      discovery_diary_entries: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          day_number: number
+          emotional_reaction: string | null
+          id: string
+          question: string
+          response: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          day_number: number
+          emotional_reaction?: string | null
+          id?: string
+          question: string
+          response?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          day_number?: number
+          emotional_reaction?: string | null
+          id?: string
+          question?: string
+          response?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1156,6 +1336,99 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profession_recommendations: {
+        Row: {
+          created_at: string
+          growth_outlook: string | null
+          id: string
+          is_selected: boolean | null
+          match_reasons: Json | null
+          match_score: number
+          profession_description: string | null
+          profession_name: string
+          required_skills: Json | null
+          salary_range: string | null
+          skills_gap: Json | null
+          updated_at: string
+          user_id: string
+          user_matching_skills: Json | null
+        }
+        Insert: {
+          created_at?: string
+          growth_outlook?: string | null
+          id?: string
+          is_selected?: boolean | null
+          match_reasons?: Json | null
+          match_score?: number
+          profession_description?: string | null
+          profession_name: string
+          required_skills?: Json | null
+          salary_range?: string | null
+          skills_gap?: Json | null
+          updated_at?: string
+          user_id: string
+          user_matching_skills?: Json | null
+        }
+        Update: {
+          created_at?: string
+          growth_outlook?: string | null
+          id?: string
+          is_selected?: boolean | null
+          match_reasons?: Json | null
+          match_score?: number
+          profession_description?: string | null
+          profession_name?: string
+          required_skills?: Json | null
+          salary_range?: string | null
+          skills_gap?: Json | null
+          updated_at?: string
+          user_id?: string
+          user_matching_skills?: Json | null
+        }
+        Relationships: []
+      }
+      professional_timeline: {
+        Row: {
+          ai_suggested_learning: string | null
+          created_at: string
+          event_description: string | null
+          event_title: string
+          event_type: string
+          event_year: number
+          id: string
+          learnings: string | null
+          sort_order: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ai_suggested_learning?: string | null
+          created_at?: string
+          event_description?: string | null
+          event_title: string
+          event_type?: string
+          event_year: number
+          id?: string
+          learnings?: string | null
+          sort_order?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ai_suggested_learning?: string | null
+          created_at?: string
+          event_description?: string | null
+          event_title?: string
+          event_type?: string
+          event_year?: number
+          id?: string
+          learnings?: string | null
+          sort_order?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

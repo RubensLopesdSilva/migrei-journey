@@ -1,4 +1,4 @@
-import { Flame, Star, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -53,8 +53,6 @@ export function HeroMotivational() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const [currentPhase] = useState("despertar"); // TODO: Get from user progress
-  const [streakDays] = useState(7); // TODO: Get from user progress
-  const [nextAchievement] = useState("Primeira Semana"); // TODO: Get dynamically
 
   useEffect(() => {
     if (user) {
@@ -94,30 +92,6 @@ export function HeroMotivational() {
           </p>
         </div>
 
-        {/* Streak & Achievement */}
-        <div className="flex items-center gap-4">
-          {/* Streak Badge */}
-          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-accent/20 border border-accent/30 shadow-sm">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-accent/30">
-              <Flame className="h-5 w-5 text-accent-foreground" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">{streakDays}</p>
-              <p className="text-xs font-medium text-foreground/70">dias seguidos</p>
-            </div>
-          </div>
-
-          {/* Next Achievement */}
-          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-primary/20 border border-primary/30 shadow-sm">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/30">
-              <Star className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-foreground">{nextAchievement}</p>
-              <p className="text-xs font-medium text-foreground/70">próxima conquista</p>
-            </div>
-          </div>
-        </div>
       </div>
 
     </div>

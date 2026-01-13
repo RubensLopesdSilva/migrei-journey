@@ -72,27 +72,27 @@ export function QuickStatsBar({
       {stats.map((stat, index) => (
         <div 
           key={stat.label}
-          className="card-elevated p-4 flex flex-col items-center text-center hover:shadow-lg transition-all duration-300"
+          className="card-elevated p-3 flex flex-col items-center text-center hover:shadow-lg transition-all duration-300"
           style={{ animationDelay: `${index * 50}ms` }}
         >
           <div 
-            className="h-12 w-12 rounded-xl flex items-center justify-center mb-3"
+            className="h-10 w-10 rounded-xl flex items-center justify-center mb-2"
             style={{ backgroundColor: stat.bgColor }}
           >
             <stat.icon 
-              className="h-6 w-6" 
+              className="h-5 w-5" 
               style={{ color: stat.color }}
             />
           </div>
           
           <p 
-            className="text-2xl font-bold"
+            className="text-xl font-bold"
             style={{ color: stat.color }}
           >
             {stat.value}
           </p>
           
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground">
             {stat.label}
           </p>
 

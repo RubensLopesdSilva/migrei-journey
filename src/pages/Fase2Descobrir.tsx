@@ -20,22 +20,29 @@ import {
   Clock, 
   Radar, 
   Sparkles,
-  FileText
+  FileText,
+  Search,
+  Check
 } from 'lucide-react';
 
-const steps = [
+type Step = 'diagnosticos' | 'roda' | 'diario' | 'timeline' | 'radar' | 'profissoes' | 'relatorio';
+
+const steps: { key: Step; label: string; icon: typeof Brain }[] = [
   { key: 'diagnosticos', label: 'Diagnósticos', icon: Brain },
-  { key: 'roda', label: 'Roda da Carreira', icon: Target },
+  { key: 'roda', label: 'Roda', icon: Target },
   { key: 'diario', label: 'Diário', icon: BookOpen },
-  { key: 'timeline', label: 'Linha do Tempo', icon: Clock },
-  { key: 'radar', label: 'Competências', icon: Radar },
+  { key: 'timeline', label: 'Timeline', icon: Clock },
+  { key: 'radar', label: 'Radar', icon: Radar },
   { key: 'profissoes', label: 'Profissões', icon: Sparkles },
   { key: 'relatorio', label: 'Relatório', icon: FileText },
 ];
 
 export default function Fase2Descobrir() {
-  const [activeStep, setActiveStep] = useState('diagnosticos');
+  const [activeStep, setActiveStep] = useState<Step>('diagnosticos');
   const { phaseProgress, isLoading } = useDiscovery();
+
+  const progress = { percentage: phaseProgress, completed: Math.floor(phaseProgress / 14.3) }; // 7 steps = ~14.3% each
+  const isPhaseComplete = progress.percentage === 100;
 
   const getCoachContext = () => {
     switch (activeStep) {
@@ -60,68 +67,91 @@ export default function Fase2Descobrir() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6 lg:p-8">
-          <div className="max-w-6xl mx-auto space-y-6">
-            {/* Phase Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <Sidebar />
+      <div className="pl-64">
+        <Header />
+        <main className="p-8 space-y-6">
+          {/* Phase Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Search className="h-6 w-6 text-primary" />
+              </div>
               <div>
-                <Badge variant="outline" className="mb-2">Fase 2</Badge>
-                <h1 className="text-3xl font-bold">Descobrir</h1>
+                <h1 className="text-2xl font-bold">Fase 2: Descobrir</h1>
                 <p className="text-muted-foreground">Autoconhecimento e diagnóstico profundo</p>
               </div>
-              <div className="flex items-center gap-3">
-                <Progress value={phaseProgress} className="w-32" />
-                <span className="text-sm font-medium">{phaseProgress}%</span>
-              </div>
             </div>
-
-            {/* Tabs */}
-            <Tabs value={activeStep} onValueChange={setActiveStep}>
-              <TabsList className="grid grid-cols-7 h-auto">
-                {steps.map((step) => {
-                  const Icon = step.icon;
-                  return (
-                    <TabsTrigger
-                      key={step.key}
-                      value={step.key}
-                      className="flex flex-col gap-1 py-2 px-1 text-xs"
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span className="hidden md:inline">{step.label}</span>
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-
-              <TabsContent value="diagnosticos" className="mt-6">
-                <DiagnosticHub />
-              </TabsContent>
-              <TabsContent value="roda" className="mt-6">
-                <CareerWheel />
-              </TabsContent>
-              <TabsContent value="diario" className="mt-6">
-                <DiscoveryDiary />
-              </TabsContent>
-              <TabsContent value="timeline" className="mt-6">
-                <ProfessionalTimeline />
-              </TabsContent>
-              <TabsContent value="radar" className="mt-6">
-                <SkillsRadar />
-              </TabsContent>
-              <TabsContent value="profissoes" className="mt-6">
-                <ProfessionRecommendations />
-              </TabsContent>
-              <TabsContent value="relatorio" className="mt-6">
-                <ClarityReport />
-              </TabsContent>
-            </Tabs>
+            <Badge variant={isPhaseComplete ? 'default' : 'secondary'} className="text-sm">
+              {isPhaseComplete ? (
+                <>
+                  <Check className="h-3 w-3 mr-1" />
+                  Fase Completa
+                </>
+              ) : (
+                `${progress.percentage}% concluído`
+              )}
+            </Badge>
           </div>
 
-          {/* Avatar Coach */}
-          <AvatarCoach phase="descobrir" context={getCoachContext()} />
+          {/* Progress Bar */}
+          <Progress value={progress.percentage} className="h-2" />
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-12 gap-6">
+            {/* Main Content */}
+            <div className="col-span-8">
+              <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+                <TabsList className="grid grid-cols-7 mb-6">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
+                    const isCompleted = index < progress.completed;
+                    return (
+                      <TabsTrigger key={step.key} value={step.key} className="relative">
+                        <Icon className="h-4 w-4 mr-2" />
+                        {step.label}
+                        {isCompleted && (
+                          <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <Check className="h-3 w-3 text-white" />
+                          </div>
+                        )}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+
+                <TabsContent value="diagnosticos">
+                  <DiagnosticHub />
+                </TabsContent>
+                <TabsContent value="roda">
+                  <CareerWheel />
+                </TabsContent>
+                <TabsContent value="diario">
+                  <DiscoveryDiary />
+                </TabsContent>
+                <TabsContent value="timeline">
+                  <ProfessionalTimeline />
+                </TabsContent>
+                <TabsContent value="radar">
+                  <SkillsRadar />
+                </TabsContent>
+                <TabsContent value="profissoes">
+                  <ProfessionRecommendations />
+                </TabsContent>
+                <TabsContent value="relatorio">
+                  <ClarityReport />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Coach Sidebar */}
+            <div className="col-span-4">
+              <AvatarCoach 
+                phase="descobrir" 
+                context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
+              />
+            </div>
+          </div>
         </main>
       </div>
     </div>

@@ -4,13 +4,13 @@ import {
   TrendingUp, 
   Users, 
   GraduationCap,
-  Droplet,
   Settings,
   LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import logoMigrei from "@/assets/logo-migrei.png";
 
 interface NavItem {
   icon: React.ElementType;
@@ -41,12 +41,13 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col py-6 z-50">
       {/* Logo */}
       <div className="px-6 mb-8">
-        <div className="flex items-center gap-2">
-          <Droplet className="h-8 w-8 text-primary" />
-          <h1 className="font-display text-2xl font-bold text-gradient-primary">
-            Migrei
-          </h1>
-        </div>
+        <Link to="/" className="flex items-center">
+          <img 
+            src={logoMigrei} 
+            alt="Migrei" 
+            className="h-10 w-auto"
+          />
+        </Link>
       </div>
 
       {/* Main Navigation */}

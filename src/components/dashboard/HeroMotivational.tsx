@@ -1,4 +1,4 @@
-import { Flame, Star, ArrowRight, Sparkles } from "lucide-react";
+import { Flame, Star, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -120,48 +120,6 @@ export function HeroMotivational() {
         </div>
       </div>
 
-      {/* Motivational banner */}
-      <div 
-        className="relative overflow-hidden rounded-2xl p-5 border"
-        style={{ 
-          background: `linear-gradient(135deg, ${currentMotivation.color}15, ${currentMotivation.color}05)`,
-          borderColor: `${currentMotivation.color}30`
-        }}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div 
-              className="h-12 w-12 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: `${currentMotivation.color}25` }}
-            >
-              <div 
-                className="h-3 w-3 rounded-full animate-pulse-slow"
-                style={{ backgroundColor: currentMotivation.color }}
-              />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                Fase atual
-              </p>
-              <p 
-                className="text-lg font-semibold capitalize"
-                style={{ color: currentMotivation.color }}
-              >
-                {currentPhase}
-              </p>
-            </div>
-          </div>
-          
-          <p className="text-sm text-muted-foreground max-w-md text-right hidden md:block">
-            {currentMotivation.motivation}
-          </p>
-
-          <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card border border-border hover:bg-muted transition-colors text-sm font-medium">
-            Ver jornada
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

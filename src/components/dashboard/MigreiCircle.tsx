@@ -6,8 +6,10 @@ import {
   Settings, 
   Rocket, 
   Star,
-  User
+  User,
+  ArrowRight
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Phase {
   id: string;
@@ -314,6 +316,26 @@ export function MigreiCircle() {
             </p>
           </div>
         )}
+      </div>
+
+      {/* Current Phase Indicator */}
+      <div className="flex items-center justify-between w-full max-w-md px-2">
+        <div className="flex items-center gap-3">
+          <div 
+            className="w-3 h-3 rounded-full animate-pulse"
+            style={{ backgroundColor: phases[0].bgColor }}
+          />
+          <span className="text-sm text-muted-foreground">
+            Fase atual: <span className="font-semibold text-foreground capitalize">Despertar</span>
+          </span>
+        </div>
+        <Link 
+          to="/progress"
+          className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+        >
+          Ver jornada
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
       {/* Legend - horizontal aligned */}

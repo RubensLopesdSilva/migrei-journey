@@ -5,7 +5,6 @@ import { SkillsCard } from "@/components/dashboard/SkillsCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { QuickStatsBar } from "@/components/dashboard/QuickStatsBar";
-import { NextActionCard } from "@/components/dashboard/NextActionCard";
 
 const Index = () => {
   return (
@@ -22,9 +21,6 @@ const Index = () => {
 
           {/* Quick Stats Bar */}
           <QuickStatsBar />
-
-          {/* Próxima Ação em Destaque */}
-          <NextActionCard />
 
           {/* Main Grid: Círculo + Cards */}
           <div className="grid grid-cols-12 gap-8">

@@ -30,8 +30,8 @@ export function QuickStatsBar({
       icon: Flame,
       label: "Dias seguidos",
       value: streakDays.toString(),
-      color: "hsl(var(--accent))",
-      bgColor: "hsl(var(--accent) / 0.15)"
+      color: "hsl(var(--phase-decidir))",
+      bgColor: "hsl(var(--phase-decidir) / 0.15)"
     },
     {
       icon: Calendar,

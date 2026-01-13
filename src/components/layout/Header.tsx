@@ -1,27 +1,22 @@
 import { useState, useEffect } from "react";
-import { Star, Calendar, Trophy, Zap, Bell, User } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Bell, User, Settings, CreditCard, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-
-interface UserStats {
-  points: number;
-  days: number;
-  ranking: number;
-  energy: number;
-}
+import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Header() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
-  
-  const [stats] = useState<UserStats>({
-    points: 30,
-    days: 100,
-    ranking: 1,
-    energy: 75,
-  });
+  const [hasNotifications] = useState(true); // TODO: Connect to real notifications
 
   useEffect(() => {
     if (user) {
@@ -43,6 +38,11 @@ export function Header() {
     }
   };
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Usuário";
   const userInitials = displayName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
 
@@ -62,13 +62,47 @@ export function Header() {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
-        <button className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors">
-          <Bell className="h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center gap-3">
+        {/* Notifications */}
+        <button className="relative h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors">
+          <Bell className="h-5 w-5 text-muted-foreground" />
+          {hasNotifications && (
+            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary" />
+          )}
         </button>
-        <a href="/configuracoes" className="h-9 w-9 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors">
-          <User className="h-4 w-4 text-muted-foreground" />
-        </a>
+
+        {/* User Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20">
+              <User className="h-5 w-5 text-muted-foreground" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-lg z-50">
+            <DropdownMenuItem 
+              onClick={() => navigate("/configuracoes")}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <Settings className="h-4 w-4" />
+              <span>Configurações</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem 
+              onClick={() => navigate("/configuracoes")}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              <CreditCard className="h-4 w-4" />
+              <span>Pagamento</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              onClick={handleSignOut}
+              className="flex items-center gap-3 cursor-pointer text-destructive focus:text-destructive"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Sair</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

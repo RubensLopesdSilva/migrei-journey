@@ -73,6 +73,71 @@ export type Database = {
           },
         ]
       }
+      coach_conversations: {
+        Row: {
+          context_type: string
+          created_at: string
+          id: string
+          messages: Json
+          phase_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          context_type?: string
+          created_at?: string
+          id?: string
+          messages?: Json
+          phase_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          context_type?: string
+          created_at?: string
+          id?: string
+          messages?: Json
+          phase_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coach_conversations_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commitment_declarations: {
+        Row: {
+          confirmed_at: string
+          created_at: string
+          custom_text: string | null
+          declaration_text: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          confirmed_at?: string
+          created_at?: string
+          custom_text?: string | null
+          declaration_text?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          confirmed_at?: string
+          created_at?: string
+          custom_text?: string | null
+          declaration_text?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       community_events: {
         Row: {
           created_at: string
@@ -217,6 +282,39 @@ export type Database = {
           description?: string | null
           id?: string
           xp_reward?: number
+        }
+        Relationships: []
+      }
+      consciousness_responses: {
+        Row: {
+          created_at: string
+          id: string
+          question_key: string
+          question_text: string
+          response_text: string | null
+          response_value: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_key: string
+          question_text: string
+          response_text?: string | null
+          response_value: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_key?: string
+          question_text?: string
+          response_text?: string | null
+          response_value?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -829,6 +927,33 @@ export type Database = {
           },
         ]
       }
+      pain_map: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          intensity: number
+          pain_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          intensity: number
+          pain_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          intensity?: number
+          pain_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payment_events: {
         Row: {
           created_at: string
@@ -1099,6 +1224,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      readiness_assessments: {
+        Row: {
+          created_at: string
+          emotional_answers: Json | null
+          emotional_score: number
+          financial_answers: Json | null
+          financial_score: number
+          id: string
+          professional_answers: Json | null
+          professional_score: number
+          readiness_level: string | null
+          total_score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emotional_answers?: Json | null
+          emotional_score?: number
+          financial_answers?: Json | null
+          financial_score?: number
+          id?: string
+          professional_answers?: Json | null
+          professional_score?: number
+          readiness_level?: string | null
+          total_score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emotional_answers?: Json | null
+          emotional_score?: number
+          financial_answers?: Json | null
+          financial_score?: number
+          id?: string
+          professional_answers?: Json | null
+          professional_score?: number
+          readiness_level?: string | null
+          total_score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       subscription_plans: {
         Row: {

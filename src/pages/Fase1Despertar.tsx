@@ -1,0 +1,117 @@
+import { useState } from 'react';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { Header } from '@/components/layout/Header';
+import { ConsciousnessOnboarding } from '@/components/awakening/ConsciousnessOnboarding';
+import { ReadinessTest } from '@/components/awakening/ReadinessTest';
+import { PainMapBuilder } from '@/components/awakening/PainMapBuilder';
+import { CommitmentDeclaration } from '@/components/awakening/CommitmentDeclaration';
+import { AvatarCoach } from '@/components/awakening/AvatarCoach';
+import { useAwakening } from '@/hooks/useAwakening';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Sparkles, Brain, Target, Frown, Heart, Check } from 'lucide-react';
+
+type Step = 'consciousness' | 'readiness' | 'painmap' | 'commitment';
+
+const steps: { key: Step; label: string; icon: typeof Brain }[] = [
+  { key: 'consciousness', label: 'Consciência', icon: Brain },
+  { key: 'readiness', label: 'Prontidão', icon: Target },
+  { key: 'painmap', label: 'Mapa de Dor', icon: Frown },
+  { key: 'commitment', label: 'Compromisso', icon: Heart }
+];
+
+export default function Fase1Despertar() {
+  const { getPhaseProgress, commitment } = useAwakening();
+  const [activeStep, setActiveStep] = useState<Step>('consciousness');
+  const [showCoach, setShowCoach] = useState(true);
+
+  const progress = getPhaseProgress();
+  const isPhaseComplete = commitment !== null;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Sidebar />
+      <div className="pl-64">
+        <Header />
+        <main className="p-8 space-y-6">
+          {/* Phase Header */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">Fase 1: Despertar</h1>
+                <p className="text-muted-foreground">Consciência e decisão de mudar</p>
+              </div>
+            </div>
+            <Badge variant={isPhaseComplete ? 'default' : 'secondary'} className="text-sm">
+              {isPhaseComplete ? (
+                <>
+                  <Check className="h-3 w-3 mr-1" />
+                  Fase Completa
+                </>
+              ) : (
+                `${progress.percentage}% concluído`
+              )}
+            </Badge>
+          </div>
+
+          {/* Progress Bar */}
+          <Progress value={progress.percentage} className="h-2" />
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-12 gap-6">
+            {/* Main Content */}
+            <div className="col-span-8">
+              <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+                <TabsList className="grid grid-cols-4 mb-6">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
+                    const isCompleted = index < progress.completed;
+                    return (
+                      <TabsTrigger key={step.key} value={step.key} className="relative">
+                        <Icon className="h-4 w-4 mr-2" />
+                        {step.label}
+                        {isCompleted && (
+                          <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                            <Check className="h-3 w-3 text-white" />
+                          </div>
+                        )}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+
+                <TabsContent value="consciousness">
+                  <ConsciousnessOnboarding onComplete={() => setActiveStep('readiness')} />
+                </TabsContent>
+
+                <TabsContent value="readiness">
+                  <ReadinessTest onComplete={() => setActiveStep('painmap')} />
+                </TabsContent>
+
+                <TabsContent value="painmap">
+                  <PainMapBuilder onComplete={() => setActiveStep('commitment')} />
+                </TabsContent>
+
+                <TabsContent value="commitment">
+                  <CommitmentDeclaration onComplete={() => window.location.href = '/progresso'} />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Coach Sidebar */}
+            <div className="col-span-4">
+              <AvatarCoach 
+                phase="despertar" 
+                context={`Usuário está na etapa: ${activeStep}`}
+              />
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

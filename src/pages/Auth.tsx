@@ -5,7 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Droplet, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import logoMigrei from "@/assets/logo-migrei.png";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
@@ -174,11 +175,12 @@ export default function Auth() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="flex items-center gap-2 mb-8">
-            <Droplet className="h-10 w-10 text-primary" />
-            <h1 className="font-display text-3xl font-bold text-gradient-primary">
-              Migrei
-            </h1>
+          <div className="flex items-center justify-center mb-8">
+            <img 
+              src={logoMigrei} 
+              alt="Migrei" 
+              className="h-16 w-auto"
+            />
           </div>
 
           {/* Title */}
@@ -427,7 +429,7 @@ export default function Auth() {
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary/10 to-accent/10 items-center justify-center p-12">
         <div className="max-w-md text-center">
           <div className="w-64 h-64 mx-auto mb-8 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-            <Droplet className="h-32 w-32 text-primary/60" />
+            <img src={logoMigrei} alt="Migrei" className="h-32 w-auto" />
           </div>
           <h3 className="font-display text-2xl font-semibold text-foreground mb-4">
             Sua jornada de transição começa aqui

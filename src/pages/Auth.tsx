@@ -175,11 +175,11 @@ export default function Auth() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="flex items-center justify-center mb-8">
+          <div className="flex items-center justify-start mb-8">
             <img 
               src={logoMigrei} 
               alt="Migrei" 
-              className="h-16 w-auto"
+              className="h-20 w-auto"
             />
           </div>
 

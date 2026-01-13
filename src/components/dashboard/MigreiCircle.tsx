@@ -48,7 +48,7 @@ const phases: Phase[] = [
     description: "Autoconhecimento e clareza de propósito",
     angle: 60,
     route: "/fase/descobrir",
-    available: false
+    available: true
   },
   { 
     id: "decidir", 

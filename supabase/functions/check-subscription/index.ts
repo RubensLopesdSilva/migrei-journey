@@ -23,31 +23,60 @@ serve(async (req) => {
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
 
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
+    // Create client with user's auth context
     const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    // Use getClaims to validate the JWT
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
+    
+    if (claimsError || !claimsData?.claims) {
+      logStep("Auth error", { error: claimsError?.message });
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
+    const userId = claimsData.claims.sub as string;
+    const userEmail = claimsData.claims.email as string;
+    
+    if (!userId || !userEmail) {
+      return new Response(
+        JSON.stringify({ error: "User not authenticated or email not available" }),
+        { status: 401, headers: corsHeaders }
+      );
+    }
+    
+    logStep("User authenticated", { userId, email: userEmail });
+
+    // Create service role client for database queries
+    const serviceClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
       { auth: { persistSession: false } }
     );
 
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("No authorization header provided");
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabaseClient.auth.getUser(token);
-    if (userError) throw new Error(`Authentication error: ${userError.message}`);
-
-    const user = userData.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
-    logStep("User authenticated", { userId: user.id, email: user.email });
-
     // First check our database for subscription
-    const { data: dbSubscription } = await supabaseClient
+    const { data: dbSubscription } = await serviceClient
       .from("user_subscriptions")
       .select(`
         *,
         plan:subscription_plans(*)
       `)
-      .eq("user_id", user.id)
+      .eq("user_id", userId)
       .in("status", ["active", "trialing", "past_due"])
       .order("created_at", { ascending: false })
       .limit(1)
@@ -60,7 +89,7 @@ serve(async (req) => {
       });
 
       // Get plan features
-      const { data: features } = await supabaseClient
+      const { data: features } = await serviceClient
         .from("plan_features")
         .select("feature_key, feature_value")
         .eq("plan_id", dbSubscription.plan_id);
@@ -90,7 +119,7 @@ serve(async (req) => {
 
     // If no subscription in DB, check Stripe directly
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
 
     if (customers.data.length === 0) {
       logStep("No Stripe customer found");
@@ -169,7 +198,7 @@ serve(async (req) => {
     const priceId = subscription.items.data[0]?.price.id;
     
     // Find plan by Stripe price ID
-    const { data: plan } = await supabaseClient
+    const { data: plan } = await serviceClient
       .from("subscription_plans")
       .select("*")
       .eq("stripe_price_id", priceId)
@@ -178,7 +207,7 @@ serve(async (req) => {
     // Get plan features if plan found
     let featuresMap: Record<string, unknown> = {};
     if (plan) {
-      const { data: features } = await supabaseClient
+      const { data: features } = await serviceClient
         .from("plan_features")
         .select("feature_key, feature_value")
         .eq("plan_id", plan.id);

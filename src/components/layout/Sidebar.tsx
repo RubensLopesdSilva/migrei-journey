@@ -40,12 +40,12 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex flex-col py-6 z-50">
       {/* Logo */}
-      <div className="px-6 mb-8">
+      <div className="px-6 mb-8 flex justify-center">
         <Link to="/" className="flex items-center">
           <img 
             src={logoMigrei} 
             alt="Migrei" 
-            className="h-10 w-auto"
+            className="h-11 w-auto"
           />
         </Link>
       </div>

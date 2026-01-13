@@ -1,64 +1,63 @@
 import { Users, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
 interface Connection {
+  id: string;
   name: string;
+  role: string;
   initials: string;
-  color: string;
 }
 
-const connections: Connection[] = [
-  { name: "Ana Silva", initials: "AS", color: "bg-pink-500" },
-  { name: "Carlos M.", initials: "CM", color: "bg-blue-500" },
+const recentConnections: Connection[] = [
+  { id: "1", name: "Ana Silva", role: "Product Manager", initials: "AS" },
+  { id: "2", name: "Carlos O.", role: "Tech Lead", initials: "CO" },
 ];
 
 export function NetworkingCard() {
   return (
-    <div className="bg-card border border-border rounded-2xl p-4 hover:border-primary/20 transition-all duration-300 animate-fade-in" style={{ animationDelay: '200ms' }}>
-      {/* Header */}
+    <div className="card-elevated p-4 h-full flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-[hsl(var(--phase-deslanchar))]/10 flex items-center justify-center">
-            <Users className="h-4 w-4 text-[hsl(var(--phase-deslanchar))]" />
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-lg bg-phase-deslanchar/15 flex items-center justify-center">
+            <Users className="h-4 w-4 text-phase-deslanchar" />
           </div>
           <h3 className="font-semibold text-sm text-foreground">Networking</h3>
         </div>
-        <Link 
-          to="/comunidade"
-          className="h-7 w-7 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:bg-primary/10 hover:text-primary transition-all"
-        >
-          <ArrowRight className="h-3.5 w-3.5" />
+        <Link to="/comunidade" className="text-primary hover:text-primary/80 transition-colors">
+          <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
 
-      {/* Connections */}
-      <div className="space-y-1.5 mb-3">
-        {connections.map((connection, index) => (
+      <div className="space-y-2 flex-1">
+        {recentConnections.map((connection) => (
           <div 
-            key={index}
-            className="flex items-center gap-2.5 p-2 rounded-xl bg-muted/30 border border-transparent hover:border-border transition-all cursor-pointer"
+            key={connection.id}
+            className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-muted transition-colors cursor-pointer"
           >
             <Avatar className="h-7 w-7">
-              <AvatarFallback className={`${connection.color} text-white text-[10px] font-semibold`}>
+              <AvatarFallback className="bg-primary/10 text-primary text-xs">
                 {connection.initials}
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs text-foreground font-medium">{connection.name}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-medium text-foreground truncate">
+                {connection.name}
+              </p>
+              <p className="text-[10px] text-muted-foreground truncate">
+                {connection.role}
+              </p>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* CTA */}
-      <Button 
-        variant="default" 
-        size="sm" 
-        className="w-full text-xs h-8"
-        asChild
+      <Link 
+        to="/comunidade"
+        className="mt-3 w-full btn-primary-gradient text-xs py-2 text-center block"
       >
-        <Link to="/comunidade">Ver conexões</Link>
-      </Button>
+        Ver conexões
+      </Link>
     </div>
   );
 }

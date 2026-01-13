@@ -1,36 +1,50 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
-import { HeaderSection } from "@/components/dashboard/HeaderSection";
-import { MissionsCard } from "@/components/dashboard/MissionsCard";
-import { SoftSkillsCard } from "@/components/dashboard/SoftSkillsCard";
-import { LeftStatsCards } from "@/components/dashboard/LeftStatsCards";
+import { MissionCard } from "@/components/dashboard/MissionCard";
+import { SkillsCard } from "@/components/dashboard/SkillsCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
+import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
+import { QuickStatsBar } from "@/components/dashboard/QuickStatsBar";
+import { NextActionCard } from "@/components/dashboard/NextActionCard";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      {/* Sidebar */}
       <Sidebar />
 
-      <div className="pl-64 min-h-screen">
-        <main className="p-8 space-y-6">
-          {/* Header - Greeting + Stats inline */}
-          <HeaderSection />
+      {/* Main Content */}
+      <div className="pl-64">
+        {/* Main Dashboard Content */}
+        <main className="p-8 space-y-8">
+          {/* Hero Motivacional */}
+          <HeroMotivational />
 
-          {/* Main Content - 3 Column Layout */}
-          <div className="flex gap-6 items-center justify-center">
-            {/* Left - Vertical Stats Cards */}
-            <LeftStatsCards />
+          {/* Quick Stats Bar */}
+          <QuickStatsBar />
 
-            {/* Center - Roda Migrei (Main Focus) */}
-            <div className="flex-1 flex justify-center py-4">
-              <MigreiCircle />
+          {/* Próxima Ação em Destaque */}
+          <NextActionCard />
+
+          {/* Main Grid: Círculo + Cards */}
+          <div className="grid grid-cols-12 gap-8">
+            {/* Center - Migrei Circle */}
+            <div className="col-span-7 flex items-start justify-center">
+              <div className="card-elevated p-8 w-full flex justify-center">
+                <MigreiCircle />
+              </div>
             </div>
 
-            {/* Right - Side Cards */}
-            <div className="w-[240px] flex-shrink-0 space-y-3">
-              <MissionsCard />
-              <SoftSkillsCard />
-              <NetworkingCard />
+            {/* Right Sidebar - Reorganized Cards */}
+            <div className="col-span-5 space-y-6">
+              {/* Missões - Card Principal (maior) */}
+              <MissionCard />
+
+              {/* Skills e Networking lado a lado */}
+              <div className="grid grid-cols-2 gap-4">
+                <SkillsCard />
+                <NetworkingCard />
+              </div>
             </div>
           </div>
         </main>

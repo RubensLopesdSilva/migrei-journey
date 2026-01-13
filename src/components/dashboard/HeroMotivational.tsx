@@ -97,24 +97,24 @@ export function HeroMotivational() {
         {/* Streak & Achievement */}
         <div className="flex items-center gap-4">
           {/* Streak Badge */}
-          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-accent/10 to-accent/5 border border-accent/20">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-accent/20">
-              <Flame className="h-5 w-5 text-accent" />
+          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-accent/20 border border-accent/30 shadow-sm">
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-accent/30">
+              <Flame className="h-5 w-5 text-accent-foreground" />
             </div>
             <div>
               <p className="text-2xl font-bold text-foreground">{streakDays}</p>
-              <p className="text-xs text-muted-foreground">dias seguidos</p>
+              <p className="text-xs font-medium text-foreground/70">dias seguidos</p>
             </div>
           </div>
 
           {/* Next Achievement */}
-          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20">
-            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/20">
-              <Star className="h-5 w-5 text-primary" />
+          <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-primary/20 border border-primary/30 shadow-sm">
+            <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-primary/30">
+              <Star className="h-5 w-5 text-primary-foreground" />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground">{nextAchievement}</p>
-              <p className="text-xs text-muted-foreground">próxima conquista</p>
+              <p className="text-xs font-medium text-foreground/70">próxima conquista</p>
             </div>
           </div>
         </div>

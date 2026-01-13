@@ -45,7 +45,7 @@ export function Sidebar() {
           <img 
             src={logoMigrei} 
             alt="Migrei" 
-            className="h-11 w-auto"
+            className="h-14 w-auto"
           />
         </Link>
       </div>

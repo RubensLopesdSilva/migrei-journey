@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Heart, Wallet, Briefcase, Check, AlertCircle, Loader2 } from 'lucide-react';
 import { READINESS_QUESTIONS, ReadinessCategory, ReadinessAnswer } from '@/types/awakening';
 import { useAwakening } from '@/hooks/useAwakening';
@@ -111,32 +111,32 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
       </CardHeader>
 
       <CardContent>
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as ReadinessCategory)}>
-          <TabsList className="grid grid-cols-3 mb-6">
+        <AnimatedTabs value={activeTab} onValueChange={(v) => setActiveTab(v as ReadinessCategory)}>
+          <AnimatedTabsList className="grid grid-cols-3 mb-6">
             {categories.map(cat => {
               const Icon = cat.icon;
               const isComplete = isCategoryComplete(cat.key);
               const score = getCategoryScore(cat.key);
 
               return (
-                <TabsTrigger key={cat.key} value={cat.key} className="relative">
-                  <Icon className={cn("h-4 w-4 mr-2", cat.color)} />
+                <AnimatedTabsTrigger key={cat.key} value={cat.key} className="relative">
+                  <Icon className={cn("h-4 w-4 mr-2", cat.color)} aria-hidden="true" />
                   {cat.label}
                   {isComplete && (
                     <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" />
+                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
                     </div>
                   )}
                   {score !== null && score > 0 && (
                     <span className="ml-2 text-xs text-muted-foreground">{score}%</span>
                   )}
-                </TabsTrigger>
+                </AnimatedTabsTrigger>
               );
             })}
-          </TabsList>
+          </AnimatedTabsList>
 
           {categories.map(cat => (
-            <TabsContent key={cat.key} value={cat.key} className="space-y-6">
+            <AnimatedTabsContent key={cat.key} value={cat.key} className="space-y-6">
               {READINESS_QUESTIONS[cat.key].map((q, index) => {
                 const value = answers[cat.key][index] ?? 5;
                 return (
@@ -164,15 +164,15 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
                 className="w-full"
               >
                 {isSaving ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
                 ) : isCategoryComplete(cat.key) ? (
-                  <Check className="h-4 w-4 mr-2" />
+                  <Check className="h-4 w-4 mr-2" aria-hidden="true" />
                 ) : null}
                 {isCategoryComplete(cat.key) ? 'Atualizar' : 'Salvar'} avaliação {cat.label.toLowerCase()}
               </Button>
-            </TabsContent>
+            </AnimatedTabsContent>
           ))}
-        </Tabs>
+        </AnimatedTabs>
 
         {allComplete && (
           <div className="mt-6 pt-6 border-t">

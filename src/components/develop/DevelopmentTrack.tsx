@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { GraduationCap, Wrench, Zap, Plus, Play, CheckCircle, Clock, Trash2 } from 'lucide-react';
 import type { DevelopmentTrackItem } from '@/types/develop';
 
@@ -124,28 +124,28 @@ export function DevelopmentTrack({
         </div>
 
         {/* Items by type */}
-        <Tabs defaultValue="course" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+        <AnimatedTabs defaultValue="course" className="w-full">
+          <AnimatedTabsList className="grid w-full grid-cols-3">
             {Object.entries(typeConfig).map(([key, config]) => (
-              <TabsTrigger key={key} value={key} className="flex items-center gap-2">
-                <config.icon className="w-4 h-4" />
+              <AnimatedTabsTrigger key={key} value={key} className="flex items-center gap-2">
+                <config.icon className="w-4 h-4" aria-hidden="true" />
                 {config.label}
                 <Badge variant="secondary" className="ml-1 h-5 px-1.5">
                   {getItemsByType(key).length}
                 </Badge>
-              </TabsTrigger>
+              </AnimatedTabsTrigger>
             ))}
-          </TabsList>
+          </AnimatedTabsList>
 
           {Object.entries(typeConfig).map(([type, config]) => (
-            <TabsContent key={type} value={type} className="space-y-3 mt-4">
+            <AnimatedTabsContent key={type} value={type} className="space-y-3 mt-4">
               {getItemsByType(type).length > 0 ? (
                 getItemsByType(type).map((item) => (
                   <Card key={item.id} className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${config.color}`}>
-                          <config.icon className="w-4 h-4" />
+                          <config.icon className="w-4 h-4" aria-hidden="true" />
                         </div>
                         <div>
                           <h4 className="font-medium">{item.title}</h4>
@@ -161,7 +161,7 @@ export function DevelopmentTrack({
                             </Badge>
                             {item.estimated_hours && (
                               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
+                                <Clock className="w-3 h-3" aria-hidden="true" />
                                 {item.estimated_hours}h
                               </span>
                             )}
@@ -175,7 +175,7 @@ export function DevelopmentTrack({
                             variant="outline"
                             onClick={() => handleStatusChange(item, 'in_progress')}
                           >
-                            <Play className="w-4 h-4 mr-1" />
+                            <Play className="w-4 h-4 mr-1" aria-hidden="true" />
                             Iniciar
                           </Button>
                         )}
@@ -184,13 +184,13 @@ export function DevelopmentTrack({
                             size="sm"
                             onClick={() => handleStatusChange(item, 'completed')}
                           >
-                            <CheckCircle className="w-4 h-4 mr-1" />
+                            <CheckCircle className="w-4 h-4 mr-1" aria-hidden="true" />
                             Concluir
                           </Button>
                         )}
                         {item.status === 'completed' && (
                           <Badge className="bg-green-100 text-green-700">
-                            <CheckCircle className="w-3 h-3 mr-1" />
+                            <CheckCircle className="w-3 h-3 mr-1" aria-hidden="true" />
                             Concluído
                           </Badge>
                         )}
@@ -198,8 +198,9 @@ export function DevelopmentTrack({
                           size="icon"
                           variant="ghost"
                           onClick={() => onDeleteItem(item.id)}
+                          aria-label="Excluir item"
                         >
-                          <Trash2 className="w-4 h-4 text-destructive" />
+                          <Trash2 className="w-4 h-4 text-destructive" aria-hidden="true" />
                         </Button>
                       </div>
                     </div>
@@ -207,13 +208,13 @@ export function DevelopmentTrack({
                 ))
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  <config.icon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <config.icon className="w-8 h-8 mx-auto mb-2 opacity-50" aria-hidden="true" />
                   <p>Nenhum item adicionado</p>
                 </div>
               )}
-            </TabsContent>
+            </AnimatedTabsContent>
           ))}
-        </Tabs>
+        </AnimatedTabs>
 
         {/* Add Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

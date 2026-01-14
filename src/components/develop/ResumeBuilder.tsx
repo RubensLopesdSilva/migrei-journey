@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { FileText, Plus, Trash2, Save, Download, Copy } from 'lucide-react';
 import type { UserResume } from '@/types/develop';
 
@@ -119,15 +119,15 @@ export function ResumeBuilder({
         )}
 
         {selectedResume && (
-          <Tabs defaultValue="info" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="info">Informações</TabsTrigger>
-              <TabsTrigger value="experience">Experiência</TabsTrigger>
-              <TabsTrigger value="education">Formação</TabsTrigger>
-              <TabsTrigger value="skills">Habilidades</TabsTrigger>
-            </TabsList>
+          <AnimatedTabs defaultValue="info" className="w-full">
+            <AnimatedTabsList className="grid w-full grid-cols-4">
+              <AnimatedTabsTrigger value="info">Informações</AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="experience">Experiência</AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="education">Formação</AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="skills">Habilidades</AnimatedTabsTrigger>
+            </AnimatedTabsList>
 
-            <TabsContent value="info" className="space-y-4 mt-4">
+            <AnimatedTabsContent value="info" className="space-y-4 mt-4">
               <div className="grid gap-4">
                 <div>
                   <Label>Nome da versão</Label>
@@ -161,9 +161,9 @@ export function ResumeBuilder({
                   </p>
                 </div>
               </div>
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="experience" className="space-y-4 mt-4">
+            <AnimatedTabsContent value="experience" className="space-y-4 mt-4">
               {(formData.experiences || []).map((exp, index) => (
                 <Card key={index} className="p-4">
                   <div className="flex justify-between items-start mb-3">
@@ -173,8 +173,9 @@ export function ResumeBuilder({
                         variant="ghost"
                         size="sm"
                         onClick={() => removeExperience(index)}
+                        aria-label="Remover experiência"
                       >
-                        <Trash2 className="w-4 h-4 text-destructive" />
+                        <Trash2 className="w-4 h-4 text-destructive" aria-hidden="true" />
                       </Button>
                     )}
                   </div>
@@ -211,25 +212,25 @@ export function ResumeBuilder({
               ))}
               {isEditing && (
                 <Button variant="outline" onClick={addExperience} className="w-full">
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                   Adicionar Experiência
                 </Button>
               )}
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="education" className="space-y-4 mt-4">
+            <AnimatedTabsContent value="education" className="space-y-4 mt-4">
               <div className="text-center text-muted-foreground py-8">
                 <p>Adicione sua formação acadêmica</p>
                 {isEditing && (
                   <Button variant="outline" className="mt-4">
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                     Adicionar Formação
                   </Button>
                 )}
               </div>
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="skills" className="space-y-4 mt-4">
+            <AnimatedTabsContent value="skills" className="space-y-4 mt-4">
               <div>
                 <Label>Habilidades (separadas por vírgula)</Label>
                 <Textarea
@@ -243,8 +244,8 @@ export function ResumeBuilder({
                   disabled={!isEditing}
                 />
               </div>
-            </TabsContent>
-          </Tabs>
+            </AnimatedTabsContent>
+          </AnimatedTabs>
         )}
 
         {/* Action buttons */}

@@ -6,7 +6,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Plus, Briefcase, Users, MessageSquare, Trash2, Edit2, CheckCircle2 } from 'lucide-react';
 import { useLaunch } from '@/hooks/useLaunch';
 import { PANEL_TYPE_LABELS, PANEL_STATUS_LABELS, type ExecutionPanelItem } from '@/types/launch';
@@ -232,19 +233,30 @@ export function ExecutionPanel({ onComplete }: ExecutionPanelProps) {
           </div>
         </div>
 
-        <Tabs defaultValue="job_application">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="job_application">Vagas ({filterByType('job_application').length})</TabsTrigger>
-            <TabsTrigger value="networking">Networking ({filterByType('networking').length})</TabsTrigger>
-            <TabsTrigger value="followup">Follow-ups ({filterByType('followup').length})</TabsTrigger>
-          </TabsList>
+        <AnimatedTabs defaultValue="job_application">
+          <AnimatedTabsList className="grid w-full grid-cols-3">
+            <AnimatedTabsTrigger value="job_application">
+              <Briefcase className="h-4 w-4 mr-2" aria-hidden="true" />
+              Vagas ({filterByType('job_application').length})
+            </AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="networking">
+              <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+              Networking ({filterByType('networking').length})
+            </AnimatedTabsTrigger>
+            <AnimatedTabsTrigger value="followup">
+              <MessageSquare className="h-4 w-4 mr-2" aria-hidden="true" />
+              Follow-ups ({filterByType('followup').length})
+            </AnimatedTabsTrigger>
+          </AnimatedTabsList>
           
           {['job_application', 'networking', 'followup'].map((type) => (
-            <TabsContent key={type} value={type} className="space-y-3 mt-4">
+            <AnimatedTabsContent key={type} value={type} className="space-y-3 mt-4">
               {filterByType(type).length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  Nenhum item ainda. Clique em "Adicionar" para começar.
-                </div>
+                <EmptyState
+                  icon={type === 'job_application' ? Briefcase : type === 'networking' ? Users : MessageSquare}
+                  title="Nenhum item ainda"
+                  description='Clique em "Adicionar" para começar.'
+                />
               ) : (
                 filterByType(type).map((item) => (
                   <div
@@ -283,23 +295,34 @@ export function ExecutionPanel({ onComplete }: ExecutionPanelProps) {
                             status: 'completed',
                             completed_at: new Date().toISOString()
                           })}
+                          aria-label="Marcar como concluído"
                         >
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-green-500" aria-hidden="true" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" onClick={() => openEdit(item)}>
-                        <Edit2 className="h-4 w-4" />
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => openEdit(item)}
+                        aria-label="Editar item"
+                      >
+                        <Edit2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
-                      <Button variant="ghost" size="icon" onClick={() => deleteExecutionItem(item.id)}>
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => deleteExecutionItem(item.id)}
+                        aria-label="Excluir item"
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" aria-hidden="true" />
                       </Button>
                     </div>
                   </div>
                 ))
               )}
-            </TabsContent>
+            </AnimatedTabsContent>
           ))}
-        </Tabs>
+        </AnimatedTabs>
       </CardContent>
     </Card>
   );

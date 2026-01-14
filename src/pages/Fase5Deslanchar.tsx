@@ -3,7 +3,7 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Rocket, Briefcase, BookOpen, Clock, Video, CalendarCheck } from 'lucide-react';
@@ -86,40 +86,40 @@ export default function Fase5Deslanchar() {
           </div>
 
           {/* Tabs Navigation */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5 h-auto p-1">
+          <AnimatedTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <AnimatedTabsList className="grid w-full grid-cols-5 h-auto p-1">
               {tabs.map((tab) => (
-                <TabsTrigger 
+                <AnimatedTabsTrigger 
                   key={tab.id} 
                   value={tab.id}
                   className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-3 px-2"
                 >
-                  <tab.icon className="h-4 w-4" />
+                  <tab.icon className="h-4 w-4" aria-hidden="true" />
                   <span className="text-xs sm:text-sm">{tab.label}</span>
-                </TabsTrigger>
+                </AnimatedTabsTrigger>
               ))}
-            </TabsList>
+            </AnimatedTabsList>
 
-            <TabsContent value="execution">
+            <AnimatedTabsContent value="execution">
               <ExecutionPanel />
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="diary">
+            <AnimatedTabsContent value="diary">
               <OpportunitiesDiary />
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="networking">
+            <AnimatedTabsContent value="networking">
               <NetworkingRoutine />
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="interview">
+            <AnimatedTabsContent value="interview">
               <InterviewSimulator />
-            </TabsContent>
+            </AnimatedTabsContent>
 
-            <TabsContent value="checkin">
+            <AnimatedTabsContent value="checkin">
               <WeeklyCheckin />
-            </TabsContent>
-          </Tabs>
+            </AnimatedTabsContent>
+          </AnimatedTabs>
         </div>
       </PageContent>
     </PageLayout>

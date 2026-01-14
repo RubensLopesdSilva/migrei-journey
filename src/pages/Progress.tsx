@@ -8,7 +8,7 @@ import { PhaseDetailCard } from "@/components/progress/PhaseDetailCard";
 import { BadgesGallery } from "@/components/progress/BadgesGallery";
 import { MissionsCard } from "@/components/progress/MissionsCard";
 import { ProgressAnalytics } from "@/components/progress/ProgressAnalytics";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { PhaseWithProgress } from "@/types/progress";
@@ -123,27 +123,27 @@ export default function Progress() {
               />
             </div>
           ) : (
-            <Tabs defaultValue="overview" className="space-y-6">
-              <TabsList className="grid w-full max-w-2xl grid-cols-4">
-                <TabsTrigger value="overview" className="gap-2">
-                  <LayoutDashboard className="h-4 w-4" />
+            <AnimatedTabs defaultValue="overview" className="space-y-6">
+              <AnimatedTabsList className="grid w-full max-w-2xl grid-cols-4">
+                <AnimatedTabsTrigger value="overview" className="gap-2">
+                  <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                   Visão Geral
-                </TabsTrigger>
-                <TabsTrigger value="badges" className="gap-2">
-                  <Trophy className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="badges" className="gap-2">
+                  <Trophy className="h-4 w-4" aria-hidden="true" />
                   Conquistas
-                </TabsTrigger>
-                <TabsTrigger value="missions" className="gap-2">
-                  <Target className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="missions" className="gap-2">
+                  <Target className="h-4 w-4" aria-hidden="true" />
                   Missões
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="gap-2">
-                  <BarChart3 className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="analytics" className="gap-2">
+                  <BarChart3 className="h-4 w-4" aria-hidden="true" />
                   Análise
-                </TabsTrigger>
-              </TabsList>
+                </AnimatedTabsTrigger>
+              </AnimatedTabsList>
 
-              <TabsContent value="overview" className="space-y-8">
+              <AnimatedTabsContent value="overview" className="space-y-8">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
                   {/* Roda Migrei */}
                   <div className="lg:col-span-7">
@@ -249,30 +249,30 @@ export default function Progress() {
                     })}
                   </div>
                 </div>
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="badges">
+              <AnimatedTabsContent value="badges">
                 <BadgesGallery
                   allBadges={badges}
                   earnedBadges={userBadges}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="missions">
+              <AnimatedTabsContent value="missions">
                 <MissionsCard
                   missions={missions}
                   userMissions={userMissions}
                   currentPhaseId={userProgress?.current_phase_id || null}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="analytics">
+              <AnimatedTabsContent value="analytics">
                 <ProgressAnalytics
                   phases={phasesWithProgress}
                   userProgress={userProgress}
                 />
-              </TabsContent>
-            </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           )}
       </PageContent>
     </PageLayout>

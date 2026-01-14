@@ -12,7 +12,7 @@ import { AvatarCoach } from '@/components/awakening/AvatarCoach';
 import { useDecision } from '@/hooks/useDecision';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Target, BarChart3, Goal, Calendar, Map, CheckCircle2, Check } from 'lucide-react';
 
 type Step = 'matrix' | 'comparator' | 'goal' | 'plan' | 'gaps' | 'checkpoint';
@@ -74,49 +74,49 @@ export default function Fase3Decidir() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-8">
-            <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <TabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
+            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+              <AnimatedTabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
                   const isCompleted = index < progress.completed;
                   return (
-                    <TabsTrigger key={step.key} value={step.key} className="relative text-xs px-2">
-                      <Icon className="h-4 w-4 mr-1" />
+                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative text-xs px-2">
+                      <Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                       {step.label}
                       {isCompleted && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
+                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
                         </div>
                       )}
-                    </TabsTrigger>
+                    </AnimatedTabsTrigger>
                   );
                 })}
-              </TabsList>
+              </AnimatedTabsList>
 
-              <TabsContent value="matrix">
+              <AnimatedTabsContent value="matrix">
                 <PossibilitiesMatrix onComplete={() => setActiveStep('comparator')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="comparator">
+              <AnimatedTabsContent value="comparator">
                 <RouteComparator onComplete={() => setActiveStep('goal')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="goal">
+              <AnimatedTabsContent value="goal">
                 <SmartGoalBuilder onComplete={() => setActiveStep('plan')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="plan">
+              <AnimatedTabsContent value="plan">
                 <Plan90Days onComplete={() => setActiveStep('gaps')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="gaps">
+              <AnimatedTabsContent value="gaps">
                 <GapsMap onComplete={() => setActiveStep('checkpoint')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="checkpoint">
+              <AnimatedTabsContent value="checkpoint">
                 <DecisionCheckpoint onComplete={() => window.location.href = '/progresso'} />
-              </TabsContent>
-            </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           </div>
 
           {/* Coach Sidebar */}

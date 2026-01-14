@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { PageLayout } from '@/components/layout/PageLayout';
@@ -108,47 +108,47 @@ export default function Fase2Descobrir() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-8">
-            <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <TabsList className="grid grid-cols-7 mb-6">
+            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+              <AnimatedTabsList className="grid grid-cols-7 mb-6">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
                   const isCompleted = index < progress.completed;
                   return (
-                    <TabsTrigger key={step.key} value={step.key} className="relative">
-                      <Icon className="h-4 w-4 mr-2" />
+                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
+                      <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
                       {step.label}
                       {isCompleted && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
+                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
                         </div>
                       )}
-                    </TabsTrigger>
+                    </AnimatedTabsTrigger>
                   );
                 })}
-              </TabsList>
+              </AnimatedTabsList>
 
-              <TabsContent value="diagnosticos">
+              <AnimatedTabsContent value="diagnosticos">
                 <DiagnosticHub />
-              </TabsContent>
-              <TabsContent value="roda">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="roda">
                 <CareerWheel />
-              </TabsContent>
-              <TabsContent value="diario">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="diario">
                 <DiscoveryDiary />
-              </TabsContent>
-              <TabsContent value="timeline">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="timeline">
                 <ProfessionalTimeline />
-              </TabsContent>
-              <TabsContent value="radar">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="radar">
                 <SkillsRadar />
-              </TabsContent>
-              <TabsContent value="profissoes">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="profissoes">
                 <ProfessionRecommendations />
-              </TabsContent>
-              <TabsContent value="relatorio">
+              </AnimatedTabsContent>
+              <AnimatedTabsContent value="relatorio">
                 <ClarityReport />
-              </TabsContent>
-            </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           </div>
 
           {/* Coach Sidebar */}

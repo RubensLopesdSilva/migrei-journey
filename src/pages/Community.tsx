@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { MessageSquare, Users, Gift, Calendar } from 'lucide-react';
 import { useCommunity } from '@/hooks/useCommunity';
@@ -69,27 +69,27 @@ const Community = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             {/* Main Content */}
             <div className="lg:col-span-8">
-              <Tabs defaultValue="feed" className="w-full">
-                <TabsList className="grid w-full grid-cols-4 mb-6">
-                  <TabsTrigger value="feed" className="gap-2">
-                    <MessageSquare className="h-4 w-4" />
+              <AnimatedTabs defaultValue="feed" className="w-full">
+                <AnimatedTabsList className="grid w-full grid-cols-4 mb-6">
+                  <AnimatedTabsTrigger value="feed" className="gap-2">
+                    <MessageSquare className="h-4 w-4" aria-hidden="true" />
                     Feed
-                  </TabsTrigger>
-                  <TabsTrigger value="connections" className="gap-2">
-                    <Users className="h-4 w-4" />
+                  </AnimatedTabsTrigger>
+                  <AnimatedTabsTrigger value="connections" className="gap-2">
+                    <Users className="h-4 w-4" aria-hidden="true" />
                     Conexões
-                  </TabsTrigger>
-                  <TabsTrigger value="give-ask" className="gap-2">
-                    <Gift className="h-4 w-4" />
+                  </AnimatedTabsTrigger>
+                  <AnimatedTabsTrigger value="give-ask" className="gap-2">
+                    <Gift className="h-4 w-4" aria-hidden="true" />
                     Dar & Receber
-                  </TabsTrigger>
-                  <TabsTrigger value="events" className="gap-2">
-                    <Calendar className="h-4 w-4" />
+                  </AnimatedTabsTrigger>
+                  <AnimatedTabsTrigger value="events" className="gap-2">
+                    <Calendar className="h-4 w-4" aria-hidden="true" />
                     Eventos
-                  </TabsTrigger>
-                </TabsList>
+                  </AnimatedTabsTrigger>
+                </AnimatedTabsList>
 
-                <TabsContent value="feed">
+                <AnimatedTabsContent value="feed">
                   <CommunityFeed
                     posts={posts}
                     phases={phases}
@@ -103,9 +103,9 @@ const Community = () => {
                     onComment={addComment}
                     onFetchComments={fetchComments}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="connections">
+                <AnimatedTabsContent value="connections">
                   <ConnectionsSection
                     connections={connections}
                     pendingConnections={pendingConnections}
@@ -113,23 +113,23 @@ const Community = () => {
                     onRespondToConnection={respondToConnection}
                     onRespondToMatch={respondToMatch}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="give-ask">
+                <AnimatedTabsContent value="give-ask">
                   <GiveAskSection
                     posts={giveAskPosts}
                     onCreatePost={createGiveAskPost}
                     onFilter={fetchGiveAskPosts}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="events">
+                <AnimatedTabsContent value="events">
                   <EventsSection
                     events={events}
                     onRegister={registerForEvent}
                   />
-                </TabsContent>
-              </Tabs>
+                </AnimatedTabsContent>
+              </AnimatedTabs>
             </div>
 
             {/* Right Sidebar */}

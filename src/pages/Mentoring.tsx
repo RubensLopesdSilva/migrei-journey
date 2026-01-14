@@ -9,7 +9,7 @@ import { RescheduleModal } from "@/components/mentoring/RescheduleModal";
 import { SessionCard } from "@/components/mentoring/SessionCard";
 import { RodaMigreiSection } from "@/components/mentoring/RodaMigreiSection";
 import { MentoringPageSkeleton } from "@/components/mentoring/MentoringPageSkeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -318,23 +318,23 @@ export default function Mentoring() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <Tabs defaultValue="upcoming">
-                    <TabsList>
-                      <TabsTrigger value="upcoming" className="gap-2">
+                  <AnimatedTabs defaultValue="upcoming">
+                    <AnimatedTabsList>
+                      <AnimatedTabsTrigger value="upcoming" className="gap-2">
                         Próximas
                         {upcomingSessions.length > 0 && (
                           <Badge variant="secondary" className="ml-1">
                             {upcomingSessions.length}
                           </Badge>
                         )}
-                      </TabsTrigger>
-                      <TabsTrigger value="past">Histórico</TabsTrigger>
-                    </TabsList>
+                      </AnimatedTabsTrigger>
+                      <AnimatedTabsTrigger value="past">Histórico</AnimatedTabsTrigger>
+                    </AnimatedTabsList>
 
-                    <TabsContent value="upcoming" className="mt-4">
+                    <AnimatedTabsContent value="upcoming" className="mt-4">
                       {upcomingSessions.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
-                          <Calendar className="h-10 w-10 mx-auto mb-3 opacity-50" />
+                          <Calendar className="h-10 w-10 mx-auto mb-3 opacity-50" aria-hidden="true" />
                           <p>Você não tem mentorias agendadas.</p>
                           {canBookSessions ? (
                             <p className="text-sm mt-1">
@@ -359,9 +359,9 @@ export default function Mentoring() {
                           ))}
                         </div>
                       )}
-                    </TabsContent>
+                    </AnimatedTabsContent>
 
-                    <TabsContent value="past" className="mt-4">
+                    <AnimatedTabsContent value="past" className="mt-4">
                       {pastSessions.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                           <p>Nenhuma mentoria no histórico.</p>
@@ -378,8 +378,8 @@ export default function Mentoring() {
                           ))}
                         </div>
                       )}
-                    </TabsContent>
-                  </Tabs>
+                    </AnimatedTabsContent>
+                  </AnimatedTabs>
                 </CardContent>
               </Card>
             )}

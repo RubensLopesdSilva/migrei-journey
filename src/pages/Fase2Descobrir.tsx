@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { DiagnosticHub } from '@/components/discovery/DiagnosticHub';
 import { CareerWheel } from '@/components/discovery/CareerWheel';
 import { DiscoveryDiary } from '@/components/discovery/DiscoveryDiary';
@@ -59,15 +61,23 @@ export default function Fase2Descobrir() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
+      <PageLayout>
+        <PageSkeleton variant="dashboard" showHeader={true} />
+      </PageLayout>
     );
   }
 
   return (
     <PageLayout>
       <PageContent className="space-y-6">
+        {/* Breadcrumb */}
+        <PageBreadcrumb
+          items={[
+            { label: "Jornada", href: "/progresso" },
+            { label: "Fase 2: Descobrir", current: true }
+          ]}
+        />
+
         {/* Phase Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

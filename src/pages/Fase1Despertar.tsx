@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { Sparkles, Brain, Target, Frown, Heart, Check } from 'lucide-react';
 
 type Step = 'consciousness' | 'readiness' | 'painmap' | 'commitment';
@@ -32,6 +33,14 @@ export default function Fase1Despertar() {
   return (
     <PageLayout>
       <PageContent className="space-y-6">
+        {/* Breadcrumb */}
+        <PageBreadcrumb
+          items={[
+            { label: "Jornada", href: "/progresso" },
+            { label: "Fase 1: Despertar", current: true }
+          ]}
+        />
+
         {/* Phase Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

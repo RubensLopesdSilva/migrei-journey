@@ -58,11 +58,6 @@ const Community = () => {
           items={[{ label: "Comunidade", current: true }]}
           className="mb-4"
         />
-          {/* Breadcrumb */}
-          <PageBreadcrumb
-            items={[{ label: "Comunidade", current: true }]}
-            className="mb-4"
-          />
 
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Comunidade</h1>

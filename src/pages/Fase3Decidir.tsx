@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PossibilitiesMatrix } from '@/components/decision/PossibilitiesMatrix';
 import { RouteComparator } from '@/components/decision/RouteComparator';
 import { SmartGoalBuilder } from '@/components/decision/SmartGoalBuilder';
@@ -35,6 +36,14 @@ export default function Fase3Decidir() {
   return (
     <PageLayout>
       <PageContent className="space-y-6">
+        {/* Breadcrumb */}
+        <PageBreadcrumb
+          items={[
+            { label: "Jornada", href: "/progresso" },
+            { label: "Fase 3: Decidir", current: true }
+          ]}
+        />
+
         {/* Phase Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { PageContent } from '@/components/ui/page-transition';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { MessageSquare, Users, Gift, Calendar } from 'lucide-react';
@@ -50,10 +51,13 @@ const Community = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div className="pl-0 md:pl-64 transition-all duration-300">
-        <main className="p-4 md:p-8">
+    <PageLayout>
+      <PageContent>
+        {/* Breadcrumb */}
+        <PageBreadcrumb
+          items={[{ label: "Comunidade", current: true }]}
+          className="mb-4"
+        />
           {/* Breadcrumb */}
           <PageBreadcrumb
             items={[{ label: "Comunidade", current: true }]}
@@ -145,11 +149,10 @@ const Community = () => {
                 onMarkRead={markNotificationRead}
                 onMarkAllRead={markAllNotificationsRead}
               />
-            </div>
           </div>
-        </main>
-      </div>
-    </div>
+        </div>
+      </PageContent>
+    </PageLayout>
   );
 };
 

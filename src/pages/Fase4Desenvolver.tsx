@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useDevelop } from '@/hooks/useDevelop';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { ResumeBuilder } from '@/components/develop/ResumeBuilder';
 import { PitchGenerator } from '@/components/develop/PitchGenerator';
 import { LinkedInChecklist } from '@/components/develop/LinkedInChecklist';
@@ -10,7 +11,7 @@ import { PortfolioTemplate } from '@/components/develop/PortfolioTemplate';
 import { DevelopmentTrack } from '@/components/develop/DevelopmentTrack';
 import { DevelopCoachFeedback } from '@/components/develop/DevelopCoachFeedback';
 import { AvatarCoach } from '@/components/awakening/AvatarCoach';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -55,9 +56,9 @@ export default function Fase4Desenvolver() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
+      <PageLayout>
+        <PageSkeleton variant="dashboard" showHeader={true} />
+      </PageLayout>
     );
   }
 
@@ -78,11 +79,8 @@ export default function Fase4Desenvolver() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-
-      <main className="pl-0 md:pl-64 transition-all duration-300">
-        <div className="container mx-auto px-4 py-6 max-w-6xl">
+    <PageLayout>
+      <div className="container mx-auto max-w-6xl">
           {/* Phase header */}
           <div className="mb-8">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
@@ -207,7 +205,6 @@ export default function Fase4Desenvolver() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
-  );
-}
+      </PageLayout>
+    );
+  }

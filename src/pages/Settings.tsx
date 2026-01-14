@@ -18,7 +18,6 @@ import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
-  phone: z.string().max(20).optional().or(z.literal("")),
   bio: z.string().max(500).optional().or(z.literal("")),
 });
 
@@ -35,8 +34,9 @@ interface Profile {
   user_id: string;
   full_name: string | null;
   avatar_url: string | null;
-  phone: string | null;
   bio: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export default function Settings() {
@@ -53,7 +53,6 @@ export default function Settings() {
 
   // Form states
   const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -87,7 +86,6 @@ export default function Settings() {
     if (data) {
       setProfile(data);
       setFullName(data.full_name || "");
-      setPhone(data.phone || "");
       setBio(data.bio || "");
     }
     setLoading(false);
@@ -168,7 +166,7 @@ export default function Settings() {
 
   const handleSaveProfile = async () => {
     try {
-      profileSchema.parse({ full_name: fullName, phone, bio });
+      profileSchema.parse({ full_name: fullName, bio });
       setErrors({});
     } catch (e) {
       if (e instanceof z.ZodError) {
@@ -191,7 +189,6 @@ export default function Settings() {
       .from("profiles")
       .update({
         full_name: fullName,
-        phone: phone || null,
         bio: bio || null,
       })
       .eq("user_id", user.id);
@@ -383,19 +380,6 @@ export default function Settings() {
                       />
                       {errors.full_name && (
                         <p className="text-sm text-destructive">{errors.full_name}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Telefone</Label>
-                      <Input
-                        id="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="(00) 00000-0000"
-                      />
-                      {errors.phone && (
-                        <p className="text-sm text-destructive">{errors.phone}</p>
                       )}
                     </div>
 

@@ -1,6 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 
@@ -50,6 +50,16 @@ const phaseMotivations: PhaseMotivation[] = [
   },
 ];
 
+// Map phase number to slug
+const phaseNumberToSlug: Record<number, string> = {
+  1: "despertar",
+  2: "descobrir",
+  3: "decidir",
+  4: "desenvolver",
+  5: "deslanchar",
+  6: "desfrutar",
+};
+
 // Get greeting based on time of day
 function getTimeGreeting(): string {
   const hour = new Date().getHours();
@@ -61,23 +71,38 @@ function getTimeGreeting(): string {
 export function HeroMotivational() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
-  const [currentPhase] = useState("despertar"); // TODO: Get from user progress
+  const [currentPhase, setCurrentPhase] = useState("despertar");
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
+  const fetchUserData = useCallback(async () => {
+    if (!user) return;
+
+    // Fetch profile and progress in parallel
+    const [profileRes, progressRes] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("user_progress")
+        .select("current_phase_number")
+        .eq("user_id", user.id)
+        .maybeSingle(),
+    ]);
+
+    if (profileRes.data) {
+      setProfile(profileRes.data);
+    }
+
+    if (progressRes.data?.current_phase_number) {
+      const phaseSlug = phaseNumberToSlug[progressRes.data.current_phase_number] || "despertar";
+      setCurrentPhase(phaseSlug);
     }
   }, [user]);
 
-  const fetchProfile = async () => {
-    if (!user) return;
-    const { data } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    if (data) setProfile(data);
-  };
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   const displayName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Migrante";
   const currentMotivation = phaseMotivations.find(p => p.phase === currentPhase) || phaseMotivations[0];

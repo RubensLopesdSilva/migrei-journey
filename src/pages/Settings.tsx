@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Lock, Camera, Save, Loader2, CreditCard } from "lucide-react";
+import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
@@ -269,6 +270,12 @@ export default function Settings() {
     <PageLayout>
       <PageContent className="p-4 md:p-8">
           <div className="max-w-3xl mx-auto">
+            {/* Breadcrumb */}
+            <PageBreadcrumb
+              items={[{ label: "Configurações", current: true }]}
+              className="mb-4"
+            />
+            
             <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
               Configurações
             </h1>

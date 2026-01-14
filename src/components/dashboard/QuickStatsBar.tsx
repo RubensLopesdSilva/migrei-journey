@@ -1,4 +1,4 @@
-import { Star, Calendar, Trophy, Zap, TrendingUp, Flame, LucideIcon } from "lucide-react";
+import { Star, Calendar, TrendingUp, MapPin, LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { AnimatedProgress } from "@/components/ui/animated-container";
 import { StatTooltip } from "@/components/ui/tooltip-enhanced";
@@ -6,18 +6,22 @@ import { StatTooltip } from "@/components/ui/tooltip-enhanced";
 interface QuickStatsBarProps {
   points?: number;
   days?: number;
-  ranking?: number;
-  energy?: number;
   weeklyProgress?: number;
-  streakDays?: number;
+  currentPhase?: {
+    name: string;
+    number: number;
+  };
 }
 
 interface StatItem {
   icon: LucideIcon;
   label: string;
   value: string;
+  sublabel?: string;
   color: string;
   bgColor: string;
+  gradientFrom?: string;
+  gradientTo?: string;
   showProgress?: boolean;
   progress?: number;
   description: string;
@@ -26,6 +30,7 @@ interface StatItem {
     label: string;
     positive?: boolean;
   };
+  isHighlighted?: boolean;
 }
 
 // Animation variants
@@ -34,99 +39,85 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1
+      staggerChildren: 0.1,
+      delayChildren: 0.05
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  hidden: { opacity: 0, y: 16, scale: 0.96 },
   visible: { 
     opacity: 1, 
     y: 0, 
     scale: 1,
     transition: { 
       type: "spring" as const,
-      stiffness: 300,
-      damping: 24
+      stiffness: 400,
+      damping: 28
     }
   }
 };
 
 export function QuickStatsBar({ 
-  points = 30, 
-  days = 100, 
-  ranking = 1, 
-  energy = 75,
-  weeklyProgress = 60,
-  streakDays = 7
+  points = 575, 
+  days = 2, 
+  weeklyProgress = 0,
+  currentPhase = { name: "Despertar", number: 1 }
 }: QuickStatsBarProps) {
   const stats: StatItem[] = [
     {
       icon: Star,
-      label: "Pontos XP",
+      label: "XP Total",
       value: points.toLocaleString(),
+      sublabel: "pontos",
       color: "hsl(var(--phase-despertar))",
-      bgColor: "hsl(var(--phase-despertar) / 0.15)",
+      bgColor: "hsl(var(--phase-despertar) / 0.12)",
+      gradientFrom: "hsl(var(--phase-despertar))",
+      gradientTo: "hsl(var(--phase-descobrir))",
       description: "Pontos de experiência ganhos completando atividades e missões",
-      trend: { value: 15, label: "esta semana", positive: true }
-    },
-    {
-      icon: Flame,
-      label: "Dias seguidos",
-      value: streakDays.toString(),
-      color: "hsl(var(--phase-decidir))",
-      bgColor: "hsl(var(--phase-decidir) / 0.15)",
-      description: "Quantos dias consecutivos você acessou a plataforma",
-      trend: streakDays > 0 ? { value: streakDays, label: "dias de streak", positive: true } : undefined
+      trend: { value: 15, label: "esta semana", positive: true },
+      isHighlighted: true
     },
     {
       icon: Calendar,
-      label: "Dias na jornada",
+      label: "Na jornada",
       value: days.toString(),
+      sublabel: days === 1 ? "dia" : "dias",
       color: "hsl(var(--primary))",
-      bgColor: "hsl(var(--primary) / 0.15)",
+      bgColor: "hsl(var(--primary) / 0.12)",
       description: "Total de dias desde que você começou sua transição de carreira"
     },
     {
-      icon: Trophy,
-      label: "Ranking",
-      value: `${ranking}º`,
-      color: "hsl(var(--phase-desfrutar))",
-      bgColor: "hsl(var(--phase-desfrutar) / 0.15)",
-      description: "Sua posição no ranking geral de migrantes ativos"
-    },
-    {
-      icon: Zap,
-      label: "Energia",
-      value: `${energy}%`,
-      color: "hsl(var(--phase-deslanchar))",
-      bgColor: "hsl(var(--phase-deslanchar) / 0.15)",
-      showProgress: true,
-      progress: energy,
-      description: "Seu nível de energia baseado na frequência de atividades recentes"
-    },
-    {
       icon: TrendingUp,
-      label: "Progresso semanal",
+      label: "Progresso",
       value: `${weeklyProgress}%`,
+      sublabel: "esta semana",
       color: "hsl(var(--phase-descobrir))",
-      bgColor: "hsl(var(--phase-descobrir) / 0.15)",
+      bgColor: "hsl(var(--phase-descobrir) / 0.12)",
       showProgress: true,
       progress: weeklyProgress,
       description: "Quanto você progrediu na fase atual esta semana"
+    },
+    {
+      icon: MapPin,
+      label: "Fase atual",
+      value: `${currentPhase.number}`,
+      sublabel: currentPhase.name,
+      color: "hsl(var(--phase-decidir))",
+      bgColor: "hsl(var(--phase-decidir) / 0.12)",
+      description: `Você está na fase ${currentPhase.number}: ${currentPhase.name}`
     }
   ];
 
   return (
     <motion.div 
-      className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3"
+      className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      {stats.map((stat) => (
+      {stats.map((stat, index) => (
         <StatTooltip
           key={stat.label}
           label={stat.label}
@@ -137,52 +128,104 @@ export function QuickStatsBar({
           <motion.div 
             variants={itemVariants}
             whileHover={{ 
-              y: -4, 
-              boxShadow: "0 8px 24px -4px hsl(200 25% 15% / 0.16)",
+              y: -6, 
+              boxShadow: "var(--shadow-lg)",
               transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.98 }}
-            className="card-elevated p-2 sm:p-3 flex flex-col items-center text-center cursor-default"
+            className={`
+              relative overflow-hidden
+              bg-card rounded-2xl border border-border
+              p-4 sm:p-5
+              flex flex-col
+              cursor-default
+              transition-colors duration-300
+              ${stat.isHighlighted ? 'ring-1 ring-primary/20' : ''}
+            `}
+            style={{ 
+              boxShadow: "var(--shadow-sm)"
+            }}
             role="group"
-            aria-label={`${stat.label}: ${stat.value}`}
+            aria-label={`${stat.label}: ${stat.value} ${stat.sublabel || ''}`}
           >
-            <motion.div 
-              className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl flex items-center justify-center mb-1.5 sm:mb-2"
-              style={{ backgroundColor: stat.bgColor }}
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              transition={{ type: "spring", stiffness: 400 }}
-            >
-              <stat.icon 
-                className="h-4 w-4 sm:h-5 sm:w-5" 
-                style={{ color: stat.color }}
-                aria-hidden="true"
+            {/* Subtle gradient accent for highlighted items */}
+            {stat.isHighlighted && (
+              <div 
+                className="absolute top-0 left-0 right-0 h-1 opacity-80"
+                style={{
+                  background: `linear-gradient(90deg, ${stat.gradientFrom}, ${stat.gradientTo})`
+                }}
               />
-            </motion.div>
-            
-            <motion.p 
-              className="text-lg sm:text-xl font-bold tabular-nums"
-              style={{ color: stat.color }}
-              key={stat.value}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 500 }}
-            >
-              {stat.value}
-            </motion.p>
-            
-            <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">
-              {stat.label}
-            </p>
-
-            {stat.showProgress && stat.progress !== undefined && (
-              <div className="w-full mt-1.5 sm:mt-2">
-                <AnimatedProgress 
-                  value={stat.progress}
-                  color={stat.color}
-                  className="h-1 sm:h-1.5"
-                />
-              </div>
             )}
+
+            {/* Header with icon */}
+            <div className="flex items-center justify-between mb-3">
+              <motion.div 
+                className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl flex items-center justify-center"
+                style={{ backgroundColor: stat.bgColor }}
+                whileHover={{ scale: 1.08, rotate: 3 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                <stat.icon 
+                  className="h-5 w-5 sm:h-5.5 sm:w-5.5" 
+                  style={{ color: stat.color }}
+                  aria-hidden="true"
+                />
+              </motion.div>
+
+              {/* Trend indicator */}
+              {stat.trend && stat.trend.positive && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium"
+                  style={{ 
+                    backgroundColor: "hsl(var(--success) / 0.1)",
+                    color: "hsl(var(--success))"
+                  }}
+                >
+                  <TrendingUp className="h-2.5 w-2.5" />
+                  +{stat.trend.value}
+                </motion.div>
+              )}
+            </div>
+
+            {/* Value */}
+            <div className="flex-1 flex flex-col justify-end">
+              <motion.p 
+                className="text-2xl sm:text-3xl font-bold tracking-tight tabular-nums"
+                style={{ color: stat.color }}
+                key={stat.value}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 500, delay: index * 0.05 }}
+              >
+                {stat.value}
+              </motion.p>
+              
+              <div className="flex items-baseline gap-1.5 mt-0.5">
+                {stat.sublabel && (
+                  <span className="text-xs text-muted-foreground font-medium">
+                    {stat.sublabel}
+                  </span>
+                )}
+              </div>
+
+              <p className="text-[11px] sm:text-xs text-muted-foreground/70 mt-1 font-medium">
+                {stat.label}
+              </p>
+
+              {/* Progress bar */}
+              {stat.showProgress && stat.progress !== undefined && (
+                <div className="mt-3">
+                  <AnimatedProgress 
+                    value={stat.progress}
+                    color={stat.color}
+                    className="h-1.5 sm:h-2 rounded-full"
+                  />
+                </div>
+              )}
+            </div>
           </motion.div>
         </StatTooltip>
       ))}

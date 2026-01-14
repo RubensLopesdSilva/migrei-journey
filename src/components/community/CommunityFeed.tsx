@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, MessageSquare, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PostCard } from './PostCard';
 import { CreatePostModal } from './CreatePostModal';
 import { PhaseSelector } from './PhaseSelector';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { EmptyState } from '@/components/ui/empty-state';
 import type { CommunityPost, PostType } from '@/types/community';
 
 interface CommunityFeedProps {
@@ -57,16 +59,17 @@ export function CommunityFeed({
 
       {/* Posts */}
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
+        <LoadingSpinner message="Carregando posts da comunidade..." />
       ) : posts.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Nenhum post nesta fase ainda.</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Seja o primeiro a compartilhar!
-          </p>
-        </div>
+        <EmptyState
+          icon={MessageSquare}
+          title="Nenhum post nesta fase ainda"
+          description="Seja o primeiro a compartilhar sua experiência e conectar-se com outros migrantes!"
+          action={{
+            label: "Criar primeiro post",
+            onClick: () => setShowCreateModal(true)
+          }}
+        />
       ) : (
         <div className="space-y-4">
           {posts.map((post) => (

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MessageSquare, Users, Gift, Calendar, Bell } from 'lucide-react';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { MessageSquare, Users, Gift, Calendar } from 'lucide-react';
 import { useCommunity } from '@/hooks/useCommunity';
 import { CommunityFeed } from '@/components/community/CommunityFeed';
 import { NetworkingProfile } from '@/components/community/NetworkingProfile';
@@ -53,6 +54,12 @@ const Community = () => {
       <Sidebar />
       <div className="pl-0 md:pl-64 transition-all duration-300">
         <main className="p-4 md:p-8">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[{ label: "Comunidade", current: true }]}
+            className="mb-4"
+          />
+
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Comunidade</h1>
             <p className="text-muted-foreground">

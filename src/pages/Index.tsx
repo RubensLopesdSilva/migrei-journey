@@ -61,33 +61,58 @@ const Index = () => {
 
             {/* Main Grid: Círculo + Cards */}
             <motion.div 
-              className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 mt-6"
+              className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-10 mt-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              {/* Center - Migrei Circle */}
-              <div className="lg:col-span-7 flex items-start justify-center order-2 lg:order-1">
+              {/* Center - Migrei Circle como palco principal */}
+              <div className="lg:col-span-7 flex items-center justify-center order-2 lg:order-1 min-h-[450px] lg:min-h-[520px]">
                 <motion.div 
-                  className="card-elevated p-4 md:p-8 w-full flex justify-center"
+                  className="relative w-full flex justify-center items-center"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
                 >
-                  <MigreiCircle />
+                  {/* Container limpo - silêncio visual */}
+                  <div className="relative p-6 md:p-10">
+                    {/* Background sutil para elevação */}
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-br from-card/80 to-card/40 rounded-3xl border border-border/30"
+                      style={{
+                        boxShadow: '0 20px 50px -20px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255,255,255,0.05)'
+                      }}
+                    />
+                    
+                    {/* A Roda - elemento principal */}
+                    <div className="relative z-10">
+                      <MigreiCircle />
+                    </div>
+                  </div>
                 </motion.div>
               </div>
 
-              {/* Right Sidebar - Reorganized Cards */}
-              <div className="lg:col-span-5 space-y-4 sm:space-y-6 order-1 lg:order-2">
-                {/* Missões - Card Principal (maior) */}
-                <MissionCard />
+              {/* Right Sidebar - Cards secundários */}
+              <div className="lg:col-span-5 space-y-4 sm:space-y-5 order-1 lg:order-2">
+                {/* Missões - Card Principal */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.4 }}
+                >
+                  <MissionCard />
+                </motion.div>
 
                 {/* Skills e Networking lado a lado */}
-                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <motion.div 
+                  className="grid grid-cols-2 gap-3 sm:gap-4"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6, duration: 0.4 }}
+                >
                   <SkillsCard />
                   <NetworkingCard />
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           </PageContent>

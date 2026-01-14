@@ -17,7 +17,11 @@ import { useDecision } from '@/hooks/useDecision';
 import { RISK_LEVEL_LABELS } from '@/types/decision';
 import type { RiskLevel, PossibilityRoute } from '@/types/decision';
 
-export const RouteComparator = () => {
+interface RouteComparatorProps {
+  onComplete?: () => void;
+}
+
+export const RouteComparator = ({ onComplete }: RouteComparatorProps) => {
   const { routes } = useDecision();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 

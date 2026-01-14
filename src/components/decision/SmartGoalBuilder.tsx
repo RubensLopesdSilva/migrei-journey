@@ -24,7 +24,11 @@ const SMART_FIELDS = [
   { key: 'time_bound', label: 'T - Temporal', placeholder: 'Qual o prazo para alcançar?', tip: 'Defina uma data limite clara' },
 ];
 
-export const SmartGoalBuilder = () => {
+interface SmartGoalBuilderProps {
+  onComplete?: () => void;
+}
+
+export const SmartGoalBuilder = ({ onComplete }: SmartGoalBuilderProps) => {
   const { smartGoals, selectedRoute, addSmartGoal, updateSmartGoal, createPlan90Days } = useDecision();
   const [isCreating, setIsCreating] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);

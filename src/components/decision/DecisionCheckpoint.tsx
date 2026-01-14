@@ -18,7 +18,11 @@ import {
 import { useDecision } from '@/hooks/useDecision';
 import confetti from 'canvas-confetti';
 
-export const DecisionCheckpoint = () => {
+interface DecisionCheckpointProps {
+  onComplete?: () => void;
+}
+
+export const DecisionCheckpoint = ({ onComplete }: DecisionCheckpointProps) => {
   const { routes, checkpoint, selectedRoute, confirmDecision } = useDecision();
   const [isConfirming, setIsConfirming] = useState(false);
   const [commitment, setCommitment] = useState('');

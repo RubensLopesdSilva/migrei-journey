@@ -377,6 +377,25 @@ export const useDecision = () => {
   const selectedRoute = routes.find(r => r.is_selected);
   const activeGoal = smartGoals.find(g => g.status === 'active');
 
+  // Calculate phase progress
+  const getPhaseProgress = () => {
+    let completed = 0;
+    const total = 6; // 6 steps: matrix, comparator, goal, plan, gaps, checkpoint
+
+    if (routes.length > 0) completed++;
+    if (routes.some(r => r.is_selected)) completed++;
+    if (smartGoals.length > 0) completed++;
+    if (plan90Days.length > 0) completed++;
+    if (skillsGaps.length > 0) completed++;
+    if (checkpoint?.is_confirmed) completed++;
+
+    return {
+      completed,
+      total,
+      percentage: Math.round((completed / total) * 100)
+    };
+  };
+
   return {
     // Data
     routes,
@@ -389,6 +408,7 @@ export const useDecision = () => {
     activeGoal,
     progressPercentage,
     isLoading,
+    getPhaseProgress,
 
     // Route actions
     addRoute,

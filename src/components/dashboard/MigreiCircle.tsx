@@ -60,7 +60,7 @@ const phases: Phase[] = [
     description: "Definição estratégica da rota e metas",
     angle: 120,
     route: "/fase/decidir",
-    available: false
+    available: true
   },
   { 
     id: "desenvolver", 

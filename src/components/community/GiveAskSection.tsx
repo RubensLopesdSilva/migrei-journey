@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { cn } from '@/lib/utils';
 import type { GiveAskPost, GiveAskType } from '@/types/community';
 
@@ -149,24 +149,24 @@ export function GiveAskSection({ posts, onCreatePost, onFilter }: GiveAskSection
         </Dialog>
       </div>
 
-      <Tabs defaultValue="all" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="all" onClick={() => onFilter()}>Todos</TabsTrigger>
-          <TabsTrigger value="give" onClick={() => onFilter('give')}>
-            <Gift className="h-4 w-4 mr-2" />
+      <AnimatedTabs defaultValue="all" className="w-full">
+        <AnimatedTabsList className="grid w-full grid-cols-3">
+          <AnimatedTabsTrigger value="all" onClick={() => onFilter()}>Todos</AnimatedTabsTrigger>
+          <AnimatedTabsTrigger value="give" onClick={() => onFilter('give')}>
+            <Gift className="h-4 w-4 mr-2" aria-hidden="true" />
             Ofertas
-          </TabsTrigger>
-          <TabsTrigger value="ask" onClick={() => onFilter('ask')}>
-            <HelpCircle className="h-4 w-4 mr-2" />
+          </AnimatedTabsTrigger>
+          <AnimatedTabsTrigger value="ask" onClick={() => onFilter('ask')}>
+            <HelpCircle className="h-4 w-4 mr-2" aria-hidden="true" />
             Pedidos
-          </TabsTrigger>
-        </TabsList>
+          </AnimatedTabsTrigger>
+        </AnimatedTabsList>
 
-        <TabsContent value="all" className="mt-6">
+        <AnimatedTabsContent value="all" className="mt-6">
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-4">
               <h3 className="font-semibold text-green-500 flex items-center gap-2">
-                <Gift className="h-4 w-4" />
+                <Gift className="h-4 w-4" aria-hidden="true" />
                 Ofertas de Ajuda
               </h3>
               {givePosts.length === 0 ? (
@@ -177,7 +177,7 @@ export function GiveAskSection({ posts, onCreatePost, onFilter }: GiveAskSection
             </div>
             <div className="space-y-4">
               <h3 className="font-semibold text-blue-500 flex items-center gap-2">
-                <HelpCircle className="h-4 w-4" />
+                <HelpCircle className="h-4 w-4" aria-hidden="true" />
                 Pedidos de Ajuda
               </h3>
               {askPosts.length === 0 ? (
@@ -187,24 +187,24 @@ export function GiveAskSection({ posts, onCreatePost, onFilter }: GiveAskSection
               )}
             </div>
           </div>
-        </TabsContent>
+        </AnimatedTabsContent>
 
-        <TabsContent value="give" className="mt-6 space-y-4">
+        <AnimatedTabsContent value="give" className="mt-6 space-y-4">
           {givePosts.length === 0 ? (
             <p className="text-muted-foreground text-center py-6">Nenhuma oferta de ajuda ainda</p>
           ) : (
             givePosts.map(post => <GiveAskCard key={post.id} post={post} />)
           )}
-        </TabsContent>
+        </AnimatedTabsContent>
 
-        <TabsContent value="ask" className="mt-6 space-y-4">
+        <AnimatedTabsContent value="ask" className="mt-6 space-y-4">
           {askPosts.length === 0 ? (
             <p className="text-muted-foreground text-center py-6">Nenhum pedido de ajuda ainda</p>
           ) : (
             askPosts.map(post => <GiveAskCard key={post.id} post={post} />)
           )}
-        </TabsContent>
-      </Tabs>
+        </AnimatedTabsContent>
+      </AnimatedTabs>
     </div>
   );
 }

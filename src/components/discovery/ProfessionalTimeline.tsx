@@ -232,8 +232,9 @@ export function ProfessionalTimeline() {
                                 size="icon"
                                 className="h-6 w-6 text-muted-foreground hover:text-destructive"
                                 onClick={() => deleteTimelineEvent(event.id)}
+                                aria-label="Excluir evento"
                               >
-                                <Trash2 className="h-3 w-3" />
+                                <Trash2 className="h-3 w-3" aria-hidden="true" />
                               </Button>
                             </div>
                             <CardTitle className="text-base">{event.event_title}</CardTitle>

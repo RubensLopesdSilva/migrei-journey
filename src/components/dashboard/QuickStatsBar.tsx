@@ -1,5 +1,6 @@
-import { Star, Calendar, Trophy, Zap, TrendingUp, Flame } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Star, Calendar, Trophy, Zap, TrendingUp, Flame, LucideIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { AnimatedProgress } from "@/components/ui/animated-container";
 
 interface QuickStatsBarProps {
   points?: number;
@@ -10,6 +11,42 @@ interface QuickStatsBarProps {
   streakDays?: number;
 }
 
+interface StatItem {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  color: string;
+  bgColor: string;
+  showProgress?: boolean;
+  progress?: number;
+}
+
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: { 
+      type: "spring" as const,
+      stiffness: 300,
+      damping: 24
+    }
+  }
+};
+
 export function QuickStatsBar({ 
   points = 30, 
   days = 100, 
@@ -18,7 +55,7 @@ export function QuickStatsBar({
   weeklyProgress = 60,
   streakDays = 7
 }: QuickStatsBarProps) {
-  const stats = [
+  const stats: StatItem[] = [
     {
       icon: Star,
       label: "Pontos XP",
@@ -68,48 +105,65 @@ export function QuickStatsBar({
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 animate-fade-in">
-      {stats.map((stat, index) => (
-        <div 
+    <motion.div 
+      className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {stats.map((stat) => (
+        <motion.div 
           key={stat.label}
-          className="card-elevated p-3 flex flex-col items-center text-center hover:shadow-lg transition-all duration-300"
-          style={{ animationDelay: `${index * 50}ms` }}
+          variants={itemVariants}
+          whileHover={{ 
+            y: -4, 
+            boxShadow: "0 8px 24px -4px hsl(200 25% 15% / 0.16)",
+            transition: { duration: 0.2 }
+          }}
+          whileTap={{ scale: 0.98 }}
+          className="card-elevated p-2 sm:p-3 flex flex-col items-center text-center cursor-default"
+          role="group"
+          aria-label={`${stat.label}: ${stat.value}`}
         >
-          <div 
-            className="h-10 w-10 rounded-xl flex items-center justify-center mb-2"
+          <motion.div 
+            className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl flex items-center justify-center mb-1.5 sm:mb-2"
             style={{ backgroundColor: stat.bgColor }}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            transition={{ type: "spring", stiffness: 400 }}
           >
             <stat.icon 
-              className="h-5 w-5" 
+              className="h-4 w-4 sm:h-5 sm:w-5" 
               style={{ color: stat.color }}
+              aria-hidden="true"
             />
-          </div>
+          </motion.div>
           
-          <p 
-            className="text-xl font-bold"
+          <motion.p 
+            className="text-lg sm:text-xl font-bold tabular-nums"
             style={{ color: stat.color }}
+            key={stat.value}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: "spring", stiffness: 500 }}
           >
             {stat.value}
-          </p>
+          </motion.p>
           
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] sm:text-xs text-muted-foreground leading-tight">
             {stat.label}
           </p>
 
-          {stat.showProgress && (
-            <div className="w-full mt-2">
-              <Progress 
-                value={stat.progress} 
-                className="h-1.5"
-                style={{ 
-                  // @ts-ignore
-                  '--progress-color': stat.color 
-                }}
+          {stat.showProgress && stat.progress !== undefined && (
+            <div className="w-full mt-1.5 sm:mt-2">
+              <AnimatedProgress 
+                value={stat.progress}
+                color={stat.color}
+                className="h-1 sm:h-1.5"
               />
             </div>
           )}
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   );
 }

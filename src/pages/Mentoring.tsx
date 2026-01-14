@@ -8,12 +8,14 @@ import { ScheduleModal } from "@/components/mentoring/ScheduleModal";
 import { RescheduleModal } from "@/components/mentoring/RescheduleModal";
 import { SessionCard } from "@/components/mentoring/SessionCard";
 import { RodaMigreiSection } from "@/components/mentoring/RodaMigreiSection";
+import { MentoringPageSkeleton } from "@/components/mentoring/MentoringPageSkeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Users, 
   Calendar, 
@@ -91,10 +93,27 @@ export default function Mentoring() {
     ? ((sessionLimit - remainingSessions) / sessionLimit) * 100 
     : 0;
 
+  if (loading) {
+    return (
+      <PageLayout>
+        <PageContent className="p-4 md:p-6 lg:p-8">
+          <MentoringPageSkeleton />
+        </PageContent>
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <PageContent className="p-4 md:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
+            {/* Breadcrumb */}
+            <PageBreadcrumb
+              items={[
+                { label: "Mentoria", current: true }
+              ]}
+            />
+
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>

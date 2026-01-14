@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { PageContent } from "@/components/ui/page-transition";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -265,10 +266,8 @@ export default function Settings() {
     : user?.email?.[0].toUpperCase() || "U";
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div className="pl-0 md:pl-64 transition-all duration-300">
-        <main className="p-4 md:p-8">
+    <PageLayout>
+      <PageContent className="p-4 md:p-8">
           <div className="max-w-3xl mx-auto">
             <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
               Configurações
@@ -465,10 +464,9 @@ export default function Settings() {
                   </Button>
                 </div>
               </TabsContent>
-            </Tabs>
+          </Tabs>
           </div>
-        </main>
-      </div>
-    </div>
+      </PageContent>
+    </PageLayout>
   );
 }

@@ -68,18 +68,24 @@ export function Header() {
         <ThemeToggle />
 
         {/* Notifications */}
-        <button className="relative h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors">
-          <Bell className="h-5 w-5 text-muted-foreground" />
+        <button 
+          className="relative h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors"
+          aria-label="Notificações"
+        >
+          <Bell className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
           {hasNotifications && (
-            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary" />
+            <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-primary" aria-label="Novas notificações" />
           )}
         </button>
 
         {/* User Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20">
-              <User className="h-5 w-5 text-muted-foreground" />
+            <button 
+              className="h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20"
+              aria-label="Menu do usuário"
+            >
+              <User className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48 bg-card border border-border shadow-lg z-50">

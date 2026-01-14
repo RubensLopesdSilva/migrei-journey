@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { User, Lock, Camera, Save, Loader2, CreditCard } from "lucide-react";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { useToast } from "@/hooks/use-toast";
@@ -256,9 +256,16 @@ export default function Settings() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
+      <PageLayout>
+        <PageContent className="p-4 md:p-8">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="h-6 w-32 bg-muted animate-pulse rounded" />
+            <div className="h-10 w-64 bg-muted animate-pulse rounded" />
+            <div className="h-12 w-full bg-muted animate-pulse rounded" />
+            <div className="h-64 w-full bg-muted animate-pulse rounded-lg" />
+          </div>
+        </PageContent>
+      </PageLayout>
     );
   }
 
@@ -280,29 +287,29 @@ export default function Settings() {
               Configurações
             </h1>
 
-            <Tabs defaultValue="subscription" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="subscription" className="gap-2">
-                  <CreditCard className="h-4 w-4" />
+            <AnimatedTabs defaultValue="subscription" className="space-y-6">
+              <AnimatedTabsList className="grid w-full grid-cols-3">
+                <AnimatedTabsTrigger value="subscription" className="gap-2">
+                  <CreditCard className="h-4 w-4" aria-hidden="true" />
                   Assinatura
-                </TabsTrigger>
-                <TabsTrigger value="profile" className="gap-2">
-                  <User className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="profile" className="gap-2">
+                  <User className="h-4 w-4" aria-hidden="true" />
                   Perfil
-                </TabsTrigger>
-                <TabsTrigger value="security" className="gap-2">
-                  <Lock className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="security" className="gap-2">
+                  <Lock className="h-4 w-4" aria-hidden="true" />
                   Segurança
-                </TabsTrigger>
-              </TabsList>
+                </AnimatedTabsTrigger>
+              </AnimatedTabsList>
 
               {/* Subscription Tab */}
-              <TabsContent value="subscription">
+              <AnimatedTabsContent value="subscription">
                 <SubscriptionCard />
-              </TabsContent>
+              </AnimatedTabsContent>
 
               {/* Profile Tab */}
-              <TabsContent value="profile" className="space-y-6">
+              <AnimatedTabsContent value="profile" className="space-y-6">
                 <div className="card-elevated p-6">
                   <h2 className="text-lg font-semibold text-foreground mb-6">
                     Foto de Perfil
@@ -311,7 +318,7 @@ export default function Settings() {
                   <div className="flex items-center gap-6">
                     <div className="relative">
                       <Avatar className="h-24 w-24 cursor-pointer" onClick={handleAvatarClick}>
-                        <AvatarImage src={profile?.avatar_url || ""} />
+                        <AvatarImage src={profile?.avatar_url || ""} alt="Foto de perfil" />
                         <AvatarFallback className="bg-primary/10 text-primary text-xl">
                           {userInitials}
                         </AvatarFallback>
@@ -319,12 +326,13 @@ export default function Settings() {
                       <button
                         onClick={handleAvatarClick}
                         disabled={uploadingAvatar}
+                        aria-label="Alterar foto de perfil"
                         className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors"
                       >
                         {uploadingAvatar ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                         ) : (
-                          <Camera className="h-4 w-4" />
+                          <Camera className="h-4 w-4" aria-hidden="true" />
                         )}
                       </button>
                       <input
@@ -333,6 +341,7 @@ export default function Settings() {
                         accept="image/*"
                         onChange={handleAvatarUpload}
                         className="hidden"
+                        aria-label="Selecionar arquivo de imagem"
                       />
                     </div>
                     <div>
@@ -411,17 +420,17 @@ export default function Settings() {
                     className="btn-primary-gradient"
                   >
                     {saving ? (
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
                     ) : (
-                      <Save className="h-4 w-4 mr-2" />
+                      <Save className="h-4 w-4 mr-2" aria-hidden="true" />
                     )}
                     Salvar alterações
                   </Button>
                 </div>
-              </TabsContent>
+              </AnimatedTabsContent>
 
               {/* Security Tab */}
-              <TabsContent value="security" className="space-y-6">
+              <AnimatedTabsContent value="security" className="space-y-6">
                 <div className="card-elevated p-6 space-y-6">
                   <h2 className="text-lg font-semibold text-foreground">
                     Alterar Senha
@@ -463,15 +472,15 @@ export default function Settings() {
                     className="btn-primary-gradient"
                   >
                     {saving ? (
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" aria-hidden="true" />
                     ) : (
-                      <Lock className="h-4 w-4 mr-2" />
+                      <Lock className="h-4 w-4 mr-2" aria-hidden="true" />
                     )}
                     Alterar senha
                   </Button>
                 </div>
-              </TabsContent>
-          </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           </div>
       </PageContent>
     </PageLayout>

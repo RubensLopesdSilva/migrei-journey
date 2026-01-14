@@ -125,8 +125,10 @@ export function Sidebar() {
           size="icon"
           onClick={() => setMobileOpen(!mobileOpen)}
           className="md:hidden"
+          aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={mobileOpen}
         >
-          {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
         </Button>
       </div>
 

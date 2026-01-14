@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -21,9 +23,9 @@ export default function Fase5Deslanchar() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
+      <PageLayout>
+        <PageSkeleton variant="dashboard" showHeader={true} />
+      </PageLayout>
     );
   }
 
@@ -45,6 +47,15 @@ export default function Fase5Deslanchar() {
     <PageLayout>
       <PageContent>
         <div className="container mx-auto max-w-6xl">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              { label: "Jornada", href: "/progresso" },
+              { label: "Fase 5: Deslanchar", current: true }
+            ]}
+            className="mb-4"
+          />
+
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">

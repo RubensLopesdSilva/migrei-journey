@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, BarChart3, Trophy, FileText, PartyPopper, RefreshCw } from 'lucide-react';
@@ -11,7 +13,6 @@ import { AchievementsLine } from '@/components/enjoy/AchievementsLine';
 import { FinalReport } from '@/components/enjoy/FinalReport';
 import { SymbolicCelebration } from '@/components/enjoy/SymbolicCelebration';
 import { CycleReentry } from '@/components/enjoy/CycleReentry';
-import { Skeleton } from '@/components/ui/skeleton';
 
 const Fase6Desfrutar = () => {
   const { user, loading: authLoading } = useAuth();
@@ -32,9 +33,9 @@ const Fase6Desfrutar = () => {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-      </div>
+      <PageLayout>
+        <PageSkeleton variant="dashboard" showHeader={true} />
+      </PageLayout>
     );
   }
 
@@ -42,6 +43,15 @@ const Fase6Desfrutar = () => {
     <PageLayout>
       <PageContent>
         <div className="container mx-auto max-w-6xl">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              { label: "Jornada", href: "/progresso" },
+              { label: "Fase 6: Desfrutar", current: true }
+            ]}
+            className="mb-4"
+          />
+
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
@@ -61,10 +71,7 @@ const Fase6Desfrutar = () => {
           </div>
 
           {loading ? (
-            <div className="space-y-6">
-              <Skeleton className="h-64 w-full" />
-              <Skeleton className="h-64 w-full" />
-            </div>
+            <PageSkeleton variant="dashboard" showHeader={false} />
           ) : (
             <Tabs defaultValue="evaluation" className="space-y-6">
               <TabsList className="grid grid-cols-5 w-full">

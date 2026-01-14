@@ -4,6 +4,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDevelop } from '@/hooks/useDevelop';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
+import { PageContent } from '@/components/ui/page-transition';
+import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { ResumeBuilder } from '@/components/develop/ResumeBuilder';
 import { PitchGenerator } from '@/components/develop/PitchGenerator';
 import { LinkedInChecklist } from '@/components/develop/LinkedInChecklist';
@@ -22,8 +24,7 @@ import {
   Linkedin, 
   Briefcase, 
   GraduationCap,
-  Sparkles,
-  ChevronRight
+  Sparkles
 } from 'lucide-react';
 
 export default function Fase4Desenvolver() {
@@ -80,15 +81,19 @@ export default function Fase4Desenvolver() {
 
   return (
     <PageLayout>
-      <div className="container mx-auto max-w-6xl">
+      <PageContent>
+        <div className="container mx-auto max-w-6xl">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              { label: "Jornada", href: "/progresso" },
+              { label: "Fase 4: Desenvolver", current: true }
+            ]}
+            className="mb-4"
+          />
+
           {/* Phase header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <span>Jornada Migrei</span>
-              <ChevronRight className="w-4 h-4" />
-              <span className="text-orange-600 font-medium">Fase 4</span>
-            </div>
-            
+          <div className="mb-8">            
             <div className="flex items-center gap-4 mb-4">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
                 <Wrench className="w-7 h-7 text-white" />
@@ -205,6 +210,7 @@ export default function Fase4Desenvolver() {
             </div>
           </div>
         </div>
+        </PageContent>
       </PageLayout>
     );
   }

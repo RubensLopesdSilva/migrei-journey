@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { PageContent } from "@/components/ui/page-transition";
 
 const Index = () => {
-  const { loading, userProgress, getProgressSummary } = useProgress();
+  const { loading, userProgress, getProgressSummary, phases } = useProgress();
   
   const summary = loading ? null : getProgressSummary();
   
@@ -20,6 +20,9 @@ const Index = () => {
   const daysInJourney = userProgress?.journey_started_at 
     ? Math.floor((Date.now() - new Date(userProgress.journey_started_at).getTime()) / (1000 * 60 * 60 * 24))
     : 0;
+
+  // Get current phase info
+  const currentPhase = phases?.find(p => p.id === userProgress?.current_phase_id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -41,9 +44,9 @@ const Index = () => {
 
             {/* Quick Stats Bar */}
             {loading ? (
-              <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3 mt-6">
-                {[...Array(6)].map((_, i) => (
-                  <Skeleton key={i} className="h-20 sm:h-24 rounded-xl" />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6">
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton key={i} className="h-28 sm:h-32 rounded-2xl" />
                 ))}
               </div>
             ) : (
@@ -51,10 +54,11 @@ const Index = () => {
                 <QuickStatsBar 
                   points={summary?.totalXp || 0}
                   days={daysInJourney}
-                  ranking={1}
-                  energy={75}
                   weeklyProgress={summary?.overallProgress || 0}
-                  streakDays={summary?.streak || 0}
+                  currentPhase={currentPhase ? { 
+                    name: currentPhase.name, 
+                    number: currentPhase.phase_number 
+                  } : undefined}
                 />
               </div>
             )}

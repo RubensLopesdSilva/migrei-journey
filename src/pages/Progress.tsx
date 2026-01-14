@@ -81,10 +81,8 @@ export default function Progress() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div className="pl-0 md:pl-64 transition-all duration-300">
-        <main className="p-4 md:p-8">
+    <PageLayout>
+      <PageContent className="p-4 md:p-8">
           {/* Breadcrumb */}
           <PageBreadcrumb
             items={[
@@ -276,8 +274,7 @@ export default function Progress() {
               </TabsContent>
             </Tabs>
           )}
-        </main>
-      </div>
-    </div>
+      </PageContent>
+    </PageLayout>
   );
 }

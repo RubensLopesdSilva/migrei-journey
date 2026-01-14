@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { PageContent } from "@/components/ui/page-transition";
 import { useMentoring, Mentor, MentoringSession } from "@/hooks/useMentoring";
 import { MentorCard } from "@/components/mentoring/MentorCard";
 import { ScheduleModal } from "@/components/mentoring/ScheduleModal";
@@ -91,10 +92,8 @@ export default function Mentoring() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div className="pl-0 md:pl-64 transition-all duration-300">
-        <main className="p-4 md:p-6 lg:p-8">
+    <PageLayout>
+      <PageContent className="p-4 md:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto space-y-8">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -392,29 +391,28 @@ export default function Mentoring() {
               </Card>
             )}
           </div>
-        </main>
-      </div>
 
-      <ScheduleModal
-        mentor={selectedMentor}
-        open={scheduleModalOpen}
-        onOpenChange={setScheduleModalOpen}
-        onBook={bookSession}
-        fetchAvailability={fetchMentorAvailability}
-        fetchBookedSlots={fetchBookedSlots}
-        remainingSessions={remainingSessions}
-        minAdvanceHours={minAdvanceHours}
-      />
+        <ScheduleModal
+          mentor={selectedMentor}
+          open={scheduleModalOpen}
+          onOpenChange={setScheduleModalOpen}
+          onBook={bookSession}
+          fetchAvailability={fetchMentorAvailability}
+          fetchBookedSlots={fetchBookedSlots}
+          remainingSessions={remainingSessions}
+          minAdvanceHours={minAdvanceHours}
+        />
 
-      <RescheduleModal
-        session={sessionToReschedule}
-        open={rescheduleModalOpen}
-        onOpenChange={setRescheduleModalOpen}
-        onReschedule={rescheduleSession}
-        fetchAvailability={fetchMentorAvailability}
-        fetchBookedSlots={fetchBookedSlots}
-        minAdvanceHours={minAdvanceHours}
-      />
-    </div>
+        <RescheduleModal
+          session={sessionToReschedule}
+          open={rescheduleModalOpen}
+          onOpenChange={setRescheduleModalOpen}
+          onReschedule={rescheduleSession}
+          fetchAvailability={fetchMentorAvailability}
+          fetchBookedSlots={fetchBookedSlots}
+          minAdvanceHours={minAdvanceHours}
+        />
+      </PageContent>
+    </PageLayout>
   );
 }

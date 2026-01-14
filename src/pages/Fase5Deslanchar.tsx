@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { PageLayout } from '@/components/layout/PageLayout';
+import { PageContent } from '@/components/ui/page-transition';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -41,11 +42,9 @@ export default function Fase5Deslanchar() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      
-      <main className="pl-0 md:pl-64 transition-all duration-300">
-        <div className="container mx-auto px-4 py-8">
+    <PageLayout>
+      <PageContent>
+        <div className="container mx-auto max-w-6xl">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
@@ -111,7 +110,7 @@ export default function Fase5Deslanchar() {
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-    </div>
+      </PageContent>
+    </PageLayout>
   );
 }

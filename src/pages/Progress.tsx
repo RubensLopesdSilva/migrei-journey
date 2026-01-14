@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Sidebar } from "@/components/layout/Sidebar";
+import { PageLayout } from "@/components/layout/PageLayout";
+import { PageContent } from "@/components/ui/page-transition";
 import { useProgress } from "@/hooks/useProgress";
 import { ProgressHeader } from "@/components/progress/ProgressHeader";
 import { InteractiveRodaMigrei } from "@/components/progress/InteractiveRodaMigrei";
@@ -40,14 +41,9 @@ export default function Progress() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <Sidebar />
-        <div className="pl-0 md:pl-64 transition-all duration-300">
-          <main className="p-4 md:p-8">
-            <PageSkeleton variant="dashboard" showHeader={true} />
-          </main>
-        </div>
-      </div>
+      <PageLayout>
+        <PageSkeleton variant="dashboard" showHeader={true} />
+      </PageLayout>
     );
   }
 

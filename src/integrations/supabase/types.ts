@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      achievements_line: {
+        Row: {
+          achieved_at: string
+          achievement_type: string
+          created_at: string
+          description: string | null
+          id: string
+          is_celebrated: boolean | null
+          phase_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          achieved_at?: string
+          achievement_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_celebrated?: boolean | null
+          phase_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          achieved_at?: string
+          achievement_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_celebrated?: boolean | null
+          phase_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_line_phase_id_fkey"
+            columns: ["phase_id"]
+            isOneToOne: false
+            referencedRelation: "migrei_phases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       badges: {
         Row: {
           category: string
@@ -630,6 +674,39 @@ export type Database = {
         }
         Relationships: []
       }
+      cycle_reentries: {
+        Row: {
+          created_at: string
+          id: string
+          motivation: string | null
+          new_cycle: number
+          next_level_goal: string | null
+          previous_cycle: number
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          motivation?: string | null
+          new_cycle: number
+          next_level_goal?: string | null
+          previous_cycle: number
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          motivation?: string | null
+          new_cycle?: number
+          next_level_goal?: string | null
+          previous_cycle?: number
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       decision_checkpoints: {
         Row: {
           commitment_statement: string | null
@@ -917,6 +994,45 @@ export type Database = {
           panel_type?: string
           status?: string | null
           title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      final_reports: {
+        Row: {
+          generated_at: string
+          id: string
+          journey_summary: string | null
+          key_learnings: Json | null
+          new_professional_identity: string | null
+          phases_completed: number | null
+          total_days: number | null
+          total_xp_earned: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          generated_at?: string
+          id?: string
+          journey_summary?: string | null
+          key_learnings?: Json | null
+          new_professional_identity?: string | null
+          phases_completed?: number | null
+          total_days?: number | null
+          total_xp_earned?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          generated_at?: string
+          id?: string
+          journey_summary?: string | null
+          key_learnings?: Json | null
+          new_professional_identity?: string | null
+          phases_completed?: number | null
+          total_days?: number | null
+          total_xp_earned?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -2143,6 +2259,39 @@ export type Database = {
         }
         Relationships: []
       }
+      results_evaluation: {
+        Row: {
+          after_score: number | null
+          before_score: number | null
+          created_at: string
+          dimension: string
+          id: string
+          reflection: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          after_score?: number | null
+          before_score?: number | null
+          created_at?: string
+          dimension: string
+          id?: string
+          reflection?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          after_score?: number | null
+          before_score?: number | null
+          created_at?: string
+          dimension?: string
+          id?: string
+          reflection?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       skills_gaps: {
         Row: {
           created_at: string
@@ -2315,6 +2464,39 @@ export type Database = {
           stripe_product_id?: string | null
           trial_days?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      symbolic_celebrations: {
+        Row: {
+          avatar_message: string | null
+          celebration_message: string | null
+          completed_at: string
+          created_at: string
+          cycle_number: number | null
+          id: string
+          next_cycle_started: boolean | null
+          user_id: string
+        }
+        Insert: {
+          avatar_message?: string | null
+          celebration_message?: string | null
+          completed_at?: string
+          created_at?: string
+          cycle_number?: number | null
+          id?: string
+          next_cycle_started?: boolean | null
+          user_id: string
+        }
+        Update: {
+          avatar_message?: string | null
+          celebration_message?: string | null
+          completed_at?: string
+          created_at?: string
+          cycle_number?: number | null
+          id?: string
+          next_cycle_started?: boolean | null
+          user_id?: string
         }
         Relationships: []
       }

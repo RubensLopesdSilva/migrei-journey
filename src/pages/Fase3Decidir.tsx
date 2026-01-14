@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { Header } from '@/components/layout/Header';
 import { PossibilitiesMatrix } from '@/components/decision/PossibilitiesMatrix';
 import { RouteComparator } from '@/components/decision/RouteComparator';
 import { SmartGoalBuilder } from '@/components/decision/SmartGoalBuilder';
@@ -35,9 +34,8 @@ export default function Fase3Decidir() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="pl-64">
-        <Header />
-        <main className="p-8 space-y-6">
+      <div className="pl-0 md:pl-64 transition-all duration-300">
+        <main className="p-4 md:p-8 space-y-6">
           {/* Phase Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -65,11 +63,11 @@ export default function Fase3Decidir() {
           <Progress value={progress.percentage} className="h-2" />
 
           {/* Content Grid */}
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Main Content */}
-            <div className="col-span-8">
+            <div className="lg:col-span-8">
               <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-                <TabsList className="grid grid-cols-6 mb-6">
+                <TabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
                   {steps.map((step, index) => {
                     const Icon = step.icon;
                     const isCompleted = index < progress.completed;
@@ -114,7 +112,7 @@ export default function Fase3Decidir() {
             </div>
 
             {/* Coach Sidebar */}
-            <div className="col-span-4">
+            <div className="lg:col-span-4 order-first lg:order-last">
               <AvatarCoach 
                 phase="decidir" 
                 context={`Usuário está na etapa: ${activeStep}`}

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useDevelop } from '@/hooks/useDevelop';
-import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { ResumeBuilder } from '@/components/develop/ResumeBuilder';
 import { PitchGenerator } from '@/components/develop/PitchGenerator';
@@ -29,7 +28,6 @@ import {
 export default function Fase4Desenvolver() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('resume');
   
   const {
@@ -81,10 +79,9 @@ export default function Fase4Desenvolver() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <Sidebar />
 
-      <main className="pt-16 pb-8">
+      <main className="pl-0 md:pl-64 transition-all duration-300">
         <div className="container mx-auto px-4 py-6 max-w-6xl">
           {/* Phase header */}
           <div className="mb-8">

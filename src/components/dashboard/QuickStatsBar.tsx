@@ -68,7 +68,7 @@ export function QuickStatsBar({
   ];
 
   return (
-    <div className="grid grid-cols-6 gap-3 animate-fade-in">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 animate-fade-in">
       {stats.map((stat, index) => (
         <div 
           key={stat.label}

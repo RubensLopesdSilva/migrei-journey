@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
 import { useProgress } from "@/hooks/useProgress";
 import { ProgressHeader } from "@/components/progress/ProgressHeader";
 import { InteractiveRodaMigrei } from "@/components/progress/InteractiveRodaMigrei";
@@ -42,9 +41,8 @@ export default function Progress() {
     return (
       <div className="min-h-screen bg-background">
         <Sidebar />
-        <div className="pl-64">
-          <Header />
-          <main className="p-8">
+        <div className="pl-0 md:pl-64 transition-all duration-300">
+          <main className="p-4 md:p-8">
             <div className="space-y-6">
               <Skeleton className="h-32 w-full" />
               <Skeleton className="h-[400px] w-full" />
@@ -91,9 +89,8 @@ export default function Progress() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="pl-64">
-        <Header />
-        <main className="p-8">
+      <div className="pl-0 md:pl-64 transition-all duration-300">
+        <main className="p-4 md:p-8">
           {/* Progress Header */}
           <ProgressHeader
             totalXp={summary.totalXp}
@@ -144,10 +141,10 @@ export default function Progress() {
               </TabsList>
 
               <TabsContent value="overview" className="space-y-8">
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
                   {/* Roda Migrei */}
-                  <div className="col-span-7">
-                    <div className="bg-card rounded-2xl border border-border p-8">
+                  <div className="lg:col-span-7">
+                    <div className="bg-card rounded-2xl border border-border p-4 md:p-8">
                       <h3 className="text-lg font-semibold mb-6 text-center">
                         Sua Jornada Migrei
                       </h3>
@@ -160,7 +157,7 @@ export default function Progress() {
                   </div>
 
                   {/* Right side cards */}
-                  <div className="col-span-5 space-y-6">
+                  <div className="lg:col-span-5 space-y-6 order-first lg:order-last">
                     {/* Current Phase Quick View */}
                     {summary.currentPhase && (
                       <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl border border-primary/20 p-6">
@@ -207,7 +204,7 @@ export default function Progress() {
                 {/* Phase Cards Grid */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Todas as Fases</h3>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {phasesWithProgress.map(phase => {
                       const isLocked = phase.userProgress?.status === 'locked';
                       const isCompleted = phase.userProgress?.status === 'completed';

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { Header } from '@/components/layout/Header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MessageSquare, Users, Gift, Calendar, Bell } from 'lucide-react';
 import { useCommunity } from '@/hooks/useCommunity';
@@ -52,19 +51,18 @@ const Community = () => {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="pl-64">
-        <Header />
-        <main className="p-8">
+      <div className="pl-0 md:pl-64 transition-all duration-300">
+        <main className="p-4 md:p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Comunidade</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Comunidade</h1>
             <p className="text-muted-foreground">
               Conecte-se com pessoas na mesma fase da jornada e avance junto
             </p>
           </div>
 
-          <div className="grid grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             {/* Main Content */}
-            <div className="col-span-8">
+            <div className="lg:col-span-8">
               <Tabs defaultValue="feed" className="w-full">
                 <TabsList className="grid w-full grid-cols-4 mb-6">
                   <TabsTrigger value="feed" className="gap-2">
@@ -129,7 +127,7 @@ const Community = () => {
             </div>
 
             {/* Right Sidebar */}
-            <div className="col-span-4 space-y-6">
+            <div className="lg:col-span-4 space-y-6 order-first lg:order-last">
               <NetworkingProfile
                 profile={networkingProfile}
                 onSave={updateNetworkingProfile}

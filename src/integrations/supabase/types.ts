@@ -877,6 +877,51 @@ export type Database = {
           },
         ]
       }
+      execution_panel: {
+        Row: {
+          company: string | null
+          completed_at: string | null
+          contact_name: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          notes: string | null
+          panel_type: string
+          status: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          completed_at?: string | null
+          contact_name?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          panel_type: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          completed_at?: string | null
+          contact_name?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          notes?: string | null
+          panel_type?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       give_ask_posts: {
         Row: {
           created_at: string
@@ -953,6 +998,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      interview_simulations: {
+        Row: {
+          ai_feedback: string | null
+          area: string
+          created_at: string
+          id: string
+          practiced_at: string | null
+          question: string
+          score: number | null
+          updated_at: string
+          user_id: string
+          user_response: string | null
+        }
+        Insert: {
+          ai_feedback?: string | null
+          area: string
+          created_at?: string
+          id?: string
+          practiced_at?: string | null
+          question: string
+          score?: number | null
+          updated_at?: string
+          user_id: string
+          user_response?: string | null
+        }
+        Update: {
+          ai_feedback?: string | null
+          area?: string
+          created_at?: string
+          id?: string
+          practiced_at?: string | null
+          question?: string
+          score?: number | null
+          updated_at?: string
+          user_id?: string
+          user_response?: string | null
+        }
+        Relationships: []
       }
       linkedin_checklist: {
         Row: {
@@ -1300,6 +1384,93 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      networking_routine: {
+        Row: {
+          action_description: string | null
+          action_type: string
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          scheduled_date: string
+          target_name: string | null
+          target_profile_url: string | null
+          user_id: string
+        }
+        Insert: {
+          action_description?: string | null
+          action_type: string
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          scheduled_date?: string
+          target_name?: string | null
+          target_profile_url?: string | null
+          user_id: string
+        }
+        Update: {
+          action_description?: string | null
+          action_type?: string
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          scheduled_date?: string
+          target_name?: string | null
+          target_profile_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      opportunities_diary: {
+        Row: {
+          company: string | null
+          contact_name: string | null
+          created_at: string
+          description: string | null
+          entry_date: string
+          entry_type: string
+          id: string
+          importance_level: number | null
+          next_steps: string | null
+          outcome: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          contact_name?: string | null
+          created_at?: string
+          description?: string | null
+          entry_date?: string
+          entry_type: string
+          id?: string
+          importance_level?: number | null
+          next_steps?: string | null
+          outcome?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company?: string | null
+          contact_name?: string | null
+          created_at?: string
+          description?: string | null
+          entry_date?: string
+          entry_type?: string
+          id?: string
+          importance_level?: number | null
+          next_steps?: string | null
+          outcome?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       pain_map: {
         Row: {
@@ -2642,6 +2813,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      weekly_checkins: {
+        Row: {
+          confidence_level: number | null
+          created_at: string
+          energy_level: number | null
+          goals_next_week: string | null
+          id: string
+          suggested_adjustments: string | null
+          updated_at: string
+          user_id: string
+          week_start: string
+          what_blocked: string | null
+          what_worked: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string
+          energy_level?: number | null
+          goals_next_week?: string | null
+          id?: string
+          suggested_adjustments?: string | null
+          updated_at?: string
+          user_id: string
+          week_start: string
+          what_blocked?: string | null
+          what_worked?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string
+          energy_level?: number | null
+          goals_next_week?: string | null
+          id?: string
+          suggested_adjustments?: string | null
+          updated_at?: string
+          user_id?: string
+          week_start?: string
+          what_blocked?: string | null
+          what_worked?: string | null
+        }
+        Relationships: []
       }
       xp_transactions: {
         Row: {

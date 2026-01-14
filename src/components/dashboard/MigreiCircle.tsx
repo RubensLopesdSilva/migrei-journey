@@ -84,7 +84,7 @@ const phases: Phase[] = [
     description: "Execução prática e networking",
     angle: 240,
     route: "/fase/deslanchar",
-    available: false
+    available: true
   },
   { 
     id: "desfrutar", 

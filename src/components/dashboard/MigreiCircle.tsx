@@ -96,7 +96,7 @@ const phases: Phase[] = [
     description: "Consolidação e celebração",
     angle: 300,
     route: "/fase/desfrutar",
-    available: false
+    available: true
   },
 ];
 

@@ -13,6 +13,7 @@ import Progress from "./pages/Progress";
 import Community from "./pages/Community";
 import Fase1Despertar from "./pages/Fase1Despertar";
 import Fase2Descobrir from "./pages/Fase2Descobrir";
+import Fase3Decidir from "./pages/Fase3Decidir";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/fase" element={<Fase1Despertar />} />
               <Route path="/fase/despertar" element={<Fase1Despertar />} />
               <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
+              <Route path="/fase/decidir" element={<Fase3Decidir />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -18,7 +18,11 @@ import {
 import { useDecision } from '@/hooks/useDecision';
 import { MONTH_THEMES } from '@/types/decision';
 
-export const Plan90Days = () => {
+interface Plan90DaysProps {
+  onComplete?: () => void;
+}
+
+export const Plan90Days = ({ onComplete }: Plan90DaysProps) => {
   const { plan90Days, weeklyTasks, activeGoal, addWeeklyTask, toggleTaskComplete, createPlan90Days } = useDecision();
   const [expandedMonth, setExpandedMonth] = useState<number | null>(1);
   const [newTask, setNewTask] = useState({ monthId: '', week: 1, title: '' });

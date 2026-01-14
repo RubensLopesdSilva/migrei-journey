@@ -49,7 +49,11 @@ const SUGGESTED_ACTIONS_BY_TYPE: Record<GapType, SuggestedAction[]> = {
   ],
 };
 
-export const GapsMap = () => {
+interface GapsMapProps {
+  onComplete?: () => void;
+}
+
+export const GapsMap = ({ onComplete }: GapsMapProps) => {
   const { skillsGaps, selectedRoute, addSkillGap, updateSkillGap } = useDecision();
   const [isAdding, setIsAdding] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);

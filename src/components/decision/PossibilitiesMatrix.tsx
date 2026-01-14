@@ -22,7 +22,11 @@ import { useDecision } from '@/hooks/useDecision';
 import { RISK_LEVEL_LABELS } from '@/types/decision';
 import type { RiskLevel } from '@/types/decision';
 
-export const PossibilitiesMatrix = () => {
+interface PossibilitiesMatrixProps {
+  onComplete?: () => void;
+}
+
+export const PossibilitiesMatrix = ({ onComplete }: PossibilitiesMatrixProps) => {
   const { routes, addRoute, updateRoute, deleteRoute, selectRoute, isLoading } = useDecision();
   const [isAdding, setIsAdding] = useState(false);
   const [newRoute, setNewRoute] = useState({

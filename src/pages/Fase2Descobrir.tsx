@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { DiagnosticHub } from '@/components/discovery/DiagnosticHub';
 import { CareerWheel } from '@/components/discovery/CareerWheel';
@@ -68,9 +67,8 @@ export default function Fase2Descobrir() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="pl-64">
-        <Header />
-        <main className="p-8 space-y-6">
+      <div className="pl-0 md:pl-64 transition-all duration-300">
+        <main className="p-4 md:p-8 space-y-6">
           {/* Phase Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -98,9 +96,9 @@ export default function Fase2Descobrir() {
           <Progress value={progress.percentage} className="h-2" />
 
           {/* Content Grid */}
-          <div className="grid grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Main Content */}
-            <div className="col-span-8">
+            <div className="lg:col-span-8">
               <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
                 <TabsList className="grid grid-cols-7 mb-6">
                   {steps.map((step, index) => {
@@ -145,8 +143,8 @@ export default function Fase2Descobrir() {
             </div>
 
             {/* Coach Sidebar */}
-            <div className="col-span-4">
-              <AvatarCoach 
+            <div className="lg:col-span-4 order-first lg:order-last">
+              <AvatarCoach
                 phase="descobrir" 
                 context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
               />

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -268,11 +267,10 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
-      <div className="pl-64">
-        <Header />
-        <main className="p-8">
+      <div className="pl-0 md:pl-64 transition-all duration-300">
+        <main className="p-4 md:p-8">
           <div className="max-w-3xl mx-auto">
-            <h1 className="font-display text-3xl font-bold text-foreground mb-8">
+            <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
               Configurações
             </h1>
 

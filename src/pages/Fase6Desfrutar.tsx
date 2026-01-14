@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -40,11 +39,10 @@ const Fase6Desfrutar = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <Sidebar />
       
-      <main className="pt-16 lg:pl-64">
-        <div className="container mx-auto p-6 max-w-6xl">
+      <main className="pl-0 md:pl-64 transition-all duration-300">
+        <div className="container mx-auto p-4 md:p-6 max-w-6xl">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">

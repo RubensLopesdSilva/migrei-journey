@@ -409,7 +409,9 @@ export function useProgress() {
     });
 
     const completedPhases = phaseProgress.filter(p => p.status === 'completed').length;
-    const overallProgress = Math.round((completedPhases / phases.length) * 100);
+    const overallProgress = phases.length > 0 
+      ? Math.round((completedPhases / phases.length) * 100) 
+      : 0;
 
     return {
       progress: userProgress,

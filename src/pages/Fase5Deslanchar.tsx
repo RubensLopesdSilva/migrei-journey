@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Header } from '@/components/layout/Header';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
@@ -17,7 +16,6 @@ import { Navigate } from 'react-router-dom';
 export default function Fase5Deslanchar() {
   const { user, loading: authLoading } = useAuth();
   const { loading, getPhaseProgress } = useLaunch();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('execution');
 
   if (authLoading) {
@@ -44,10 +42,9 @@ export default function Fase5Deslanchar() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
       <Sidebar />
       
-      <main className="pt-16 lg:pl-64">
+      <main className="pl-0 md:pl-64 transition-all duration-300">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="mb-8">

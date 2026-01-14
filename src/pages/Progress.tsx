@@ -8,7 +8,8 @@ import { BadgesGallery } from "@/components/progress/BadgesGallery";
 import { MissionsCard } from "@/components/progress/MissionsCard";
 import { ProgressAnalytics } from "@/components/progress/ProgressAnalytics";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
+import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { PhaseWithProgress } from "@/types/progress";
 import { 
   LayoutDashboard, 
@@ -43,10 +44,7 @@ export default function Progress() {
         <Sidebar />
         <div className="pl-0 md:pl-64 transition-all duration-300">
           <main className="p-4 md:p-8">
-            <div className="space-y-6">
-              <Skeleton className="h-32 w-full" />
-              <Skeleton className="h-[400px] w-full" />
-            </div>
+            <PageSkeleton variant="dashboard" showHeader={true} />
           </main>
         </div>
       </div>
@@ -91,6 +89,17 @@ export default function Progress() {
       <Sidebar />
       <div className="pl-0 md:pl-64 transition-all duration-300">
         <main className="p-4 md:p-8">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              ...(selectedPhase 
+                ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
+                : [{ label: "Progresso", current: true }]
+              )
+            ]}
+            className="mb-4"
+          />
+
           {/* Progress Header */}
           <ProgressHeader
             totalXp={summary.totalXp}

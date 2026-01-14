@@ -2,6 +2,7 @@ import { Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
 
 interface PhaseMotivation {
   phase: string;
@@ -49,6 +50,14 @@ const phaseMotivations: PhaseMotivation[] = [
   },
 ];
 
+// Get greeting based on time of day
+function getTimeGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Bom dia";
+  if (hour < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
 export function HeroMotivational() {
   const { user } = useAuth();
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
@@ -72,28 +81,59 @@ export function HeroMotivational() {
 
   const displayName = profile?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Migrante";
   const currentMotivation = phaseMotivations.find(p => p.phase === currentPhase) || phaseMotivations[0];
+  const timeGreeting = getTimeGreeting();
 
   return (
-    <div className="animate-fade-in">
+    <motion.div 
+      className="mb-4 sm:mb-6"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       {/* Main greeting */}
-      <div className="flex items-start justify-between mb-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-              Bom dia
+      <div className="flex items-start justify-between">
+        <div className="space-y-1 sm:space-y-2">
+          <motion.div 
+            className="flex items-center gap-2"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <motion.div
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+            >
+              <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" aria-hidden="true" />
+            </motion.div>
+            <span className="text-xs sm:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              {timeGreeting}
             </span>
-          </div>
-          <h1 className="text-3xl font-heading font-bold text-foreground">
-            Olá, <span className="text-gradient-primary">{displayName}</span>! 👋
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl">
+          </motion.div>
+          <motion.h1 
+            className="text-2xl sm:text-3xl font-heading font-bold text-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Olá, <span className="text-gradient-primary">{displayName}</span>! 
+            <motion.span
+              className="inline-block ml-1"
+              animate={{ rotate: [0, 20, 0] }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              👋
+            </motion.span>
+          </motion.h1>
+          <motion.p 
+            className="text-sm sm:text-lg text-muted-foreground max-w-xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
             {currentMotivation.greeting}
-          </p>
+          </motion.p>
         </div>
-
       </div>
-
-    </div>
+    </motion.div>
   );
 }

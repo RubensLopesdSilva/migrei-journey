@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SubscriptionProvider } from "@/hooks/useSubscription";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
+import { SkipToContent } from "@/components/ui/focus-ring";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
@@ -28,6 +29,7 @@ const App = () => (
       <TooltipProvider>
         <AuthProvider>
           <SubscriptionProvider>
+            <SkipToContent />
             <Toaster />
             <Sonner />
             <BrowserRouter>

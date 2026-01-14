@@ -72,7 +72,7 @@ const phases: Phase[] = [
     description: "Construção de competências",
     angle: 180,
     route: "/fase/desenvolver",
-    available: false
+    available: true
   },
   { 
     id: "deslanchar", 

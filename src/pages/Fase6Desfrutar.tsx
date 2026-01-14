@@ -3,7 +3,7 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, BarChart3, Trophy, FileText, PartyPopper, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -73,66 +73,66 @@ const Fase6Desfrutar = () => {
           {loading ? (
             <PageSkeleton variant="dashboard" showHeader={false} />
           ) : (
-            <Tabs defaultValue="evaluation" className="space-y-6">
-              <TabsList className="grid grid-cols-5 w-full">
-                <TabsTrigger value="evaluation" className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
+            <AnimatedTabs defaultValue="evaluation" className="space-y-6">
+              <AnimatedTabsList className="grid grid-cols-5 w-full">
+                <AnimatedTabsTrigger value="evaluation" className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Avaliação</span>
-                </TabsTrigger>
-                <TabsTrigger value="achievements" className="flex items-center gap-2">
-                  <Trophy className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="achievements" className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Conquistas</span>
-                </TabsTrigger>
-                <TabsTrigger value="report" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="report" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Relatório</span>
-                </TabsTrigger>
-                <TabsTrigger value="celebration" className="flex items-center gap-2">
-                  <PartyPopper className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="celebration" className="flex items-center gap-2">
+                  <PartyPopper className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Celebração</span>
-                </TabsTrigger>
-                <TabsTrigger value="reentry" className="flex items-center gap-2">
-                  <RefreshCw className="h-4 w-4" />
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="reentry" className="flex items-center gap-2">
+                  <RefreshCw className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Novo Ciclo</span>
-                </TabsTrigger>
-              </TabsList>
+                </AnimatedTabsTrigger>
+              </AnimatedTabsList>
 
-              <TabsContent value="evaluation">
+              <AnimatedTabsContent value="evaluation">
                 <ResultsEvaluation 
                   evaluations={resultsEvaluation}
                   onSave={saveResultEvaluation}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="achievements">
+              <AnimatedTabsContent value="achievements">
                 <AchievementsLine 
                   achievements={achievements}
                   onAdd={addAchievement}
                   onCelebrate={celebrateAchievement}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="report">
+              <AnimatedTabsContent value="report">
                 <FinalReport 
                   report={finalReport}
                   onGenerate={generateFinalReport}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="celebration">
+              <AnimatedTabsContent value="celebration">
                 <SymbolicCelebration 
                   celebration={celebration}
                   onCreate={createCelebration}
                 />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="reentry">
+              <AnimatedTabsContent value="reentry">
                 <CycleReentry 
                   reentries={cycleReentries}
                   onStartNewCycle={startNewCycle}
                 />
-              </TabsContent>
-            </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           )}
         </div>
       </PageContent>

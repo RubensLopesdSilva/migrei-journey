@@ -15,7 +15,7 @@ import { DevelopCoachFeedback } from '@/components/develop/DevelopCoachFeedback'
 import { AvatarCoach } from '@/components/awakening/AvatarCoach';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Badge } from '@/components/ui/badge';
 import { 
   Wrench, 
@@ -133,72 +133,72 @@ export default function Fase4Desenvolver() {
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Main content */}
             <div className="lg:col-span-2">
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-6 mb-6">
+              <AnimatedTabs value={activeTab} onValueChange={setActiveTab}>
+                <AnimatedTabsList className="grid w-full grid-cols-6 mb-6">
                   {tabs.map((tab) => (
-                    <TabsTrigger 
+                    <AnimatedTabsTrigger 
                       key={tab.id} 
                       value={tab.id}
                       className="relative"
                     >
-                      <tab.icon className="w-4 h-4" />
+                      <tab.icon className="w-4 h-4" aria-hidden="true" />
                       <span className="hidden sm:inline ml-2">{tab.label}</span>
                       {tab.completed && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" />
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" aria-label="Completo" />
                       )}
-                    </TabsTrigger>
+                    </AnimatedTabsTrigger>
                   ))}
-                </TabsList>
+                </AnimatedTabsList>
 
-                <TabsContent value="resume">
+                <AnimatedTabsContent value="resume">
                   <ResumeBuilder
                     resumes={resumes}
                     onCreateResume={createResume}
                     onUpdateResume={updateResume}
                     onDeleteResume={deleteResume}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="pitch">
+                <AnimatedTabsContent value="pitch">
                   <PitchGenerator
                     pitch={pitch}
                     onSave={savePitch}
                     onRecordPractice={recordPitchPractice}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="linkedin">
+                <AnimatedTabsContent value="linkedin">
                   <LinkedInChecklist
                     checklist={linkedInChecklist}
                     onSave={saveLinkedInChecklist}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="portfolio">
+                <AnimatedTabsContent value="portfolio">
                   <PortfolioTemplate
                     projects={portfolioProjects}
                     onAddProject={addPortfolioProject}
                     onUpdateProject={updatePortfolioProject}
                     onDeleteProject={deletePortfolioProject}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="track">
+                <AnimatedTabsContent value="track">
                   <DevelopmentTrack
                     items={developmentTrack}
                     onAddItem={addTrackItem}
                     onUpdateItem={updateTrackItem}
                     onDeleteItem={deleteTrackItem}
                   />
-                </TabsContent>
+                </AnimatedTabsContent>
 
-                <TabsContent value="feedback">
+                <AnimatedTabsContent value="feedback">
                   <DevelopCoachFeedback
                     feedback={coachFeedback}
                     phaseProgress={phaseProgress}
                   />
-                </TabsContent>
-              </Tabs>
+                </AnimatedTabsContent>
+              </AnimatedTabs>
             </div>
 
             {/* Avatar Coach sidebar */}

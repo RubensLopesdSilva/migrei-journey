@@ -8,7 +8,7 @@ import { AvatarCoach } from '@/components/awakening/AvatarCoach';
 import { useAwakening } from '@/hooks/useAwakening';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { Sparkles, Brain, Target, Frown, Heart, Check } from 'lucide-react';
@@ -71,41 +71,41 @@ export default function Fase1Despertar() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-8">
-            <Tabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <TabsList className="grid grid-cols-4 mb-6">
+            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+              <AnimatedTabsList className="grid grid-cols-4 mb-6">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
                   const isCompleted = index < progress.completed;
                   return (
-                    <TabsTrigger key={step.key} value={step.key} className="relative">
-                      <Icon className="h-4 w-4 mr-2" />
+                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
+                      <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
                       {step.label}
                       {isCompleted && (
                         <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" />
+                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
                         </div>
                       )}
-                    </TabsTrigger>
+                    </AnimatedTabsTrigger>
                   );
                 })}
-              </TabsList>
+              </AnimatedTabsList>
 
-              <TabsContent value="consciousness">
+              <AnimatedTabsContent value="consciousness">
                 <ConsciousnessOnboarding onComplete={() => setActiveStep('readiness')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="readiness">
+              <AnimatedTabsContent value="readiness">
                 <ReadinessTest onComplete={() => setActiveStep('painmap')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="painmap">
+              <AnimatedTabsContent value="painmap">
                 <PainMapBuilder onComplete={() => setActiveStep('commitment')} />
-              </TabsContent>
+              </AnimatedTabsContent>
 
-              <TabsContent value="commitment">
+              <AnimatedTabsContent value="commitment">
                 <CommitmentDeclaration onComplete={() => window.location.href = '/progresso'} />
-              </TabsContent>
-            </Tabs>
+              </AnimatedTabsContent>
+            </AnimatedTabs>
           </div>
 
           {/* Coach Sidebar */}

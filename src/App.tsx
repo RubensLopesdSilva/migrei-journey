@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SubscriptionProvider } from "@/hooks/useSubscription";
+import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
@@ -22,35 +23,37 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <SubscriptionProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/configuracoes" element={<Settings />} />
-              <Route path="/mentoria" element={<Mentoring />} />
-              <Route path="/progresso" element={<Progress />} />
-              <Route path="/comunidade" element={<Community />} />
-              <Route path="/fase" element={<Fase1Despertar />} />
-              <Route path="/fase/despertar" element={<Fase1Despertar />} />
-              <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
-              <Route path="/fase/decidir" element={<Fase3Decidir />} />
-              <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
-              <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
-              <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </SubscriptionProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <SubscriptionProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/configuracoes" element={<Settings />} />
+                <Route path="/mentoria" element={<Mentoring />} />
+                <Route path="/progresso" element={<Progress />} />
+                <Route path="/comunidade" element={<Community />} />
+                <Route path="/fase" element={<Fase1Despertar />} />
+                <Route path="/fase/despertar" element={<Fase1Despertar />} />
+                <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
+                <Route path="/fase/decidir" element={<Fase3Decidir />} />
+                <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
+                <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
+                <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </SubscriptionProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

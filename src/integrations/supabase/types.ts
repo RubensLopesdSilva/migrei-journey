@@ -630,6 +630,53 @@ export type Database = {
         }
         Relationships: []
       }
+      decision_checkpoints: {
+        Row: {
+          commitment_statement: string | null
+          confidence_level: number | null
+          created_at: string
+          decision_date: string | null
+          discarded_routes: Json | null
+          id: string
+          is_confirmed: boolean | null
+          selected_route_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          commitment_statement?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          decision_date?: string | null
+          discarded_routes?: Json | null
+          id?: string
+          is_confirmed?: boolean | null
+          selected_route_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          commitment_statement?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          decision_date?: string | null
+          discarded_routes?: Json | null
+          id?: string
+          is_confirmed?: boolean | null
+          selected_route_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "decision_checkpoints_selected_route_id_fkey"
+            columns: ["selected_route_id"]
+            isOneToOne: false
+            referencedRelation: "possibility_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diagnostic_results: {
         Row: {
           answers: Json
@@ -1235,6 +1282,47 @@ export type Database = {
           },
         ]
       }
+      plan_90_days: {
+        Row: {
+          created_at: string
+          goal_id: string | null
+          id: string
+          month_number: number
+          month_objective: string | null
+          month_theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          goal_id?: string | null
+          id?: string
+          month_number: number
+          month_objective?: string | null
+          month_theme: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          goal_id?: string | null
+          id?: string
+          month_number?: number
+          month_objective?: string | null
+          month_theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_90_days_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "smart_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plan_features: {
         Row: {
           created_at: string
@@ -1272,6 +1360,110 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plan_weekly_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          is_completed: boolean | null
+          plan_month_id: string
+          task_description: string | null
+          task_title: string
+          updated_at: string
+          user_id: string
+          week_number: number
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          plan_month_id: string
+          task_description?: string | null
+          task_title: string
+          updated_at?: string
+          user_id: string
+          week_number: number
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          plan_month_id?: string
+          task_description?: string | null
+          task_title?: string
+          updated_at?: string
+          user_id?: string
+          week_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_weekly_tasks_plan_month_id_fkey"
+            columns: ["plan_month_id"]
+            isOneToOne: false
+            referencedRelation: "plan_90_days"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      possibility_routes: {
+        Row: {
+          created_at: string
+          financial_return: string | null
+          id: string
+          is_discarded: boolean | null
+          is_selected: boolean | null
+          market_score: number | null
+          notes: string | null
+          passion_score: number | null
+          profile_fit_percentage: number | null
+          risk_level: string | null
+          route_name: string
+          skill_score: number | null
+          total_score: number | null
+          transition_time_months: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          financial_return?: string | null
+          id?: string
+          is_discarded?: boolean | null
+          is_selected?: boolean | null
+          market_score?: number | null
+          notes?: string | null
+          passion_score?: number | null
+          profile_fit_percentage?: number | null
+          risk_level?: string | null
+          route_name: string
+          skill_score?: number | null
+          total_score?: number | null
+          transition_time_months?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          financial_return?: string | null
+          id?: string
+          is_discarded?: boolean | null
+          is_selected?: boolean | null
+          market_score?: number | null
+          notes?: string | null
+          passion_score?: number | null
+          profile_fit_percentage?: number | null
+          risk_level?: string | null
+          route_name?: string
+          skill_score?: number | null
+          total_score?: number | null
+          transition_time_months?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       post_comments: {
         Row: {
@@ -1542,6 +1734,121 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      skills_gaps: {
+        Row: {
+          created_at: string
+          current_level: number | null
+          gap_name: string
+          gap_type: string
+          id: string
+          is_addressed: boolean | null
+          priority: string | null
+          required_level: number | null
+          route_id: string | null
+          suggested_actions: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_level?: number | null
+          gap_name: string
+          gap_type: string
+          id?: string
+          is_addressed?: boolean | null
+          priority?: string | null
+          required_level?: number | null
+          route_id?: string | null
+          suggested_actions?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_level?: number | null
+          gap_name?: string
+          gap_type?: string
+          id?: string
+          is_addressed?: boolean | null
+          priority?: string | null
+          required_level?: number | null
+          route_id?: string | null
+          suggested_actions?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skills_gaps_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "possibility_routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_goals: {
+        Row: {
+          achievable: string
+          created_at: string
+          goal_title: string
+          id: string
+          is_validated: boolean | null
+          measurable: string
+          relevant: string
+          route_id: string | null
+          specific: string
+          status: string | null
+          target_date: string | null
+          time_bound: string
+          updated_at: string
+          user_id: string
+          validation_feedback: string | null
+        }
+        Insert: {
+          achievable: string
+          created_at?: string
+          goal_title: string
+          id?: string
+          is_validated?: boolean | null
+          measurable: string
+          relevant: string
+          route_id?: string | null
+          specific: string
+          status?: string | null
+          target_date?: string | null
+          time_bound: string
+          updated_at?: string
+          user_id: string
+          validation_feedback?: string | null
+        }
+        Update: {
+          achievable?: string
+          created_at?: string
+          goal_title?: string
+          id?: string
+          is_validated?: boolean | null
+          measurable?: string
+          relevant?: string
+          route_id?: string | null
+          specific?: string
+          status?: string | null
+          target_date?: string | null
+          time_bound?: string
+          updated_at?: string
+          user_id?: string
+          validation_feedback?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_goals_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "possibility_routes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscription_plans: {
         Row: {

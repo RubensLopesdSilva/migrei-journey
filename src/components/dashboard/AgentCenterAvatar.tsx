@@ -65,11 +65,11 @@ export function AgentCenterAvatar({ size = 56, showTooltip = true }: AgentCenter
         }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       >
-        {/* Avatar image */}
+        {/* Avatar image - fills the entire circle */}
         <img 
           src={avatarUrl}
           alt={currentAgent?.name}
-          className="w-[85%] h-[85%] object-cover rounded-full"
+          className="w-full h-full object-cover"
         />
         
         {/* Subtle glow overlay */}

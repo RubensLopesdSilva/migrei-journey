@@ -47,7 +47,7 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-6 mb-8 flex justify-center">
         <Link to="/" className="flex items-center" onClick={closeMobile}>
-          <img alt="Migrei" className="h-16 w-auto" src="/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png" />
+          <img alt="Migrei" className="h-16 w-auto" src="/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png" />
         </Link>
       </div>
 

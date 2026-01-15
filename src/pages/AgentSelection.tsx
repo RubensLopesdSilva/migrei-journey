@@ -110,9 +110,9 @@ export default function AgentSelection() {
           </motion.p>
         </motion.div>
 
-        {/* Agents Grid */}
+        {/* Agents Row */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4 mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -235,45 +235,30 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 * index, duration: 0.4 }}
+      transition={{ delay: 0.05 * index, duration: 0.4 }}
       className={cn(
-        "group relative rounded-2xl border-2 p-6 cursor-pointer transition-all duration-300 overflow-hidden",
+        "group relative rounded-xl border-2 p-4 cursor-pointer transition-all duration-300 overflow-hidden",
         isSelected 
-          ? "border-primary bg-gradient-to-br from-primary/5 via-primary/10 to-transparent shadow-xl shadow-primary/10" 
-          : "border-border/40 bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
+          ? "border-primary bg-gradient-to-br from-primary/5 via-primary/10 to-transparent shadow-lg shadow-primary/10" 
+          : "border-border/40 bg-card hover:border-primary/40 hover:shadow-md"
       )}
       onClick={onSelect}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -2 }}
       whileTap={{ scale: 0.98 }}
     >
-      {/* Background glow when selected */}
-      <AnimatePresence>
-        {isSelected && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: `radial-gradient(circle at 50% 30%, ${agent.background_color}20 0%, transparent 60%)`,
-            }}
-          />
-        )}
-      </AnimatePresence>
-
       {/* Selected indicator - top right */}
       <AnimatePresence>
         {isSelected && (
           <motion.div
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            exit={{ scale: 0, rotate: 180 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="absolute top-4 right-4 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg z-10"
+            className="absolute top-2 right-2 h-6 w-6 bg-primary rounded-full flex items-center justify-center shadow-md z-10"
           >
-            <Check className="h-5 w-5 text-primary-foreground" />
+            <Check className="h-4 w-4 text-primary-foreground" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -281,28 +266,15 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Avatar container */}
         <motion.div
-          className="relative mb-5"
+          className="relative mb-3"
           animate={{ 
-            scale: isSelected ? 1.08 : isHovered ? 1.04 : 1,
+            scale: isSelected ? 1.05 : isHovered ? 1.02 : 1,
           }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          {/* Outer ring animation */}
-          <motion.div
-            className="absolute -inset-2 rounded-full"
-            style={{ 
-              background: `linear-gradient(135deg, ${agent.background_color}40, ${agent.background_color}10)`,
-            }}
-            animate={{
-              opacity: isSelected ? 1 : isHovered ? 0.5 : 0,
-              scale: isSelected ? 1 : isHovered ? 0.95 : 0.9,
-            }}
-            transition={{ duration: 0.3 }}
-          />
-          
           {/* Avatar */}
           <div 
-            className="relative w-28 h-28 rounded-full flex items-center justify-center overflow-hidden ring-4 ring-white/50 dark:ring-gray-800/50 shadow-xl"
+            className="relative w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center overflow-hidden ring-2 ring-white/50 dark:ring-gray-800/50 shadow-lg"
             style={{ backgroundColor: agent.background_color }}
           >
             <img 
@@ -320,7 +292,7 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
                 border: `2px solid ${agent.background_color}`,
               }}
               animate={{ 
-                scale: [1, 1.4, 1.4],
+                scale: [1, 1.3, 1.3],
                 opacity: [0.6, 0, 0],
               }}
               transition={{ duration: 1.5, repeat: Infinity }}

@@ -431,7 +431,7 @@ export default function Auth() {
         <div className="max-w-md flex flex-col items-center">
           <AuthMigreiWheel />
           <p className="text-muted-foreground text-center mt-6 max-w-sm">
-            6 fases para transformar sua carreira com clareza e propósito.
+            Seis fases para transformar sua carreira com clareza e propósito.
           </p>
         </div>
       </div>

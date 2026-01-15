@@ -81,7 +81,7 @@ export function AuthMigreiWheel() {
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  const size = 280;
+  const size = 320;
   const center = size / 2;
   const outerRadius = 130;
   const innerRadius = 50;
@@ -319,11 +319,8 @@ export function AuthMigreiWheel() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <h4 className="font-semibold text-foreground mb-1">
-              Metodologia Migrei
-            </h4>
             <p className="text-sm text-muted-foreground">
-              Clique em uma fase para saber mais sobre sua jornada de transição
+              Clique em uma fase do <span className="font-semibold text-foreground">Ciclo Migrei</span> para saber mais sobre sua jornada de transição
             </p>
           </motion.div>
         )}

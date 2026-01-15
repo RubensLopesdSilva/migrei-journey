@@ -27,111 +27,101 @@ export function DashboardTour() {
     // STEP 1 — BOAS-VINDAS
     {
       id: "welcome",
-      title: "Bem-vindo à sua jornada Migrei 🎉",
-      description: "Você está no Ciclo Migrei, um processo estruturado para guiar sua transição de carreira com clareza, ação e apoio. Vamos te mostrar onde você está e o que fazer agora.",
+      title: "Bem-vindo ao Migrei! 🎉",
+      description: "Vamos te mostrar como navegar pela plataforma em menos de 2 minutos.",
       position: "center",
       action: (
         <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-lg p-2">
           <Rocket className="h-4 w-4 text-primary" />
-          <span>Tour rápido de ~2 minutos</span>
+          <span>Tour rápido</span>
         </div>
       ),
     },
     // STEP 2 — CICLO MIGREI (FASE ATUAL)
     {
       id: "cycle",
-      title: `Sua fase atual: ${currentPhaseName}`,
-      description: `O Ciclo Migrei é dividido em 6 fases progressivas. Você está na fase "${currentPhaseName}". Tudo aqui foi pensado para te ajudar a avançar exatamente neste momento.`,
+      title: `Você está na fase ${currentPhaseName}`,
+      description: "O Ciclo tem 6 fases. Foque apenas na atual — o resto vem depois.",
       target: "[data-tour='migrei-circle']",
       position: "right",
     },
     // STEP 3 — MISSÃO DA FASE
     {
       id: "mission",
-      title: "Sua missão nesta fase",
-      description: "Cada fase tem uma missão principal. Ao cumprir essa missão, você avança com mais clareza e segurança no processo de migração de carreira.",
+      title: "Sua missão principal",
+      description: "Cumpra a missão da fase para avançar com segurança na transição.",
       target: "[data-tour='mission-card']",
       position: "left",
     },
     // STEP 4 — TAREFAS DA MISSÃO
     {
       id: "tasks",
-      title: "Tarefas que geram progresso",
-      description: "Essas são as tarefas práticas da sua missão. Cada tarefa concluída impacta diretamente seu progresso e desbloqueia novos aprendizados.",
+      title: "Tarefas práticas",
+      description: "Complete as tarefas no seu ritmo. Cada uma gera progresso real.",
       target: "[data-tour='mission-tasks']",
       position: "left",
-      action: (
-        <div className="space-y-1 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="text-green-500">✔</span> Faça no seu ritmo
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-green-500">✔</span> Progresso salvo automaticamente
-          </div>
-        </div>
-      ),
     },
     // STEP 5 — NETWORKING
     {
       id: "networking",
-      title: "Networking estratégico",
-      description: "Migrar de carreira não é só sobre habilidades. Aqui você encontra tarefas de networking direcionado para se conectar com as pessoas certas no momento certo.",
+      title: "Conexões estratégicas",
+      description: "Networking direcionado para abrir portas na nova carreira.",
       target: "[data-tour='networking-card']",
       position: "left",
     },
     // STEP 6 — INDICADORES
     {
       id: "indicators",
-      title: "Seus indicadores",
-      description: "Aqui você acompanha sua evolução no Ciclo Migrei: Progresso da fase, Engajamento e Consistência. Use esses dados para se manter no ritmo certo.",
+      title: "Seus números",
+      description: "Acompanhe progresso, engajamento e consistência aqui.",
       target: "[data-tour='stats-bar']",
       position: "bottom",
     },
     // STEP 7 — SIDEBAR | FASE ATUAL
     {
       id: "sidebar-phase",
-      title: "Acesso rápido à sua fase",
-      description: "A qualquer momento, volte para sua fase atual por aqui. Tudo o que você precisa agora está concentrado neste espaço.",
+      title: "Fase atual",
+      description: "Acesso rápido a tudo que você precisa agora.",
       target: "[data-tour='sidebar-current-phase']",
       position: "right",
     },
     // STEP 8 — SIDEBAR | PROGRESSO
     {
       id: "sidebar-progress",
-      title: "Visualize seu progresso",
-      description: "Veja o quanto você já avançou e o que falta para concluir a fase. Pequenos passos constroem grandes mudanças.",
+      title: "Seu progresso",
+      description: "Veja quanto já avançou e o que falta.",
       target: "[data-tour='sidebar-progress']",
       position: "right",
     },
     // STEP 9 — SIDEBAR | COMUNIDADE
     {
       id: "sidebar-community",
-      title: "Comunidade Migrei",
-      description: "Conecte-se com pessoas que também estão migrando de carreira. Troca real, experiências práticas e apoio durante a jornada.",
+      title: "Comunidade",
+      description: "Conecte-se com quem também está migrando.",
       target: "[data-tour='sidebar-community']",
       position: "right",
     },
     // STEP 10 — SIDEBAR | MENTORIA
     {
       id: "sidebar-mentoring",
-      title: "Mentoria especializada",
-      description: "Precisa de ajuda personalizada? Aqui você pode acessar mentores que já passaram por processos de transição e atuam no mercado.",
+      title: "Mentoria",
+      description: "Ajuda personalizada de quem já fez a transição.",
       target: "[data-tour='sidebar-mentoring']",
       position: "right",
     },
     // STEP 11 — CONFIGURAÇÕES
     {
       id: "sidebar-settings",
-      title: "Conta e assinatura",
-      description: "Aqui você gerencia seus dados, plano de assinatura e preferências. Tudo de forma simples, transparente e segura.",
+      title: "Configurações",
+      description: "Gerencie conta e assinatura.",
       target: "[data-tour='sidebar-settings']",
       position: "right",
     },
     // STEP 12 — ENCERRAMENTO
     {
       id: "complete",
-      title: "Agora é com você 🚀",
-      description: "Foque na missão da fase atual. O Migrei cuida do método — você cuida da ação.",
+      title: "Pronto! 🚀",
+      description: "Foque na missão. O Migrei cuida do método.",
       position: "center",
       action: (
         <Button 
@@ -139,7 +129,7 @@ export function DashboardTour() {
           className="w-full"
           onClick={() => navigate(`/fase${currentPhaseNumber}-${currentPhaseName.toLowerCase()}`)}
         >
-          Ir para minha missão
+          Começar missão
         </Button>
       ),
     },

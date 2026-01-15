@@ -1,301 +1,429 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { 
   Lightbulb, 
   Search, 
   Target, 
-  Wrench, 
+  Settings, 
   Rocket, 
-  Trophy,
+  Star,
   User
 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const phases = [
-  {
-    number: 1,
-    name: "Despertar",
-    icon: Lightbulb,
+interface Phase {
+  id: string;
+  name: string;
+  icon: React.ElementType;
+  bgColor: string;
+  glowColor: string;
+  textColor: string;
+  description: string;
+  angle: number;
+}
+
+const phases: Phase[] = [
+  { 
+    id: "despertar", 
+    name: "Despertar", 
+    icon: Lightbulb, 
+    bgColor: "#F59E0B",
+    glowColor: "rgba(245, 158, 11, 0.4)",
+    textColor: "#FFFFFF",
     description: "Perceba a necessidade de mudança e dê o primeiro passo.",
-    color: "#F59E0B", // amber/orange
-    startAngle: -60,
+    angle: 0,
   },
-  {
-    number: 2,
-    name: "Descobrir",
-    icon: Search,
-    description: "Entenda seus talentos, valores e interesses profundos.",
-    color: "#10B981", // emerald/teal
-    startAngle: 0,
+  { 
+    id: "descobrir", 
+    name: "Descobrir", 
+    icon: Search, 
+    bgColor: "#10B981",
+    glowColor: "rgba(16, 185, 129, 0.4)",
+    textColor: "#FFFFFF",
+    description: "Entenda quem você é, seus talentos e o que faz sentido agora.",
+    angle: 60,
   },
-  {
-    number: 3,
-    name: "Decidir",
-    icon: Target,
+  { 
+    id: "decidir", 
+    name: "Decidir", 
+    icon: Target, 
+    bgColor: "#3B82F6",
+    glowColor: "rgba(59, 130, 246, 0.4)",
+    textColor: "#FFFFFF",
     description: "Escolha um caminho com base em clareza, não em pressão.",
-    color: "#3B82F6", // blue
-    startAngle: 60,
+    angle: 120,
   },
-  {
-    number: 4,
-    name: "Desenvolver",
-    icon: Wrench,
-    description: "Prepare-se com as habilidades necessárias.",
-    color: "#8B5CF6", // purple
-    startAngle: 120,
+  { 
+    id: "desenvolver", 
+    name: "Desenvolver", 
+    icon: Settings, 
+    bgColor: "#8B5CF6",
+    glowColor: "rgba(139, 92, 246, 0.4)",
+    textColor: "#FFFFFF",
+    description: "Construa as competências necessárias para sua nova carreira.",
+    angle: 180,
   },
-  {
-    number: 5,
-    name: "Deslanchar",
-    icon: Rocket,
-    description: "Execute seu plano e conquiste oportunidades.",
-    color: "#EC4899", // pink
-    startAngle: 180,
+  { 
+    id: "deslanchar", 
+    name: "Deslanchar", 
+    icon: Rocket, 
+    bgColor: "#EC4899",
+    glowColor: "rgba(236, 72, 153, 0.4)",
+    textColor: "#FFFFFF",
+    description: "Execute com consistência e acompanhe sua evolução.",
+    angle: 240,
   },
-  {
-    number: 6,
-    name: "Desfrutar",
-    icon: Trophy,
-    description: "Celebre e consolide sua nova identidade profissional.",
-    color: "#F97316", // orange
-    startAngle: 240,
+  { 
+    id: "desfrutar", 
+    name: "Desfrutar", 
+    icon: Star, 
+    bgColor: "#F97316",
+    glowColor: "rgba(249, 115, 22, 0.4)",
+    textColor: "#FFFFFF",
+    description: "Celebre sua conquista e consolide sua nova identidade.",
+    angle: 300,
   },
 ];
 
-// Helper function to create pie segment path
-const createPieSegment = (
-  centerX: number,
-  centerY: number,
-  radius: number,
-  innerRadius: number,
-  startAngle: number,
-  endAngle: number
-): string => {
-  const startRad = (startAngle - 90) * (Math.PI / 180);
-  const endRad = (endAngle - 90) * (Math.PI / 180);
-
-  const x1 = centerX + radius * Math.cos(startRad);
-  const y1 = centerY + radius * Math.sin(startRad);
-  const x2 = centerX + radius * Math.cos(endRad);
-  const y2 = centerY + radius * Math.sin(endRad);
-  const x3 = centerX + innerRadius * Math.cos(endRad);
-  const y3 = centerY + innerRadius * Math.sin(endRad);
-  const x4 = centerX + innerRadius * Math.cos(startRad);
-  const y4 = centerY + innerRadius * Math.sin(startRad);
-
-  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
-
-  return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4} Z`;
-};
-
-// Get icon position in the middle of a segment
-const getIconPosition = (
-  centerX: number,
-  centerY: number,
-  radius: number,
-  startAngle: number,
-  endAngle: number
-) => {
-  const midAngle = ((startAngle + endAngle) / 2 - 90) * (Math.PI / 180);
-  const iconRadius = radius * 0.7;
-  return {
-    x: centerX + iconRadius * Math.cos(midAngle),
-    y: centerY + iconRadius * Math.sin(midAngle),
-  };
-};
-
 export const HeroMigreiWheel = () => {
-  const [activePhase, setActivePhase] = useState<number | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
+  const [isEntered, setIsEntered] = useState(false);
+  const [pulseScale, setPulseScale] = useState(1);
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
 
-  const size = 320;
+  // Animação de entrada
+  useEffect(() => {
+    const timer = setTimeout(() => setIsEntered(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Pulso vital sutil a cada 6-8 segundos
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPulseScale(1.02);
+      setTimeout(() => setPulseScale(1), 800);
+    }, 7000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-rotate phases when not hovering
+  useEffect(() => {
+    if (hoveredPhase) return;
+    
+    const interval = setInterval(() => {
+      setActivePhaseIndex((prev) => (prev + 1) % phases.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, [hoveredPhase]);
+
+  // Dimensões responsivas
+  const size = 380;
   const center = size / 2;
-  const outerRadius = 140;
-  const innerRadius = 55;
-  const segmentAngle = 60;
+  const outerRadius = 175;
+  const innerRadius = 65;
+  const numSegments = 6;
+  const segmentAngle = 360 / numSegments;
+  const gapAngle = 5;
+  const cornerRadius = 10;
 
-  const handleMouseEnter = (index: number, event: React.MouseEvent) => {
-    setActivePhase(index);
-    const rect = event.currentTarget.getBoundingClientRect();
-    const svgRect = event.currentTarget.closest('svg')?.getBoundingClientRect();
-    if (svgRect) {
-      setTooltipPosition({
-        x: rect.left - svgRect.left + rect.width / 2,
-        y: rect.top - svgRect.top + rect.height / 2,
-      });
-    }
+  // Criar caminho do segmento arredondado
+  const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {
+    const startAngle = index * segmentAngle + gapAngle / 2;
+    const endAngle = (index + 1) * segmentAngle - gapAngle / 2;
+    
+    const startRad = (startAngle - 90) * (Math.PI / 180);
+    const endRad = (endAngle - 90) * (Math.PI / 180);
+    
+    const outerCornerOffset = cornerRadius / outer;
+    const innerCornerOffset = cornerRadius / inner;
+    
+    const outerStart = {
+      x: center + outer * Math.cos(startRad + outerCornerOffset),
+      y: center + outer * Math.sin(startRad + outerCornerOffset)
+    };
+    const outerEnd = {
+      x: center + outer * Math.cos(endRad - outerCornerOffset),
+      y: center + outer * Math.sin(endRad - outerCornerOffset)
+    };
+    
+    const innerStart = {
+      x: center + inner * Math.cos(endRad - innerCornerOffset),
+      y: center + inner * Math.sin(endRad - innerCornerOffset)
+    };
+    const innerEnd = {
+      x: center + inner * Math.cos(startRad + innerCornerOffset),
+      y: center + inner * Math.sin(startRad + innerCornerOffset)
+    };
+    
+    const outerStartCorner = {
+      x: center + outer * Math.cos(startRad),
+      y: center + outer * Math.sin(startRad)
+    };
+    const outerEndCorner = {
+      x: center + outer * Math.cos(endRad),
+      y: center + outer * Math.sin(endRad)
+    };
+    const innerStartCorner = {
+      x: center + inner * Math.cos(endRad),
+      y: center + inner * Math.sin(endRad)
+    };
+    const innerEndCorner = {
+      x: center + inner * Math.cos(startRad),
+      y: center + inner * Math.sin(startRad)
+    };
+
+    return `
+      M ${outerStart.x} ${outerStart.y}
+      A ${outer} ${outer} 0 0 1 ${outerEnd.x} ${outerEnd.y}
+      Q ${outerEndCorner.x} ${outerEndCorner.y} ${center + (outer - cornerRadius) * Math.cos(endRad)} ${center + (outer - cornerRadius) * Math.sin(endRad)}
+      L ${center + (inner + cornerRadius) * Math.cos(endRad)} ${center + (inner + cornerRadius) * Math.sin(endRad)}
+      Q ${innerStartCorner.x} ${innerStartCorner.y} ${innerStart.x} ${innerStart.y}
+      A ${inner} ${inner} 0 0 0 ${innerEnd.x} ${innerEnd.y}
+      Q ${innerEndCorner.x} ${innerEndCorner.y} ${center + (inner + cornerRadius) * Math.cos(startRad)} ${center + (inner + cornerRadius) * Math.sin(startRad)}
+      L ${center + (outer - cornerRadius) * Math.cos(startRad)} ${center + (outer - cornerRadius) * Math.sin(startRad)}
+      Q ${outerStartCorner.x} ${outerStartCorner.y} ${outerStart.x} ${outerStart.y}
+      Z
+    `;
   };
+
+  const getIconPosition = (index: number, radius: number) => {
+    const angle = index * segmentAngle + segmentAngle / 2;
+    const rad = (angle - 90) * (Math.PI / 180);
+    return {
+      x: center + radius * Math.cos(rad),
+      y: center + radius * Math.sin(rad),
+    };
+  };
+
+  const currentActivePhase = hoveredPhase || phases[activePhaseIndex].id;
 
   return (
-    <div className="relative">
-      {/* Glow effect */}
-      <div 
-        className="absolute inset-0 blur-3xl opacity-30"
-        style={{
-          background: "radial-gradient(circle, rgba(245,158,11,0.3) 0%, rgba(16,185,129,0.2) 30%, rgba(139,92,246,0.2) 60%, transparent 80%)"
-        }}
-      />
-      
-      <motion.svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
-        className="relative z-10 drop-shadow-xl"
-        initial={{ scale: 0.8, opacity: 0, rotate: -30 }}
-        animate={{ scale: 1, opacity: 1, rotate: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        {/* Shadow filter */}
-        <defs>
-          <filter id="wheelShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.15" />
-          </filter>
-          <filter id="segmentGlow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        {/* White background circle */}
-        <circle
-          cx={center}
-          cy={center}
-          r={outerRadius + 8}
-          fill="white"
-          filter="url(#wheelShadow)"
-        />
-
-        {/* Segments */}
-        {phases.map((phase, index) => {
-          const startAngle = phase.startAngle;
-          const endAngle = startAngle + segmentAngle;
-          const isActive = activePhase === index;
-          const iconPos = getIconPosition(center, center, outerRadius, startAngle, endAngle);
-
-          return (
-            <g
-              key={phase.number}
-              onMouseEnter={(e) => handleMouseEnter(index, e)}
-              onMouseLeave={() => setActivePhase(null)}
-              style={{ cursor: "pointer" }}
-            >
-              {/* Segment */}
-              <motion.path
-                d={createPieSegment(center, center, outerRadius, innerRadius, startAngle, endAngle)}
-                fill={phase.color}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: isActive ? 1.05 : 1,
-                  filter: isActive ? "url(#segmentGlow)" : "none"
-                }}
-                transition={{ 
-                  opacity: { delay: index * 0.1, duration: 0.4 },
-                  scale: { duration: 0.2 }
-                }}
-                style={{ 
-                  transformOrigin: `${center}px ${center}px`,
-                }}
-              />
-
-              {/* Icon background circle */}
-              <motion.circle
-                cx={iconPos.x}
-                cy={iconPos.y}
-                r={18}
-                fill="rgba(255,255,255,0.25)"
-                initial={{ scale: 0 }}
-                animate={{ scale: isActive ? 1.2 : 1 }}
-                transition={{ delay: 0.3 + index * 0.1, duration: 0.3 }}
-              />
-
-              {/* Icon */}
-              <motion.g
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4 + index * 0.1, duration: 0.3 }}
-              >
-                <foreignObject
-                  x={iconPos.x - 12}
-                  y={iconPos.y - 12}
-                  width={24}
-                  height={24}
-                >
-                  <phase.icon 
-                    className="w-6 h-6 text-white drop-shadow-sm" 
-                    strokeWidth={1.5}
-                  />
-                </foreignObject>
-              </motion.g>
-            </g>
-          );
-        })}
-
-        {/* Center circle */}
-        <motion.circle
-          cx={center}
-          cy={center}
-          r={innerRadius}
-          fill="white"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+    <motion.div 
+      className="flex flex-col items-center gap-4"
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ 
+        opacity: isEntered ? 1 : 0, 
+        scale: isEntered ? 1 : 0.92 
+      }}
+      transition={{ 
+        duration: 0.4, 
+        ease: [0.25, 0.46, 0.45, 0.94] 
+      }}
+    >
+      {/* Circle Container */}
+      <div className="relative">
+        {/* Fundo com blur sutil */}
+        <div 
+          className="absolute inset-0 -m-8 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 blur-xl"
+          style={{ transform: 'scale(0.85)' }}
         />
         
-        {/* Center icon */}
-        <motion.g
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.7, duration: 0.3 }}
+        {/* Sombra de elevação */}
+        <div 
+          className="absolute inset-0 rounded-full"
+          style={{ 
+            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(8px) scale(0.95)',
+            borderRadius: '50%'
+          }}
+        />
+
+        <motion.svg 
+          width={size} 
+          height={size} 
+          viewBox={`0 0 ${size} ${size}`}
+          className="relative z-10"
+          style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.08))' }}
         >
+          {/* Definições de gradientes e filtros */}
+          <defs>
+            {phases.map((phase) => (
+              <linearGradient 
+                key={`gradient-${phase.id}`}
+                id={`landing-gradient-${phase.id}`}
+                x1="0%" y1="0%" x2="100%" y2="100%"
+              >
+                <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
+                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
+              </linearGradient>
+            ))}
+            
+            {/* Glow filter para fase ativa */}
+            <filter id="landing-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Segmentos */}
+          {phases.map((phase, index) => {
+            const isActive = currentActivePhase === phase.id;
+            const isHovered = hoveredPhase === phase.id;
+            const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
+
+            // Calcular transformação
+            const segmentScale = isActive && !isHovered ? pulseScale : isHovered ? 1.04 : 1;
+
+            return (
+              <g key={phase.id}>
+                {/* Glow da fase ativa */}
+                {isActive && (
+                  <motion.path
+                    d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
+                    fill={phase.glowColor}
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: [0.3, 0.5, 0.3],
+                      scale: [1, 1.02, 1]
+                    }}
+                    transition={{ 
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    style={{ transformOrigin: `${center}px ${center}px` }}
+                  />
+                )}
+
+                {/* Segmento principal */}
+                <motion.path
+                  d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
+                  fill={`url(#landing-gradient-${phase.id})`}
+                  className="cursor-pointer transition-all duration-300"
+                  style={{
+                    filter: isActive ? 'url(#landing-glow)' : 'none',
+                    transformOrigin: `${center}px ${center}px`,
+                  }}
+                  initial={{ scale: 1, opacity: 1 }}
+                  animate={{ 
+                    scale: segmentScale,
+                    opacity: isActive ? 1 : 0.7,
+                  }}
+                  whileHover={{ 
+                    scale: 1.04,
+                    opacity: 1,
+                    transition: { duration: 0.2 }
+                  }}
+                  onMouseEnter={() => setHoveredPhase(phase.id)}
+                  onMouseLeave={() => setHoveredPhase(null)}
+                />
+
+                {/* Brilho interno para fase ativa */}
+                {isActive && (
+                  <motion.path
+                    d={createRoundedSegmentPath(index, outerRadius - 20, innerRadius + 10)}
+                    fill="white"
+                    opacity={0.08}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                )}
+
+                {/* Container do ícone */}
+                <foreignObject
+                  x={iconPos.x - 22}
+                  y={iconPos.y - 22}
+                  width={44}
+                  height={44}
+                  className="pointer-events-none"
+                >
+                  <motion.div 
+                    className="flex items-center justify-center h-full w-full rounded-full"
+                    style={{ 
+                      backgroundColor: 'rgba(255,255,255,0.2)',
+                      backdropFilter: 'blur(8px)'
+                    }}
+                    animate={isActive ? {
+                      boxShadow: [
+                        '0 0 0 0 rgba(255,255,255,0)',
+                        '0 0 0 6px rgba(255,255,255,0.15)',
+                        '0 0 0 0 rgba(255,255,255,0)'
+                      ]
+                    } : {}}
+                    transition={{ duration: 2.5, repeat: Infinity }}
+                  >
+                    <phase.icon 
+                      className={cn(
+                        "h-5 w-5 transition-transform duration-200",
+                        isHovered && "scale-110"
+                      )}
+                      style={{ color: phase.textColor }}
+                      strokeWidth={2.5}
+                    />
+                  </motion.div>
+                </foreignObject>
+              </g>
+            );
+          })}
+
+          {/* Centro - Círculo do usuário */}
+          <motion.circle
+            cx={center}
+            cy={center}
+            r={innerRadius - 10}
+            fill="hsl(var(--card))"
+            stroke="hsl(var(--border))"
+            strokeWidth="2"
+            style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))' }}
+          />
+
+          {/* Conteúdo central */}
           <foreignObject
-            x={center - 16}
-            y={center - 16}
-            width={32}
-            height={32}
+            x={center - 26}
+            y={center - 26}
+            width={52}
+            height={52}
           >
-            <div className="w-8 h-8 flex items-center justify-center">
-              <User className="w-7 h-7 text-primary/70" strokeWidth={1.5} />
+            <div className="flex items-center justify-center h-full">
+              <motion.div 
+                className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
+                animate={{ 
+                  borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <User className="h-5 w-5 text-primary" />
+              </motion.div>
             </div>
           </foreignObject>
-        </motion.g>
-      </motion.svg>
+        </motion.svg>
 
-      {/* Tooltip */}
-      <AnimatePresence>
-        {activePhase !== null && (
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="absolute z-20 bg-white rounded-xl shadow-xl p-4 min-w-[200px] max-w-[240px] border border-border/50"
-            style={{
-              left: "50%",
-              bottom: "-20px",
-              transform: "translateX(-50%)",
-            }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <div 
-                className="w-3 h-3 rounded-full"
-                style={{ backgroundColor: phases[activePhase].color }}
-              />
-              <span className="font-bold text-foreground">
-                {phases[activePhase].name}
-              </span>
-              <span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                Fase {phases[activePhase].number}
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {phases[activePhase].description}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        {/* Tooltip elegante no hover */}
+        <AnimatePresence>
+          {currentActivePhase && (
+            <motion.div 
+              className="absolute left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-5 py-3 shadow-xl z-20 min-w-[240px]"
+              style={{ bottom: '-24px' }}
+              key={currentActivePhase}
+              initial={{ opacity: 0, y: -8, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center gap-2.5">
+                <motion.div 
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ 
+                    backgroundColor: phases.find(p => p.id === currentActivePhase)?.bgColor 
+                  }}
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+                <span className="font-semibold text-foreground text-sm">
+                  {phases.find(p => p.id === currentActivePhase)?.name}
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                {phases.find(p => p.id === currentActivePhase)?.description}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
   );
 };

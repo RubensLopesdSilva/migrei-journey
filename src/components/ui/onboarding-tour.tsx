@@ -73,8 +73,8 @@ export function OnboardingTour({
 
   const getTooltipPosition = () => {
     const padding = 16;
-    const tooltipWidth = Math.min(320, window.innerWidth - 32); // Max 320px or screen width - 32px
-    const tooltipHeight = 220;
+    const tooltipWidth = Math.min(320, window.innerWidth - 32);
+    const tooltipHeight = 240;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
@@ -92,6 +92,9 @@ export function OnboardingTour({
     let top: number;
     let left: number;
 
+    // Check if target is in the sidebar (left side of screen, typically x < 280)
+    const isInSidebar = targetRect.left < 280;
+
     switch (step?.position) {
       case "top":
         top = targetRect.top - tooltipHeight - padding;
@@ -106,8 +109,14 @@ export function OnboardingTour({
         left = targetRect.left - tooltipWidth - padding;
         break;
       case "right":
-        top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
-        left = targetRect.right + padding;
+        // For sidebar items, align tooltip top with the item
+        if (isInSidebar) {
+          top = targetRect.top - 8;
+          left = targetRect.right + padding;
+        } else {
+          top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
+          left = targetRect.right + padding;
+        }
         break;
       default:
         top = targetRect.bottom + padding;
@@ -142,15 +151,17 @@ export function OnboardingTour({
         {/* Spotlight on target */}
         {targetRect && (
           <motion.div
+            key={`spotlight-${currentStep}`}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="absolute rounded-lg shadow-[0_0_0_9999px_rgba(0,0,0,0.6)] pointer-events-none"
+            className="absolute pointer-events-none"
             style={{
-              top: targetRect.top - 8,
-              left: targetRect.left - 8,
-              width: targetRect.width + 16,
-              height: targetRect.height + 16,
-              boxShadow: "0 0 0 4px hsl(var(--primary)), 0 0 0 9999px rgba(0,0,0,0.6)",
+              top: targetRect.top - 4,
+              left: targetRect.left - 4,
+              width: targetRect.width + 8,
+              height: targetRect.height + 8,
+              boxShadow: "0 0 0 3px hsl(var(--primary)), 0 0 12px 2px hsl(var(--primary) / 0.4), 0 0 0 9999px rgba(0,0,0,0.6)",
+              borderRadius: "10px",
             }}
           />
         )}

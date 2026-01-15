@@ -3153,6 +3153,16 @@ export type Database = {
     }
     Functions: {
       count_monthly_sessions: { Args: { user_uuid: string }; Returns: number }
+      get_all_users: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+        }[]
+      }
       get_mentor_booked_slots: {
         Args: { p_end_date: string; p_mentor_id: string; p_start_date: string }
         Returns: {

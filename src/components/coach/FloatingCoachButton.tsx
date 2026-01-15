@@ -1,11 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AvatarCoach } from '@/components/awakening/AvatarCoach';
 import { cn } from '@/lib/utils';
+import { useAgent } from '@/hooks/useAgent';
+
+// Import agent avatar images
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import emaAvatar from "@/assets/agents/ema.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
+
+const agentAvatars: Record<string, string> = {
+  'Lumi': lumiAvatar,
+  'Noah': noahAvatar,
+  'Ema': emaAvatar,
+  'Leo': leoAvatar,
+  'Maya': mayaAvatar,
+  'Kai': kaiAvatar,
+};
 
 interface FloatingCoachButtonProps {
   phase: string;
@@ -25,6 +42,10 @@ const phaseLabels: Record<string, string> = {
 export function FloatingCoachButton({ phase, context, greeting }: FloatingCoachButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const { currentAgent, hasSelectedAgent } = useAgent();
+  
+  const avatarUrl = currentAgent ? agentAvatars[currentAgent.name] || lumiAvatar : lumiAvatar;
+  const agentName = currentAgent?.name || 'Coach';
   
   const storageKey = `migrei-coach-tutorial-${phase}`;
 
@@ -111,18 +132,22 @@ export function FloatingCoachButton({ phase, context, greeting }: FloatingCoachB
           <Button
             onClick={handleOpenCoach}
             className={cn(
-              "h-14 w-14 rounded-full shadow-lg hover:scale-110 transition-all duration-300",
+              "h-14 w-14 rounded-full shadow-lg hover:scale-110 transition-all duration-300 p-0 overflow-hidden",
               "bg-gradient-to-br from-primary via-primary to-primary/80",
               "hover:shadow-xl hover:shadow-primary/25",
               showTutorial && "ring-4 ring-primary/30 animate-pulse"
             )}
-            aria-label="Abrir Coach Cicle"
+            aria-label={`Abrir Coach ${agentName}`}
           >
-            <Avatar className="h-10 w-10">
-              <AvatarFallback className="bg-transparent">
-                <Sparkles className="h-6 w-6 text-primary-foreground" />
-              </AvatarFallback>
-            </Avatar>
+            {hasSelectedAgent && currentAgent ? (
+              <img 
+                src={avatarUrl}
+                alt={agentName}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <Sparkles className="h-6 w-6 text-primary-foreground" />
+            )}
           </Button>
         </motion.div>
       </div>

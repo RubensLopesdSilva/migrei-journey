@@ -72,45 +72,58 @@ export function OnboardingTour({
   };
 
   const getTooltipPosition = () => {
+    const padding = 16;
+    const tooltipWidth = Math.min(320, window.innerWidth - 32); // Max 320px or screen width - 32px
+    const tooltipHeight = 220;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Center position for steps without target
     if (!targetRect || step?.position === "center") {
       return {
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
+        width: `${tooltipWidth}px`,
+        maxWidth: "calc(100vw - 32px)",
       };
     }
 
-    const padding = 16;
-    const tooltipWidth = 320;
-    const tooltipHeight = 200;
+    let top: number;
+    let left: number;
 
     switch (step?.position) {
       case "top":
-        return {
-          top: `${targetRect.top - tooltipHeight - padding}px`,
-          left: `${targetRect.left + targetRect.width / 2 - tooltipWidth / 2}px`,
-        };
+        top = targetRect.top - tooltipHeight - padding;
+        left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
+        break;
       case "bottom":
-        return {
-          top: `${targetRect.bottom + padding}px`,
-          left: `${targetRect.left + targetRect.width / 2 - tooltipWidth / 2}px`,
-        };
+        top = targetRect.bottom + padding;
+        left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
+        break;
       case "left":
-        return {
-          top: `${targetRect.top + targetRect.height / 2 - tooltipHeight / 2}px`,
-          left: `${targetRect.left - tooltipWidth - padding}px`,
-        };
+        top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
+        left = targetRect.left - tooltipWidth - padding;
+        break;
       case "right":
-        return {
-          top: `${targetRect.top + targetRect.height / 2 - tooltipHeight / 2}px`,
-          left: `${targetRect.right + padding}px`,
-        };
+        top = targetRect.top + targetRect.height / 2 - tooltipHeight / 2;
+        left = targetRect.right + padding;
+        break;
       default:
-        return {
-          top: `${targetRect.bottom + padding}px`,
-          left: `${targetRect.left + targetRect.width / 2 - tooltipWidth / 2}px`,
-        };
+        top = targetRect.bottom + padding;
+        left = targetRect.left + targetRect.width / 2 - tooltipWidth / 2;
     }
+
+    // Clamp to viewport boundaries
+    left = Math.max(padding, Math.min(left, viewportWidth - tooltipWidth - padding));
+    top = Math.max(padding, Math.min(top, viewportHeight - tooltipHeight - padding));
+
+    return {
+      top: `${top}px`,
+      left: `${left}px`,
+      width: `${tooltipWidth}px`,
+      maxWidth: "calc(100vw - 32px)",
+    };
   };
 
   if (!isOpen) return null;
@@ -147,7 +160,7 @@ export function OnboardingTour({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed z-[101] w-80 bg-card border border-border rounded-xl shadow-2xl p-6"
+          className="fixed z-[101] bg-card border border-border rounded-xl shadow-2xl p-4 sm:p-6"
           style={getTooltipPosition()}
         >
           {/* Close button */}
@@ -177,44 +190,44 @@ export function OnboardingTour({
           </div>
 
           {/* Content */}
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
             {step?.title}
           </h3>
-          <p className="text-sm text-muted-foreground mb-6">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
             {step?.description}
           </p>
 
           {/* Action */}
-          {step?.action && <div className="mb-6">{step.action}</div>}
+          {step?.action && <div className="mb-4 sm:mb-6">{step.action}</div>}
 
           {/* Navigation */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <Button
               variant="ghost"
               size="sm"
               onClick={handleSkip}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground text-xs sm:text-sm px-2 sm:px-3"
             >
-              Pular tour
+              Pular
             </Button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               {!isFirstStep && (
-                <Button variant="outline" size="sm" onClick={handlePrev}>
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Voltar
+                <Button variant="outline" size="sm" onClick={handlePrev} className="text-xs sm:text-sm px-2 sm:px-3">
+                  <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                  <span className="hidden sm:inline">Voltar</span>
                 </Button>
               )}
-              <Button size="sm" onClick={handleNext}>
+              <Button size="sm" onClick={handleNext} className="text-xs sm:text-sm px-3 sm:px-4">
                 {isLastStep ? (
                   <>
-                    <Check className="h-4 w-4 mr-1" />
-                    Concluir
+                    <Check className="h-3 w-3 sm:h-4 sm:w-4 mr-0.5 sm:mr-1" />
+                    <span>Concluir</span>
                   </>
                 ) : (
                   <>
-                    Próximo
-                    <ChevronRight className="h-4 w-4 ml-1" />
+                    <span>Próximo</span>
+                    <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 ml-0.5 sm:ml-1" />
                   </>
                 )}
               </Button>

@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { useProgress } from '@/hooks/useProgress';
 import { useToast } from '@/hooks/use-toast';
 import { startOfWeek, endOfWeek, format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 export interface NetworkingAction {
   id: string;
@@ -30,6 +28,12 @@ interface NetworkingGoal {
   xp_reward: number;
 }
 
+interface UserProgressMinimal {
+  current_phase_number: number;
+  current_phase_name: string;
+  total_xp: number;
+}
+
 // Default weekly networking goals per phase
 const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
   const baseGoals: NetworkingGoal[] = [
@@ -53,27 +57,21 @@ const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
 
   // Customize goals based on phase
   if (phaseNumber === 1) {
-    // Despertar - exploration focus
     baseGoals[0].description = 'Conecte com pessoas que inspiram sua mudança';
     baseGoals[1].description = 'Comente em conteúdos sobre transição de carreira';
   } else if (phaseNumber === 2) {
-    // Descobrir - discovery focus
     baseGoals[0].description = 'Conecte para explorar possibilidades de carreira';
     baseGoals[1].description = 'Aprenda com quem vive a realidade que você busca';
   } else if (phaseNumber === 3) {
-    // Decidir - validation focus
     baseGoals[0].description = 'Valide sua decisão com quem trilhou caminhos similares';
     baseGoals[1].description = 'Interaja para confirmar seu direcionamento';
   } else if (phaseNumber === 4) {
-    // Desenvolver - building focus
     baseGoals[0].description = 'Conecte com referências da sua nova área';
     baseGoals[1].description = 'Mostre seu aprendizado através dos comentários';
   } else if (phaseNumber === 5) {
-    // Deslanchar - action focus
     baseGoals[0].description = 'Amplie sua rede para acessar oportunidades';
     baseGoals[1].description = 'Aumente visibilidade com engajamento consistente';
   } else if (phaseNumber === 6) {
-    // Desfrutar - consolidation focus
     baseGoals[0].description = 'Cultive sua rede com valor genuíno';
     baseGoals[1].description = 'Compartilhe aprendizados da sua jornada';
   }
@@ -84,61 +82,84 @@ const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
 export function useNetworking() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { currentPhase, userProgress, refreshProgress } = useProgress();
   
   const [actions, setActions] = useState<NetworkingAction[]>([]);
+  const [userProgressData, setUserProgressData] = useState<UserProgressMinimal | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Get current week boundaries
   const now = new Date();
-  const weekStart = startOfWeek(now, { weekStartsOn: 1 }); // Monday
-  const weekEnd = endOfWeek(now, { weekStartsOn: 1 }); // Sunday
+  const weekStart = startOfWeek(now, { weekStartsOn: 1 });
+  const weekEnd = endOfWeek(now, { weekStartsOn: 1 });
   const weekStartStr = format(weekStart, 'yyyy-MM-dd');
   const weekEndStr = format(weekEnd, 'yyyy-MM-dd');
 
-  // Load actions for current week
-  const loadActions = useCallback(async () => {
-    if (!user) return;
+  // Load all data in a single fetch
+  const loadData = useCallback(async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('networking_routine')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('scheduled_date', weekStartStr)
-        .lte('scheduled_date', weekEndStr)
-        .order('scheduled_date', { ascending: false });
+      // Fetch networking actions and user progress in parallel
+      const [actionsResult, progressResult] = await Promise.all([
+        supabase
+          .from('networking_routine')
+          .select('*')
+          .eq('user_id', user.id)
+          .gte('scheduled_date', weekStartStr)
+          .lte('scheduled_date', weekEndStr)
+          .order('scheduled_date', { ascending: false }),
+        supabase
+          .from('user_progress')
+          .select('current_phase_number, total_xp, current_phase_id')
+          .eq('user_id', user.id)
+          .maybeSingle()
+      ]);
 
-      if (error) {
-        console.error('Error loading networking actions:', error);
-        return;
+      if (actionsResult.error) {
+        console.error('Error loading networking actions:', actionsResult.error);
+      } else {
+        setActions(actionsResult.data as NetworkingAction[]);
       }
 
-      setActions(data as NetworkingAction[]);
+      // Get phase name if we have progress
+      let phaseName = 'Despertar';
+      if (progressResult.data?.current_phase_id) {
+        const { data: phaseData } = await supabase
+          .from('migrei_phases')
+          .select('name')
+          .eq('id', progressResult.data.current_phase_id)
+          .single();
+        if (phaseData) {
+          phaseName = phaseData.name;
+        }
+      }
+
+      setUserProgressData({
+        current_phase_number: progressResult.data?.current_phase_number || 1,
+        current_phase_name: phaseName,
+        total_xp: progressResult.data?.total_xp || 0
+      });
     } finally {
       setLoading(false);
     }
   }, [user, weekStartStr, weekEndStr]);
 
   useEffect(() => {
-    if (user) {
-      loadActions();
-    }
-  }, [user, loadActions]);
+    loadData();
+  }, [loadData]);
 
   // Get weekly goals based on current phase
   const weeklyGoals = useMemo(() => {
-    const phaseNumber = currentPhase?.phase_number || userProgress?.current_phase_number || 1;
-    return getWeeklyGoals(phaseNumber);
-  }, [currentPhase, userProgress]);
+    return getWeeklyGoals(userProgressData?.current_phase_number || 1);
+  }, [userProgressData?.current_phase_number]);
 
   // Calculate progress for each goal type
   const getGoalProgress = useCallback((actionType: 'connect' | 'comment' | 'message') => {
-    const completedCount = actions.filter(
-      a => a.action_type === actionType && a.completed
-    ).length;
-    return completedCount;
+    return actions.filter(a => a.action_type === actionType && a.completed).length;
   }, [actions]);
 
   // Calculate total weekly progress
@@ -152,11 +173,9 @@ export function useNetworking() {
       const completed = getGoalProgress(goal.action_type);
       totalTarget += goal.target_count;
       
-      // Cap at target count for progress calculation
       const cappedCompleted = Math.min(completed, goal.target_count);
       totalCompleted += cappedCompleted;
       
-      // XP calculation: proportional to completed/target, capped at 100%
       const completionRatio = Math.min(completed / goal.target_count, 1);
       earnedXP += Math.round(goal.xp_reward * completionRatio);
       potentialXP += goal.xp_reward;
@@ -178,7 +197,6 @@ export function useNetworking() {
   ) => {
     if (!user) return { success: false, error: 'Usuário não autenticado' };
     
-    // Validate evidence
     if (!evidence.targetName && !evidence.description) {
       return { 
         success: false, 
@@ -191,7 +209,6 @@ export function useNetworking() {
       return { success: false, error: 'Tipo de ação inválido' };
     }
 
-    // Check if goal already completed for this type
     const currentCompleted = getGoalProgress(actionType);
     if (currentCompleted >= goal.target_count) {
       return { 
@@ -201,7 +218,6 @@ export function useNetworking() {
     }
 
     try {
-      // Insert the action
       const { error: insertError } = await supabase
         .from('networking_routine')
         .insert({
@@ -220,24 +236,21 @@ export function useNetworking() {
         return { success: false, error: 'Erro ao salvar ação' };
       }
 
-      // Calculate XP earned for this action
       const newCompleted = currentCompleted + 1;
       const xpPerAction = Math.round(goal.xp_reward / goal.target_count);
       
-      // Update user XP if we just completed the goal
       if (newCompleted <= goal.target_count) {
         await supabase
           .from('user_progress')
           .update({ 
-            total_xp: (userProgress?.total_xp || 0) + xpPerAction,
+            total_xp: (userProgressData?.total_xp || 0) + xpPerAction,
             last_activity_at: new Date().toISOString()
           })
           .eq('user_id', user.id);
       }
 
-      // Reload actions and progress
-      await loadActions();
-      await refreshProgress();
+      // Reload only networking data (lightweight)
+      await loadData();
 
       return { 
         success: true, 
@@ -272,8 +285,8 @@ export function useNetworking() {
     loading,
     completeAction,
     getActionsWithGoalInfo,
-    reload: loadActions,
-    currentPhaseName: currentPhase?.name || 'Despertar',
-    currentPhaseNumber: currentPhase?.phase_number || userProgress?.current_phase_number || 1
+    reload: loadData,
+    currentPhaseName: userProgressData?.current_phase_name || 'Despertar',
+    currentPhaseNumber: userProgressData?.current_phase_number || 1
   };
 }

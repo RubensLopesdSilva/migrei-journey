@@ -1,4 +1,4 @@
-import { Target, Circle, ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
+import { Target, ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useProgress } from "@/hooks/useProgress";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import confetti from "canvas-confetti";
 import type { PhaseActivity } from "@/types/progress";
@@ -126,10 +127,36 @@ export function MissionCard() {
     activities, 
     completedActivities, 
     completeActivity,
-    phaseProgress 
+    phaseProgress,
+    loading
   } = useProgress();
   
   const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
+
+  // Show skeleton while loading
+  if (loading) {
+    return (
+      <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
+        <div className="flex items-center justify-between p-4 border-b border-border/50">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-9 w-9 rounded-xl" />
+            <div className="space-y-1">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-24" />
+            </div>
+          </div>
+        </div>
+        <div className="px-4 pt-3">
+          <Skeleton className="h-1.5 w-full rounded-full" />
+        </div>
+        <div className="p-3 space-y-2 flex-1">
+          <Skeleton className="h-12 w-full rounded-xl" />
+          <Skeleton className="h-12 w-full rounded-xl" />
+          <Skeleton className="h-12 w-full rounded-xl" />
+        </div>
+      </div>
+    );
+  }
   
   // Get current phase info
   const currentPhase = useMemo(() => {

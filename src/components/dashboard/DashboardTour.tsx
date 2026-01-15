@@ -1,7 +1,6 @@
 import { OnboardingTour, TourStep, useTour } from "@/components/ui/onboarding-tour";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, Rocket } from "lucide-react";
-import { TooltipEnhanced } from "@/components/ui/tooltip-enhanced";
+import { Rocket } from "lucide-react";
 import { useProgress } from "@/hooks/useProgress";
 import { useNavigate } from "react-router-dom";
 
@@ -15,13 +14,36 @@ const phaseNames: Record<number, string> = {
   6: "Desfrutar",
 };
 
-export function DashboardTour() {
-  const { isOpen, hasCompleted, startTour, closeTour, completeTour } = useTour("migrei-dashboard-tour-v2");
+interface DashboardTourProps {
+  onTourComplete?: () => void;
+}
+
+export function DashboardTour({ onTourComplete }: DashboardTourProps) {
+  const { isOpen, hasCompleted, startTour, closeTour, completeTour } = useTour("migrei-dashboard-tour-v3");
   const { currentPhase } = useProgress();
   const navigate = useNavigate();
 
   const currentPhaseName = currentPhase ? phaseNames[currentPhase.phase_number] || "Despertar" : "Despertar";
   const currentPhaseNumber = currentPhase?.phase_number || 1;
+
+  // Auto-start tour on first visit (only once ever)
+  const handleComplete = () => {
+    completeTour();
+    onTourComplete?.();
+  };
+
+  const handleClose = () => {
+    closeTour();
+    // Also mark as completed when user closes/skips
+    localStorage.setItem("migrei-dashboard-tour-v3", "true");
+    onTourComplete?.();
+  };
+
+  // Auto-start on first visit
+  if (!hasCompleted && !isOpen) {
+    // Small delay to let dashboard render first
+    setTimeout(() => startTour(), 1000);
+  }
 
   const dashboardTourSteps: TourStep[] = [
     // STEP 1 — BOAS-VINDAS
@@ -127,7 +149,10 @@ export function DashboardTour() {
         <Button 
           size="sm" 
           className="w-full"
-          onClick={() => navigate(`/fase${currentPhaseNumber}-${currentPhaseName.toLowerCase()}`)}
+          onClick={() => {
+            handleComplete();
+            navigate(`/fase${currentPhaseNumber}-${currentPhaseName.toLowerCase()}`);
+          }}
         >
           Começar missão
         </Button>
@@ -136,27 +161,12 @@ export function DashboardTour() {
   ];
 
   return (
-    <>
-      {/* Tour trigger button - always visible for re-execution */}
-      <TooltipEnhanced content={hasCompleted ? "Rever tour" : "Iniciar tour"} side="left">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={startTour}
-          className="fixed bottom-4 right-4 z-50 h-12 w-12 rounded-full bg-card border shadow-lg hover:shadow-xl hover:scale-105 transition-all"
-          aria-label="Ajuda"
-        >
-          <HelpCircle className="h-5 w-5 text-muted-foreground" />
-        </Button>
-      </TooltipEnhanced>
-
-      <OnboardingTour
-        steps={dashboardTourSteps}
-        isOpen={isOpen}
-        onClose={closeTour}
-        onComplete={completeTour}
-        storageKey="migrei-dashboard-tour-v2"
-      />
-    </>
+    <OnboardingTour
+      steps={dashboardTourSteps}
+      isOpen={isOpen}
+      onClose={handleClose}
+      onComplete={handleComplete}
+      storageKey="migrei-dashboard-tour-v3"
+    />
   );
 }

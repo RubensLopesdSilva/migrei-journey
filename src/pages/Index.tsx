@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
@@ -11,6 +12,12 @@ import { useProgress } from "@/hooks/useProgress";
 
 const Index = () => {
   const { loading } = useProgress();
+  const [showPhaseModal, setShowPhaseModal] = useState(false);
+
+  const handleTourComplete = () => {
+    // Show phase modal after tour completes
+    setTimeout(() => setShowPhaseModal(true), 300);
+  };
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -85,11 +92,11 @@ const Index = () => {
         </motion.div>
       </PageContent>
 
-      {/* Onboarding Tour */}
-      <DashboardTour />
+      {/* Onboarding Tour - only on first visit */}
+      <DashboardTour onTourComplete={handleTourComplete} />
       
-      {/* Phase Welcome Modal */}
-      <PhaseWelcomeModal />
+      {/* Phase Welcome Modal - shown after tour completes */}
+      <PhaseWelcomeModal forceOpen={showPhaseModal} />
     </div>
   );
 };

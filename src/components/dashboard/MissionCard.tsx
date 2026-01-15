@@ -117,8 +117,7 @@ export function MissionCard() {
               <h3 className="font-semibold text-sm text-foreground">
                 Missões: {phaseDisplayName}
               </h3>
-              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-                <Sparkles className="h-2.5 w-2.5" />
+              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
                 Fase {currentPhase?.phase_number || 1}
               </span>
             </div>

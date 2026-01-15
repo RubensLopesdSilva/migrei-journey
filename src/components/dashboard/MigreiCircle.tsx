@@ -37,7 +37,7 @@ const phases: Phase[] = [
     bgColor: "#F59E0B",
     glowColor: "rgba(245, 158, 11, 0.4)",
     completedColor: "#78716C",
-    textColor: "#1F2937",
+    textColor: "#FFFFFF",
     description: "Percepção da necessidade de mudança",
     angle: 0,
     route: "/fase/despertar",

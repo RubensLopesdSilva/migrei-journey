@@ -91,6 +91,7 @@ export function QuickStatsBar({
   return (
     <motion.div 
       className="flex items-center gap-2"
+      data-tour="stats-bar"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

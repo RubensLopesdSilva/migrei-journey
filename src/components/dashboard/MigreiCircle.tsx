@@ -249,6 +249,7 @@ export function MigreiCircle() {
   return (
     <motion.div 
       className="flex flex-col items-center gap-6"
+      data-tour="migrei-circle"
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ 
         opacity: isEntered ? 1 : 0, 

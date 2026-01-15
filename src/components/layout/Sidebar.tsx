@@ -60,18 +60,40 @@ export function Sidebar() {
       {/* Main Navigation */}
       <nav className="flex-1 px-3">
         <ul className="space-y-1">
-          {mainNavItems.map(item => <li key={item.label}>
-              <Link to={item.href} onClick={closeMobile} className={cn("sidebar-item", location.pathname === item.href && "active")}>
-                <item.icon className="h-5 w-5" />
-                <span className="font-medium">{item.label}</span>
-              </Link>
-            </li>)}
+          {mainNavItems.map(item => {
+            // Determine data-tour attribute based on href
+            const tourAttr = 
+              item.href === "/fase" ? "sidebar-current-phase" :
+              item.href === "/progresso" ? "sidebar-progress" :
+              item.href === "/comunidade" ? "sidebar-community" :
+              item.href === "/mentoria" ? "sidebar-mentoring" :
+              undefined;
+            
+            return (
+              <li key={item.label}>
+                <Link 
+                  to={item.href} 
+                  onClick={closeMobile} 
+                  className={cn("sidebar-item", location.pathname === item.href && "active")}
+                  data-tour={tourAttr}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
       {/* Footer Actions */}
       <div className="px-3 space-y-1">
-        <Link to="/configuracoes" onClick={closeMobile} className={cn("sidebar-item", location.pathname === "/configuracoes" && "active")}>
+        <Link 
+          to="/configuracoes" 
+          onClick={closeMobile} 
+          className={cn("sidebar-item", location.pathname === "/configuracoes" && "active")}
+          data-tour="sidebar-settings"
+        >
           <Settings className="h-5 w-5" />
           <span className="font-medium">Configurações</span>
         </Link>

@@ -101,6 +101,7 @@ export function MissionCard() {
   return (
     <motion.div 
       className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col"
+      data-tour="mission-card"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
@@ -141,6 +142,7 @@ export function MissionCard() {
       {/* Missions list - show only first 3 */}
       <motion.div 
         className="p-3 space-y-1"
+        data-tour="mission-tasks"
         variants={listVariants}
         initial="hidden"
         animate="visible"

@@ -329,17 +329,14 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
         </motion.div>
 
         {/* Info */}
-        <h3 className="font-display text-xl font-bold text-foreground mb-1">
+        <h3 className="font-display text-lg font-bold text-foreground mb-1">
           {agent.name}
         </h3>
         <p className={cn(
-          "text-sm font-semibold mb-3 transition-colors",
+          "text-sm font-medium transition-colors",
           isSelected ? "text-primary" : "text-primary/70"
         )}>
           {agent.title}
-        </p>
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
-          {agent.description}
         </p>
 
         {/* Bottom indicator line */}

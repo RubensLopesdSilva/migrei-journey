@@ -38,7 +38,7 @@ const phases: Phase[] = [
     glowColor: "rgba(245, 158, 11, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Percepção da necessidade de mudança",
+    description: "Perceba a necessidade de mudança e dê o primeiro passo.",
     angle: 0,
     route: "/fase/despertar",
     phaseNumber: 1
@@ -51,7 +51,7 @@ const phases: Phase[] = [
     glowColor: "rgba(16, 185, 129, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Autoconhecimento e clareza de propósito",
+    description: "Entenda quem você é, seus talentos e o que faz sentido agora.",
     angle: 60,
     route: "/fase/descobrir",
     phaseNumber: 2
@@ -64,7 +64,7 @@ const phases: Phase[] = [
     glowColor: "rgba(59, 130, 246, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Definição estratégica da rota e metas",
+    description: "Escolha um caminho com base em clareza, não em pressão.",
     angle: 120,
     route: "/fase/decidir",
     phaseNumber: 3
@@ -77,7 +77,7 @@ const phases: Phase[] = [
     glowColor: "rgba(139, 92, 246, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Construção de competências",
+    description: "Construa as competências necessárias para sua nova carreira.",
     angle: 180,
     route: "/fase/desenvolver",
     phaseNumber: 4
@@ -90,7 +90,7 @@ const phases: Phase[] = [
     glowColor: "rgba(236, 72, 153, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Execução prática e networking",
+    description: "Execute com consistência e acompanhe sua evolução.",
     angle: 240,
     route: "/fase/deslanchar",
     phaseNumber: 5
@@ -103,7 +103,7 @@ const phases: Phase[] = [
     glowColor: "rgba(249, 115, 22, 0.4)",
     completedColor: "#78716C",
     textColor: "#FFFFFF",
-    description: "Consolidação e celebração",
+    description: "Celebre sua conquista e consolide sua nova identidade.",
     angle: 300,
     route: "/fase/desfrutar",
     phaseNumber: 6

@@ -88,8 +88,8 @@ export default function Progress() {
           <PageBreadcrumb
             items={[
               ...(selectedPhase 
-                ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
-                : [{ label: "Progresso", current: true }]
+                ? [{ label: "Meu progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
+                : [{ label: "Meu progresso", current: true }]
               )
             ]}
             className="mb-4"

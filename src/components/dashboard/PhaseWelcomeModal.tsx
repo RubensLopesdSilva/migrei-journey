@@ -26,32 +26,32 @@ const phaseColors: Record<string, string> = {
 const phaseMessages: Record<string, { title: string; subtitle: string; description: string }> = {
   despertar: {
     title: "Fase Despertar",
-    subtitle: "O início da sua jornada!",
+    subtitle: "Sua transição começa aqui.",
     description: "Você está dando o primeiro passo para transformar sua carreira. Nesta fase, vamos mapear suas dores e motivações para iniciar sua mudança profissional."
   },
   descobrir: {
     title: "Fase Descobrir",
-    subtitle: "Hora de se conhecer melhor!",
-    description: "Explore suas habilidades, valores e interesses. Nesta fase, você vai descobrir seu perfil profissional e identificar caminhos possíveis."
+    subtitle: "Clareza vem antes da decisão.",
+    description: "Aqui você vai se conhecer melhor para evitar escolhas baseadas apenas em medo ou comparação. Não existe resposta certa agora — existe clareza sendo construída."
   },
   decidir: {
     title: "Fase Decidir",
-    subtitle: "Clareza nas escolhas!",
+    subtitle: "Escolha com consciência, não pressão.",
     description: "Com base no que descobriu, agora é hora de definir sua rota. Vamos criar metas claras e um plano de ação para os próximos 90 dias."
   },
   desenvolver: {
     title: "Fase Desenvolver",
-    subtitle: "Construindo seu futuro!",
+    subtitle: "Construindo competências reais.",
     description: "Prepare-se para o mercado. Nesta fase, você vai otimizar seu LinkedIn, currículo, pitch e desenvolver as competências necessárias."
   },
   deslanchar: {
     title: "Fase Deslanchar",
-    subtitle: "É hora de brilhar!",
+    subtitle: "Execute com consistência.",
     description: "Coloque tudo em prática! Candidate-se a vagas, faça networking ativo e prepare-se para entrevistas. A transição está acontecendo."
   },
   desfrutar: {
     title: "Fase Desfrutar",
-    subtitle: "Você conseguiu!",
+    subtitle: "Você avançou com consciência.",
     description: "Celebre suas conquistas e consolide os aprendizados. Documente sua jornada e prepare-se para continuar evoluindo."
   },
 };
@@ -210,7 +210,7 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
                     }}
                   >
                     <Link to={phaseLink} onClick={() => setIsOpen(false)}>
-                      Ir para a fase
+                      Avançar para a fase
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

@@ -37,7 +37,7 @@ const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
       id: 'connect-goal',
       action_type: 'connect',
       title: 'Enviar 3 convites',
-      description: 'Conecte com novos profissionais',
+      description: 'Conecte-se com pessoas que já estão onde você quer chegar',
       target_count: 3,
       xp_reward: 15
     },
@@ -45,7 +45,7 @@ const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
       id: 'comment-goal',
       action_type: 'comment',
       title: 'Comentar 2 posts',
-      description: 'Engaje com a comunidade',
+      description: 'Faça perguntas sobre rotina, desafios e caminhos possíveis',
       target_count: 2,
       xp_reward: 10
     }
@@ -54,28 +54,28 @@ const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
   // Customize goals based on phase
   if (phaseNumber === 1) {
     // Despertar - exploration focus
-    baseGoals[0].description = 'Explore novas conexões na sua área';
-    baseGoals[1].description = 'Comente em conteúdos inspiradores';
+    baseGoals[0].description = 'Conecte com pessoas que inspiram sua mudança';
+    baseGoals[1].description = 'Comente em conteúdos sobre transição de carreira';
   } else if (phaseNumber === 2) {
     // Descobrir - discovery focus
-    baseGoals[0].description = 'Conecte com profissionais da área que deseja explorar';
-    baseGoals[1].description = 'Engaje em discussões sobre tendências';
+    baseGoals[0].description = 'Conecte para explorar possibilidades de carreira';
+    baseGoals[1].description = 'Aprenda com quem vive a realidade que você busca';
   } else if (phaseNumber === 3) {
     // Decidir - validation focus
-    baseGoals[0].description = 'Conecte para validar sua decisão de carreira';
-    baseGoals[1].description = 'Interaja com conteúdos estratégicos';
+    baseGoals[0].description = 'Valide sua decisão com quem trilhou caminhos similares';
+    baseGoals[1].description = 'Interaja para confirmar seu direcionamento';
   } else if (phaseNumber === 4) {
     // Desenvolver - building focus
     baseGoals[0].description = 'Conecte com referências da sua nova área';
-    baseGoals[1].description = 'Demonstre seu conhecimento nos comentários';
+    baseGoals[1].description = 'Mostre seu aprendizado através dos comentários';
   } else if (phaseNumber === 5) {
     // Deslanchar - action focus
-    baseGoals[0].description = 'Expanda sua rede estrategicamente';
-    baseGoals[1].description = 'Aumente sua visibilidade com engajamento';
+    baseGoals[0].description = 'Amplie sua rede para acessar oportunidades';
+    baseGoals[1].description = 'Aumente visibilidade com engajamento consistente';
   } else if (phaseNumber === 6) {
     // Desfrutar - consolidation focus
-    baseGoals[0].description = 'Mantenha sua rede ativa';
-    baseGoals[1].description = 'Compartilhe insights da sua jornada';
+    baseGoals[0].description = 'Cultive sua rede com valor genuíno';
+    baseGoals[1].description = 'Compartilhe aprendizados da sua jornada';
   }
 
   return baseGoals;

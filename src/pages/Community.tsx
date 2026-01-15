@@ -60,9 +60,9 @@ const Community = () => {
         />
 
           <div className="mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Comunidade</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Comunidade Migrei</h1>
             <p className="text-muted-foreground">
-              Conecte-se com pessoas na mesma fase da jornada e avance junto
+              Um espaço seguro para trocar experiências com quem também está em transição. Você não está sozinho nessa jornada.
             </p>
           </div>
 

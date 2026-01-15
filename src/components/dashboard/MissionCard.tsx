@@ -200,13 +200,13 @@ export function MissionCard() {
       // Show success toast with progress info
       toast.success(
         <div className="flex flex-col gap-1">
-          <span className="font-semibold">Missão concluída! 🎉</span>
+          <span className="font-semibold">Etapa concluída 🎉</span>
           <span className="text-sm text-muted-foreground">
-            Você avançou para {newProgressPercentage}% na fase {phaseDisplayName}.
+            Você avançou mais um passo na sua transição.
           </span>
           {activity && (
             <span className="text-sm text-primary font-medium">
-              +{activity.xp_reward} XP ganhos!
+              +{activity.xp_reward} XP
             </span>
           )}
         </div>
@@ -214,7 +214,7 @@ export function MissionCard() {
       
     } catch (error) {
       console.error('Error completing mission:', error);
-      toast.error('Não foi possível concluir a missão. Tente novamente.');
+      toast.error('Algo não saiu como esperado. Tente novamente em instantes.');
     } finally {
       setLoadingActivity(null);
     }
@@ -240,19 +240,19 @@ export function MissionCard() {
     >
       {/* Header compact */}
       <div className="flex items-center justify-between p-4 border-b border-border/50">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Target className="h-4 w-4 text-primary" aria-hidden="true" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-sm text-foreground">
-                Missões: {phaseDisplayName}
-              </h3>
-              <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-                Fase {currentPhase?.phase_number || 1}
-              </span>
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Target className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-sm text-foreground">
+                  Missões da fase
+                </h3>
+                <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+                  {phaseDisplayName}
+                </span>
+              </div>
             <p className="text-[10px] text-muted-foreground">
               {completedCount}/{phaseMissions.length} completas • +{totalXP}/{potentialXP} XP
             </p>
@@ -313,7 +313,8 @@ export function MissionCard() {
               animate={{ opacity: 1 }}
             >
               <Sparkles className="h-8 w-8 mx-auto mb-2 text-primary/30" />
-              <p className="text-sm">Nenhuma missão disponível</p>
+              <p className="text-sm">Nenhuma missão disponível agora.</p>
+              <p className="text-xs mt-1">Conclua as etapas anteriores para continuar.</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -328,7 +329,7 @@ export function MissionCard() {
               size="sm" 
               className="w-full text-xs h-8 text-muted-foreground hover:text-foreground"
             >
-              Ver todas as {phaseMissions.length} missões
+              Continuar jornada
               <ArrowRight className="h-3 w-3 ml-1" />
             </Button>
           </Link>

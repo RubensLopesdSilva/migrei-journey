@@ -117,9 +117,9 @@ export default function Mentoring() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-foreground">Mentoria</h1>
+                <h1 className="text-3xl font-bold text-foreground">Mentoria com especialistas</h1>
                 <p className="text-muted-foreground mt-1">
-                  Acelere sua transição com a Roda Migrei e mentorias individuais
+                  Receba orientação de quem já percorreu caminhos semelhantes ao seu.
                 </p>
               </div>
 

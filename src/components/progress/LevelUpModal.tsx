@@ -76,10 +76,10 @@ export function LevelUpModal({
             </div>
 
             <h2 className="text-2xl font-bold mb-2">
-              Parabéns! 🎉
+              Fase concluída 🎉
             </h2>
             <p className="text-lg text-muted-foreground mb-4">
-              Você alcançou o nível
+              Você avançou com consciência
             </p>
 
             <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-2xl p-6 mb-6">
@@ -109,7 +109,7 @@ export function LevelUpModal({
             </div>
 
             <Button onClick={onClose} className="w-full" size="lg">
-              Continuar Jornada
+              Continuar jornada
             </Button>
           </div>
         </div>

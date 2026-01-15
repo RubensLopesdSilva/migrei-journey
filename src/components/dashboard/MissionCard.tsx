@@ -139,14 +139,14 @@ export function MissionCard() {
         </Link>
       </div>
       
-      {/* Missions list - compact */}
+      {/* Missions list - show only first 3 */}
       <motion.div 
         className="p-3 space-y-1"
         variants={listVariants}
         initial="hidden"
         animate="visible"
       >
-        {missions.map((mission) => (
+        {missions.slice(0, 3).map((mission) => (
           <motion.div
             key={mission.id}
             variants={itemVariants}
@@ -189,6 +189,25 @@ export function MissionCard() {
             </Link>
           </motion.div>
         ))}
+        
+        {/* Link to see more missions */}
+        {missions.length > 3 && (
+          <motion.div variants={itemVariants}>
+            <Link
+              to={phaseLink}
+              className={cn(
+                "w-full flex items-center justify-center gap-2 p-2.5 rounded-xl transition-all duration-200 text-center",
+                "text-primary hover:bg-primary/5",
+                focusRingClasses
+              )}
+            >
+              <span className="text-xs font-medium">
+                +{missions.length - 3} missões • Ver fase completa
+              </span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );

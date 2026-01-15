@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, Loader2, Sparkles } from "lucide-react";
+import { Check, ArrowRight, Loader2, Sparkles, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAgent } from "@/hooks/useAgent";
 import { useToast } from "@/hooks/use-toast";
@@ -35,6 +35,8 @@ export default function AgentSelection() {
   const [hoveredAgentId, setHoveredAgentId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const selectedAgent = agents.find(a => a.id === selectedAgentId);
+
   const handleConfirm = async () => {
     if (!selectedAgentId) return;
 
@@ -60,46 +62,80 @@ export default function AgentSelection() {
   if (agentsLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="relative">
+            <div className="w-16 h-16 rounded-full bg-primary/10 animate-pulse" />
+            <Loader2 className="absolute inset-0 m-auto h-8 w-8 animate-spin text-primary" />
+          </div>
+          <p className="text-muted-foreground">Carregando agentes...</p>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="container max-w-5xl mx-auto px-4 py-8 md:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative container max-w-6xl mx-auto px-4 py-8 md:py-12">
         {/* Header */}
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <img 
+          <motion.img 
             src={logoMigrei} 
             alt="Migrei" 
-            className="h-16 w-auto mx-auto mb-6"
+            className="h-12 w-auto mx-auto mb-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
           />
           
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary mb-4">
+          <motion.div 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             <Sparkles className="h-4 w-4" />
             <span className="text-sm font-medium">Etapa final do cadastro</span>
-          </div>
+          </motion.div>
           
-          <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-            Escolha quem vai te guiar nessa transição
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Cada agente tem um estilo de orientação único. Todos seguem o método Migrei.
-          </p>
+          <motion.h1 
+            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            Quem será seu guia nessa jornada?
+          </motion.h1>
+          <motion.p 
+            className="text-muted-foreground text-lg max-w-xl mx-auto"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            Cada mentor tem um estilo único de orientação, mas todos dominam o método Migrei.
+          </motion.p>
         </motion.div>
 
         {/* Agents Grid */}
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3 }}
         >
           {agents.map((agent, index) => (
             <AgentCard
@@ -115,34 +151,88 @@ export default function AgentSelection() {
           ))}
         </motion.div>
 
-        {/* CTA */}
-        <motion.div
-          className="flex justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Button
-            size="lg"
-            className="btn-primary-gradient px-8 py-6 text-lg gap-2"
-            disabled={!selectedAgentId || isSubmitting}
-            onClick={handleConfirm}
+        {/* Selected Agent Preview & CTA */}
+        <AnimatePresence mode="wait">
+          {selectedAgent && (
+            <motion.div
+              key="selection-cta"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              className="sticky bottom-4 md:bottom-8"
+            >
+              <div className="bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl p-4 md:p-6 max-w-2xl mx-auto">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  {/* Selected agent mini preview */}
+                  <div className="flex items-center gap-3 flex-1">
+                    <div 
+                      className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-primary/20"
+                      style={{ backgroundColor: selectedAgent.background_color }}
+                    >
+                      <img 
+                        src={agentAvatars[selectedAgent.name] || lumiAvatar}
+                        alt={selectedAgent.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm text-muted-foreground">Você escolheu</p>
+                      <p className="font-display font-semibold text-foreground">
+                        {selectedAgent.name}
+                        <span className="text-primary ml-2 text-sm font-normal">
+                          {selectedAgent.title}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <Button
+                    size="lg"
+                    className="btn-primary-gradient px-6 py-5 text-base gap-2 w-full sm:w-auto shadow-lg shadow-primary/20"
+                    disabled={isSubmitting}
+                    onClick={handleConfirm}
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        Começar minha jornada
+                        <ArrowRight className="h-5 w-5" />
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Empty state hint */}
+        {!selectedAgent && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            className="text-center"
           >
-            {isSubmitting ? (
-              <Loader2 className="h-5 w-5 animate-spin" />
-            ) : (
-              <>
-                Confirmar agente e iniciar minha jornada
-                <ArrowRight className="h-5 w-5" />
-              </>
-            )}
-          </Button>
-        </motion.div>
+            <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
+              <Star className="h-4 w-4" />
+              Clique em um mentor para selecioná-lo
+            </p>
+          </motion.div>
+        )}
 
         {/* Helper text */}
-        <p className="text-center text-muted-foreground text-sm mt-4">
-          Você pode alterar seu agente a qualquer momento nas Configurações
-        </p>
+        <motion.p 
+          className="text-center text-muted-foreground/70 text-sm mt-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          Você pode alterar seu mentor a qualquer momento nas Configurações
+        </motion.p>
       </div>
     </div>
   );
@@ -165,89 +255,120 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.1 * index }}
+      transition={{ delay: 0.1 * index, duration: 0.4 }}
       className={cn(
-        "relative rounded-2xl border-2 p-6 cursor-pointer transition-all duration-300",
+        "group relative rounded-2xl border-2 p-6 cursor-pointer transition-all duration-300 overflow-hidden",
         isSelected 
-          ? "border-primary bg-primary/5 shadow-lg shadow-primary/20" 
-          : "border-border/50 bg-card hover:border-primary/50 hover:shadow-md"
+          ? "border-primary bg-gradient-to-br from-primary/5 via-primary/10 to-transparent shadow-xl shadow-primary/10" 
+          : "border-border/40 bg-card hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5"
       )}
       onClick={onSelect}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
     >
-      {/* Selected indicator */}
+      {/* Background glow when selected */}
       <AnimatePresence>
         {isSelected && (
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            exit={{ scale: 0 }}
-            className="absolute -top-2 -right-2 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% 30%, ${agent.background_color}20 0%, transparent 60%)`,
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Selected indicator - top right */}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="absolute top-4 right-4 h-8 w-8 bg-primary rounded-full flex items-center justify-center shadow-lg z-10"
           >
             <Check className="h-5 w-5 text-primary-foreground" />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Glow effect when selected */}
-      {isSelected && (
-        <motion.div
-          className="absolute inset-0 rounded-2xl"
-          style={{
-            background: `radial-gradient(circle at center, ${agent.background_color}30 0%, transparent 70%)`,
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        />
-      )}
-
       <div className="relative z-10 flex flex-col items-center text-center">
-        {/* Avatar */}
+        {/* Avatar container */}
         <motion.div
-          className="relative mb-4"
+          className="relative mb-5"
           animate={{ 
-            scale: isSelected ? 1.05 : isHovered ? 1.02 : 1,
+            scale: isSelected ? 1.08 : isHovered ? 1.04 : 1,
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
         >
+          {/* Outer ring animation */}
+          <motion.div
+            className="absolute -inset-2 rounded-full"
+            style={{ 
+              background: `linear-gradient(135deg, ${agent.background_color}40, ${agent.background_color}10)`,
+            }}
+            animate={{
+              opacity: isSelected ? 1 : isHovered ? 0.5 : 0,
+              scale: isSelected ? 1 : isHovered ? 0.95 : 0.9,
+            }}
+            transition={{ duration: 0.3 }}
+          />
+          
+          {/* Avatar */}
           <div 
-            className="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden"
+            className="relative w-28 h-28 rounded-full flex items-center justify-center overflow-hidden ring-4 ring-white/50 dark:ring-gray-800/50 shadow-xl"
             style={{ backgroundColor: agent.background_color }}
           >
             <img 
               src={avatarUrl}
               alt={agent.name}
-              className="w-20 h-20 object-cover rounded-full"
+              className="w-[90%] h-[90%] object-cover rounded-full"
             />
           </div>
           
-          {/* Animated ring when selected */}
+          {/* Pulse effect when selected */}
           {isSelected && (
             <motion.div
-              className="absolute inset-0 rounded-full border-2 border-primary"
-              animate={{ 
-                boxShadow: [
-                  '0 0 0 0 rgba(var(--primary), 0)',
-                  '0 0 0 8px rgba(var(--primary), 0.1)',
-                  '0 0 0 0 rgba(var(--primary), 0)'
-                ]
+              className="absolute inset-0 rounded-full"
+              style={{ 
+                border: `2px solid ${agent.background_color}`,
               }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={{ 
+                scale: [1, 1.4, 1.4],
+                opacity: [0.6, 0, 0],
+              }}
+              transition={{ duration: 1.5, repeat: Infinity }}
             />
           )}
         </motion.div>
 
         {/* Info */}
-        <h3 className="font-display text-lg font-semibold text-foreground mb-1">
+        <h3 className="font-display text-xl font-bold text-foreground mb-1">
           {agent.name}
         </h3>
-        <p className="text-sm font-medium text-primary mb-2">
+        <p className={cn(
+          "text-sm font-semibold mb-3 transition-colors",
+          isSelected ? "text-primary" : "text-primary/70"
+        )}>
           {agent.title}
         </p>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
           {agent.description}
         </p>
+
+        {/* Bottom indicator line */}
+        <motion.div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 rounded-full bg-primary"
+          initial={{ width: 0 }}
+          animate={{ width: isSelected ? "60%" : isHovered ? "30%" : "0%" }}
+          transition={{ duration: 0.3 }}
+        />
       </div>
     </motion.div>
   );

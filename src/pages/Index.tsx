@@ -64,17 +64,18 @@ const Index = () => {
                 </motion.div>
               </div>
 
-              {/* Right: Action Cards - stacked */}
-              <div className="lg:col-span-4 space-y-4 order-1 lg:order-2">
+              {/* Right: Action Cards - stacked to fill height */}
+              <div className="lg:col-span-4 flex flex-col gap-4 order-1 lg:order-2">
                 {loading ? (
                   <>
-                    <Skeleton className="h-72 rounded-2xl" />
-                    <Skeleton className="h-72 rounded-2xl" />
+                    <Skeleton className="flex-1 min-h-[200px] rounded-2xl" />
+                    <Skeleton className="flex-1 min-h-[200px] rounded-2xl" />
                   </>
                 ) : (
                   <>
                     {/* Missions Card - Phase contextual */}
                     <motion.div
+                      className="flex-1"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4, duration: 0.4 }}
@@ -84,6 +85,7 @@ const Index = () => {
 
                     {/* Networking Card - Same height as Missions */}
                     <motion.div
+                      className="flex-1"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.5, duration: 0.4 }}

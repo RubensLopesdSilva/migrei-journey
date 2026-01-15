@@ -100,7 +100,7 @@ export function MissionCard() {
 
   return (
     <motion.div 
-      className="bg-card rounded-2xl border border-border overflow-hidden"
+      className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}

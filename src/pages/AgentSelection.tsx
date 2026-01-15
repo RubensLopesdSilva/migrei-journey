@@ -10,19 +10,21 @@ import logoMigrei from "@/assets/logo-migrei.png";
 import { cn } from "@/lib/utils";
 
 // Import agent avatar images
-import agentsSet1 from "@/assets/agents/agents-set-1.png";
-import agentsSet2 from "@/assets/agents/agents-set-2.png";
-import agentsSet3 from "@/assets/agents/agents-set-3.png";
-import agentsSet4 from "@/assets/agents/agents-set-4.png";
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import emaAvatar from "@/assets/agents/ema.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
 
-// Agent avatar images mapping (4 unique images for 6 agents)
+// Agent avatar images mapping
 const agentAvatars: Record<string, string> = {
-  'Lumi': agentsSet1,
-  'Noah': agentsSet2,
-  'Ema': agentsSet3,
-  'Leo': agentsSet4,
-  'Maya': agentsSet1,
-  'Kai': agentsSet2,
+  'Lumi': lumiAvatar,
+  'Noah': noahAvatar,
+  'Ema': emaAvatar,
+  'Leo': leoAvatar,
+  'Maya': mayaAvatar,
+  'Kai': kaiAvatar,
 };
 
 export default function AgentSelection() {
@@ -157,7 +159,7 @@ interface AgentCardProps {
 }
 
 function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, index }: AgentCardProps) {
-  const avatarUrl = agentAvatars[agent.name] || agentsSet1;
+  const avatarUrl = agentAvatars[agent.name] || lumiAvatar;
 
   return (
     <motion.div

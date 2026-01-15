@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
@@ -10,22 +9,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { PageContent } from "@/components/ui/page-transition";
 import { useProgress } from "@/hooks/useProgress";
-import { useAuth } from "@/hooks/useAuth";
 import { useAgent } from "@/hooks/useAgent";
 
 const Index = () => {
-  const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
   const { loading: progressLoading } = useProgress();
-  const { hasSelectedAgent, loading: agentLoading } = useAgent();
+  const { loading: agentLoading } = useAgent();
   const [showPhaseModal, setShowPhaseModal] = useState(false);
-
-  // Redirect to agent selection if logged in but no agent selected
-  useEffect(() => {
-    if (!authLoading && !agentLoading && user && !hasSelectedAgent) {
-      navigate("/escolher-agente");
-    }
-  }, [authLoading, agentLoading, user, hasSelectedAgent, navigate]);
 
   const loading = progressLoading || agentLoading;
 

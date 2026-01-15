@@ -17,6 +17,9 @@ import Mentoring from "./pages/Mentoring";
 import MentorDashboard from "./pages/MentorDashboard";
 import BecomeMentor from "./pages/BecomeMentor";
 import AdminMentors from "./pages/AdminMentors";
+import AdminUsers from "./pages/AdminUsers";
+import AdminSettings from "./pages/AdminSettings";
+import AdminDashboard from "./pages/AdminDashboard";
 import Progress from "./pages/Progress";
 import Community from "./pages/Community";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -51,7 +54,10 @@ const App = () => (
                     <Route path="/mentoria" element={<Mentoring />} />
                     <Route path="/mentor" element={<MentorDashboard />} />
                     <Route path="/seja-mentor" element={<BecomeMentor />} />
+                    <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/admin/mentores" element={<AdminMentors />} />
+                    <Route path="/admin/usuarios" element={<AdminUsers />} />
+                    <Route path="/admin/configuracoes" element={<AdminSettings />} />
                     <Route path="/progresso" element={<Progress />} />
                     <Route path="/comunidade" element={<Community />} />
                     <Route path="/fase" element={<Fase1Despertar />} />

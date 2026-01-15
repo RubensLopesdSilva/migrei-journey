@@ -65,7 +65,11 @@ const phaseNumberToSlug: Record<number, string> = {
   6: "desfrutar",
 };
 
-export function PhaseWelcomeModal() {
+interface PhaseWelcomeModalProps {
+  forceOpen?: boolean;
+}
+
+export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { userProgress, phases } = useProgress();
 
@@ -79,17 +83,12 @@ export function PhaseWelcomeModal() {
   const phaseMessage = phaseMessages[phaseSlug] || phaseMessages.despertar;
   const phaseNumber = currentPhaseData?.phase_number || 1;
 
-  // Show modal on first visit of session
+  // Open when forceOpen changes to true
   useEffect(() => {
-    const hasSeenWelcome = sessionStorage.getItem('phase_welcome_shown');
-    if (!hasSeenWelcome && userProgress) {
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-        sessionStorage.setItem('phase_welcome_shown', 'true');
-      }, 800);
-      return () => clearTimeout(timer);
+    if (forceOpen) {
+      setIsOpen(true);
     }
-  }, [userProgress]);
+  }, [forceOpen]);
 
   const phaseLink = `/fase${phaseNumber}-${phaseSlug}`;
 

@@ -461,13 +461,13 @@ export function MigreiCircle() {
 
           {/* Conteúdo central - Agente IA */}
           <foreignObject
-            x={center - 30}
-            y={center - 30}
-            width={60}
-            height={60}
+            x={center - (innerRadius - 12)}
+            y={center - (innerRadius - 12)}
+            width={(innerRadius - 12) * 2}
+            height={(innerRadius - 12) * 2}
           >
-            <div className="flex items-center justify-center h-full">
-              <AgentCenterAvatar size={56} showTooltip={false} />
+            <div className="flex items-center justify-center h-full w-full">
+              <AgentCenterAvatar size={(innerRadius - 12) * 2} showTooltip={false} />
             </div>
           </foreignObject>
         </motion.svg>

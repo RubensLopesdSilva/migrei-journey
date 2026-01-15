@@ -41,7 +41,8 @@ import {
 } from "lucide-react";
 
 interface UserProfile {
-  user_id: string;
+  id: string;
+  email: string;
   full_name: string | null;
   avatar_url: string | null;
   created_at: string;
@@ -95,18 +96,17 @@ export default function AdminUsers() {
   } | null>(null);
 
   const fetchUsers = useCallback(async () => {
-    const { data: profiles, error: profilesError } = await supabase
-      .from("profiles")
-      .select("user_id, full_name, avatar_url, created_at")
-      .order("created_at", { ascending: false });
+    // Fetch all users from auth.users via RPC function
+    const { data: allUsers, error: usersError } = await supabase
+      .rpc("get_all_users");
 
-    if (profilesError) {
-      console.error("Error fetching profiles:", profilesError);
+    if (usersError) {
+      console.error("Error fetching users:", usersError);
       toast.error("Erro ao carregar usuários");
       return;
     }
 
-    setUsers(profiles || []);
+    setUsers(allUsers || []);
 
     // Fetch roles for all users
     const { data: roles, error: rolesError } = await supabase
@@ -218,7 +218,8 @@ export default function AdminUsers() {
   const filteredUsers = users.filter(
     (u) =>
       u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      u.user_id.toLowerCase().includes(searchQuery.toLowerCase())
+      u.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Loading state
@@ -304,14 +305,14 @@ export default function AdminUsers() {
                 <div className="space-y-3">
                   {filteredUsers.map((profile) => (
                     <div
-                      key={profile.user_id}
+                      key={profile.id}
                       className="flex items-center justify-between p-4 rounded-lg border bg-card hover:shadow-sm transition-shadow"
                     >
                       <div className="flex items-center gap-4">
                         <Avatar className="h-10 w-10">
                           <AvatarImage src={profile.avatar_url || undefined} />
                           <AvatarFallback>
-                            {profile.full_name?.[0] || "U"}
+                            {profile.full_name?.[0] || profile.email?.[0]?.toUpperCase() || "U"}
                           </AvatarFallback>
                         </Avatar>
                         <div>
@@ -319,26 +320,26 @@ export default function AdminUsers() {
                             {profile.full_name || "Sem nome"}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {profile.user_id.slice(0, 8)}...
+                            {profile.email}
                           </p>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-4">
-                        {getRoleBadge(userRoles[profile.user_id])}
+                        {getRoleBadge(userRoles[profile.id])}
                         
                         <Select
-                          value={userRoles[profile.user_id] || "user"}
+                          value={userRoles[profile.id] || "user"}
                           onValueChange={(value) =>
                             handleRoleChange(
-                              profile.user_id,
+                              profile.id,
                               value,
-                              profile.full_name || "usuário"
+                              profile.full_name || profile.email || "usuário"
                             )
                           }
                           disabled={
-                            updatingRole === profile.user_id ||
-                            profile.user_id === user?.id // Can't change own role
+                            updatingRole === profile.id ||
+                            profile.id === user?.id // Can't change own role
                           }
                         >
                           <SelectTrigger className="w-32">
@@ -351,7 +352,7 @@ export default function AdminUsers() {
                           </SelectContent>
                         </Select>
 
-                        {updatingRole === profile.user_id && (
+                        {updatingRole === profile.id && (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         )}
                       </div>

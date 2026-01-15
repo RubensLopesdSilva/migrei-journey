@@ -82,7 +82,8 @@ export default function Progress() {
 
   return (
     <PageLayout>
-      <PageContent className="p-4 md:p-8">
+      <PageContent>
+        <div className="space-y-6">
           {/* Breadcrumb */}
           <PageBreadcrumb
             items={[
@@ -274,6 +275,7 @@ export default function Progress() {
               </AnimatedTabsContent>
             </AnimatedTabs>
           )}
+        </div>
       </PageContent>
     </PageLayout>
   );

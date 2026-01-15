@@ -2,11 +2,28 @@ import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, Sparkles, Loader2, X, MessageCircle } from 'lucide-react';
 import { useAvatarCoach } from '@/hooks/useAvatarCoach';
+import { useAgent } from '@/hooks/useAgent';
 import { cn } from '@/lib/utils';
+
+// Import agent avatar images
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import emaAvatar from "@/assets/agents/ema.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
+
+const agentAvatars: Record<string, string> = {
+  'Lumi': lumiAvatar,
+  'Noah': noahAvatar,
+  'Ema': emaAvatar,
+  'Leo': leoAvatar,
+  'Maya': mayaAvatar,
+  'Kai': kaiAvatar,
+};
 
 interface AvatarCoachProps {
   phase?: string;
@@ -26,6 +43,11 @@ export function AvatarCoach({
   const [input, setInput] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const { messages, isLoading, isStreaming, sendMessage, addGreeting } = useAvatarCoach({ phase, context });
+  const { currentAgent, hasSelectedAgent } = useAgent();
+  
+  const avatarUrl = currentAgent ? agentAvatars[currentAgent.name] || lumiAvatar : lumiAvatar;
+  const agentName = currentAgent?.name || 'Coach MIGREI';
+  const agentTitle = currentAgent?.title || 'Sua mentora de carreira';
 
   useEffect(() => {
     addGreeting(greeting);
@@ -55,9 +77,13 @@ export function AvatarCoach({
     return (
       <Button
         onClick={onToggle}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:scale-105 transition-transform z-50"
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:scale-105 transition-transform z-50 p-0 overflow-hidden"
       >
-        <MessageCircle className="h-6 w-6" />
+        {hasSelectedAgent ? (
+          <img src={avatarUrl} alt={agentName} className="h-full w-full object-cover" />
+        ) : (
+          <MessageCircle className="h-6 w-6" />
+        )}
       </Button>
     );
   }
@@ -67,15 +93,21 @@ export function AvatarCoach({
       <CardHeader className="pb-3 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-              <AvatarImage src="/coach-avatar.png" />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/60 text-primary-foreground">
-                <Sparkles className="h-5 w-5" />
-              </AvatarFallback>
-            </Avatar>
+            <div 
+              className="h-10 w-10 rounded-full ring-2 ring-primary/20 overflow-hidden flex-shrink-0"
+              style={{ backgroundColor: currentAgent?.background_color || 'hsl(var(--primary))' }}
+            >
+              {hasSelectedAgent ? (
+                <img src={avatarUrl} alt={agentName} className="h-full w-full object-cover" />
+              ) : (
+                <div className="h-full w-full flex items-center justify-center bg-gradient-to-br from-primary to-primary/60">
+                  <Sparkles className="h-5 w-5 text-primary-foreground" />
+                </div>
+              )}
+            </div>
             <div>
-              <CardTitle className="text-base">Coach MIGREI</CardTitle>
-              <p className="text-xs text-muted-foreground">Sua mentora de carreira</p>
+              <CardTitle className="text-base">{agentName}</CardTitle>
+              <p className="text-xs text-muted-foreground">{agentTitle}</p>
             </div>
           </div>
           {onToggle && (
@@ -98,11 +130,18 @@ export function AvatarCoach({
                 )}
               >
                 {message.role === 'assistant' && (
-                  <Avatar className="h-8 w-8 flex-shrink-0">
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      <Sparkles className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
+                  <div 
+                    className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0"
+                    style={{ backgroundColor: currentAgent?.background_color || 'hsl(var(--primary) / 0.1)' }}
+                  >
+                    {hasSelectedAgent ? (
+                      <img src={avatarUrl} alt={agentName} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                      </div>
+                    )}
+                  </div>
                 )}
                 <div
                   className={cn(
@@ -118,11 +157,18 @@ export function AvatarCoach({
             ))}
             {isLoading && messages[messages.length - 1]?.role === 'user' && (
               <div className="flex gap-3 justify-start">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/10 text-primary">
-                    <Sparkles className="h-4 w-4" />
-                  </AvatarFallback>
-                </Avatar>
+                <div 
+                  className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0"
+                  style={{ backgroundColor: currentAgent?.background_color || 'hsl(var(--primary) / 0.1)' }}
+                >
+                  {hasSelectedAgent ? (
+                    <img src={avatarUrl} alt={agentName} className="h-full w-full object-cover" />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                    </div>
+                  )}
+                </div>
                 <div className="bg-muted rounded-2xl rounded-bl-sm px-4 py-3">
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 </div>

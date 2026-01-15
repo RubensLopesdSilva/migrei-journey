@@ -135,7 +135,8 @@ export const LandingHero = () => {
 
           {/* Right: Migrei Wheel */}
           <motion.div 
-            className="flex justify-center lg:justify-end order-1 lg:order-2"
+            className="flex justify-center lg:justify-end order-1 lg:order-2 relative"
+            style={{ transform: 'translate(-20%, -15%)' }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}

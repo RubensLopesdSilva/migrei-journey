@@ -90,7 +90,7 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
     }
   }, [forceOpen]);
 
-  const phaseLink = `/fase${phaseNumber}-${phaseSlug}`;
+  const phaseLink = `/fase/${phaseSlug}`;
 
   return (
     <AnimatePresence>

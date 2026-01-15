@@ -3,6 +3,12 @@ import { useAgent } from "@/hooks/useAgent";
 import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Import agent avatar images
+import agentsSet1 from "@/assets/agents/agents-set-1.png";
+import agentsSet2 from "@/assets/agents/agents-set-2.png";
+import agentsSet3 from "@/assets/agents/agents-set-3.png";
+import agentsSet4 from "@/assets/agents/agents-set-4.png";
+
 interface AgentCenterAvatarProps {
   size?: number;
   showTooltip?: boolean;
@@ -10,12 +16,12 @@ interface AgentCenterAvatarProps {
 
 // Agent avatar images mapping
 const agentAvatars: Record<string, string> = {
-  'Lumi': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Noah': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
-  'Ema': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Leo': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
-  'Maya': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Kai': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
+  'Lumi': agentsSet1,
+  'Noah': agentsSet2,
+  'Ema': agentsSet3,
+  'Leo': agentsSet4,
+  'Maya': agentsSet1,
+  'Kai': agentsSet2,
 };
 
 export function AgentCenterAvatar({ size = 56, showTooltip = true }: AgentCenterAvatarProps) {
@@ -37,7 +43,7 @@ export function AgentCenterAvatar({ size = 56, showTooltip = true }: AgentCenter
     );
   }
 
-  const avatarUrl = agentAvatars[currentAgent?.name || ''] || '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png';
+  const avatarUrl = agentAvatars[currentAgent?.name || ''] || agentsSet1;
 
   return (
     <div className="relative group">

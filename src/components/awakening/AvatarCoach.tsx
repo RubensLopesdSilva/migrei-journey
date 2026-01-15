@@ -110,11 +110,6 @@ export function AvatarCoach({
               <p className="text-xs text-muted-foreground">{agentTitle}</p>
             </div>
           </div>
-          {onToggle && (
-            <Button variant="ghost" size="icon" onClick={onToggle}>
-              <X className="h-4 w-4" />
-            </Button>
-          )}
         </div>
       </CardHeader>
 

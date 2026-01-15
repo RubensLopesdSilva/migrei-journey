@@ -1,7 +1,6 @@
-import { Target, CheckCircle2, Circle, ArrowRight, Sparkles } from "lucide-react";
+import { Target, Circle, ArrowRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { AnimatedProgress } from "@/components/ui/animated-container";
 import { focusRingClasses } from "@/components/ui/focus-ring";
 import { cn } from "@/lib/utils";
 import { useProgress } from "@/hooks/useProgress";
@@ -69,12 +68,12 @@ const listVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 }
+    transition: { staggerChildren: 0.06, delayChildren: 0.1 }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, x: -10 },
+  hidden: { opacity: 0, x: -8 },
   visible: { opacity: 1, x: 0 }
 };
 
@@ -93,7 +92,6 @@ export function MissionCard() {
   const completedCount = missions.filter(m => m.completed).length;
   const totalXP = missions.filter(m => m.completed).reduce((acc, m) => acc + m.xp, 0);
   const potentialXP = missions.reduce((acc, m) => acc + m.xp, 0);
-  const progressPercent = (completedCount / missions.length) * 100;
 
   const phaseDisplayName = currentPhase?.name || "Despertar";
   const phaseLink = currentPhase?.phase_number 
@@ -102,58 +100,48 @@ export function MissionCard() {
 
   return (
     <motion.div 
-      className="card-elevated overflow-hidden"
+      className="bg-card rounded-2xl border border-border overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
+      style={{ boxShadow: 'var(--shadow-md)' }}
     >
-      {/* Header with gradient */}
-      <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 sm:p-5 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <motion.div 
-              className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl bg-primary/20 flex items-center justify-center"
-              whileHover={{ rotate: 10, scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400 }}
-            >
-              <Target className="h-4 w-4 sm:h-5 sm:w-5 text-primary" aria-hidden="true" />
-            </motion.div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm sm:text-base text-foreground">
-                  Missões: {phaseDisplayName}
-                </h3>
-                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-                  <Sparkles className="h-2.5 w-2.5" />
-                  Fase {currentPhase?.phase_number || 1}
-                </span>
-              </div>
-              <p className="text-[10px] sm:text-xs text-muted-foreground">
-                {completedCount}/{missions.length} completas • +{totalXP}/{potentialXP} XP
-              </p>
-            </div>
+      {/* Header compact */}
+      <div className="flex items-center justify-between p-4 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Target className="h-4 w-4 text-primary" aria-hidden="true" />
           </div>
-          <Link 
-            to={phaseLink}
-            className={cn(
-              "text-primary hover:text-primary/80 transition-colors p-2 -m-2 rounded-lg",
-              focusRingClasses
-            )}
-            aria-label="Ver todas as missões da fase"
-          >
-            <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Link>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-sm text-foreground">
+                Missões: {phaseDisplayName}
+              </h3>
+              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+                <Sparkles className="h-2.5 w-2.5" />
+                Fase {currentPhase?.phase_number || 1}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              {completedCount}/{missions.length} completas • +{totalXP}/{potentialXP} XP
+            </p>
+          </div>
         </div>
-        
-        {/* Progress bar */}
-        <div className="mt-3 sm:mt-4">
-          <AnimatedProgress value={progressPercent} className="h-1.5 sm:h-2" />
-        </div>
+        <Link 
+          to={phaseLink}
+          className={cn(
+            "text-primary hover:text-primary/80 transition-colors p-2 -m-2 rounded-lg",
+            focusRingClasses
+          )}
+          aria-label="Ver todas as missões da fase"
+        >
+          <ArrowRight className="h-5 w-5" />
+        </Link>
       </div>
       
-      {/* Missions list */}
+      {/* Missions list - compact */}
       <motion.div 
-        className="p-3 sm:p-4 space-y-1.5 sm:space-y-2"
+        className="p-3 space-y-1"
         variants={listVariants}
         initial="hidden"
         animate="visible"
@@ -166,44 +154,35 @@ export function MissionCard() {
             <Link
               to={phaseLink}
               className={cn(
-                "w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-200 text-left group",
+                "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left group",
                 focusRingClasses,
                 mission.completed 
-                  ? 'bg-primary/5 hover:bg-primary/10' 
-                  : 'hover:bg-muted'
+                  ? 'bg-primary/5' 
+                  : 'hover:bg-muted/50'
               )}
             >
-              <motion.div
-                initial={mission.completed ? { scale: 0 } : { scale: 1 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              >
-                {mission.completed ? (
-                  <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
-                ) : (
-                  <Circle className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
-                )}
-              </motion.div>
+              <Circle className={cn(
+                "h-4 w-4 flex-shrink-0 transition-colors",
+                mission.completed ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+              )} />
               <div className="flex-1 min-w-0">
                 <p className={cn(
-                  "text-xs sm:text-sm font-medium truncate",
+                  "text-sm font-medium truncate",
                   mission.completed 
                     ? 'text-muted-foreground line-through' 
-                    : 'text-foreground group-hover:text-primary transition-colors'
+                    : 'text-foreground'
                 )}>
                   {mission.title}
                 </p>
                 {mission.description && (
-                  <p className="text-[10px] sm:text-xs text-muted-foreground truncate">
+                  <p className="text-[10px] text-muted-foreground truncate">
                     {mission.description}
                   </p>
                 )}
               </div>
               <span className={cn(
-                "text-[10px] sm:text-xs font-medium flex-shrink-0",
-                mission.completed 
-                  ? 'text-primary' 
-                  : 'text-muted-foreground'
+                "text-xs font-medium flex-shrink-0",
+                mission.completed ? 'text-primary' : 'text-muted-foreground'
               )}>
                 +{mission.xp} XP
               </span>

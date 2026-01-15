@@ -30,7 +30,7 @@ const Index = () => {
             {/* Top Bar: Hero (greeting + stats) */}
             <HeroMotivational />
 
-            {/* Main Content Grid */}
+            {/* Main Content Grid - Circle takes most space, cards on right */}
             <motion.div 
               className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mt-6"
               initial={{ opacity: 0 }}
@@ -38,15 +38,15 @@ const Index = () => {
               transition={{ delay: 0.2 }}
             >
               {/* Left: Migrei Circle - Hero element, fills most space */}
-              <div className="lg:col-span-7 xl:col-span-8 order-2 lg:order-1">
+              <div className="lg:col-span-8 order-2 lg:order-1">
                 <motion.div 
-                  className="relative w-full flex justify-center items-center min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]"
+                  className="relative w-full flex justify-center items-center"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
                   {/* Clean container with subtle elevation */}
-                  <div className="relative p-4 sm:p-6 lg:p-8 w-full max-w-[600px]">
+                  <div className="relative p-4 sm:p-6 lg:p-8 w-full">
                     {/* Subtle background */}
                     <div 
                       className="absolute inset-0 bg-gradient-to-br from-card to-card/60 rounded-3xl border border-border/40"
@@ -56,7 +56,7 @@ const Index = () => {
                     />
                     
                     {/* The Circle - main element */}
-                    <div className="relative z-10">
+                    <div className="relative z-10 flex justify-center">
                       <MigreiCircle />
                     </div>
                   </div>
@@ -64,11 +64,11 @@ const Index = () => {
               </div>
 
               {/* Right: Action Cards - stacked */}
-              <div className="lg:col-span-5 xl:col-span-4 space-y-4 order-1 lg:order-2">
+              <div className="lg:col-span-4 space-y-4 order-1 lg:order-2">
                 {loading ? (
                   <>
-                    <Skeleton className="h-64 rounded-2xl" />
-                    <Skeleton className="h-64 rounded-2xl" />
+                    <Skeleton className="h-72 rounded-2xl" />
+                    <Skeleton className="h-72 rounded-2xl" />
                   </>
                 ) : (
                   <>

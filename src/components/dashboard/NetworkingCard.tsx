@@ -132,21 +132,6 @@ export function NetworkingCard() {
         ))}
       </motion.div>
 
-      {/* Help tooltip */}
-      <div className="px-4 pb-3 flex justify-end">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button className="text-muted-foreground hover:text-foreground transition-colors p-1">
-                <HelpCircle className="h-4 w-4" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="left" className="max-w-[200px]">
-              <p className="text-xs">Complete ações de networking semanalmente para ganhar XP e expandir sua rede profissional.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
     </motion.div>
   );
 }

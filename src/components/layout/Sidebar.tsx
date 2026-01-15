@@ -1,49 +1,104 @@
-import { useState } from "react";
-import { Home, Layers, TrendingUp, Users, GraduationCap, Settings, LogOut, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { 
+  Home, 
+  Layers, 
+  TrendingUp, 
+  Users, 
+  GraduationCap, 
+  Settings, 
+  LogOut, 
+  Menu, 
+  X,
+  ShieldCheck,
+  UserCog,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdmin } from "@/hooks/useAdmin";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
 interface NavItem {
   icon: React.ElementType;
   label: string;
   href: string;
 }
-const mainNavItems: NavItem[] = [{
-  icon: Home,
-  label: "Início",
-  href: "/"
-}, {
-  icon: Layers,
-  label: "Minha fase atual",
-  href: "/fase"
-}, {
-  icon: TrendingUp,
-  label: "Meu progresso",
-  href: "/progresso"
-}, {
-  icon: Users,
-  label: "Comunidade",
-  href: "/comunidade"
-}, {
-  icon: GraduationCap,
-  label: "Mentoria",
-  href: "/mentoria"
-}];
+
+const mainNavItems: NavItem[] = [
+  {
+    icon: Home,
+    label: "Início",
+    href: "/"
+  },
+  {
+    icon: Layers,
+    label: "Minha fase atual",
+    href: "/fase"
+  },
+  {
+    icon: TrendingUp,
+    label: "Meu progresso",
+    href: "/progresso"
+  },
+  {
+    icon: Users,
+    label: "Comunidade",
+    href: "/comunidade"
+  },
+  {
+    icon: GraduationCap,
+    label: "Mentoria",
+    href: "/mentoria"
+  }
+];
+
+const adminNavItems: NavItem[] = [
+  {
+    icon: UserCog,
+    label: "Gerenciar Mentores",
+    href: "/admin/mentores"
+  },
+  {
+    icon: Users,
+    label: "Gerenciar Usuários",
+    href: "/admin/usuarios"
+  },
+  {
+    icon: Settings,
+    label: "Configurações",
+    href: "/admin/configuracoes"
+  }
+];
+
 export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    signOut
-  } = useAuth();
+  const { signOut } = useAuth();
+  const { isAdmin } = useAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+
+  // Open admin menu if we're on an admin route
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin")) {
+      setAdminMenuOpen(true);
+    }
+  }, [location.pathname]);
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
   };
+
   const closeMobile = () => setMobileOpen(false);
-  const SidebarContent = () => <>
+
+  const SidebarContent = () => (
+    <>
       {/* Logo - stable, no re-render on navigation */}
       <div className="px-6 mb-8 flex justify-center">
         <Link to="/" className="flex items-center" onClick={closeMobile}>
@@ -58,7 +113,7 @@ export function Sidebar() {
       </div>
 
       {/* Main Navigation */}
-      <nav className="flex-1 px-3">
+      <nav className="flex-1 px-3 overflow-y-auto">
         <ul className="space-y-1">
           {mainNavItems.map(item => {
             // Determine data-tour attribute based on href
@@ -84,6 +139,54 @@ export function Sidebar() {
             );
           })}
         </ul>
+
+        {/* Admin Menu - Only visible for admins */}
+        {isAdmin && (
+          <div className="mt-6">
+            <Collapsible open={adminMenuOpen} onOpenChange={setAdminMenuOpen}>
+              <CollapsibleTrigger className="w-full">
+                <div className={cn(
+                  "sidebar-item justify-between group",
+                  location.pathname.startsWith("/admin") && "bg-primary/10"
+                )}>
+                  <div className="flex items-center gap-3">
+                    <ShieldCheck className="h-5 w-5 text-amber-600" />
+                    <span className="font-medium">Administração</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-xs bg-amber-500/10 text-amber-600 border-amber-500/20">
+                      Admin
+                    </Badge>
+                    {adminMenuOpen ? (
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </div>
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <ul className="mt-1 ml-4 pl-4 border-l border-sidebar-border space-y-1">
+                  {adminNavItems.map(item => (
+                    <li key={item.label}>
+                      <Link 
+                        to={item.href} 
+                        onClick={closeMobile} 
+                        className={cn(
+                          "sidebar-item text-sm py-2",
+                          location.pathname === item.href && "active"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        )}
       </nav>
 
       {/* Footer Actions */}
@@ -109,8 +212,11 @@ export function Sidebar() {
           © 2025 Migrei
         </p>
       </div>
-    </>;
-  return <>
+    </>
+  );
+
+  return (
+    <>
       {/* Mobile Header */}
       <div className="fixed top-0 left-0 right-0 h-16 bg-sidebar border-b border-sidebar-border flex items-center justify-between px-4 md:hidden z-50">
         <Link to="/" className="flex items-center">
@@ -122,7 +228,14 @@ export function Sidebar() {
             decoding="sync"
           />
         </Link>
-        <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={mobileOpen}>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setMobileOpen(!mobileOpen)} 
+          className="md:hidden" 
+          aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"} 
+          aria-expanded={mobileOpen}
+        >
           {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
         </Button>
       </div>
@@ -134,7 +247,10 @@ export function Sidebar() {
       {mobileOpen && <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={closeMobile} />}
 
       {/* Mobile Sidebar */}
-      <aside className={cn("fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-sidebar border-r border-sidebar-border flex flex-col py-6 z-50 transition-transform duration-300 md:hidden", mobileOpen ? "translate-x-0" : "-translate-x-full")}>
+      <aside className={cn(
+        "fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-sidebar border-r border-sidebar-border flex flex-col py-6 z-50 transition-transform duration-300 md:hidden",
+        mobileOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
         <SidebarContent />
       </aside>
 
@@ -142,5 +258,6 @@ export function Sidebar() {
       <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-sidebar-border flex-col py-6 z-50">
         <SidebarContent />
       </aside>
-    </>;
+    </>
+  );
 }

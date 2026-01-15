@@ -9,14 +9,20 @@ import { AIAgent } from "@/types/agent";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { cn } from "@/lib/utils";
 
-// Agent avatar images mapping
+// Import agent avatar images
+import agentsSet1 from "@/assets/agents/agents-set-1.png";
+import agentsSet2 from "@/assets/agents/agents-set-2.png";
+import agentsSet3 from "@/assets/agents/agents-set-3.png";
+import agentsSet4 from "@/assets/agents/agents-set-4.png";
+
+// Agent avatar images mapping (4 unique images for 6 agents)
 const agentAvatars: Record<string, string> = {
-  'Lumi': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Noah': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
-  'Ema': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Leo': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
-  'Maya': '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png',
-  'Kai': '/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png',
+  'Lumi': agentsSet1,
+  'Noah': agentsSet2,
+  'Ema': agentsSet3,
+  'Leo': agentsSet4,
+  'Maya': agentsSet1,
+  'Kai': agentsSet2,
 };
 
 export default function AgentSelection() {
@@ -151,7 +157,7 @@ interface AgentCardProps {
 }
 
 function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, index }: AgentCardProps) {
-  const avatarUrl = agentAvatars[agent.name] || '/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png';
+  const avatarUrl = agentAvatars[agent.name] || agentsSet1;
 
   return (
     <motion.div

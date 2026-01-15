@@ -31,12 +31,19 @@ export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const [isNewUser, setIsNewUser] = useState(false);
+
   useEffect(() => {
     if (user) {
-      // Redirect to agent selection after login (it will check if agent is needed)
-      navigate("/");
+      if (isNewUser) {
+        // New signup - go directly to agent selection
+        navigate("/escolher-agente");
+      } else {
+        // Login - go to dashboard (Index will check if agent is needed)
+        navigate("/");
+      }
     }
-  }, [user, navigate]);
+  }, [user, navigate, isNewUser]);
 
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
@@ -160,9 +167,10 @@ export default function Auth() {
             variant: "destructive",
           });
         } else {
+          setIsNewUser(true);
           toast({
             title: "Conta criada!",
-            description: "Bem-vindo ao Migrei!",
+            description: "Agora escolha seu agente de IA!",
           });
         }
       }

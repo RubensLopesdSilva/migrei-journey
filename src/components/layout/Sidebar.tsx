@@ -47,7 +47,7 @@ export function Sidebar() {
   const SidebarContent = () => (
     <>
       {/* Logo */}
-      <div className="px-6 mt-[15%] mb-8 flex justify-center">
+      <div className="px-6 mb-8 flex justify-center">
         <Link to="/" className="flex items-center" onClick={closeMobile}>
           <img 
             src={logoMigrei} 

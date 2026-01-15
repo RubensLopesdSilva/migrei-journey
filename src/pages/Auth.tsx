@@ -10,6 +10,7 @@ import logoMigrei from "@/assets/logo-migrei.png";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
+import { AuthMigreiWheel } from "@/components/auth/AuthMigreiWheel";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -425,16 +426,11 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* Right Side - Decorative */}
+      {/* Right Side - Roda Migrei */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary/10 to-accent/10 items-center justify-center p-12">
-        <div className="max-w-md text-center">
-          <div className="w-64 h-64 mx-auto mb-8 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-            <img src={logoMigrei} alt="Migrei" className="h-32 w-auto" />
-          </div>
-          <h3 className="font-display text-2xl font-semibold text-foreground mb-4">
-            Sua jornada de transição começa aqui
-          </h3>
-          <p className="text-muted-foreground">
+        <div className="max-w-md flex flex-col items-center">
+          <AuthMigreiWheel />
+          <p className="text-muted-foreground text-center mt-6 max-w-sm">
             A Metodologia Migrei vai te guiar através de um processo estruturado 
             de autoconhecimento, planejamento e ação para alcançar sua nova carreira.
           </p>

@@ -33,6 +33,7 @@ export default function Auth() {
 
   useEffect(() => {
     if (user) {
+      // Redirect to agent selection after login (it will check if agent is needed)
       navigate("/");
     }
   }, [user, navigate]);

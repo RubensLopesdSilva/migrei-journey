@@ -58,6 +58,45 @@ export type Database = {
           },
         ]
       }
+      ai_agents: {
+        Row: {
+          avatar_url: string
+          background_color: string
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          name: string
+          persona: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          avatar_url: string
+          background_color?: string
+          created_at?: string
+          description: string
+          id?: string
+          is_active?: boolean
+          name: string
+          persona: string
+          sort_order?: number
+          title: string
+        }
+        Update: {
+          avatar_url?: string
+          background_color?: string
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          persona?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
       badges: {
         Row: {
           category: string
@@ -2148,6 +2187,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          agent_id: string | null
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -2157,6 +2197,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          agent_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -2166,6 +2207,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          agent_id?: string | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -2174,7 +2216,15 @@ export type Database = {
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ai_agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       progress_events: {
         Row: {

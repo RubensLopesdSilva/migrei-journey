@@ -6,13 +6,13 @@ import {
   Settings, 
   Rocket, 
   Star,
-  User,
   Check
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@/hooks/useProgress";
 import { cn } from "@/lib/utils";
+import { AgentCenterAvatar } from "./AgentCenterAvatar";
 
 interface Phase {
   id: string;
@@ -459,23 +459,15 @@ export function MigreiCircle() {
             style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))' }}
           />
 
-          {/* Conteúdo central */}
+          {/* Conteúdo central - Agente IA */}
           <foreignObject
-            x={center - 28}
-            y={center - 28}
-            width={56}
-            height={56}
+            x={center - 30}
+            y={center - 30}
+            width={60}
+            height={60}
           >
             <div className="flex items-center justify-center h-full">
-              <motion.div 
-                className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
-                animate={{ 
-                  borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <User className="h-6 w-6 text-primary" />
-              </motion.div>
+              <AgentCenterAvatar size={56} showTooltip={false} />
             </div>
           </foreignObject>
         </motion.svg>

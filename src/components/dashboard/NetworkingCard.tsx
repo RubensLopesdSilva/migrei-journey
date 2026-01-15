@@ -18,7 +18,6 @@ interface NetworkingAction {
 const weeklyActions: NetworkingAction[] = [
   { id: "1", title: "Enviar 3 convites", description: "Conecte com novos profissionais", completed: false, xp: 15, icon: UserPlus },
   { id: "2", title: "Comentar 2 posts", description: "Engaje com a comunidade", completed: false, xp: 10, icon: MessageCircle },
-  { id: "3", title: "Agendar 1 conversa", description: "Marque um café virtual", completed: false, xp: 25, icon: Calendar },
 ];
 
 const listVariants = {

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { HelpCircle, Rocket } from "lucide-react";
 import { TooltipEnhanced } from "@/components/ui/tooltip-enhanced";
 import { useProgress } from "@/hooks/useProgress";
+import { useAgent } from "@/hooks/useAgent";
 import { useNavigate } from "react-router-dom";
 
 // Phase name mapping
@@ -22,10 +23,17 @@ interface DashboardTourProps {
 export function DashboardTour({ onTourComplete }: DashboardTourProps) {
   const { isOpen, hasCompleted, startTour, closeTour, completeTour } = useTour("migrei-dashboard-tour-v3");
   const { currentPhase } = useProgress();
+  const { currentAgent } = useAgent();
   const navigate = useNavigate();
 
   const currentPhaseName = currentPhase ? phaseNames[currentPhase.phase_number] || "Despertar" : "Despertar";
   const currentPhaseNumber = currentPhase?.phase_number || 1;
+  
+  // Agent info for tour
+  const agentInfo = currentAgent ? {
+    name: currentAgent.name,
+    title: currentAgent.title
+  } : null;
 
   // Auto-start tour on first visit (only once ever)
   const handleComplete = () => {
@@ -46,17 +54,19 @@ export function DashboardTour({ onTourComplete }: DashboardTourProps) {
     setTimeout(() => startTour(), 1000);
   }
 
+  const agentGreeting = currentAgent ? `Olá! Sou ${currentAgent.name}, seu coach de transição!` : "Bem-vindo ao Migrei! 🎉";
+
   const dashboardTourSteps: TourStep[] = [
     // STEP 1 — BOAS-VINDAS
     {
       id: "welcome",
-      title: "Bem-vindo ao Migrei! 🎉",
-      description: "Vamos te mostrar como navegar pela plataforma em menos de 2 minutos.",
+      title: agentGreeting,
+      description: "Vou te guiar pela plataforma em menos de 2 minutos. Vamos lá?",
       position: "center",
       action: (
         <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-lg p-2">
           <Rocket className="h-4 w-4 text-primary" />
-          <span>Tour rápido</span>
+          <span>Tour rápido com {currentAgent?.name || "seu coach"}</span>
         </div>
       ),
     },
@@ -182,6 +192,7 @@ export function DashboardTour({ onTourComplete }: DashboardTourProps) {
         onClose={handleClose}
         onComplete={handleComplete}
         storageKey="migrei-dashboard-tour-v3"
+        agent={agentInfo}
       />
     </>
   );

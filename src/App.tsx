@@ -20,6 +20,7 @@ import Fase3Decidir from "./pages/Fase3Decidir";
 import Fase4Desenvolver from "./pages/Fase4Desenvolver";
 import Fase5Deslanchar from "./pages/Fase5Deslanchar";
 import Fase6Desfrutar from "./pages/Fase6Desfrutar";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
               <AppLayout>
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/landing" element={<Landing />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/configuracoes" element={<Settings />} />
                   <Route path="/mentoria" element={<Mentoring />} />

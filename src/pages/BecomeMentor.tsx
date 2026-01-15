@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
-import { MentorRegistrationModal } from "@/components/mentoring/MentorRegistrationModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,7 +19,7 @@ import {
   CheckCircle,
   Sparkles,
   ShieldCheck,
-  Loader2,
+  Mail,
 } from "lucide-react";
 
 const benefits = [
@@ -61,7 +60,6 @@ const requirements = [
 export default function BecomeMentor() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
-  const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
   const [isMentor, setIsMentor] = useState(false);
   const [checking, setChecking] = useState(true);
 
@@ -87,16 +85,8 @@ export default function BecomeMentor() {
     }
   }, [user, authLoading]);
 
-  const handleStartRegistration = () => {
-    if (!user) {
-      navigate("/auth");
-      return;
-    }
-    setRegistrationModalOpen(true);
-  };
-
-  const handleRegistrationSuccess = () => {
-    navigate("/mentor");
+  const handleContact = () => {
+    window.location.href = "mailto:contato@migrei.com.br?subject=Quero%20ser%20mentor%20na%20plataforma%20Migrei";
   };
 
   if (authLoading || checking) {
@@ -176,12 +166,15 @@ export default function BecomeMentor() {
                 <Button
                   size="lg"
                   className="gap-2 btn-primary-gradient"
-                  onClick={handleStartRegistration}
+                  onClick={handleContact}
                 >
-                  <Users className="h-5 w-5" />
-                  {user ? "Começar Cadastro" : "Entrar para Começar"}
+                  <Mail className="h-5 w-5" />
+                  Entrar em Contato
                   <ArrowRight className="h-4 w-4" />
                 </Button>
+                <p className="text-sm text-muted-foreground mt-3">
+                  O cadastro de mentores é feito pela nossa equipe após avaliação
+                </p>
               </div>
             </div>
           </div>
@@ -232,10 +225,10 @@ export default function BecomeMentor() {
                   1
                 </div>
                 <CardContent className="p-6 pt-8">
-                  <h3 className="font-semibold mb-2">Faça seu cadastro</h3>
+                  <h3 className="font-semibold mb-2">Entre em contato</h3>
                   <p className="text-sm text-muted-foreground">
-                    Preencha suas informações profissionais, áreas de expertise
-                    e experiência.
+                    Envie um e-mail para nossa equipe expressando seu interesse
+                    em ser mentor e compartilhe sua experiência.
                   </p>
                 </CardContent>
               </Card>
@@ -245,10 +238,10 @@ export default function BecomeMentor() {
                   2
                 </div>
                 <CardContent className="p-6 pt-8">
-                  <h3 className="font-semibold mb-2">Configure sua agenda</h3>
+                  <h3 className="font-semibold mb-2">Avaliação</h3>
                   <p className="text-sm text-muted-foreground">
-                    Defina os dias e horários em que você está disponível para
-                    mentorias.
+                    Nossa equipe irá avaliar seu perfil e entrar em contato para
+                    uma conversa sobre o programa.
                   </p>
                 </CardContent>
               </Card>
@@ -260,8 +253,8 @@ export default function BecomeMentor() {
                 <CardContent className="p-6 pt-8">
                   <h3 className="font-semibold mb-2">Comece a mentorar</h3>
                   <p className="text-sm text-muted-foreground">
-                    Receba agendamentos de mentorados e faça a diferença na
-                    carreira de alguém.
+                    Após aprovação, configuramos seu perfil e você já pode começar
+                    a receber agendamentos.
                   </p>
                 </CardContent>
               </Card>
@@ -276,26 +269,19 @@ export default function BecomeMentor() {
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
                 Junte-se à nossa comunidade de mentores e ajude a transformar
-                carreiras. O cadastro é rápido e simples.
+                carreiras. Entre em contato conosco para iniciar o processo.
               </p>
               <Button
                 size="lg"
                 className="gap-2 btn-primary-gradient"
-                onClick={handleStartRegistration}
+                onClick={handleContact}
               >
-                <Users className="h-5 w-5" />
-                {user ? "Cadastrar-se como Mentor" : "Entrar e Cadastrar"}
+                <Mail className="h-5 w-5" />
+                Quero ser Mentor
               </Button>
             </CardContent>
           </Card>
         </div>
-
-        {/* Registration Modal */}
-        <MentorRegistrationModal
-          open={registrationModalOpen}
-          onOpenChange={setRegistrationModalOpen}
-          onSuccess={handleRegistrationSuccess}
-        />
       </PageContent>
     </PageLayout>
   );

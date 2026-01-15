@@ -2975,6 +2975,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_subscriptions: {
         Row: {
           cancel_at_period_end: boolean
@@ -3153,6 +3174,14 @@ export type Database = {
       get_user_plan_slug: { Args: { p_user_id: string }; Returns: string }
       has_active_subscription: { Args: { p_user_id: string }; Returns: boolean }
       has_premium_plan: { Args: { user_uuid: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_slot_available: {
         Args: {
           p_exclude_session_id?: string
@@ -3179,6 +3208,7 @@ export type Database = {
         | "checkpoint"
         | "quiz"
         | "reflection"
+      app_role: "admin" | "moderator" | "user"
       connection_status: "pending" | "accepted" | "rejected" | "blocked"
       conversation_status:
         | "pending"
@@ -3356,6 +3386,7 @@ export const Constants = {
   public: {
     Enums: {
       activity_type: ["lesson", "exercise", "checkpoint", "quiz", "reflection"],
+      app_role: ["admin", "moderator", "user"],
       connection_status: ["pending", "accepted", "rejected", "blocked"],
       conversation_status: [
         "pending",

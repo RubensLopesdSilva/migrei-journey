@@ -120,6 +120,30 @@ function MissionItem({ activity, isCompleted, onComplete, isLoading, phaseLink }
   );
 }
 
+function MissionCardSkeleton() {
+  return (
+    <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
+      <div className="flex items-center justify-between p-4 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-9 w-9 rounded-xl" />
+          <div className="space-y-1">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-24" />
+          </div>
+        </div>
+      </div>
+      <div className="px-4 pt-3">
+        <Skeleton className="h-1.5 w-full rounded-full" />
+      </div>
+      <div className="p-3 space-y-2 flex-1">
+        <Skeleton className="h-12 w-full rounded-xl" />
+        <Skeleton className="h-12 w-full rounded-xl" />
+        <Skeleton className="h-12 w-full rounded-xl" />
+      </div>
+    </div>
+  );
+}
+
 export function MissionCard() {
   const { 
     userProgress, 
@@ -133,34 +157,12 @@ export function MissionCard() {
   
   const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
 
-  // Show skeleton while loading
-  if (loading) {
-    return (
-      <div className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col">
-        <div className="flex items-center justify-between p-4 border-b border-border/50">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-9 w-9 rounded-xl" />
-            <div className="space-y-1">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-24" />
-            </div>
-          </div>
-        </div>
-        <div className="px-4 pt-3">
-          <Skeleton className="h-1.5 w-full rounded-full" />
-        </div>
-        <div className="p-3 space-y-2 flex-1">
-          <Skeleton className="h-12 w-full rounded-xl" />
-          <Skeleton className="h-12 w-full rounded-xl" />
-          <Skeleton className="h-12 w-full rounded-xl" />
-        </div>
-      </div>
-    );
-  }
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   
   // Get current phase info
   const currentPhase = useMemo(() => {
-    return phases?.find(p => p.id === userProgress?.current_phase_id) || phases?.[0];
+    if (!phases || phases.length === 0) return null;
+    return phases.find(p => p.id === userProgress?.current_phase_id) || phases[0];
   }, [phases, userProgress]);
 
   const phaseSlug = useMemo(() => {
@@ -203,6 +205,15 @@ export function MissionCard() {
   const phaseDisplayName = currentPhase?.name || "Despertar";
   const phaseLink = phaseRoutes[phaseSlug] || "/fase/despertar";
 
+  // Get first uncompleted missions to display
+  const displayMissions = useMemo(() => {
+    const uncompleted = phaseMissions.filter(m => !completedActivities.includes(m.id));
+    const completed = phaseMissions.filter(m => completedActivities.includes(m.id));
+    
+    // Show up to 3 missions: prioritize uncompleted, then show completed
+    return [...uncompleted, ...completed].slice(0, 3);
+  }, [phaseMissions, completedActivities]);
+
   // Handle mission completion
   const handleCompleteMission = async (activityId: string) => {
     if (!currentPhase) return;
@@ -213,8 +224,6 @@ export function MissionCard() {
       await completeActivity(activityId, currentPhase.id, 0);
       
       const activity = phaseMissions.find(a => a.id === activityId);
-      const newCompletedCount = completedCount + 1;
-      const newProgressPercentage = Math.round((newCompletedCount / phaseMissions.length) * 100);
       
       // Trigger confetti for celebration
       confetti({
@@ -247,14 +256,10 @@ export function MissionCard() {
     }
   };
 
-  // Get first uncompleted missions to display
-  const displayMissions = useMemo(() => {
-    const uncompleted = phaseMissions.filter(m => !completedActivities.includes(m.id));
-    const completed = phaseMissions.filter(m => completedActivities.includes(m.id));
-    
-    // Show up to 3 missions: prioritize uncompleted, then show completed
-    return [...uncompleted, ...completed].slice(0, 3);
-  }, [phaseMissions, completedActivities]);
+  // NOW we can have conditional returns after all hooks
+  if (loading) {
+    return <MissionCardSkeleton />;
+  }
 
   return (
     <motion.div 

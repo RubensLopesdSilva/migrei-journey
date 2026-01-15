@@ -1,60 +1,16 @@
-import { Target, Circle, ArrowRight, Sparkles } from "lucide-react";
+import { Target, Circle, ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
 import { cn } from "@/lib/utils";
 import { useProgress } from "@/hooks/useProgress";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import confetti from "canvas-confetti";
+import type { PhaseActivity } from "@/types/progress";
 
-interface Mission {
-  id: string;
-  title: string;
-  description?: string;
-  completed: boolean;
-  xp: number;
-  type: 'daily' | 'phase' | 'special';
-}
-
-// Missions per phase - contextual and relevant
-const phaseMissions: Record<string, Mission[]> = {
-  despertar: [
-    { id: "d1", title: "Complete seu perfil", description: "Adicione sua foto e bio", completed: false, xp: 20, type: 'phase' },
-    { id: "d2", title: "Faça o teste de prontidão", description: "Avalie sua situação atual", completed: false, xp: 25, type: 'phase' },
-    { id: "d3", title: "Mapeie suas dores", description: "Identifique o que te incomoda", completed: false, xp: 15, type: 'phase' },
-    { id: "d4", title: "Declare seu compromisso", description: "Assine sua declaração", completed: false, xp: 30, type: 'phase' },
-  ],
-  descobrir: [
-    { id: "ds1", title: "Preencha a Roda da Carreira", description: "Avalie 8 dimensões profissionais", completed: false, xp: 30, type: 'phase' },
-    { id: "ds2", title: "Monte sua linha do tempo", description: "Documente sua trajetória", completed: false, xp: 25, type: 'phase' },
-    { id: "ds3", title: "Faça um diagnóstico", description: "Descubra seu perfil", completed: false, xp: 20, type: 'phase' },
-    { id: "ds4", title: "Explore profissões", description: "Veja recomendações para você", completed: false, xp: 25, type: 'phase' },
-  ],
-  decidir: [
-    { id: "dc1", title: "Compare rotas possíveis", description: "Analise suas opções", completed: false, xp: 30, type: 'phase' },
-    { id: "dc2", title: "Mapeie lacunas", description: "Identifique gaps a desenvolver", completed: false, xp: 25, type: 'phase' },
-    { id: "dc3", title: "Defina meta SMART", description: "Crie um objetivo claro", completed: false, xp: 35, type: 'phase' },
-    { id: "dc4", title: "Monte seu plano 90 dias", description: "Estruture os próximos passos", completed: false, xp: 40, type: 'phase' },
-  ],
-  desenvolver: [
-    { id: "dv1", title: "Otimize seu LinkedIn", description: "Complete o checklist", completed: false, xp: 30, type: 'phase' },
-    { id: "dv2", title: "Crie seu pitch", description: "Prepare sua apresentação", completed: false, xp: 25, type: 'phase' },
-    { id: "dv3", title: "Atualize seu currículo", description: "Use o builder", completed: false, xp: 30, type: 'phase' },
-    { id: "dv4", title: "Monte seu portfólio", description: "Documente projetos", completed: false, xp: 35, type: 'phase' },
-  ],
-  deslanchar: [
-    { id: "dl1", title: "Registre uma oportunidade", description: "Acompanhe candidaturas", completed: false, xp: 20, type: 'phase' },
-    { id: "dl2", title: "Pratique uma entrevista", description: "Use o simulador", completed: false, xp: 30, type: 'phase' },
-    { id: "dl3", title: "Complete networking semanal", description: "Faça 3 conexões", completed: false, xp: 25, type: 'phase' },
-    { id: "dl4", title: "Faça check-in semanal", description: "Reflita sobre seu progresso", completed: false, xp: 15, type: 'phase' },
-  ],
-  desfrutar: [
-    { id: "df1", title: "Avalie seus resultados", description: "Compare antes e depois", completed: false, xp: 30, type: 'phase' },
-    { id: "df2", title: "Celebre conquistas", description: "Reconheça sua jornada", completed: false, xp: 25, type: 'phase' },
-    { id: "df3", title: "Gere seu relatório final", description: "Documente aprendizados", completed: false, xp: 40, type: 'phase' },
-    { id: "df4", title: "Planeje próximo ciclo", description: "Continue evoluindo", completed: false, xp: 35, type: 'phase' },
-  ],
-};
-
+// Phase number to slug mapping
 const phaseNumberToSlug: Record<number, string> = {
   1: "despertar",
   2: "descobrir",
@@ -62,6 +18,16 @@ const phaseNumberToSlug: Record<number, string> = {
   4: "desenvolver",
   5: "deslanchar",
   6: "desfrutar",
+};
+
+// Phase routes mapping
+const phaseRoutes: Record<string, string> = {
+  despertar: "/fase/despertar",
+  descobrir: "/fase/descobrir",
+  decidir: "/fase/decidir",
+  desenvolver: "/fase/desenvolver",
+  deslanchar: "/fase/deslanchar",
+  desfrutar: "/fase/desfrutar",
 };
 
 const listVariants = {
@@ -77,26 +43,191 @@ const itemVariants = {
   visible: { opacity: 1, x: 0 }
 };
 
+interface MissionItemProps {
+  activity: PhaseActivity;
+  isCompleted: boolean;
+  onComplete: (activityId: string) => Promise<void>;
+  isLoading: boolean;
+  phaseLink: string;
+}
+
+function MissionItem({ activity, isCompleted, onComplete, isLoading, phaseLink }: MissionItemProps) {
+  const handleComplete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isCompleted && !isLoading) {
+      await onComplete(activity.id);
+    }
+  };
+
+  return (
+    <motion.div
+      variants={itemVariants}
+      className="group"
+    >
+      <div
+        className={cn(
+          "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left",
+          isCompleted 
+            ? 'bg-primary/5' 
+            : 'hover:bg-muted/50'
+        )}
+      >
+        <button
+          onClick={handleComplete}
+          disabled={isCompleted || isLoading}
+          className={cn(
+            "h-5 w-5 rounded-full border-2 flex-shrink-0 transition-all flex items-center justify-center",
+            focusRingClasses,
+            isCompleted 
+              ? "bg-primary border-primary" 
+              : "border-muted-foreground/40 hover:border-primary group-hover:border-primary"
+          )}
+          aria-label={isCompleted ? "Missão concluída" : "Concluir missão"}
+        >
+          {isLoading ? (
+            <Loader2 className="h-3 w-3 text-muted-foreground animate-spin" />
+          ) : isCompleted ? (
+            <Check className="h-3 w-3 text-primary-foreground" />
+          ) : null}
+        </button>
+        
+        <Link to={phaseLink} className="flex-1 min-w-0">
+          <p className={cn(
+            "text-sm font-medium truncate",
+            isCompleted 
+              ? 'text-muted-foreground line-through' 
+              : 'text-foreground'
+          )}>
+            {activity.title}
+          </p>
+          {activity.description && (
+            <p className="text-[10px] text-muted-foreground truncate">
+              {activity.description}
+            </p>
+          )}
+        </Link>
+        
+        <span className={cn(
+          "text-xs font-medium flex-shrink-0",
+          isCompleted ? 'text-primary' : 'text-muted-foreground'
+        )}>
+          +{activity.xp_reward} XP
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
 export function MissionCard() {
-  const { userProgress, phases } = useProgress();
+  const { 
+    userProgress, 
+    phases, 
+    activities, 
+    completedActivities, 
+    completeActivity,
+    phaseProgress 
+  } = useProgress();
   
-  const currentPhase = phases?.find(p => p.id === userProgress?.current_phase_id);
-  const phaseSlug = currentPhase?.phase_number 
-    ? phaseNumberToSlug[currentPhase.phase_number] 
-    : "despertar";
+  const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
+  
+  // Get current phase info
+  const currentPhase = useMemo(() => {
+    return phases?.find(p => p.id === userProgress?.current_phase_id) || phases?.[0];
+  }, [phases, userProgress]);
 
-  const missions = useMemo(() => {
-    return phaseMissions[phaseSlug] || phaseMissions.despertar;
-  }, [phaseSlug]);
+  const phaseSlug = useMemo(() => {
+    return currentPhase?.phase_number 
+      ? phaseNumberToSlug[currentPhase.phase_number] 
+      : "despertar";
+  }, [currentPhase]);
 
-  const completedCount = missions.filter(m => m.completed).length;
-  const totalXP = missions.filter(m => m.completed).reduce((acc, m) => acc + m.xp, 0);
-  const potentialXP = missions.reduce((acc, m) => acc + m.xp, 0);
+  // Get missions (activities) for the current phase
+  const phaseMissions = useMemo(() => {
+    if (!currentPhase || !activities) return [];
+    
+    return activities
+      .filter(a => a.phase_id === currentPhase.id)
+      .sort((a, b) => a.sort_order - b.sort_order);
+  }, [activities, currentPhase]);
+
+  // Calculate completion stats
+  const completedCount = useMemo(() => {
+    return phaseMissions.filter(m => completedActivities.includes(m.id)).length;
+  }, [phaseMissions, completedActivities]);
+
+  const totalXP = useMemo(() => {
+    return phaseMissions
+      .filter(m => completedActivities.includes(m.id))
+      .reduce((acc, m) => acc + m.xp_reward, 0);
+  }, [phaseMissions, completedActivities]);
+
+  const potentialXP = useMemo(() => {
+    return phaseMissions.reduce((acc, m) => acc + m.xp_reward, 0);
+  }, [phaseMissions]);
+
+  // Get current phase progress
+  const currentPhaseProgress = useMemo(() => {
+    return phaseProgress?.find(p => p.phase_id === currentPhase?.id);
+  }, [phaseProgress, currentPhase]);
+
+  const progressPercentage = currentPhaseProgress?.progress_percentage || 0;
 
   const phaseDisplayName = currentPhase?.name || "Despertar";
-  const phaseLink = currentPhase?.phase_number 
-    ? `/fase${currentPhase.phase_number}-${phaseSlug}` 
-    : "/fase1-despertar";
+  const phaseLink = phaseRoutes[phaseSlug] || "/fase/despertar";
+
+  // Handle mission completion
+  const handleCompleteMission = async (activityId: string) => {
+    if (!currentPhase) return;
+    
+    setLoadingActivity(activityId);
+    
+    try {
+      await completeActivity(activityId, currentPhase.id, 0);
+      
+      const activity = phaseMissions.find(a => a.id === activityId);
+      const newCompletedCount = completedCount + 1;
+      const newProgressPercentage = Math.round((newCompletedCount / phaseMissions.length) * 100);
+      
+      // Trigger confetti for celebration
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.8 },
+        colors: ['#3B82F6', '#8B5CF6', '#F59E0B']
+      });
+      
+      // Show success toast with progress info
+      toast.success(
+        <div className="flex flex-col gap-1">
+          <span className="font-semibold">Missão concluída! 🎉</span>
+          <span className="text-sm text-muted-foreground">
+            Você avançou para {newProgressPercentage}% na fase {phaseDisplayName}.
+          </span>
+          {activity && (
+            <span className="text-sm text-primary font-medium">
+              +{activity.xp_reward} XP ganhos!
+            </span>
+          )}
+        </div>
+      );
+      
+    } catch (error) {
+      console.error('Error completing mission:', error);
+      toast.error('Não foi possível concluir a missão. Tente novamente.');
+    } finally {
+      setLoadingActivity(null);
+    }
+  };
+
+  // Get first uncompleted missions to display
+  const displayMissions = useMemo(() => {
+    const uncompleted = phaseMissions.filter(m => !completedActivities.includes(m.id));
+    const completed = phaseMissions.filter(m => completedActivities.includes(m.id));
+    
+    // Show up to 3 missions: prioritize uncompleted, then show completed
+    return [...uncompleted, ...completed].slice(0, 3);
+  }, [phaseMissions, completedActivities]);
 
   return (
     <motion.div 
@@ -123,7 +254,7 @@ export function MissionCard() {
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground">
-              {completedCount}/{missions.length} completas • +{totalXP}/{potentialXP} XP
+              {completedCount}/{phaseMissions.length} completas • +{totalXP}/{potentialXP} XP
             </p>
           </div>
         </div>
@@ -138,59 +269,71 @@ export function MissionCard() {
           <ArrowRight className="h-5 w-5" />
         </Link>
       </div>
+
+      {/* Progress bar */}
+      <div className="px-4 pt-3">
+        <div className="flex items-center justify-between text-[10px] mb-1">
+          <span className="text-muted-foreground">Progresso da fase</span>
+          <span className="font-medium text-primary">{progressPercentage}%</span>
+        </div>
+        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+          <motion.div 
+            className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPercentage}%` }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
+        </div>
+      </div>
       
-      {/* Missions list - show only first 3 */}
+      {/* Missions list */}
       <motion.div 
-        className="p-3 space-y-1"
+        className="p-3 space-y-1 flex-1"
         data-tour="mission-tasks"
         variants={listVariants}
         initial="hidden"
         animate="visible"
       >
-        {missions.slice(0, 3).map((mission) => (
-          <motion.div
-            key={mission.id}
-            variants={itemVariants}
-          >
-            <Link
-              to={phaseLink}
-              className={cn(
-                "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left group",
-                focusRingClasses,
-                mission.completed 
-                  ? 'bg-primary/5' 
-                  : 'hover:bg-muted/50'
-              )}
+        <AnimatePresence mode="popLayout">
+          {displayMissions.length > 0 ? (
+            displayMissions.map((mission) => (
+              <MissionItem
+                key={mission.id}
+                activity={mission}
+                isCompleted={completedActivities.includes(mission.id)}
+                onComplete={handleCompleteMission}
+                isLoading={loadingActivity === mission.id}
+                phaseLink={phaseLink}
+              />
+            ))
+          ) : (
+            <motion.div 
+              className="text-center py-4 text-muted-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
             >
-              <Circle className={cn(
-                "h-4 w-4 flex-shrink-0 transition-colors",
-                mission.completed ? "text-primary" : "text-muted-foreground group-hover:text-primary"
-              )} />
-              <div className="flex-1 min-w-0">
-                <p className={cn(
-                  "text-sm font-medium truncate",
-                  mission.completed 
-                    ? 'text-muted-foreground line-through' 
-                    : 'text-foreground'
-                )}>
-                  {mission.title}
-                </p>
-                {mission.description && (
-                  <p className="text-[10px] text-muted-foreground truncate">
-                    {mission.description}
-                  </p>
-                )}
-              </div>
-              <span className={cn(
-                "text-xs font-medium flex-shrink-0",
-                mission.completed ? 'text-primary' : 'text-muted-foreground'
-              )}>
-                +{mission.xp} XP
-              </span>
-            </Link>
-          </motion.div>
-        ))}
+              <Sparkles className="h-8 w-8 mx-auto mb-2 text-primary/30" />
+              <p className="text-sm">Nenhuma missão disponível</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
+
+      {/* Footer - link to phase */}
+      {phaseMissions.length > 3 && (
+        <div className="px-4 pb-3">
+          <Link to={phaseLink}>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-xs h-8 text-muted-foreground hover:text-foreground"
+            >
+              Ver todas as {phaseMissions.length} missões
+              <ArrowRight className="h-3 w-3 ml-1" />
+            </Button>
+          </Link>
+        </div>
+      )}
     </motion.div>
   );
 }

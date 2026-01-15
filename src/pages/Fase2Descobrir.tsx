@@ -13,7 +13,7 @@ import { ProfessionalTimeline } from '@/components/discovery/ProfessionalTimelin
 import { SkillsRadar } from '@/components/discovery/SkillsRadar';
 import { ProfessionRecommendations } from '@/components/discovery/ProfessionRecommendations';
 import { ClarityReport } from '@/components/discovery/ClarityReport';
-import { AvatarCoach } from '@/components/awakening/AvatarCoach';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { 
   Brain, 
@@ -104,61 +104,55 @@ export default function Fase2Descobrir() {
         {/* Progress Bar */}
         <Progress value={progress.percentage} className="h-2" />
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-8">
-            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <AnimatedTabsList className="grid grid-cols-7 mb-6">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isCompleted = index < progress.completed;
-                  return (
-                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
-                      <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
-                      {step.label}
-                      {isCompleted && (
-                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                        </div>
-                      )}
-                    </AnimatedTabsTrigger>
-                  );
-                })}
-              </AnimatedTabsList>
+        {/* Main Content - Full Width */}
+        <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+          <AnimatedTabsList className="grid grid-cols-7 mb-6">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isCompleted = index < progress.completed;
+              return (
+                <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
+                  <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
+                  {step.label}
+                  {isCompleted && (
+                    <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
+                    </div>
+                  )}
+                </AnimatedTabsTrigger>
+              );
+            })}
+          </AnimatedTabsList>
 
-              <AnimatedTabsContent value="diagnosticos">
-                <DiagnosticHub />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="roda">
-                <CareerWheel />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="diario">
-                <DiscoveryDiary />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="timeline">
-                <ProfessionalTimeline />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="radar">
-                <SkillsRadar />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="profissoes">
-                <ProfessionRecommendations />
-              </AnimatedTabsContent>
-              <AnimatedTabsContent value="relatorio">
-                <ClarityReport />
-              </AnimatedTabsContent>
-            </AnimatedTabs>
-          </div>
+          <AnimatedTabsContent value="diagnosticos">
+            <DiagnosticHub />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="roda">
+            <CareerWheel />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="diario">
+            <DiscoveryDiary />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="timeline">
+            <ProfessionalTimeline />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="radar">
+            <SkillsRadar />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="profissoes">
+            <ProfessionRecommendations />
+          </AnimatedTabsContent>
+          <AnimatedTabsContent value="relatorio">
+            <ClarityReport />
+          </AnimatedTabsContent>
+        </AnimatedTabs>
 
-          {/* Coach Sidebar */}
-          <div className="lg:col-span-4 order-first lg:order-last">
-            <AvatarCoach
-              phase="descobrir" 
-              context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
-            />
-          </div>
-        </div>
+        {/* Floating Coach Button */}
+        <FloatingCoachButton
+          phase="descobrir" 
+          context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
+          greeting="Olá! 👋 Estou aqui na fase de Descobrir! Esta é a fase do autoconhecimento profundo. Vamos juntos explorar seus talentos, motivadores e construir seu perfil profissional?"
+        />
       </PageContent>
     </PageLayout>
   );

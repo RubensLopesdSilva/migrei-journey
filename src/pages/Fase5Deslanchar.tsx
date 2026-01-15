@@ -12,6 +12,7 @@ import { OpportunitiesDiary } from '@/components/launch/OpportunitiesDiary';
 import { NetworkingRoutine } from '@/components/launch/NetworkingRoutine';
 import { InterviewSimulator } from '@/components/launch/InterviewSimulator';
 import { WeeklyCheckin } from '@/components/launch/WeeklyCheckin';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { useLaunch } from '@/hooks/useLaunch';
 import { useAuth } from '@/hooks/useAuth';
 import { Navigate } from 'react-router-dom';
@@ -120,6 +121,13 @@ export default function Fase5Deslanchar() {
               <WeeklyCheckin />
             </AnimatedTabsContent>
           </AnimatedTabs>
+
+          {/* Floating Coach Button */}
+          <FloatingCoachButton
+            phase="deslanchar"
+            context={`Usuário está na aba: ${activeTab}. Fase de execução do plano e geração de oportunidades.`}
+            greeting="Olá! 👋 Estou aqui na fase de Deslanchar! Esta é a hora da ação. Posso te ajudar com networking, preparação para entrevistas ou acompanhar sua execução. Como posso apoiar?"
+          />
         </div>
       </PageContent>
     </PageLayout>

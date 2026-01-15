@@ -13,6 +13,7 @@ import { AchievementsLine } from '@/components/enjoy/AchievementsLine';
 import { FinalReport } from '@/components/enjoy/FinalReport';
 import { SymbolicCelebration } from '@/components/enjoy/SymbolicCelebration';
 import { CycleReentry } from '@/components/enjoy/CycleReentry';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 
 const Fase6Desfrutar = () => {
   const { user, loading: authLoading } = useAuth();
@@ -30,6 +31,8 @@ const Fase6Desfrutar = () => {
     createCelebration,
     startNewCycle,
   } = useEnjoy();
+
+  const [activeTab, setActiveTab] = useState('evaluation');
 
   if (authLoading) {
     return (
@@ -73,7 +76,7 @@ const Fase6Desfrutar = () => {
           {loading ? (
             <PageSkeleton variant="dashboard" showHeader={false} />
           ) : (
-            <AnimatedTabs defaultValue="evaluation" className="space-y-6">
+            <AnimatedTabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <AnimatedTabsList className="grid grid-cols-5 w-full">
                 <AnimatedTabsTrigger value="evaluation" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" aria-hidden="true" />
@@ -134,6 +137,13 @@ const Fase6Desfrutar = () => {
               </AnimatedTabsContent>
             </AnimatedTabs>
           )}
+
+          {/* Floating Coach Button */}
+          <FloatingCoachButton
+            phase="desfrutar"
+            context={`Usuário está na aba: ${activeTab}. Fase de celebração e consolidação da transição.`}
+            greeting="Parabéns! 🎉 Você chegou à fase final! Estou aqui para te ajudar a celebrar suas conquistas, gerar seu relatório final e, se desejar, iniciar um novo ciclo de evolução. Como posso ajudar?"
+          />
         </div>
       </PageContent>
     </PageLayout>

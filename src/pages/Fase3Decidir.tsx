@@ -8,7 +8,7 @@ import { SmartGoalBuilder } from '@/components/decision/SmartGoalBuilder';
 import { Plan90Days } from '@/components/decision/Plan90Days';
 import { GapsMap } from '@/components/decision/GapsMap';
 import { DecisionCheckpoint } from '@/components/decision/DecisionCheckpoint';
-import { AvatarCoach } from '@/components/awakening/AvatarCoach';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { useDecision } from '@/hooks/useDecision';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -70,63 +70,57 @@ export default function Fase3Decidir() {
         {/* Progress Bar */}
         <Progress value={progress.percentage} className="h-2" />
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-8">
-            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <AnimatedTabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isCompleted = index < progress.completed;
-                  return (
-                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative text-xs px-2">
-                      <Icon className="h-4 w-4 mr-1" aria-hidden="true" />
-                      {step.label}
-                      {isCompleted && (
-                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                        </div>
-                      )}
-                    </AnimatedTabsTrigger>
-                  );
-                })}
-              </AnimatedTabsList>
+        {/* Main Content - Full Width */}
+        <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+          <AnimatedTabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isCompleted = index < progress.completed;
+              return (
+                <AnimatedTabsTrigger key={step.key} value={step.key} className="relative text-xs px-2">
+                  <Icon className="h-4 w-4 mr-1" aria-hidden="true" />
+                  {step.label}
+                  {isCompleted && (
+                    <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
+                    </div>
+                  )}
+                </AnimatedTabsTrigger>
+              );
+            })}
+          </AnimatedTabsList>
 
-              <AnimatedTabsContent value="matrix">
-                <PossibilitiesMatrix onComplete={() => setActiveStep('comparator')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="matrix">
+            <PossibilitiesMatrix onComplete={() => setActiveStep('comparator')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="comparator">
-                <RouteComparator onComplete={() => setActiveStep('goal')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="comparator">
+            <RouteComparator onComplete={() => setActiveStep('goal')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="goal">
-                <SmartGoalBuilder onComplete={() => setActiveStep('plan')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="goal">
+            <SmartGoalBuilder onComplete={() => setActiveStep('plan')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="plan">
-                <Plan90Days onComplete={() => setActiveStep('gaps')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="plan">
+            <Plan90Days onComplete={() => setActiveStep('gaps')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="gaps">
-                <GapsMap onComplete={() => setActiveStep('checkpoint')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="gaps">
+            <GapsMap onComplete={() => setActiveStep('checkpoint')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="checkpoint">
-                <DecisionCheckpoint onComplete={() => window.location.href = '/progresso'} />
-              </AnimatedTabsContent>
-            </AnimatedTabs>
-          </div>
+          <AnimatedTabsContent value="checkpoint">
+            <DecisionCheckpoint onComplete={() => window.location.href = '/progresso'} />
+          </AnimatedTabsContent>
+        </AnimatedTabs>
 
-          {/* Coach Sidebar */}
-          <div className="lg:col-span-4 order-first lg:order-last">
-            <AvatarCoach 
-              phase="decidir" 
-              context={`Usuário está na etapa: ${activeStep}`}
-            />
-          </div>
-        </div>
+        {/* Floating Coach Button */}
+        <FloatingCoachButton 
+          phase="decidir" 
+          context={`Usuário está na etapa: ${activeStep}`}
+          greeting="Olá! 👋 Estou aqui na fase de Decidir! Esta é a hora de definir seu caminho. Vou te ajudar a avaliar possibilidades, definir metas SMART e criar seu plano de ação. Por onde quer começar?"
+        />
       </PageContent>
     </PageLayout>
   );

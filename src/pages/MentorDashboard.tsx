@@ -72,17 +72,22 @@ function AccessDenied() {
     <PageLayout>
       <PageContent>
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-          <div className="h-20 w-20 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
-            <ShieldCheck className="h-10 w-10 text-destructive" />
+          <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+            <Users className="h-10 w-10 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold mb-2">Acesso Restrito</h1>
+          <h1 className="text-2xl font-bold mb-2">Você ainda não é um mentor</h1>
           <p className="text-muted-foreground mb-6 max-w-md">
-            Esta área é exclusiva para mentores cadastrados na plataforma. 
-            Se você é um mentor, verifique se sua conta está vinculada corretamente.
+            Cadastre-se como mentor para ajudar outros profissionais em transição de carreira
+            e compartilhar sua experiência.
           </p>
-          <Button onClick={() => navigate("/")} variant="outline">
-            Voltar ao início
-          </Button>
+          <div className="flex gap-3">
+            <Button onClick={() => navigate("/seja-mentor")} className="gap-2">
+              Quero ser Mentor
+            </Button>
+            <Button onClick={() => navigate("/")} variant="outline">
+              Voltar ao início
+            </Button>
+          </div>
         </div>
       </PageContent>
     </PageLayout>

@@ -145,6 +145,100 @@ function SessionNotesModal({ session, open, onOpenChange, onSave }: SessionNotes
   );
 }
 
+interface AvailabilitySlot {
+  day: number;
+  name: string;
+  isAvailable: boolean;
+  startTime: string;
+  endTime: string;
+}
+
+interface AvailabilitySlotEditorProps {
+  slot: AvailabilitySlot;
+  isUpdating: boolean;
+  onToggle: () => void;
+  onUpdateTime: (startTime: string, endTime: string) => void;
+}
+
+function AvailabilitySlotEditor({ slot, isUpdating, onToggle, onUpdateTime }: AvailabilitySlotEditorProps) {
+  const [startTime, setStartTime] = useState(slot.startTime);
+  const [endTime, setEndTime] = useState(slot.endTime);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSave = () => {
+    onUpdateTime(startTime, endTime);
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setStartTime(slot.startTime);
+    setEndTime(slot.endTime);
+    setIsEditing(false);
+  };
+
+  return (
+    <div className={`p-3 rounded-lg border transition-colors ${slot.isAvailable ? 'bg-primary/5 border-primary/20' : ''}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Switch
+            checked={slot.isAvailable}
+            onCheckedChange={onToggle}
+            disabled={isUpdating}
+          />
+          <Label className={slot.isAvailable ? "font-medium" : "text-muted-foreground"}>
+            {slot.name}
+          </Label>
+        </div>
+        
+        {slot.isAvailable && !isEditing && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="gap-2 text-sm"
+            onClick={() => setIsEditing(true)}
+          >
+            <Clock className="h-3 w-3" />
+            {slot.startTime} - {slot.endTime}
+          </Button>
+        )}
+      </div>
+
+      {slot.isAvailable && isEditing && (
+        <div className="mt-3 pt-3 border-t space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs text-muted-foreground mb-1.5 block">Início</Label>
+              <Input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="h-9"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground mb-1.5 block">Fim</Label>
+              <Input
+                type="time"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="h-9"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button size="sm" variant="ghost" onClick={handleCancel}>
+              Cancelar
+            </Button>
+            <Button size="sm" onClick={handleSave}>
+              Salvar
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function MentorDashboard() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
@@ -197,6 +291,12 @@ export default function MentorDashboard() {
   const handleToggleDay = async (dayOfWeek: number) => {
     setUpdatingAvailability(dayOfWeek);
     await toggleDayAvailability(dayOfWeek);
+    setUpdatingAvailability(null);
+  };
+
+  const handleUpdateTime = async (dayOfWeek: number, startTime: string, endTime: string) => {
+    setUpdatingAvailability(dayOfWeek);
+    await updateAvailability(dayOfWeek, startTime, endTime, true);
     setUpdatingAvailability(null);
   };
 
@@ -472,32 +572,19 @@ export default function MentorDashboard() {
                   Disponibilidade
                 </CardTitle>
                 <CardDescription>
-                  Defina os dias em que você pode receber mentorados
+                  Defina os dias e horários em que você pode receber mentorados
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {availabilitySlots.map((slot) => (
-                    <div
+                    <AvailabilitySlotEditor
                       key={slot.day}
-                      className="flex items-center justify-between p-3 rounded-lg border"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Switch
-                          checked={slot.isAvailable}
-                          onCheckedChange={() => handleToggleDay(slot.day)}
-                          disabled={updatingAvailability === slot.day}
-                        />
-                        <Label className={slot.isAvailable ? "" : "text-muted-foreground"}>
-                          {slot.name}
-                        </Label>
-                      </div>
-                      {slot.isAvailable && (
-                        <span className="text-sm text-muted-foreground">
-                          {slot.startTime} - {slot.endTime}
-                        </span>
-                      )}
-                    </div>
+                      slot={slot}
+                      isUpdating={updatingAvailability === slot.day}
+                      onToggle={() => handleToggleDay(slot.day)}
+                      onUpdateTime={(startTime, endTime) => handleUpdateTime(slot.day, startTime, endTime)}
+                    />
                   ))}
                 </div>
 
@@ -505,8 +592,8 @@ export default function MentorDashboard() {
                   <div className="flex items-start gap-2">
                     <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
                     <div className="text-sm text-muted-foreground">
-                      <p className="font-medium text-foreground">Horário padrão</p>
-                      <p>Os mentorados podem agendar entre 09:00 e 18:00 nos dias ativos.</p>
+                      <p className="font-medium text-foreground">Dica</p>
+                      <p>Mentorados só podem agendar nos horários que você definir para cada dia.</p>
                     </div>
                   </div>
                 </div>

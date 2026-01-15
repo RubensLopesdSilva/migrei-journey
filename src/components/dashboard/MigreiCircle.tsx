@@ -111,15 +111,6 @@ const phases: Phase[] = [
   },
 ];
 
-// Mensagens emocionais de microcopy
-const motivationalMessages = [
-  "Você está avançando",
-  "Um passo de cada vez",
-  "Essa é a sua jornada",
-  "Continue no seu ritmo",
-  "Você está no caminho certo"
-];
-
 export function MigreiCircle() {
   const navigate = useNavigate();
   const { phasesWithProgress, currentPhase } = useProgress();
@@ -128,12 +119,6 @@ export function MigreiCircle() {
   const [isEntered, setIsEntered] = useState(false);
   const [pulseScale, setPulseScale] = useState(1);
   const [celebratingPhase, setCelebratingPhase] = useState<string | null>(null);
-  
-  // Mensagem motivacional aleatória
-  const motivationalMessage = useMemo(() => 
-    motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)],
-    []
-  );
 
   // Fase atual do banco
   const currentPhaseId = currentPhase?.slug || "despertar";
@@ -166,11 +151,11 @@ export function MigreiCircle() {
     return () => clearInterval(interval);
   }, []);
 
-  // Dimensões responsivas
-  const size = 380;
+  // Dimensões responsivas - maior para preencher o espaço
+  const size = 420;
   const center = size / 2;
-  const outerRadius = 175;
-  const innerRadius = 65;
+  const outerRadius = 195;
+  const innerRadius = 70;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = 5;
@@ -262,15 +247,9 @@ export function MigreiCircle() {
     }
   };
 
-  // Celebrar conclusão de fase
-  const triggerCelebration = (phaseId: string) => {
-    setCelebratingPhase(phaseId);
-    setTimeout(() => setCelebratingPhase(null), 1500);
-  };
-
   return (
     <motion.div 
-      className="flex flex-col items-center gap-6"
+      className="flex items-start gap-4 lg:gap-8"
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ 
         opacity: isEntered ? 1 : 0, 
@@ -281,309 +260,12 @@ export function MigreiCircle() {
         ease: [0.25, 0.46, 0.45, 0.94] 
       }}
     >
-      {/* Container da Roda com profundidade */}
-      <div className="relative">
-        {/* Fundo com blur sutil */}
-        <div 
-          className="absolute inset-0 -m-8 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 blur-xl"
-          style={{ transform: 'scale(0.85)' }}
-        />
-        
-        {/* Sombra de elevação */}
-        <div 
-          className="absolute inset-0 rounded-full"
-          style={{ 
-            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.1)',
-            transform: 'translateY(8px) scale(0.95)',
-            borderRadius: '50%'
-          }}
-        />
-
-        <motion.svg 
-          width={size} 
-          height={size} 
-          viewBox={`0 0 ${size} ${size}`}
-          className="relative z-10"
-          style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.08))' }}
-        >
-          {/* Definições de gradientes e filtros */}
-          <defs>
-            {phases.map((phase) => (
-              <linearGradient 
-                key={`gradient-${phase.id}`}
-                id={`gradient-${phase.id}`}
-                x1="0%" y1="0%" x2="100%" y2="100%"
-              >
-                <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
-                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
-              </linearGradient>
-            ))}
-            
-            {/* Glow filter para fase atual */}
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-              <feMerge>
-                <feMergeNode in="coloredBlur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            
-            {/* Filtro de desaturação para fases concluídas */}
-            <filter id="completed">
-              <feColorMatrix type="saturate" values="0.3" />
-            </filter>
-          </defs>
-
-          {/* Segmentos */}
-          {phases.map((phase, index) => {
-            const { isCurrent, isCompleted, isLocked } = getPhaseVisualState(phase);
-            const isHovered = hoveredPhase === phase.id;
-            const isCelebrating = celebratingPhase === phase.id;
-            const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
-
-            // Calcular transformação
-            const segmentScale = isCurrent && !isHovered ? pulseScale : isHovered ? 1.04 : 1;
-            const segmentOpacity = isLocked ? 0.4 : isCompleted ? 0.7 : 1;
-
-            return (
-              <g key={phase.id}>
-                {/* Glow da fase atual */}
-                {isCurrent && (
-                  <motion.path
-                    d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
-                    fill={phase.glowColor}
-                    initial={{ opacity: 0 }}
-                    animate={{ 
-                      opacity: [0.3, 0.5, 0.3],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    style={{ transformOrigin: `${center}px ${center}px` }}
-                  />
-                )}
-
-                {/* Segmento principal */}
-                <motion.path
-                  d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
-                  fill={isCompleted ? phase.completedColor : `url(#gradient-${phase.id})`}
-                  className={cn(
-                    "transition-all duration-300",
-                    isLocked ? "cursor-not-allowed" : "cursor-pointer"
-                  )}
-                  style={{
-                    filter: isCurrent ? 'url(#glow)' : isCompleted ? 'url(#completed)' : 'none',
-                    transformOrigin: `${center}px ${center}px`,
-                  }}
-                  initial={{ scale: 1, opacity: segmentOpacity }}
-                  animate={{ 
-                    scale: segmentScale,
-                    opacity: segmentOpacity,
-                  }}
-                  whileHover={!isLocked ? { 
-                    scale: 1.04,
-                    transition: { duration: 0.2 }
-                  } : {}}
-                  onMouseEnter={() => !isLocked && setHoveredPhase(phase.id)}
-                  onMouseLeave={() => setHoveredPhase(null)}
-                  onClick={() => handlePhaseClick(phase)}
-                />
-
-                {/* Brilho interno para fase atual */}
-                {isCurrent && (
-                  <motion.path
-                    d={createRoundedSegmentPath(index, outerRadius - 20, innerRadius + 10)}
-                    fill="white"
-                    opacity={0.08}
-                    style={{ pointerEvents: 'none' }}
-                  />
-                )}
-
-                {/* Celebração */}
-                <AnimatePresence>
-                  {isCelebrating && (
-                    <motion.circle
-                      cx={iconPos.x}
-                      cy={iconPos.y}
-                      r={30}
-                      fill={phase.bgColor}
-                      initial={{ scale: 0, opacity: 0.8 }}
-                      animate={{ scale: 3, opacity: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
-                  )}
-                </AnimatePresence>
-
-                {/* Container do ícone */}
-                <foreignObject
-                  x={iconPos.x - 22}
-                  y={iconPos.y - 22}
-                  width={44}
-                  height={44}
-                  className="pointer-events-none"
-                >
-                  <motion.div 
-                    className={cn(
-                      "flex items-center justify-center h-full w-full rounded-full",
-                      isCompleted && "ring-2 ring-white/30"
-                    )}
-                    style={{ 
-                      backgroundColor: isCompleted ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.2)',
-                      backdropFilter: 'blur(8px)'
-                    }}
-                    animate={isCurrent ? {
-                      boxShadow: [
-                        '0 0 0 0 rgba(255,255,255,0)',
-                        '0 0 0 6px rgba(255,255,255,0.15)',
-                        '0 0 0 0 rgba(255,255,255,0)'
-                      ]
-                    } : {}}
-                    transition={{ duration: 2.5, repeat: Infinity }}
-                  >
-                    {isCompleted ? (
-                      <Check 
-                        className="h-5 w-5" 
-                        style={{ color: '#FFFFFF' }}
-                        strokeWidth={3}
-                      />
-                    ) : (
-                      <phase.icon 
-                        className={cn(
-                          "h-5 w-5 transition-transform duration-200",
-                          isHovered && "scale-110"
-                        )}
-                        style={{ 
-                          color: phase.textColor,
-                          opacity: isLocked ? 0.5 : 1
-                        }}
-                        strokeWidth={2.5}
-                      />
-                    )}
-                  </motion.div>
-                </foreignObject>
-              </g>
-            );
-          })}
-
-          {/* Centro - Círculo do usuário */}
-          <motion.circle
-            cx={center}
-            cy={center}
-            r={innerRadius - 10}
-            fill="hsl(var(--card))"
-            stroke="hsl(var(--border))"
-            strokeWidth="2"
-            style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))' }}
-          />
-
-          {/* Conteúdo central */}
-          <foreignObject
-            x={center - 26}
-            y={center - 26}
-            width={52}
-            height={52}
-          >
-            <div className="flex items-center justify-center h-full">
-              <motion.div 
-                className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
-                animate={{ 
-                  borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <User className="h-5 w-5 text-primary" />
-              </motion.div>
-            </div>
-          </foreignObject>
-        </motion.svg>
-
-        {/* Tooltip elegante no hover */}
-        <AnimatePresence>
-          {hoveredPhase && (
-            <motion.div 
-              className="absolute left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-5 py-3 shadow-xl z-20"
-              style={{ bottom: '-20px' }}
-              initial={{ opacity: 0, y: -8, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
-            >
-              <div className="flex items-center gap-2.5">
-                <motion.div 
-                  className="w-2.5 h-2.5 rounded-full"
-                  style={{ backgroundColor: phases.find(p => p.id === hoveredPhase)?.bgColor }}
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                />
-                <p className="font-semibold text-foreground text-sm">
-                  {phases.find(p => p.id === hoveredPhase)?.name}
-                </p>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                  {getPhaseVisualState(phases.find(p => p.id === hoveredPhase)!).isCompleted 
-                    ? 'Concluída' 
-                    : getPhaseVisualState(phases.find(p => p.id === hoveredPhase)!).isCurrent 
-                      ? 'Em andamento' 
-                      : 'Próxima'}
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1.5">
-                {phases.find(p => p.id === hoveredPhase)?.description}
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Microcopy Emocional */}
-      <motion.p 
-        className="text-sm text-muted-foreground font-medium tracking-wide"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-      >
-        {motivationalMessage}
-      </motion.p>
-
-      {/* Indicador da fase atual */}
+      {/* Phase Legend - Vertical on left */}
       <motion.div 
-        className="flex items-center justify-between w-full max-w-sm px-1"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.4 }}
-      >
-        <div className="flex items-center gap-2.5">
-          <motion.div 
-            className="w-2.5 h-2.5 rounded-full"
-            style={{ backgroundColor: phases.find(p => p.id === currentPhaseId)?.bgColor }}
-            animate={{ 
-              scale: [1, 1.3, 1],
-              opacity: [1, 0.7, 1]
-            }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <span className="text-xs text-muted-foreground">
-            Fase atual: <span className="font-semibold text-foreground capitalize">{phases.find(p => p.id === currentPhaseId)?.name}</span>
-          </span>
-        </div>
-        <Link 
-          to="/progresso"
-          className="flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors group"
-        >
-          Ver jornada
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </Link>
-      </motion.div>
-
-      {/* Legenda horizontal compacta */}
-      <motion.div 
-        className="grid grid-cols-6 gap-1.5 w-full max-w-sm"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.4 }}
+        className="hidden lg:flex flex-col gap-2 pt-8"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.4, duration: 0.4 }}
       >
         {phases.map((phase) => {
           const { isCurrent, isCompleted, isLocked } = getPhaseVisualState(phase);
@@ -594,18 +276,17 @@ export function MigreiCircle() {
               onClick={() => handlePhaseClick(phase)}
               disabled={isLocked}
               className={cn(
-                "flex flex-col items-center gap-1 px-1.5 py-2 rounded-lg text-center transition-all duration-200",
-                isCurrent && "bg-primary/5 ring-1 ring-primary/20",
-                isCompleted && "bg-muted/50",
-                !isLocked && !isCurrent && "hover:bg-muted/30",
+                "flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-all duration-200 min-w-[120px]",
+                isCurrent && "bg-card border border-primary/30 shadow-sm",
+                !isCurrent && !isLocked && "hover:bg-muted/50",
                 isLocked && "opacity-40 cursor-not-allowed"
               )}
-              whileHover={!isLocked ? { scale: 1.02 } : {}}
+              whileHover={!isLocked ? { x: 4 } : {}}
               whileTap={!isLocked ? { scale: 0.98 } : {}}
             >
               <div 
                 className={cn(
-                  "w-3 h-3 rounded-full transition-all duration-300",
+                  "w-3 h-3 rounded-full transition-all duration-300 flex-shrink-0",
                   isCompleted && "ring-1 ring-offset-1 ring-offset-background ring-muted-foreground/30"
                 )}
                 style={{ 
@@ -615,8 +296,8 @@ export function MigreiCircle() {
               />
               <span 
                 className={cn(
-                  "text-[10px] font-medium leading-tight",
-                  isCurrent ? "text-primary" : "text-muted-foreground"
+                  "text-sm font-medium leading-tight",
+                  isCurrent ? "text-foreground font-semibold" : "text-muted-foreground"
                 )}
               >
                 {phase.name}
@@ -625,6 +306,296 @@ export function MigreiCircle() {
           );
         })}
       </motion.div>
+
+      {/* Circle Container */}
+      <div className="flex flex-col items-center gap-4">
+        {/* Container da Roda com profundidade */}
+        <div className="relative">
+          {/* Fundo com blur sutil */}
+          <div 
+            className="absolute inset-0 -m-8 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 blur-xl"
+            style={{ transform: 'scale(0.85)' }}
+          />
+          
+          {/* Sombra de elevação */}
+          <div 
+            className="absolute inset-0 rounded-full"
+            style={{ 
+              boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.1)',
+              transform: 'translateY(8px) scale(0.95)',
+              borderRadius: '50%'
+            }}
+          />
+
+          <motion.svg 
+            width={size} 
+            height={size} 
+            viewBox={`0 0 ${size} ${size}`}
+            className="relative z-10"
+            style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.08))' }}
+          >
+            {/* Definições de gradientes e filtros */}
+            <defs>
+              {phases.map((phase) => (
+                <linearGradient 
+                  key={`gradient-${phase.id}`}
+                  id={`gradient-${phase.id}`}
+                  x1="0%" y1="0%" x2="100%" y2="100%"
+                >
+                  <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
+                  <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
+                </linearGradient>
+              ))}
+              
+              {/* Glow filter para fase atual */}
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              
+              {/* Filtro de desaturação para fases concluídas */}
+              <filter id="completed">
+                <feColorMatrix type="saturate" values="0.3" />
+              </filter>
+            </defs>
+
+            {/* Segmentos */}
+            {phases.map((phase, index) => {
+              const { isCurrent, isCompleted, isLocked } = getPhaseVisualState(phase);
+              const isHovered = hoveredPhase === phase.id;
+              const isCelebrating = celebratingPhase === phase.id;
+              const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
+
+              // Calcular transformação
+              const segmentScale = isCurrent && !isHovered ? pulseScale : isHovered ? 1.04 : 1;
+              const segmentOpacity = isLocked ? 0.4 : isCompleted ? 0.7 : 1;
+
+              return (
+                <g key={phase.id}>
+                  {/* Glow da fase atual */}
+                  {isCurrent && (
+                    <motion.path
+                      d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
+                      fill={phase.glowColor}
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: [0.3, 0.5, 0.3],
+                        scale: [1, 1.02, 1]
+                      }}
+                      transition={{ 
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      style={{ transformOrigin: `${center}px ${center}px` }}
+                    />
+                  )}
+
+                  {/* Segmento principal */}
+                  <motion.path
+                    d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
+                    fill={isCompleted ? phase.completedColor : `url(#gradient-${phase.id})`}
+                    className={cn(
+                      "transition-all duration-300",
+                      isLocked ? "cursor-not-allowed" : "cursor-pointer"
+                    )}
+                    style={{
+                      filter: isCurrent ? 'url(#glow)' : isCompleted ? 'url(#completed)' : 'none',
+                      transformOrigin: `${center}px ${center}px`,
+                    }}
+                    initial={{ scale: 1, opacity: segmentOpacity }}
+                    animate={{ 
+                      scale: segmentScale,
+                      opacity: segmentOpacity,
+                    }}
+                    whileHover={!isLocked ? { 
+                      scale: 1.04,
+                      transition: { duration: 0.2 }
+                    } : {}}
+                    onMouseEnter={() => !isLocked && setHoveredPhase(phase.id)}
+                    onMouseLeave={() => setHoveredPhase(null)}
+                    onClick={() => handlePhaseClick(phase)}
+                  />
+
+                  {/* Brilho interno para fase atual */}
+                  {isCurrent && (
+                    <motion.path
+                      d={createRoundedSegmentPath(index, outerRadius - 20, innerRadius + 10)}
+                      fill="white"
+                      opacity={0.08}
+                      style={{ pointerEvents: 'none' }}
+                    />
+                  )}
+
+                  {/* Celebração */}
+                  <AnimatePresence>
+                    {isCelebrating && (
+                      <motion.circle
+                        cx={iconPos.x}
+                        cy={iconPos.y}
+                        r={30}
+                        fill={phase.bgColor}
+                        initial={{ scale: 0, opacity: 0.8 }}
+                        animate={{ scale: 3, opacity: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Container do ícone */}
+                  <foreignObject
+                    x={iconPos.x - 24}
+                    y={iconPos.y - 24}
+                    width={48}
+                    height={48}
+                    className="pointer-events-none"
+                  >
+                    <motion.div 
+                      className={cn(
+                        "flex items-center justify-center h-full w-full rounded-full",
+                        isCompleted && "ring-2 ring-white/30"
+                      )}
+                      style={{ 
+                        backgroundColor: isCompleted ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.2)',
+                        backdropFilter: 'blur(8px)'
+                      }}
+                      animate={isCurrent ? {
+                        boxShadow: [
+                          '0 0 0 0 rgba(255,255,255,0)',
+                          '0 0 0 6px rgba(255,255,255,0.15)',
+                          '0 0 0 0 rgba(255,255,255,0)'
+                        ]
+                      } : {}}
+                      transition={{ duration: 2.5, repeat: Infinity }}
+                    >
+                      {isCompleted ? (
+                        <Check 
+                          className="h-5 w-5" 
+                          style={{ color: '#FFFFFF' }}
+                          strokeWidth={3}
+                        />
+                      ) : (
+                        <phase.icon 
+                          className={cn(
+                            "h-5 w-5 transition-transform duration-200",
+                            isHovered && "scale-110"
+                          )}
+                          style={{ 
+                            color: phase.textColor,
+                            opacity: isLocked ? 0.5 : 1
+                          }}
+                          strokeWidth={2.5}
+                        />
+                      )}
+                    </motion.div>
+                  </foreignObject>
+                </g>
+              );
+            })}
+
+            {/* Centro - Círculo do usuário */}
+            <motion.circle
+              cx={center}
+              cy={center}
+              r={innerRadius - 10}
+              fill="hsl(var(--card))"
+              stroke="hsl(var(--border))"
+              strokeWidth="2"
+              style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))' }}
+            />
+
+            {/* Conteúdo central */}
+            <foreignObject
+              x={center - 28}
+              y={center - 28}
+              width={56}
+              height={56}
+            >
+              <div className="flex items-center justify-center h-full">
+                <motion.div 
+                  className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
+                  animate={{ 
+                    borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <User className="h-6 w-6 text-primary" />
+                </motion.div>
+              </div>
+            </foreignObject>
+          </motion.svg>
+
+          {/* Tooltip elegante no hover */}
+          <AnimatePresence>
+            {hoveredPhase && (
+              <motion.div 
+                className="absolute left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-5 py-3 shadow-xl z-20"
+                style={{ bottom: '-20px' }}
+                initial={{ opacity: 0, y: -8, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <motion.div 
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ backgroundColor: phases.find(p => p.id === hoveredPhase)?.bgColor }}
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                  <p className="font-semibold text-foreground text-sm">
+                    {phases.find(p => p.id === hoveredPhase)?.name}
+                  </p>
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                    {getPhaseVisualState(phases.find(p => p.id === hoveredPhase)!).isCompleted 
+                      ? 'Concluída' 
+                      : getPhaseVisualState(phases.find(p => p.id === hoveredPhase)!).isCurrent 
+                        ? 'Em andamento' 
+                        : 'Próxima'}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  {phases.find(p => p.id === hoveredPhase)?.description}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Footer: Fase atual + Ver jornada */}
+        <motion.div 
+          className="flex items-center justify-center gap-6 w-full"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+        >
+          <div className="flex items-center gap-2.5">
+            <motion.div 
+              className="w-2.5 h-2.5 rounded-full"
+              style={{ backgroundColor: phases.find(p => p.id === currentPhaseId)?.bgColor }}
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [1, 0.7, 1]
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <span className="text-sm text-muted-foreground">
+              Fase atual: <span className="font-semibold text-foreground capitalize">{phases.find(p => p.id === currentPhaseId)?.name}</span>
+            </span>
+          </div>
+          <Link 
+            to="/progresso"
+            className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors group"
+          >
+            Ver jornada
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }

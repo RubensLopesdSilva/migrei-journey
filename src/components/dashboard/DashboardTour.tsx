@@ -1,6 +1,7 @@
 import { OnboardingTour, TourStep, useTour } from "@/components/ui/onboarding-tour";
 import { Button } from "@/components/ui/button";
-import { Rocket } from "lucide-react";
+import { HelpCircle, Rocket } from "lucide-react";
+import { TooltipEnhanced } from "@/components/ui/tooltip-enhanced";
 import { useProgress } from "@/hooks/useProgress";
 import { useNavigate } from "react-router-dom";
 
@@ -161,12 +162,27 @@ export function DashboardTour({ onTourComplete }: DashboardTourProps) {
   ];
 
   return (
-    <OnboardingTour
-      steps={dashboardTourSteps}
-      isOpen={isOpen}
-      onClose={handleClose}
-      onComplete={handleComplete}
-      storageKey="migrei-dashboard-tour-v3"
-    />
+    <>
+      {/* Tour trigger button - bottom left */}
+      <TooltipEnhanced content={hasCompleted ? "Rever tour" : "Iniciar tour"} side="right">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={startTour}
+          className="fixed bottom-4 left-4 z-40 h-10 w-10 rounded-full bg-card border shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+          aria-label="Ajuda"
+        >
+          <HelpCircle className="h-5 w-5 text-muted-foreground" />
+        </Button>
+      </TooltipEnhanced>
+
+      <OnboardingTour
+        steps={dashboardTourSteps}
+        isOpen={isOpen}
+        onClose={handleClose}
+        onComplete={handleComplete}
+        storageKey="migrei-dashboard-tour-v3"
+      />
+    </>
   );
 }

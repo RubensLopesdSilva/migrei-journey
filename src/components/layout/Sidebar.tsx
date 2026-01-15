@@ -44,10 +44,16 @@ export function Sidebar() {
   };
   const closeMobile = () => setMobileOpen(false);
   const SidebarContent = () => <>
-      {/* Logo */}
+      {/* Logo - stable, no re-render on navigation */}
       <div className="px-6 mb-8 flex justify-center">
         <Link to="/" className="flex items-center" onClick={closeMobile}>
-          <img alt="Migrei" className="h-16 w-auto" src="/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png" />
+          <img 
+            alt="Migrei" 
+            className="h-16 w-auto" 
+            src="/lovable-uploads/a35459ed-c19c-44e1-a8af-803cf4d49f8d.png"
+            loading="eager"
+            decoding="sync"
+          />
         </Link>
       </div>
 
@@ -86,7 +92,13 @@ export function Sidebar() {
       {/* Mobile Header */}
       <div className="fixed top-0 left-0 right-0 h-16 bg-sidebar border-b border-sidebar-border flex items-center justify-between px-4 md:hidden z-50">
         <Link to="/" className="flex items-center">
-          <img src={logoMigrei} alt="Migrei" className="h-10 w-auto" />
+          <img 
+            src={logoMigrei} 
+            alt="Migrei" 
+            className="h-10 w-auto"
+            loading="eager"
+            decoding="sync"
+          />
         </Link>
         <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden" aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={mobileOpen}>
           {mobileOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}

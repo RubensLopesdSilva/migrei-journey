@@ -5,10 +5,10 @@ import {
   Target, 
   Settings, 
   Rocket, 
-  Star
+  Star,
+  User
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import logoMigrei from "@/assets/logo-migrei.png";
 
 interface Phase {
   id: string;
@@ -267,13 +267,21 @@ export function AuthMigreiWheel() {
           />
 
           <foreignObject
-            x={center - 22}
-            y={center - 22}
-            width={44}
-            height={44}
+            x={center - 20}
+            y={center - 20}
+            width={40}
+            height={40}
           >
             <div className="flex items-center justify-center h-full">
-              <img src={logoMigrei} alt="Migrei" className="h-10 w-auto" />
+              <motion.div 
+                className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
+                animate={{ 
+                  borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <User className="h-5 w-5 text-primary" />
+              </motion.div>
             </div>
           </foreignObject>
         </motion.svg>

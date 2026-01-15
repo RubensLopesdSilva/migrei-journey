@@ -431,8 +431,7 @@ export default function Auth() {
         <div className="max-w-md flex flex-col items-center">
           <AuthMigreiWheel />
           <p className="text-muted-foreground text-center mt-6 max-w-sm">
-            A Metodologia Migrei vai te guiar através de um processo estruturado 
-            de autoconhecimento, planejamento e ação para alcançar sua nova carreira.
+            6 fases para transformar sua carreira com clareza e propósito.
           </p>
         </div>
       </div>

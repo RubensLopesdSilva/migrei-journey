@@ -10,11 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
-import { User, Lock, Camera, Save, Loader2, CreditCard } from "lucide-react";
+import { User, Lock, Camera, Save, Loader2, CreditCard, Bot } from "lucide-react";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
+import { AgentSettingsCard } from "@/components/settings/AgentSettingsCard";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
@@ -285,24 +286,33 @@ export default function Settings() {
             </h1>
 
             <AnimatedTabs defaultValue="subscription" className="space-y-6">
-              <AnimatedTabsList className="grid w-full grid-cols-3">
+              <AnimatedTabsList className="grid w-full grid-cols-4">
                 <AnimatedTabsTrigger value="subscription" className="gap-2">
                   <CreditCard className="h-4 w-4" aria-hidden="true" />
-                  Assinatura
+                  <span className="hidden sm:inline">Assinatura</span>
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="agent" className="gap-2">
+                  <Bot className="h-4 w-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Agente IA</span>
                 </AnimatedTabsTrigger>
                 <AnimatedTabsTrigger value="profile" className="gap-2">
                   <User className="h-4 w-4" aria-hidden="true" />
-                  Perfil
+                  <span className="hidden sm:inline">Perfil</span>
                 </AnimatedTabsTrigger>
                 <AnimatedTabsTrigger value="security" className="gap-2">
                   <Lock className="h-4 w-4" aria-hidden="true" />
-                  Segurança
+                  <span className="hidden sm:inline">Segurança</span>
                 </AnimatedTabsTrigger>
               </AnimatedTabsList>
 
               {/* Subscription Tab */}
               <AnimatedTabsContent value="subscription">
                 <SubscriptionCard />
+              </AnimatedTabsContent>
+
+              {/* Agent Tab */}
+              <AnimatedTabsContent value="agent">
+                <AgentSettingsCard />
               </AnimatedTabsContent>
 
               {/* Profile Tab */}

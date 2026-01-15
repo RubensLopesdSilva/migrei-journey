@@ -4,6 +4,7 @@ import { MissionCard } from "@/components/dashboard/MissionCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
+import { PhaseWelcomeModal } from "@/components/dashboard/PhaseWelcomeModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { PageContent } from "@/components/ui/page-transition";
@@ -98,6 +99,9 @@ const Index = () => {
 
         {/* Onboarding Tour */}
         <DashboardTour />
+        
+        {/* Phase Welcome Modal */}
+        <PhaseWelcomeModal />
       </div>
     </div>
   );

@@ -105,8 +105,8 @@ export default function Mentoring() {
 
   return (
     <PageLayout>
-      <PageContent className="p-4 md:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-8">
+      <PageContent>
+        <div className="space-y-6">
             {/* Breadcrumb */}
             <PageBreadcrumb
               items={[
@@ -409,7 +409,7 @@ export default function Mentoring() {
                 </CardContent>
               </Card>
             )}
-          </div>
+        </div>
 
         <ScheduleModal
           mentor={selectedMentor}

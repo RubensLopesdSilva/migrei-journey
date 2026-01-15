@@ -419,6 +419,41 @@ export function useMentor() {
     }
   }, [user, checkMentorStatus, fetchSessions, fetchAvailability]);
 
+  // Subscribe to realtime updates for mentoring sessions
+  useEffect(() => {
+    if (!mentorProfile) return;
+
+    const channel = supabase
+      .channel('mentor-sessions-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'mentoring_sessions',
+          filter: `mentor_id=eq.${mentorProfile.id}`,
+        },
+        (payload) => {
+          console.log('Session update received:', payload);
+          // Refetch sessions when any change occurs
+          fetchSessions(mentorProfile.id);
+          
+          // Show toast for new bookings
+          if (payload.eventType === 'INSERT') {
+            toast({
+              title: "Novo agendamento!",
+              description: "Um usuário agendou uma mentoria com você.",
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [mentorProfile, fetchSessions, toast]);
+
   return {
     // State
     isMentor,

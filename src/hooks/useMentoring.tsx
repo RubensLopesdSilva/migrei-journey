@@ -85,6 +85,7 @@ export function useMentoring() {
 
     if (mentorsError) {
       console.error("Error fetching mentors:", mentorsError);
+      setMentors([]);
       return;
     }
 
@@ -93,7 +94,7 @@ export function useMentoring() {
       return;
     }
 
-    // Fetch availability for all mentors
+    // Fetch availability for all mentors - only get those with is_available = true
     const { data: availabilityData, error: availabilityError } = await supabase
       .from("mentor_availability")
       .select("mentor_id")
@@ -105,16 +106,17 @@ export function useMentoring() {
       return;
     }
 
-    // Get unique mentor IDs that have availability
-    const mentorIdsWithAvailability = new Set(
+    // Get unique mentor IDs that have at least one available slot
+    const mentorIdsWithAvailability = new Set<string>(
       (availabilityData || []).map((a) => a.mentor_id)
     );
 
-    // Filter mentors to only include those with availability
+    // Filter mentors to only include those with availability configured
     const mentorsWithAvailability = mentorsData.filter((mentor) =>
       mentorIdsWithAvailability.has(mentor.id)
     );
 
+    console.log("Mentors with availability:", mentorsWithAvailability.length, "of", mentorsData.length, "total");
     setMentors(mentorsWithAvailability);
   }, []);
 

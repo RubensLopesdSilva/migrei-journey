@@ -13,12 +13,12 @@ interface PhaseMotivation {
 }
 
 const phaseMotivations: PhaseMotivation[] = [
-  { phase: "despertar", greeting: "O primeiro passo já foi dado!", color: "hsl(var(--phase-despertar))" },
-  { phase: "descobrir", greeting: "Hora de se conhecer melhor!", color: "hsl(var(--phase-descobrir))" },
-  { phase: "decidir", greeting: "Clareza nas escolhas!", color: "hsl(var(--phase-decidir))" },
-  { phase: "desenvolver", greeting: "Construindo seu futuro!", color: "hsl(var(--phase-desenvolver))" },
-  { phase: "deslanchar", greeting: "É hora de brilhar!", color: "hsl(var(--phase-deslanchar))" },
-  { phase: "desfrutar", greeting: "Você conseguiu!", color: "hsl(var(--phase-desfrutar))" },
+  { phase: "despertar", greeting: "Sua transição começa aqui.", color: "hsl(var(--phase-despertar))" },
+  { phase: "descobrir", greeting: "Clareza vem antes da decisão.", color: "hsl(var(--phase-descobrir))" },
+  { phase: "decidir", greeting: "Escolha com consciência, não pressão.", color: "hsl(var(--phase-decidir))" },
+  { phase: "desenvolver", greeting: "Construindo competências reais.", color: "hsl(var(--phase-desenvolver))" },
+  { phase: "deslanchar", greeting: "Execute com consistência.", color: "hsl(var(--phase-deslanchar))" },
+  { phase: "desfrutar", greeting: "Você avançou com consciência.", color: "hsl(var(--phase-desfrutar))" },
 ];
 
 const phaseNumberToSlug: Record<number, string> = {

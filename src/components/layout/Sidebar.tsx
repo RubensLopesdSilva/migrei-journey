@@ -16,11 +16,11 @@ const mainNavItems: NavItem[] = [{
   href: "/"
 }, {
   icon: Layers,
-  label: "Fase",
+  label: "Minha fase atual",
   href: "/fase"
 }, {
   icon: TrendingUp,
-  label: "Progresso",
+  label: "Meu progresso",
   href: "/progresso"
 }, {
   icon: Users,
@@ -95,7 +95,7 @@ export function Sidebar() {
           data-tour="sidebar-settings"
         >
           <Settings className="h-5 w-5" />
-          <span className="font-medium">Configurações</span>
+          <span className="font-medium">Conta e assinatura</span>
         </Link>
         <button onClick={handleSignOut} className="sidebar-item w-full text-left hover:text-destructive">
           <LogOut className="h-5 w-5" />

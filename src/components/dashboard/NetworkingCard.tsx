@@ -115,19 +115,19 @@ export function NetworkingCard() {
           colors: ['#10B981', '#34D399', '#6EE7B7']
         });
         toast({
-          title: "🎉 Meta concluída!",
-          description: `Você completou ${selectedAction.title} esta semana! +${result.xpEarned} XP`
+          title: "Networking registrado 🎉",
+          description: `Cada conversa amplia sua visão. +${result.xpEarned} XP`
         });
       } else {
         toast({
-          title: "✅ Ação registrada!",
-          description: `Ótimo networking! +${result.xpEarned} XP`
+          title: "Networking registrado",
+          description: `Progresso salvo. +${result.xpEarned} XP`
         });
       }
     } else {
       toast({
-        title: "Erro",
-        description: result.error || "Não foi possível registrar a ação.",
+        title: "Algo não saiu como esperado",
+        description: result.error || "Tente novamente em instantes.",
         variant: "destructive"
       });
     }
@@ -165,8 +165,8 @@ export function NetworkingCard() {
               <Users className="h-4 w-4 text-phase-deslanchar" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="font-semibold text-sm text-foreground">
-                Networking semanal
+            <h3 className="font-semibold text-sm text-foreground">
+                Networking estratégico
               </h3>
               <p className="text-[10px] text-muted-foreground">
                 {weeklyProgress.completed}/{weeklyProgress.total} ações • +{weeklyProgress.earnedXP}/{weeklyProgress.potentialXP} XP
@@ -288,7 +288,7 @@ export function NetworkingCard() {
               )}
             </DialogTitle>
             <DialogDescription>
-              Registre sua ação de networking com evidências para validar e ganhar XP.
+              Networking não é pedir emprego. É aprender com quem já vive a realidade que você busca.
             </DialogDescription>
           </DialogHeader>
 
@@ -341,10 +341,10 @@ export function NetworkingCard() {
               {isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Salvando...
+                  Registrando...
                 </>
               ) : (
-                "Concluir ação"
+                "Registrar progresso"
               )}
             </Button>
           </DialogFooter>

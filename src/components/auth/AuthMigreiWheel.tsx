@@ -28,7 +28,7 @@ const phases: Phase[] = [
     bgColor: "#F59E0B",
     glowColor: "rgba(245, 158, 11, 0.4)",
     textColor: "#1F2937",
-    description: "Percepção da necessidade de mudança"
+    description: "Perceba a necessidade de mudança e dê o primeiro passo."
   },
   { 
     id: "descobrir", 
@@ -37,7 +37,7 @@ const phases: Phase[] = [
     bgColor: "#10B981",
     glowColor: "rgba(16, 185, 129, 0.4)",
     textColor: "#FFFFFF",
-    description: "Autoconhecimento e clareza de propósito"
+    description: "Entenda quem você é, seus talentos e o que faz sentido agora."
   },
   { 
     id: "decidir", 
@@ -46,7 +46,7 @@ const phases: Phase[] = [
     bgColor: "#3B82F6",
     glowColor: "rgba(59, 130, 246, 0.4)",
     textColor: "#FFFFFF",
-    description: "Definição estratégica da rota e metas"
+    description: "Escolha um caminho com base em clareza, não em pressão."
   },
   { 
     id: "desenvolver", 
@@ -55,7 +55,7 @@ const phases: Phase[] = [
     bgColor: "#8B5CF6",
     glowColor: "rgba(139, 92, 246, 0.4)",
     textColor: "#FFFFFF",
-    description: "Construção de competências"
+    description: "Construa as competências necessárias para sua nova carreira."
   },
   { 
     id: "deslanchar", 
@@ -64,7 +64,7 @@ const phases: Phase[] = [
     bgColor: "#EC4899",
     glowColor: "rgba(236, 72, 153, 0.4)",
     textColor: "#FFFFFF",
-    description: "Execução prática e networking"
+    description: "Execute com consistência e acompanhe sua evolução."
   },
   { 
     id: "desfrutar", 
@@ -73,7 +73,7 @@ const phases: Phase[] = [
     bgColor: "#F97316",
     glowColor: "rgba(249, 115, 22, 0.4)",
     textColor: "#FFFFFF",
-    description: "Consolidação e celebração"
+    description: "Celebre sua conquista e consolide sua nova identidade."
   },
 ];
 

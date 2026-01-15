@@ -4,25 +4,27 @@ import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Import agent avatar images
-import agentsSet1 from "@/assets/agents/agents-set-1.png";
-import agentsSet2 from "@/assets/agents/agents-set-2.png";
-import agentsSet3 from "@/assets/agents/agents-set-3.png";
-import agentsSet4 from "@/assets/agents/agents-set-4.png";
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import emaAvatar from "@/assets/agents/ema.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
+
+// Agent avatar images mapping
+const agentAvatars: Record<string, string> = {
+  'Lumi': lumiAvatar,
+  'Noah': noahAvatar,
+  'Ema': emaAvatar,
+  'Leo': leoAvatar,
+  'Maya': mayaAvatar,
+  'Kai': kaiAvatar,
+};
 
 interface AgentCenterAvatarProps {
   size?: number;
   showTooltip?: boolean;
 }
-
-// Agent avatar images mapping
-const agentAvatars: Record<string, string> = {
-  'Lumi': agentsSet1,
-  'Noah': agentsSet2,
-  'Ema': agentsSet3,
-  'Leo': agentsSet4,
-  'Maya': agentsSet1,
-  'Kai': agentsSet2,
-};
 
 export function AgentCenterAvatar({ size = 56, showTooltip = true }: AgentCenterAvatarProps) {
   const { currentAgent, getAgentMessage, loading, hasSelectedAgent } = useAgent();
@@ -43,7 +45,7 @@ export function AgentCenterAvatar({ size = 56, showTooltip = true }: AgentCenter
     );
   }
 
-  const avatarUrl = agentAvatars[currentAgent?.name || ''] || agentsSet1;
+  const avatarUrl = agentAvatars[currentAgent?.name || ''] || lumiAvatar;
 
   return (
     <div className="relative group">

@@ -13,11 +13,14 @@ import {
   UserCog,
   ChevronDown,
   ChevronRight,
+  CalendarDays,
+  LayoutDashboard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useMentorStatus } from "@/hooks/useMentorStatus";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -75,18 +78,36 @@ const adminNavItems: NavItem[] = [
   }
 ];
 
+const mentorNavItems: NavItem[] = [
+  {
+    icon: LayoutDashboard,
+    label: "Painel do Mentor",
+    href: "/mentor"
+  },
+  {
+    icon: CalendarDays,
+    label: "Minhas Sessões",
+    href: "/mentor/sessoes"
+  }
+];
+
 export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut } = useAuth();
   const { isAdmin } = useAdmin();
+  const { isMentor } = useMentorStatus();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const [mentorMenuOpen, setMentorMenuOpen] = useState(false);
 
   // Open admin menu if we're on an admin route
   useEffect(() => {
     if (location.pathname.startsWith("/admin")) {
       setAdminMenuOpen(true);
+    }
+    if (location.pathname.startsWith("/mentor")) {
+      setMentorMenuOpen(true);
     }
   }, [location.pathname]);
 
@@ -168,6 +189,54 @@ export function Sidebar() {
               <CollapsibleContent>
                 <ul className="mt-1 ml-4 pl-4 border-l border-sidebar-border space-y-1">
                   {adminNavItems.map(item => (
+                    <li key={item.label}>
+                      <Link 
+                        to={item.href} 
+                        onClick={closeMobile} 
+                        className={cn(
+                          "sidebar-item text-sm py-2",
+                          location.pathname === item.href && "active"
+                        )}
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        )}
+
+        {/* Mentor Menu - Only visible for mentors */}
+        {isMentor && (
+          <div className="mt-6">
+            <Collapsible open={mentorMenuOpen} onOpenChange={setMentorMenuOpen}>
+              <CollapsibleTrigger className="w-full">
+                <div className={cn(
+                  "sidebar-item justify-between group",
+                  location.pathname.startsWith("/mentor") && "bg-primary/10"
+                )}>
+                  <div className="flex items-center gap-3">
+                    <GraduationCap className="h-5 w-5 text-emerald-600" />
+                    <span className="font-medium">Mentor</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-xs bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                      Mentor
+                    </Badge>
+                    {mentorMenuOpen ? (
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </div>
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <ul className="mt-1 ml-4 pl-4 border-l border-sidebar-border space-y-1">
+                  {mentorNavItems.map(item => (
                     <li key={item.label}>
                       <Link 
                         to={item.href} 

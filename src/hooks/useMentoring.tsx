@@ -77,17 +77,45 @@ export function useMentoring() {
   const bookingHook = useMentoringBooking(sessionLimit, monthlySessionCount, refetchSessions);
 
   const fetchMentors = useCallback(async () => {
-    const { data, error } = await supabase
+    // Fetch mentors with their availability - only show mentors who have availability slots configured
+    const { data: mentorsData, error: mentorsError } = await supabase
       .from("mentors")
       .select("*")
       .eq("is_active", true);
 
-    if (error) {
-      console.error("Error fetching mentors:", error);
+    if (mentorsError) {
+      console.error("Error fetching mentors:", mentorsError);
       return;
     }
 
-    setMentors(data || []);
+    if (!mentorsData || mentorsData.length === 0) {
+      setMentors([]);
+      return;
+    }
+
+    // Fetch availability for all mentors
+    const { data: availabilityData, error: availabilityError } = await supabase
+      .from("mentor_availability")
+      .select("mentor_id")
+      .eq("is_available", true);
+
+    if (availabilityError) {
+      console.error("Error fetching availability:", availabilityError);
+      setMentors([]);
+      return;
+    }
+
+    // Get unique mentor IDs that have availability
+    const mentorIdsWithAvailability = new Set(
+      (availabilityData || []).map((a) => a.mentor_id)
+    );
+
+    // Filter mentors to only include those with availability
+    const mentorsWithAvailability = mentorsData.filter((mentor) =>
+      mentorIdsWithAvailability.has(mentor.id)
+    );
+
+    setMentors(mentorsWithAvailability);
   }, []);
 
   const fetchMySessions = useCallback(async () => {

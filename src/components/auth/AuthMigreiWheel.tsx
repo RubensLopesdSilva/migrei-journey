@@ -81,7 +81,7 @@ export function AuthMigreiWheel() {
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  const size = 320;
+  const size = 380;
   const center = size / 2;
   const outerRadius = 130;
   const innerRadius = 50;
@@ -162,7 +162,7 @@ export function AuthMigreiWheel() {
   const activePhaseData = phases.find(p => p.id === activePhase);
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-4">
       {/* Wheel */}
       <div className="relative">
         <motion.svg 
@@ -314,13 +314,13 @@ export function AuthMigreiWheel() {
         ) : (
           <motion.div 
             key="default"
-            className="text-center max-w-xs"
+            className="text-center max-w-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <p className="text-sm text-muted-foreground">
-              Clique em uma fase do <span className="font-semibold text-foreground">Ciclo Migrei</span> para saber mais sobre sua jornada de transição
+            <p className="text-muted-foreground">
+              Clique em uma fase do <span className="font-semibold text-foreground">Ciclo Migrei</span> para saber mais sobre sua jornada de transição.
             </p>
           </motion.div>
         )}

@@ -428,12 +428,7 @@ export default function Auth() {
 
       {/* Right Side - Roda Migrei */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary/10 to-accent/10 items-center justify-center p-12">
-        <div className="max-w-md flex flex-col items-center">
-          <AuthMigreiWheel />
-          <p className="text-muted-foreground text-center mt-6 max-w-sm">
-            Seis fases para transformar sua carreira com clareza e propósito.
-          </p>
-        </div>
+        <AuthMigreiWheel />
       </div>
     </div>
   );

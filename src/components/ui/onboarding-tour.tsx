@@ -4,6 +4,23 @@ import { X, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+// Agent avatar imports
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import emaAvatar from "@/assets/agents/ema.png";
+
+const agentAvatars: Record<string, string> = {
+  "Lumi": lumiAvatar,
+  "Noah": noahAvatar,
+  "Maya": mayaAvatar,
+  "Kai": kaiAvatar,
+  "Leo": leoAvatar,
+  "Ema": emaAvatar,
+};
+
 export interface TourStep {
   id: string;
   title: string;
@@ -13,12 +30,18 @@ export interface TourStep {
   action?: ReactNode;
 }
 
+export interface AgentInfo {
+  name: string;
+  title?: string;
+}
+
 interface OnboardingTourProps {
   steps: TourStep[];
   isOpen: boolean;
   onClose: () => void;
   onComplete: () => void;
   storageKey?: string;
+  agent?: AgentInfo | null;
 }
 
 export function OnboardingTour({
@@ -27,6 +50,7 @@ export function OnboardingTour({
   onClose,
   onComplete,
   storageKey = "migrei-tour-completed",
+  agent,
 }: OnboardingTourProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -182,6 +206,23 @@ export function OnboardingTour({
           >
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
+
+          {/* Agent header */}
+          {agent && (
+            <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
+              <img 
+                src={agentAvatars[agent.name] || lumiAvatar} 
+                alt={agent.name}
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20"
+              />
+              <div>
+                <p className="text-sm font-semibold text-foreground">{agent.name}</p>
+                {agent.title && (
+                  <p className="text-xs text-muted-foreground">{agent.title}</p>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Progress dots */}
           <div className="flex items-center gap-1.5 mb-4">

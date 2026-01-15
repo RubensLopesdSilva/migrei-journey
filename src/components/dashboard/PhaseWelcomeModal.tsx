@@ -1,9 +1,27 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, ArrowRight, Lightbulb, Search, Target, Settings, Rocket, Star } from "lucide-react";
+import { X, ArrowRight, Lightbulb, Search, Target, Settings, Rocket, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useProgress } from "@/hooks/useProgress";
+import { useAgent } from "@/hooks/useAgent";
 import { Link } from "react-router-dom";
+
+// Agent avatar imports
+import lumiAvatar from "@/assets/agents/lumi.png";
+import noahAvatar from "@/assets/agents/noah.png";
+import mayaAvatar from "@/assets/agents/maya.png";
+import kaiAvatar from "@/assets/agents/kai.png";
+import leoAvatar from "@/assets/agents/leo.png";
+import emaAvatar from "@/assets/agents/ema.png";
+
+const agentAvatars: Record<string, string> = {
+  "Lumi": lumiAvatar,
+  "Noah": noahAvatar,
+  "Maya": mayaAvatar,
+  "Kai": kaiAvatar,
+  "Leo": leoAvatar,
+  "Ema": emaAvatar,
+};
 
 const phaseIcons: Record<string, React.ElementType> = {
   despertar: Lightbulb,
@@ -72,6 +90,7 @@ interface PhaseWelcomeModalProps {
 export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { userProgress, phases } = useProgress();
+  const { currentAgent } = useAgent();
 
   const currentPhaseData = phases?.find(p => p.id === userProgress?.current_phase_id);
   const phaseSlug = currentPhaseData?.phase_number 
@@ -82,6 +101,9 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
   const phaseColor = phaseColors[phaseSlug] || "#F59E0B";
   const phaseMessage = phaseMessages[phaseSlug] || phaseMessages.despertar;
   const phaseNumber = currentPhaseData?.phase_number || 1;
+  
+  // Agent avatar
+  const agentAvatar = currentAgent ? (agentAvatars[currentAgent.name] || lumiAvatar) : null;
 
   // Open when forceOpen changes to true
   useEffect(() => {
@@ -120,9 +142,9 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
             >
               <div className="bg-card rounded-3xl border border-border shadow-2xl overflow-hidden">
-              {/* Header with phase color accent */}
+              {/* Header with agent avatar */}
               <div 
-                className="relative h-32 flex items-center justify-center"
+                className="relative h-36 flex items-center justify-center"
                 style={{ 
                   background: `linear-gradient(135deg, ${phaseColor}20 0%, ${phaseColor}05 100%)`,
                   borderBottom: `2px solid ${phaseColor}30`
@@ -146,18 +168,36 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
                   <X className="h-5 w-5 text-foreground/70" />
                 </button>
 
-                {/* Phase icon */}
+                {/* Agent avatar or Phase icon */}
                 <motion.div
-                  className="relative z-10 h-20 w-20 rounded-2xl flex items-center justify-center"
-                  style={{ 
-                    backgroundColor: phaseColor,
-                    boxShadow: `0 10px 40px -10px ${phaseColor}80`
-                  }}
+                  className="relative z-10 flex flex-col items-center gap-2"
                   initial={{ scale: 0, rotate: -20 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
                 >
-                  <PhaseIcon className="h-10 w-10 text-white" strokeWidth={2} />
+                  {agentAvatar ? (
+                    <>
+                      <img 
+                        src={agentAvatar} 
+                        alt={currentAgent?.name}
+                        className="h-16 w-16 rounded-full object-cover ring-4 ring-white/20"
+                        style={{ boxShadow: `0 10px 40px -10px ${phaseColor}80` }}
+                      />
+                      <span className="text-xs font-medium text-foreground/80">
+                        {currentAgent?.name} • Seu Coach
+                      </span>
+                    </>
+                  ) : (
+                    <div
+                      className="h-20 w-20 rounded-2xl flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: phaseColor,
+                        boxShadow: `0 10px 40px -10px ${phaseColor}80`
+                      }}
+                    >
+                      <PhaseIcon className="h-10 w-10 text-white" strokeWidth={2} />
+                    </div>
+                  )}
                 </motion.div>
               </div>
 
@@ -169,7 +209,7 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
                   transition={{ delay: 0.3 }}
                 >
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Sparkles className="h-4 w-4" style={{ color: phaseColor }} />
+                    <PhaseIcon className="h-4 w-4" style={{ color: phaseColor }} />
                     <span 
                       className="text-xs font-semibold uppercase tracking-wide"
                       style={{ color: phaseColor }}

@@ -4,7 +4,7 @@ import { ConsciousnessOnboarding } from '@/components/awakening/ConsciousnessOnb
 import { ReadinessTest } from '@/components/awakening/ReadinessTest';
 import { PainMapBuilder } from '@/components/awakening/PainMapBuilder';
 import { CommitmentDeclaration } from '@/components/awakening/CommitmentDeclaration';
-import { AvatarCoach } from '@/components/awakening/AvatarCoach';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { useAwakening } from '@/hooks/useAwakening';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,6 @@ const steps: { key: Step; label: string; icon: typeof Brain }[] = [
 export default function Fase1Despertar() {
   const { getPhaseProgress, commitment } = useAwakening();
   const [activeStep, setActiveStep] = useState<Step>('consciousness');
-  const [showCoach, setShowCoach] = useState(true);
 
   const progress = getPhaseProgress();
   const isPhaseComplete = commitment !== null;
@@ -67,55 +66,49 @@ export default function Fase1Despertar() {
         {/* Progress Bar */}
         <Progress value={progress.percentage} className="h-2" />
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-8">
-            <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-              <AnimatedTabsList className="grid grid-cols-4 mb-6">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
-                  const isCompleted = index < progress.completed;
-                  return (
-                    <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
-                      <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
-                      {step.label}
-                      {isCompleted && (
-                        <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                          <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                        </div>
-                      )}
-                    </AnimatedTabsTrigger>
-                  );
-                })}
-              </AnimatedTabsList>
+        {/* Main Content - Full Width */}
+        <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
+          <AnimatedTabsList className="grid grid-cols-4 mb-6">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isCompleted = index < progress.completed;
+              return (
+                <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
+                  <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
+                  {step.label}
+                  {isCompleted && (
+                    <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
+                    </div>
+                  )}
+                </AnimatedTabsTrigger>
+              );
+            })}
+          </AnimatedTabsList>
 
-              <AnimatedTabsContent value="consciousness">
-                <ConsciousnessOnboarding onComplete={() => setActiveStep('readiness')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="consciousness">
+            <ConsciousnessOnboarding onComplete={() => setActiveStep('readiness')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="readiness">
-                <ReadinessTest onComplete={() => setActiveStep('painmap')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="readiness">
+            <ReadinessTest onComplete={() => setActiveStep('painmap')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="painmap">
-                <PainMapBuilder onComplete={() => setActiveStep('commitment')} />
-              </AnimatedTabsContent>
+          <AnimatedTabsContent value="painmap">
+            <PainMapBuilder onComplete={() => setActiveStep('commitment')} />
+          </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="commitment">
-                <CommitmentDeclaration onComplete={() => window.location.href = '/progresso'} />
-              </AnimatedTabsContent>
-            </AnimatedTabs>
-          </div>
+          <AnimatedTabsContent value="commitment">
+            <CommitmentDeclaration onComplete={() => window.location.href = '/progresso'} />
+          </AnimatedTabsContent>
+        </AnimatedTabs>
 
-          {/* Coach Sidebar */}
-          <div className="lg:col-span-4 order-first lg:order-last">
-            <AvatarCoach 
-              phase="despertar" 
-              context={`Usuário está na etapa: ${activeStep}`}
-            />
-          </div>
-        </div>
+        {/* Floating Coach Button */}
+        <FloatingCoachButton 
+          phase="despertar" 
+          context={`Usuário está na etapa: ${activeStep}`}
+          greeting="Olá! 👋 Estou aqui para te ajudar na fase de Despertar. Esta é a fase mais importante - você está tomando consciência da necessidade de mudança. Como posso te apoiar?"
+        />
       </PageContent>
     </PageLayout>
   );

@@ -12,7 +12,7 @@ import { LinkedInChecklist } from '@/components/develop/LinkedInChecklist';
 import { PortfolioTemplate } from '@/components/develop/PortfolioTemplate';
 import { DevelopmentTrack } from '@/components/develop/DevelopmentTrack';
 import { DevelopCoachFeedback } from '@/components/develop/DevelopCoachFeedback';
-import { AvatarCoach } from '@/components/awakening/AvatarCoach';
+import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
@@ -130,87 +130,82 @@ export default function Fase4Desenvolver() {
             </Card>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Main content */}
-            <div className="lg:col-span-2">
-              <AnimatedTabs value={activeTab} onValueChange={setActiveTab}>
-                <AnimatedTabsList className="grid w-full grid-cols-6 mb-6">
-                  {tabs.map((tab) => (
-                    <AnimatedTabsTrigger 
-                      key={tab.id} 
-                      value={tab.id}
-                      className="relative"
-                    >
-                      <tab.icon className="w-4 h-4" aria-hidden="true" />
-                      <span className="hidden sm:inline ml-2">{tab.label}</span>
-                      {tab.completed && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" aria-label="Completo" />
-                      )}
-                    </AnimatedTabsTrigger>
-                  ))}
-                </AnimatedTabsList>
+          {/* Main content - Full Width */}
+          <AnimatedTabs value={activeTab} onValueChange={setActiveTab}>
+            <AnimatedTabsList className="grid w-full grid-cols-6 mb-6">
+              {tabs.map((tab) => (
+                <AnimatedTabsTrigger 
+                  key={tab.id} 
+                  value={tab.id}
+                  className="relative"
+                >
+                  <tab.icon className="w-4 h-4" aria-hidden="true" />
+                  <span className="hidden sm:inline ml-2">{tab.label}</span>
+                  {tab.completed && (
+                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full" aria-label="Completo" />
+                  )}
+                </AnimatedTabsTrigger>
+              ))}
+            </AnimatedTabsList>
 
-                <AnimatedTabsContent value="resume">
-                  <ResumeBuilder
-                    resumes={resumes}
-                    onCreateResume={createResume}
-                    onUpdateResume={updateResume}
-                    onDeleteResume={deleteResume}
-                  />
-                </AnimatedTabsContent>
-
-                <AnimatedTabsContent value="pitch">
-                  <PitchGenerator
-                    pitch={pitch}
-                    onSave={savePitch}
-                    onRecordPractice={recordPitchPractice}
-                  />
-                </AnimatedTabsContent>
-
-                <AnimatedTabsContent value="linkedin">
-                  <LinkedInChecklist
-                    checklist={linkedInChecklist}
-                    onSave={saveLinkedInChecklist}
-                  />
-                </AnimatedTabsContent>
-
-                <AnimatedTabsContent value="portfolio">
-                  <PortfolioTemplate
-                    projects={portfolioProjects}
-                    onAddProject={addPortfolioProject}
-                    onUpdateProject={updatePortfolioProject}
-                    onDeleteProject={deletePortfolioProject}
-                  />
-                </AnimatedTabsContent>
-
-                <AnimatedTabsContent value="track">
-                  <DevelopmentTrack
-                    items={developmentTrack}
-                    onAddItem={addTrackItem}
-                    onUpdateItem={updateTrackItem}
-                    onDeleteItem={deleteTrackItem}
-                  />
-                </AnimatedTabsContent>
-
-                <AnimatedTabsContent value="feedback">
-                  <DevelopCoachFeedback
-                    feedback={coachFeedback}
-                    phaseProgress={phaseProgress}
-                  />
-                </AnimatedTabsContent>
-              </AnimatedTabs>
-            </div>
-
-            {/* Avatar Coach sidebar */}
-            <div className="lg:col-span-1">
-              <AvatarCoach
-                phase="desenvolver"
-                context="O usuário está na fase de desenvolvimento, preparando currículo, pitch, LinkedIn e portfólio para a transição de carreira."
+            <AnimatedTabsContent value="resume">
+              <ResumeBuilder
+                resumes={resumes}
+                onCreateResume={createResume}
+                onUpdateResume={updateResume}
+                onDeleteResume={deleteResume}
               />
-            </div>
-          </div>
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="pitch">
+              <PitchGenerator
+                pitch={pitch}
+                onSave={savePitch}
+                onRecordPractice={recordPitchPractice}
+              />
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="linkedin">
+              <LinkedInChecklist
+                checklist={linkedInChecklist}
+                onSave={saveLinkedInChecklist}
+              />
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="portfolio">
+              <PortfolioTemplate
+                projects={portfolioProjects}
+                onAddProject={addPortfolioProject}
+                onUpdateProject={updatePortfolioProject}
+                onDeleteProject={deletePortfolioProject}
+              />
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="track">
+              <DevelopmentTrack
+                items={developmentTrack}
+                onAddItem={addTrackItem}
+                onUpdateItem={updateTrackItem}
+                onDeleteItem={deleteTrackItem}
+              />
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="feedback">
+              <DevelopCoachFeedback
+                feedback={coachFeedback}
+                phaseProgress={phaseProgress}
+              />
+            </AnimatedTabsContent>
+          </AnimatedTabs>
+
+          {/* Floating Coach Button */}
+          <FloatingCoachButton
+            phase="desenvolver"
+            context={`Usuário está na aba: ${activeTab}. Preparando currículo, pitch, LinkedIn e portfólio para a transição de carreira.`}
+            greeting="Olá! 👋 Estou aqui na fase de Desenvolver! Vamos preparar você para o mercado. Posso te ajudar com currículo, pitch, LinkedIn ou portfólio. O que você precisa?"
+          />
         </div>
-        </PageContent>
-      </PageLayout>
-    );
-  }
+      </PageContent>
+    </PageLayout>
+  );
+}

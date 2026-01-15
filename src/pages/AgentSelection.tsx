@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, Loader2, Sparkles, Star } from "lucide-react";
+import { Check, ArrowRight, Loader2, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAgent } from "@/hooks/useAgent";
 import { useToast } from "@/hooks/use-toast";
 import { AIAgent } from "@/types/agent";
-import logoMigrei from "@/assets/logo-migrei.png";
 import { cn } from "@/lib/utils";
 
 // Import agent avatar images
@@ -85,48 +84,29 @@ export default function AgentSelection() {
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative container max-w-6xl mx-auto px-4 py-8 md:py-12">
-        {/* Header */}
+      <div className="relative container max-w-6xl mx-auto px-4 py-6 md:py-10">
+        {/* Header - Simplified */}
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: -20 }}
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.4 }}
         >
-          <motion.img 
-            src={logoMigrei} 
-            alt="Migrei" 
-            className="h-12 w-auto mx-auto mb-8"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.1 }}
-          />
-          
-          <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full text-primary mb-6"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Sparkles className="h-4 w-4" />
-            <span className="text-sm font-medium">Etapa final do cadastro</span>
-          </motion.div>
-          
           <motion.h1 
-            className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4"
+            className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.1 }}
           >
-            Quem será seu guia nessa jornada?
+            Escolha seu mentor
           </motion.h1>
           <motion.p 
-            className="text-muted-foreground text-lg max-w-xl mx-auto"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            className="text-muted-foreground text-sm md:text-base"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            Cada mentor tem um estilo único de orientação, mas todos dominam o método Migrei.
+            Todos seguem o método Migrei, cada um com seu estilo.
           </motion.p>
         </motion.div>
 

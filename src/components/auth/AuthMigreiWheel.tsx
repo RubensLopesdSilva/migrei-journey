@@ -81,7 +81,7 @@ export function AuthMigreiWheel() {
   const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  const size = 380;
+  const size = 494;
   const center = size / 2;
   const outerRadius = 130;
   const innerRadius = 50;

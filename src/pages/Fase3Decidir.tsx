@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
+import { getPhaseIntroData } from '@/data/phaseIntroData';
 import { PossibilitiesMatrix } from '@/components/decision/PossibilitiesMatrix';
 import { RouteComparator } from '@/components/decision/RouteComparator';
 import { SmartGoalBuilder } from '@/components/decision/SmartGoalBuilder';
@@ -11,8 +13,6 @@ import { DecisionCheckpoint } from '@/components/decision/DecisionCheckpoint';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { PhaseAccessGate } from '@/components/subscription/PhaseAccessGate';
 import { useDecision } from '@/hooks/useDecision';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { Target, BarChart3, Goal, Calendar, Map, CheckCircle2, Check } from 'lucide-react';
 
@@ -34,6 +34,9 @@ export default function Fase3Decidir() {
   const progress = getPhaseProgress();
   const isPhaseComplete = checkpoint?.is_confirmed === true;
 
+  // Dados do bloco introdutório com clareza UX
+  const phaseIntroData = getPhaseIntroData(3, progress.percentage, isPhaseComplete);
+
   return (
     <PhaseAccessGate phaseNumber={3} phaseName="Fase 3: Decidir">
       <PageLayout>
@@ -46,31 +49,8 @@ export default function Fase3Decidir() {
             ]}
           />
 
-          {/* Phase Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <Target className="h-6 w-6 text-blue-500" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold">Fase 3: Decidir</h1>
-                <p className="text-muted-foreground">Planejamento estratégico e foco</p>
-              </div>
-            </div>
-            <Badge variant={isPhaseComplete ? 'default' : 'secondary'} className="text-sm">
-              {isPhaseComplete ? (
-                <>
-                  <Check className="h-3 w-3 mr-1" />
-                  Fase Completa
-                </>
-              ) : (
-                `${progress.percentage}% concluído`
-              )}
-            </Badge>
-          </div>
-
-          {/* Progress Bar */}
-          <Progress value={progress.percentage} className="h-2" />
+          {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+          <PhaseIntroBlock data={phaseIntroData} />
 
           {/* Main Content - Full Width */}
           <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>

@@ -5,13 +5,13 @@ import { ReadinessTest } from '@/components/awakening/ReadinessTest';
 import { PainMapBuilder } from '@/components/awakening/PainMapBuilder';
 import { CommitmentDeclaration } from '@/components/awakening/CommitmentDeclaration';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
+import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
+import { getPhaseIntroData } from '@/data/phaseIntroData';
 import { useAwakening } from '@/hooks/useAwakening';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
-import { Sparkles, Brain, Target, Frown, Heart, Check } from 'lucide-react';
+import { Brain, Target, Frown, Heart, Check } from 'lucide-react';
 
 type Step = 'consciousness' | 'readiness' | 'painmap' | 'commitment';
 
@@ -29,6 +29,9 @@ export default function Fase1Despertar() {
   const progress = getPhaseProgress();
   const isPhaseComplete = commitment !== null;
 
+  // Dados do bloco introdutório com clareza UX
+  const phaseIntroData = getPhaseIntroData(1, progress.percentage, isPhaseComplete);
+
   return (
     <PageLayout>
       <PageContent className="space-y-6">
@@ -40,31 +43,8 @@ export default function Fase1Despertar() {
           ]}
         />
 
-        {/* Phase Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Sparkles className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">Fase 1: Despertar</h1>
-              <p className="text-muted-foreground">Consciência e decisão de mudar</p>
-            </div>
-          </div>
-          <Badge variant={isPhaseComplete ? 'default' : 'secondary'} className="text-sm">
-            {isPhaseComplete ? (
-              <>
-                <Check className="h-3 w-3 mr-1" />
-                Fase Completa
-              </>
-            ) : (
-              `${progress.percentage}% concluído`
-            )}
-          </Badge>
-        </div>
-
-        {/* Progress Bar */}
-        <Progress value={progress.percentage} className="h-2" />
+        {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+        <PhaseIntroBlock data={phaseIntroData} />
 
         {/* Main Content - Full Width */}
         <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>

@@ -1,4 +1,4 @@
-import { Target, ArrowRight, Check, Sparkles } from "lucide-react";
+import { Target, ArrowRight, Check, Sparkles, Trophy, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
@@ -29,6 +29,16 @@ const phaseRoutes: Record<string, string> = {
   desfrutar: "/fase/desfrutar",
 };
 
+// Quick win messages per phase
+const phaseQuickWins: Record<string, string> = {
+  despertar: "5 min para seu 1º diagnóstico",
+  descobrir: "Descubra padrões ocultos na sua carreira",
+  decidir: "Defina sua rota em 20 minutos",
+  desenvolver: "Saia com currículo pronto hoje",
+  deslanchar: "Comece a se candidatar agora",
+  desfrutar: "Celebre suas conquistas",
+};
+
 const listVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -46,9 +56,10 @@ interface MissionItemProps {
   activity: PhaseActivity;
   isCompleted: boolean;
   phaseLink: string;
+  isNext?: boolean;
 }
 
-function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
+function MissionItem({ activity, isCompleted, phaseLink, isNext }: MissionItemProps) {
   return (
     <motion.div
       variants={itemVariants}
@@ -60,23 +71,49 @@ function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
           "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left block",
           isCompleted 
             ? 'bg-primary/5' 
-            : 'hover:bg-muted/50'
+            : isNext
+              ? 'bg-primary/10 border border-primary/20 hover:bg-primary/15'
+              : 'hover:bg-muted/50'
         )}
       >
-        <p className={cn(
-          "flex-1 text-sm font-medium truncate",
-          isCompleted 
-            ? 'text-muted-foreground line-through' 
-            : 'text-foreground'
+        {/* Status icon */}
+        <div className={cn(
+          "h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0",
+          isCompleted ? "bg-primary" : isNext ? "bg-primary/20" : "bg-muted"
         )}>
-          {activity.title}
-          <span className={cn(
-            "ml-2 text-xs font-medium",
-            isCompleted ? 'text-primary' : 'text-muted-foreground'
+          {isCompleted ? (
+            <Check className="h-3.5 w-3.5 text-primary-foreground" />
+          ) : isNext ? (
+            <Zap className="h-3.5 w-3.5 text-primary" />
+          ) : (
+            <div className="h-2 w-2 rounded-full bg-muted-foreground/30" />
+          )}
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          <p className={cn(
+            "text-sm font-medium truncate",
+            isCompleted 
+              ? 'text-muted-foreground line-through' 
+              : isNext
+                ? 'text-foreground'
+                : 'text-foreground/80'
           )}>
-            {isCompleted ? '✓' : '+'}{activity.xp_reward} XP
-          </span>
-        </p>
+            {activity.title}
+          </p>
+          {isNext && !isCompleted && (
+            <p className="text-[10px] text-primary font-medium">
+              Próxima missão
+            </p>
+          )}
+        </div>
+        
+        <span className={cn(
+          "text-xs font-medium flex-shrink-0",
+          isCompleted ? 'text-primary' : 'text-muted-foreground'
+        )}>
+          {isCompleted ? '✓' : '+'}{activity.xp_reward} XP
+        </span>
       </Link>
     </motion.div>
   );
@@ -179,6 +216,9 @@ export function MissionCard() {
     return <MissionCardSkeleton />;
   }
 
+  const quickWin = phaseQuickWins[phaseSlug] || "Complete suas missões";
+  const allComplete = completedCount === phaseMissions.length && phaseMissions.length > 0;
+
   return (
     <motion.div 
       className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col"
@@ -188,23 +228,30 @@ export function MissionCard() {
       transition={{ duration: 0.4 }}
       style={{ boxShadow: 'var(--shadow-md)' }}
     >
-      {/* Header compact */}
+      {/* Header with quick win */}
       <div className="flex items-center justify-between p-4 border-b border-border/50">
-          <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+        <div className="flex items-center gap-3">
+          <div className={cn(
+            "h-9 w-9 rounded-xl flex items-center justify-center",
+            allComplete ? "bg-primary" : "bg-primary/10"
+          )}>
+            {allComplete ? (
+              <Trophy className="h-4 w-4 text-primary-foreground" aria-hidden="true" />
+            ) : (
               <Target className="h-4 w-4 text-primary" aria-hidden="true" />
+            )}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-sm text-foreground">
+                {allComplete ? "Fase completa! 🎉" : phaseDisplayName}
+              </h3>
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm text-foreground">
-                  Missões da fase
-                </h3>
-                <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-                  {phaseDisplayName}
-                </span>
-              </div>
             <p className="text-[10px] text-muted-foreground">
-              {completedCount}/{phaseMissions.length} completas • +{totalXP}/{potentialXP} XP
+              {allComplete 
+                ? `+${totalXP} XP conquistados` 
+                : `${completedCount}/${phaseMissions.length} • ${quickWin}`
+              }
             </p>
           </div>
         </div>
@@ -220,15 +267,27 @@ export function MissionCard() {
         </Link>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress bar with celebration */}
       <div className="px-4 pt-3">
         <div className="flex items-center justify-between text-[10px] mb-1">
-          <span className="text-muted-foreground">Progresso da fase</span>
-          <span className="font-medium text-primary">{progressPercentage}%</span>
+          <span className="text-muted-foreground">
+            {allComplete ? "Parabéns! Fase concluída" : "Progresso da fase"}
+          </span>
+          <span className={cn(
+            "font-medium",
+            allComplete ? "text-primary" : progressPercentage >= 50 ? "text-primary" : "text-muted-foreground"
+          )}>
+            {progressPercentage}%
+          </span>
         </div>
         <div className="h-1.5 bg-muted rounded-full overflow-hidden">
           <motion.div 
-            className="h-full bg-primary rounded-full"
+            className={cn(
+              "h-full rounded-full",
+              allComplete 
+                ? "bg-gradient-to-r from-primary to-primary/80" 
+                : "bg-primary"
+            )}
             initial={{ width: 0 }}
             animate={{ width: `${progressPercentage}%` }}
             transition={{ duration: 0.5, ease: "easeOut" }}
@@ -246,14 +305,21 @@ export function MissionCard() {
       >
         <AnimatePresence mode="popLayout">
           {displayMissions.length > 0 ? (
-            displayMissions.map((mission) => (
-              <MissionItem
-                key={mission.id}
-                activity={mission}
-                isCompleted={completedActivities.includes(mission.id)}
-                phaseLink={phaseLink}
-              />
-            ))
+            displayMissions.map((mission, index) => {
+              const isCompleted = completedActivities.includes(mission.id);
+              // First uncompleted mission is the "next" one
+              const isNext = !isCompleted && displayMissions.filter(m => !completedActivities.includes(m.id))[0]?.id === mission.id;
+              
+              return (
+                <MissionItem
+                  key={mission.id}
+                  activity={mission}
+                  isCompleted={isCompleted}
+                  phaseLink={phaseLink}
+                  isNext={isNext}
+                />
+              );
+            })
           ) : (
             <motion.div 
               className="text-center py-4 text-muted-foreground"
@@ -268,21 +334,28 @@ export function MissionCard() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Footer - link to phase */}
-      {phaseMissions.length > 3 && (
-        <div className="px-4 pb-3">
-          <Link to={phaseLink}>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="w-full text-xs h-8 text-muted-foreground hover:text-foreground"
-            >
-              Continuar jornada
-              <ArrowRight className="h-3 w-3 ml-1" />
-            </Button>
-          </Link>
-        </div>
-      )}
+      {/* Footer - action-oriented */}
+      <div className="px-4 pb-3">
+        <Link to={phaseLink}>
+          <Button 
+            variant={allComplete ? "outline" : "default"}
+            size="sm" 
+            className={cn(
+              "w-full text-xs h-9",
+              !allComplete && "btn-primary-gradient"
+            )}
+          >
+            {allComplete ? (
+              <>Revisar conquistas</>
+            ) : (
+              <>
+                Continuar missão
+                <ArrowRight className="h-3 w-3 ml-1" />
+              </>
+            )}
+          </Button>
+        </Link>
+      </div>
     </motion.div>
   );
 }

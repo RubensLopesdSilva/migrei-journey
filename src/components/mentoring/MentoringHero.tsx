@@ -40,9 +40,9 @@ export function MentoringHero({
 
   // Benefits for free/essential users
   const benefits = [
-    { icon: Target, text: "Orientação personalizada para sua transição" },
-    { icon: TrendingUp, text: "Acelere sua jornada em até 3x" },
-    { icon: MessageCircle, text: "Sessões 1:1 com especialistas" },
+    { icon: Target, text: "Orientação personalizada de carreira" },
+    { icon: TrendingUp, text: "Acelere sua transição profissional" },
+    { icon: MessageCircle, text: "Sessão 1:1 mensal com especialistas" },
   ];
 
   return (
@@ -153,13 +153,13 @@ export function MentoringHero({
                   {/* Premium benefits */}
                   <div className="space-y-2">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                      Incluso no Premium
+                      Exclusivo do Premium
                     </p>
                     <div className="space-y-1.5">
                       {[
-                        "Sessões ilimitadas de mentoria",
+                        "1 sessão de mentoria por mês",
                         "Acesso a todos os mentores",
-                        "Coach IA personalizado",
+                        "Conteúdo exclusivo",
                       ].map((item, i) => (
                         <div key={i} className="flex items-center gap-2 text-sm">
                           <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />

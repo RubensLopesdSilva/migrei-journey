@@ -273,9 +273,9 @@ export default function Mentoring() {
                       <Crown className="h-8 w-8 text-white" />
                     </div>
                     <div className="flex-1 text-center sm:text-left">
-                      <h3 className="font-bold text-xl">Quer mais sessões de mentoria?</h3>
+                      <h3 className="font-bold text-xl">Desbloqueie sessões de mentoria</h3>
                       <p className="text-muted-foreground mt-1">
-                        Com o plano Premium você tem <strong>4 sessões por mês</strong>, suporte prioritário e conteúdo exclusivo.
+                        Com o plano Premium você tem <strong>1 sessão de mentoria por mês</strong> com especialistas e conteúdo exclusivo.
                       </p>
                     </div>
                     <Button 

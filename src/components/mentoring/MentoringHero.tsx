@@ -136,17 +136,20 @@ export function MentoringHero({
                     </span>
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Progress 
                       value={sessionUsagePercent} 
                       className="h-2" 
                     />
-                    <p className="text-xs text-muted-foreground">
-                      {remainingSessions > 0 
-                        ? `${remainingSessions} sessão(ões) disponível(is)`
-                        : "Limite atingido este mês"
-                      }
-                    </p>
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>
+                        {remainingSessions > 0 
+                          ? `${remainingSessions} sessão(ões) disponível(is)`
+                          : "Limite atingido este mês"
+                        }
+                      </span>
+                      <span>1 cancelamento grátis</span>
+                    </div>
                   </div>
 
                   {isEssential && (

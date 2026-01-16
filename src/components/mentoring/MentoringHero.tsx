@@ -135,6 +135,20 @@ export function MentoringHero({
                 className="p-6 rounded-xl bg-card border shadow-lg"
               >
                 <div className="space-y-5">
+                  {/* Social proof */}
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="h-8 w-8 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 border-2 border-card flex items-center justify-center">
+                          <span className="text-xs font-medium text-primary-foreground">👤</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-xs">
+                      <span className="font-semibold text-foreground">87%</span>
+                      <span className="text-muted-foreground"> conseguiram transição em 90 dias</span>
+                    </div>
+                  </div>
 
                   {/* Premium benefits */}
                   <div className="space-y-2">

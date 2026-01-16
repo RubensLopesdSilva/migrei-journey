@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
 import { cn } from "@/lib/utils";
 import { useProgress } from "@/hooks/useProgress";
-import { useMemo } from "react";
+import { useMemo, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { PhaseActivity } from "@/types/progress";
@@ -143,7 +143,7 @@ function MissionCardSkeleton() {
   );
 }
 
-export function MissionCard() {
+export const MissionCard = forwardRef<HTMLDivElement, object>(function MissionCard(_, ref) {
   const { 
     userProgress, 
     phases, 
@@ -221,6 +221,7 @@ export function MissionCard() {
 
   return (
     <motion.div 
+      ref={ref}
       className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col"
       data-tour="mission-card"
       initial={{ opacity: 0, y: 20 }}
@@ -358,4 +359,6 @@ export function MissionCard() {
       </div>
     </motion.div>
   );
-}
+});
+
+MissionCard.displayName = "MissionCard";

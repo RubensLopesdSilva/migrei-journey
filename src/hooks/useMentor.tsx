@@ -316,6 +316,33 @@ export function useMentor() {
     return true;
   };
 
+  // Update meeting URL for a session
+  const updateMeetingUrl = async (sessionId: string, meetingUrl: string): Promise<boolean> => {
+    const { error } = await supabase
+      .from("mentoring_sessions")
+      .update({ meeting_url: meetingUrl })
+      .eq("id", sessionId);
+
+    if (error) {
+      toast({
+        title: "Erro",
+        description: "Não foi possível salvar o link da reunião.",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    toast({
+      title: "Link salvo",
+      description: "O link da reunião foi atualizado.",
+    });
+
+    if (mentorProfile) {
+      await fetchSessions(mentorProfile.id);
+    }
+    return true;
+  };
+
   // Update mentor profile
   const updateProfile = async (updates: Partial<MentorProfile>): Promise<boolean> => {
     if (!mentorProfile) return false;
@@ -471,6 +498,7 @@ export function useMentor() {
     toggleDayAvailability,
     updateSessionStatus,
     addSessionNotes,
+    updateMeetingUrl,
     updateProfile,
     // Refresh
     refetch: async () => {

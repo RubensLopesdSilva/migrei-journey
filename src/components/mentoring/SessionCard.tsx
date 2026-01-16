@@ -48,8 +48,8 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
         .slice(0, 2)
     : "??";
 
-  // Generate Google Meet link if no meeting URL
-  const meetingUrl = session.meeting_url || generateMeetingUrl(session);
+  // Use the meeting URL from the session
+  const hasMeetingUrl = !!session.meeting_url;
 
   return (
     <Card className={session.status === "cancelled" ? "opacity-60" : ""}>
@@ -87,13 +87,20 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
 
             {/* Join button with meeting URL */}
             {session.status === "scheduled" && !isPast && (
-              <Button size="sm" variant="outline" className="gap-1" asChild>
-                <a href={meetingUrl} target="_blank" rel="noopener noreferrer">
-                  <Video className="h-3 w-3" />
-                  Entrar
-                  <ExternalLink className="h-3 w-3" />
-                </a>
-              </Button>
+              hasMeetingUrl ? (
+                <Button size="sm" variant="outline" className="gap-1" asChild>
+                  <a href={session.meeting_url!} target="_blank" rel="noopener noreferrer">
+                    <Video className="h-3 w-3" />
+                    Entrar
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                </Button>
+              ) : (
+                <Badge variant="secondary" className="text-xs gap-1">
+                  <Clock className="h-3 w-3" />
+                  Aguardando link
+                </Badge>
+              )
             )}
 
             {/* Action buttons for modifiable sessions */}
@@ -158,16 +165,3 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
   );
 }
 
-// Helper to generate a Google Meet link placeholder
-function generateMeetingUrl(session: MentoringSession): string {
-  // Generate a Google Calendar event link that creates a Meet
-  const scheduledDate = new Date(session.scheduled_at);
-  const endDate = new Date(scheduledDate.getTime() + 60 * 60 * 1000); // 1 hour later
-  
-  const formatDate = (d: Date) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  
-  const title = encodeURIComponent(`Mentoria - ${session.mentor?.name || 'Mentor'}`);
-  const dates = `${formatDate(scheduledDate)}/${formatDate(endDate)}`;
-  
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=Mentoria+individual&add=meet`;
-}

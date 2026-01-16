@@ -1,14 +1,12 @@
-import { Target, ArrowRight, Check, Loader2, Sparkles } from "lucide-react";
+import { Target, ArrowRight, Check, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
 import { cn } from "@/lib/utils";
 import { useProgress } from "@/hooks/useProgress";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
-import confetti from "canvas-confetti";
 import type { PhaseActivity } from "@/types/progress";
 
 // Phase number to slug mapping
@@ -47,53 +45,39 @@ const itemVariants = {
 interface MissionItemProps {
   activity: PhaseActivity;
   isCompleted: boolean;
-  onComplete: (activityId: string) => Promise<void>;
-  isLoading: boolean;
   phaseLink: string;
 }
 
-function MissionItem({ activity, isCompleted, onComplete, isLoading, phaseLink }: MissionItemProps) {
-  const handleComplete = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isCompleted && !isLoading) {
-      await onComplete(activity.id);
-    }
-  };
-
+function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
   return (
     <motion.div
       variants={itemVariants}
       className="group"
     >
-      <div
+      <Link
+        to={phaseLink}
         className={cn(
-          "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left",
+          "w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-200 text-left block",
           isCompleted 
             ? 'bg-primary/5' 
             : 'hover:bg-muted/50'
         )}
       >
-        <button
-          onClick={handleComplete}
-          disabled={isCompleted || isLoading}
+        <div
           className={cn(
             "h-5 w-5 rounded-full border-2 flex-shrink-0 transition-all flex items-center justify-center",
-            focusRingClasses,
             isCompleted 
               ? "bg-primary border-primary" 
-              : "border-muted-foreground/40 hover:border-primary group-hover:border-primary"
+              : "border-muted-foreground/40"
           )}
-          aria-label={isCompleted ? "Missão concluída" : "Concluir missão"}
+          aria-label={isCompleted ? "Missão concluída" : "Missão pendente"}
         >
-          {isLoading ? (
-            <Loader2 className="h-3 w-3 text-muted-foreground animate-spin" />
-          ) : isCompleted ? (
+          {isCompleted && (
             <Check className="h-3 w-3 text-primary-foreground" />
-          ) : null}
-        </button>
+          )}
+        </div>
         
-        <Link to={phaseLink} className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0">
           <p className={cn(
             "text-sm font-medium truncate",
             isCompleted 
@@ -107,7 +91,7 @@ function MissionItem({ activity, isCompleted, onComplete, isLoading, phaseLink }
               {activity.description}
             </p>
           )}
-        </Link>
+        </div>
         
         <span className={cn(
           "text-xs font-medium flex-shrink-0",
@@ -115,7 +99,7 @@ function MissionItem({ activity, isCompleted, onComplete, isLoading, phaseLink }
         )}>
           +{activity.xp_reward} XP
         </span>
-      </div>
+      </Link>
     </motion.div>
   );
 }
@@ -150,12 +134,9 @@ export function MissionCard() {
     phases, 
     activities, 
     completedActivities, 
-    completeActivity,
     phaseProgress,
     loading
   } = useProgress();
-  
-  const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   
@@ -214,47 +195,6 @@ export function MissionCard() {
     return [...uncompleted, ...completed].slice(0, 3);
   }, [phaseMissions, completedActivities]);
 
-  // Handle mission completion
-  const handleCompleteMission = async (activityId: string) => {
-    if (!currentPhase) return;
-    
-    setLoadingActivity(activityId);
-    
-    try {
-      await completeActivity(activityId, currentPhase.id, 0);
-      
-      const activity = phaseMissions.find(a => a.id === activityId);
-      
-      // Trigger confetti for celebration
-      confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.8 },
-        colors: ['#3B82F6', '#8B5CF6', '#F59E0B']
-      });
-      
-      // Show success toast with progress info
-      toast.success(
-        <div className="flex flex-col gap-1">
-          <span className="font-semibold">Etapa concluída 🎉</span>
-          <span className="text-sm text-muted-foreground">
-            Você avançou mais um passo na sua transição.
-          </span>
-          {activity && (
-            <span className="text-sm text-primary font-medium">
-              +{activity.xp_reward} XP
-            </span>
-          )}
-        </div>
-      );
-      
-    } catch (error) {
-      console.error('Error completing mission:', error);
-      toast.error('Algo não saiu como esperado. Tente novamente em instantes.');
-    } finally {
-      setLoadingActivity(null);
-    }
-  };
 
   // NOW we can have conditional returns after all hooks
   if (loading) {
@@ -333,8 +273,6 @@ export function MissionCard() {
                 key={mission.id}
                 activity={mission}
                 isCompleted={completedActivities.includes(mission.id)}
-                onComplete={handleCompleteMission}
-                isLoading={loadingActivity === mission.id}
                 phaseLink={phaseLink}
               />
             ))

@@ -127,7 +127,7 @@ export function PhaseDetailCard({
       <CardContent className="space-y-6">
         {/* Objective */}
         <div className="bg-muted/50 rounded-lg p-4">
-          <h4 className="font-medium text-sm mb-1">Objetivo da Fase</h4>
+          <h4 className="font-medium text-sm mb-1">Objetivo</h4>
           <p className="text-sm text-muted-foreground">{phase.objective}</p>
         </div>
 
@@ -147,7 +147,7 @@ export function PhaseDetailCard({
           <div>
             <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
               <Flag className="h-4 w-4 text-primary" />
-              Checkpoints Obrigatórios
+              Obrigatórios
             </h4>
             <div className="space-y-2">
               {checkpoints.map((activity) => {
@@ -195,14 +195,14 @@ export function PhaseDetailCard({
             onClick={onStartPhase}
             style={{ backgroundColor: color }}
           >
-            Iniciar Fase
+            Começar
             <ChevronRight className="h-4 w-4 ml-2" />
           </Button>
         )}
 
         {/* XP Info */}
         <div className="flex items-center justify-between text-sm pt-4 border-t border-border">
-          <span className="text-muted-foreground">XP ganho nesta fase</span>
+          <span className="text-muted-foreground">XP</span>
           <span className="font-bold" style={{ color }}>
             {phase.userProgress?.xp_earned || 0} / {phase.xp_to_complete} XP
           </span>

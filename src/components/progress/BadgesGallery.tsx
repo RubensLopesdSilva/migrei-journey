@@ -68,9 +68,9 @@ export function BadgesGallery({ allBadges, earnedBadges }: BadgesGalleryProps) {
     return acc;
   }, {} as Record<string, Badge[]>);
 
-  const categoryLabels: Record<string, string> = {
-    phase: 'Fases Concluídas',
-    master: 'Conquista Máxima',
+const categoryLabels: Record<string, string> = {
+    phase: 'Por fase',
+    master: 'Máxima',
     streak: 'Sequência',
     milestone: 'Marcos',
     general: 'Geral',

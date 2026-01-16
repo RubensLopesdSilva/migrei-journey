@@ -35,7 +35,7 @@ export function MentorCard({
 
   const isDisabled = disabled || !isPremium;
   const buttonText = isDisabled
-    ? disabledReason || "Premium Necessário"
+    ? disabledReason || "Exclusivo Premium"
     : "Agendar Sessão";
 
   return (

@@ -218,14 +218,14 @@ export function MentorsGrid({
               </span>
             </div>
             <p className="text-muted-foreground text-sm max-w-md mx-auto mb-4">
-              Desbloqueie acesso a todos os mentores e agende sessões ilimitadas para acelerar sua transição.
+              Com o plano Premium, você tem 1 sessão de mentoria por mês com especialistas para acelerar sua transição.
             </p>
             <Button 
               onClick={onUpgrade} 
               size="lg"
               className="gap-2 btn-primary-gradient shadow-lg"
             >
-              Desbloquear Mentoria Premium
+              Fazer Upgrade para Premium
               <ArrowRight className="h-4 w-4" />
             </Button>
           </motion.div>

@@ -40,12 +40,12 @@ const mainNavItems: NavItem[] = [
   },
   {
     icon: Layers,
-    label: "Minha fase atual",
+    label: "Fase atual",
     href: "/fase"
   },
   {
     icon: TrendingUp,
-    label: "Meu progresso",
+    label: "Progresso",
     href: "/progresso"
   },
   {

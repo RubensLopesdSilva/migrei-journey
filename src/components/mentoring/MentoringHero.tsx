@@ -66,17 +66,19 @@ export function MentoringHero({
               <Badge 
                 variant="secondary" 
                 className={`
+                  text-sm font-semibold px-3 py-1 border
                   ${isPremium 
-                    ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-700 dark:text-amber-400 border-amber-500/30" 
+                    ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-700 dark:text-amber-400 border-amber-500/40" 
                     : isEssential 
-                      ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30"
-                      : "bg-muted text-muted-foreground"
+                      ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-700 dark:text-blue-400 border-blue-500/40"
+                      : "bg-primary/10 text-primary border-primary/30"
                   }
                 `}
               >
-                {isPremium && <Crown className="h-3 w-3 mr-1" />}
-                {isEssential && <Sparkles className="h-3 w-3 mr-1" />}
-                {planName || "Plano Gratuito"}
+                {isPremium && <Crown className="h-3.5 w-3.5 mr-1.5" />}
+                {isEssential && <Sparkles className="h-3.5 w-3.5 mr-1.5" />}
+                {isFree && <Users className="h-3.5 w-3.5 mr-1.5" />}
+                {planName || "Gratuito"}
               </Badge>
             </div>
 

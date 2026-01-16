@@ -236,43 +236,6 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
         </motion.div>
       </div>
 
-      {/* Indicador de IA - Transparência */}
-      {aiCapabilities && aiCapabilities.length > 0 && (
-        <motion.div variants={itemVariants}>
-          <Card className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shrink-0">
-                  <Brain className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-sm">IA como sua aliada nesta fase</h3>
-                    <Badge variant="outline" className="text-xs border-primary/30 text-primary">
-                      <Sparkles className="h-3 w-3 mr-1" />
-                      Potencializada por IA
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    A IA organiza o caminho. As decisões continuam sendo suas.
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {aiCapabilities.map((capability, index) => (
-                      <Badge 
-                        key={index} 
-                        variant="secondary" 
-                        className="text-xs bg-primary/10 hover:bg-primary/20"
-                      >
-                        {capability}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
     </motion.div>
   );
 }

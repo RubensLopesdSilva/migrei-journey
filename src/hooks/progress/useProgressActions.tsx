@@ -189,6 +189,12 @@ export function useProgressActions({
       const activity = activities.find(a => a.id === activityId);
       if (!activity) return;
 
+      // Check if already completed
+      if (completedActivities.includes(activityId)) {
+        console.log('Activity already completed:', activityId);
+        return;
+      }
+
       // Insert completion
       const { error: completionError } = await progressRepository.completeActivity({
         userId: user.id,

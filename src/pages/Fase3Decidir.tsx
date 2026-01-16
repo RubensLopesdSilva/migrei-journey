@@ -3,7 +3,8 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
-import { getPhaseIntroData } from '@/data/phaseIntroData';
+import { PhaseSteps, type PhaseStep } from '@/components/phases/PhaseSteps';
+import { getPhaseIntroData, PHASE_COLORS } from '@/data/phaseIntroData';
 import { PossibilitiesMatrix } from '@/components/decision/PossibilitiesMatrix';
 import { RouteComparator } from '@/components/decision/RouteComparator';
 import { SmartGoalBuilder } from '@/components/decision/SmartGoalBuilder';
@@ -13,16 +14,15 @@ import { DecisionCheckpoint } from '@/components/decision/DecisionCheckpoint';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { PhaseAccessGate } from '@/components/subscription/PhaseAccessGate';
 import { useDecision } from '@/hooks/useDecision';
-import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
-import { Target, BarChart3, Goal, Calendar, Map, CheckCircle2, Check } from 'lucide-react';
+import { Target, BarChart3, Goal, Calendar, Map, CheckCircle2 } from 'lucide-react';
 
 type Step = 'matrix' | 'comparator' | 'goal' | 'plan' | 'gaps' | 'checkpoint';
 
-const steps: { key: Step; label: string; icon: typeof Target }[] = [
+const steps: PhaseStep[] = [
   { key: 'matrix', label: 'Matriz', icon: BarChart3 },
   { key: 'comparator', label: 'Comparar', icon: Target },
   { key: 'goal', label: 'Meta SMART', icon: Goal },
-  { key: 'plan', label: 'Plano 90 Dias', icon: Calendar },
+  { key: 'plan', label: 'Plano 90d', icon: Calendar },
   { key: 'gaps', label: 'Lacunas', icon: Map },
   { key: 'checkpoint', label: 'Decisão', icon: CheckCircle2 }
 ];
@@ -36,6 +36,18 @@ export default function Fase3Decidir() {
 
   // Dados do bloco introdutório com clareza UX
   const phaseIntroData = getPhaseIntroData(3, progress.percentage, isPhaseComplete);
+
+  const renderStepContent = () => {
+    switch (activeStep) {
+      case 'matrix': return <PossibilitiesMatrix onComplete={() => setActiveStep('comparator')} />;
+      case 'comparator': return <RouteComparator onComplete={() => setActiveStep('goal')} />;
+      case 'goal': return <SmartGoalBuilder onComplete={() => setActiveStep('plan')} />;
+      case 'plan': return <Plan90Days onComplete={() => setActiveStep('gaps')} />;
+      case 'gaps': return <GapsMap onComplete={() => setActiveStep('checkpoint')} />;
+      case 'checkpoint': return <DecisionCheckpoint onComplete={() => window.location.href = '/progresso'} />;
+      default: return null;
+    }
+  };
 
   return (
     <PhaseAccessGate phaseNumber={3} phaseName="Fase 3: Decidir">
@@ -52,50 +64,19 @@ export default function Fase3Decidir() {
           {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
           <PhaseIntroBlock data={phaseIntroData} />
 
-          {/* Main Content - Full Width */}
-          <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-            <AnimatedTabsList className="grid grid-cols-3 lg:grid-cols-6 mb-6">
-              {steps.map((step, index) => {
-                const Icon = step.icon;
-                const isCompleted = index < progress.completed;
-                return (
-                  <AnimatedTabsTrigger key={step.key} value={step.key} className="relative text-xs px-2">
-                    <Icon className="h-4 w-4 mr-1" aria-hidden="true" />
-                    {step.label}
-                    {isCompleted && (
-                      <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                        <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                      </div>
-                    )}
-                  </AnimatedTabsTrigger>
-                );
-              })}
-            </AnimatedTabsList>
+          {/* Phase Steps Navigation */}
+          <PhaseSteps
+            steps={steps}
+            activeStep={activeStep}
+            onStepChange={(step) => setActiveStep(step as Step)}
+            completedSteps={progress.completed}
+            phaseColor={PHASE_COLORS[3]}
+          />
 
-            <AnimatedTabsContent value="matrix">
-              <PossibilitiesMatrix onComplete={() => setActiveStep('comparator')} />
-            </AnimatedTabsContent>
-
-            <AnimatedTabsContent value="comparator">
-              <RouteComparator onComplete={() => setActiveStep('goal')} />
-            </AnimatedTabsContent>
-
-            <AnimatedTabsContent value="goal">
-              <SmartGoalBuilder onComplete={() => setActiveStep('plan')} />
-            </AnimatedTabsContent>
-
-            <AnimatedTabsContent value="plan">
-              <Plan90Days onComplete={() => setActiveStep('gaps')} />
-            </AnimatedTabsContent>
-
-            <AnimatedTabsContent value="gaps">
-              <GapsMap onComplete={() => setActiveStep('checkpoint')} />
-            </AnimatedTabsContent>
-
-            <AnimatedTabsContent value="checkpoint">
-              <DecisionCheckpoint onComplete={() => window.location.href = '/progresso'} />
-            </AnimatedTabsContent>
-          </AnimatedTabs>
+          {/* Step Content */}
+          <div className="mt-6">
+            {renderStepContent()}
+          </div>
 
           {/* Floating Coach Button */}
           <FloatingCoachButton 

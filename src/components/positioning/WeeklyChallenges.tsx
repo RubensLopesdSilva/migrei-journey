@@ -67,11 +67,13 @@ const mockChallenges: Challenge[] = [
 interface WeeklyChallengesProps {
   challenges?: Challenge[];
   onCompleteChallenge?: (challengeId: string) => void;
+  onProgressChange?: (completedCount: number) => void;
 }
 
 export function WeeklyChallenges({ 
   challenges = mockChallenges,
-  onCompleteChallenge 
+  onCompleteChallenge,
+  onProgressChange
 }: WeeklyChallengesProps) {
   const [localChallenges, setLocalChallenges] = useState(challenges);
   
@@ -81,9 +83,12 @@ export function WeeklyChallenges({
   const allCompleted = completedCount === localChallenges.length;
 
   const handleComplete = (id: string) => {
-    setLocalChallenges(prev => prev.map(c =>
-      c.id === id ? { ...c, isCompleted: true } : c
-    ));
+    setLocalChallenges(prev => {
+      const updated = prev.map(c => c.id === id ? { ...c, isCompleted: true } : c);
+      const newCount = updated.filter(c => c.isCompleted).length;
+      onProgressChange?.(newCount);
+      return updated;
+    });
     onCompleteChallenge?.(id);
   };
 

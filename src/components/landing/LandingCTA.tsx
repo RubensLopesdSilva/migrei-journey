@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Clock, AlertCircle, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const LandingCTA = () => {
@@ -19,38 +19,70 @@ export const LandingCTA = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
+          {/* Cost of inaction */}
+          <motion.div
+            className="inline-flex items-center gap-2 bg-destructive/10 text-destructive px-4 py-2 rounded-full text-sm font-medium mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <AlertCircle className="h-4 w-4" />
+            Cada mês de indecisão custa mais do que você imagina
+          </motion.div>
+
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-            Pronto para começar sua transição?
+            Em 5 minutos você terá{" "}
+            <span className="text-primary">seu primeiro diagnóstico</span>
           </h2>
           
-          <p className="text-lg md:text-xl text-muted-foreground mb-10">
-            Milhares de profissionais já descobriram seu próximo caminho com o Migrei.
+          <p className="text-lg md:text-xl text-muted-foreground mb-8">
+            Descubra seus talentos ocultos, padrões de carreira e receba seu plano 
+            de ação personalizado. Grátis e sem compromisso.
           </p>
+
+          {/* What you get immediately */}
+          <motion.div
+            className="flex flex-wrap items-center justify-center gap-4 mb-10 text-sm"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="flex items-center gap-2 bg-card border border-border/50 px-4 py-2 rounded-full">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>Diagnóstico de carreira</span>
+            </div>
+            <div className="flex items-center gap-2 bg-card border border-border/50 px-4 py-2 rounded-full">
+              <Clock className="h-4 w-4 text-primary" />
+              <span>Plano de 90 dias</span>
+            </div>
+            <div className="flex items-center gap-2 bg-card border border-border/50 px-4 py-2 rounded-full">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>IA mentor pessoal</span>
+            </div>
+          </motion.div>
 
           <Button
             size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-7 text-lg group"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-7 text-lg group shadow-xl shadow-primary/20"
             onClick={() => navigate("/auth")}
           >
-            Começar minha jornada agora
+            Começar meu diagnóstico grátis
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
 
-          {/* Trust badges */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-500" />
-              <span className="text-sm">Comece grátis</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-500" />
-              <span className="text-sm">Sem compromisso</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="h-5 w-5 text-green-500" />
-              <span className="text-sm">Cancele quando quiser</span>
-            </div>
-          </div>
+          {/* Trust reinforcement */}
+          <motion.p
+            className="mt-6 text-sm text-muted-foreground"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <strong>+2.000 profissionais</strong> já descobriram seu próximo passo. 
+            Leva menos de 5 minutos.
+          </motion.p>
         </motion.div>
       </div>
     </section>

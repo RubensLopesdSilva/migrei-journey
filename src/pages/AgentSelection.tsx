@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, Loader2, Star } from "lucide-react";
+import { Check, ArrowRight, Loader2, Star, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAgent } from "@/hooks/useAgent";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +26,40 @@ const agentAvatars: Record<string, string> = {
   'Kai': kaiAvatar,
 };
 
+// Agent personality and approach descriptions
+const agentPersonalities: Record<string, { approach: string; bestFor: string; style: string }> = {
+  'Lumi': {
+    approach: "Acolhe primeiro, desafia depois",
+    bestFor: "Quem precisa de apoio emocional para agir",
+    style: "Empático e motivador"
+  },
+  'Noah': {
+    approach: "Direto ao ponto, foco em resultados",
+    bestFor: "Quem quer eficiência e pragmatismo",
+    style: "Analítico e objetivo"
+  },
+  'Ema': {
+    approach: "Criativo e expansivo",
+    bestFor: "Quem busca novas possibilidades",
+    style: "Inspirador e visionário"
+  },
+  'Leo': {
+    approach: "Coach que cobra resultados",
+    bestFor: "Quem precisa de accountability",
+    style: "Desafiador e energético"
+  },
+  'Maya': {
+    approach: "Reflexivo e profundo",
+    bestFor: "Quem valoriza autoconhecimento",
+    style: "Introspectivo e sábio"
+  },
+  'Kai': {
+    approach: "Prático e orientado a ação",
+    bestFor: "Quem quer executar rápido",
+    style: "Hands-on e estratégico"
+  },
+};
+
 export default function AgentSelection() {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -35,6 +69,8 @@ export default function AgentSelection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedAgent = agents.find(a => a.id === selectedAgentId);
+  const hoveredAgent = agents.find(a => a.id === hoveredAgentId);
+  const displayAgent = hoveredAgent || selectedAgent;
 
   const handleConfirm = async () => {
     if (!selectedAgentId) return;
@@ -43,13 +79,13 @@ export default function AgentSelection() {
     try {
       await selectAgent(selectedAgentId);
       toast({
-        title: "Agente escolhido!",
-        description: "Seu tutor de IA está pronto para te acompanhar.",
+        title: `🎉 ${selectedAgent?.name} está pronto para te guiar!`,
+        description: "Agora vamos começar seu diagnóstico de carreira.",
       });
       navigate("/");
     } catch (error) {
       toast({
-        title: "Erro ao selecionar agente",
+        title: "Erro ao selecionar mentor",
         description: "Tente novamente.",
         variant: "destructive",
       });
@@ -70,7 +106,7 @@ export default function AgentSelection() {
             <div className="w-16 h-16 rounded-full bg-primary/10 animate-pulse" />
             <Loader2 className="absolute inset-0 m-auto h-8 w-8 animate-spin text-primary" />
           </div>
-          <p className="text-muted-foreground">Carregando agentes...</p>
+          <p className="text-muted-foreground">Preparando seus mentores...</p>
         </motion.div>
       </div>
     );
@@ -85,34 +121,44 @@ export default function AgentSelection() {
       </div>
 
       <div className="relative container max-w-6xl mx-auto px-4 py-6 md:py-10">
-        {/* Header - Simplified */}
+        {/* Header - Clear purpose */}
         <motion.div
-          className="text-center mb-8"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <motion.h1 
-            className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2"
+          <motion.div
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Escolha seu mentor
+            <MessageCircle className="h-4 w-4" />
+            Seu mentor vai te acompanhar 24/7
+          </motion.div>
+          
+          <motion.h1 
+            className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            Quem você quer como mentor?
           </motion.h1>
           <motion.p 
-            className="text-muted-foreground text-sm md:text-base"
+            className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Todos seguem o método Migrei, cada um com seu estilo.
+            Cada mentor tem uma abordagem diferente. Escolha o estilo que combina com você.
           </motion.p>
         </motion.div>
 
         {/* Agents Grid - 3x2 layout */}
         <motion.div
-          className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mb-6 max-w-4xl mx-auto"
+          className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6 mb-4 max-w-4xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
@@ -130,6 +176,60 @@ export default function AgentSelection() {
             />
           ))}
         </motion.div>
+
+        {/* Agent Detail Preview */}
+        <AnimatePresence mode="wait">
+          {displayAgent && (
+            <motion.div
+              key={displayAgent.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="max-w-2xl mx-auto mb-4"
+            >
+              <div className="bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div 
+                    className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0"
+                    style={{ backgroundColor: displayAgent.background_color }}
+                  >
+                    <img 
+                      src={agentAvatars[displayAgent.name] || lumiAvatar}
+                      alt={displayAgent.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">{displayAgent.name}</p>
+                    <p className="text-sm text-primary">{displayAgent.title}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+                  <div className="bg-muted/50 rounded-lg p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Abordagem</p>
+                    <p className="font-medium text-foreground">
+                      {agentPersonalities[displayAgent.name]?.approach || "Personalizado"}
+                    </p>
+                  </div>
+                  <div className="bg-muted/50 rounded-lg p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Melhor para</p>
+                    <p className="font-medium text-foreground">
+                      {agentPersonalities[displayAgent.name]?.bestFor || "Todos os perfis"}
+                    </p>
+                  </div>
+                  <div className="bg-muted/50 rounded-lg p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Estilo</p>
+                    <p className="font-medium text-foreground">
+                      {agentPersonalities[displayAgent.name]?.style || "Adaptável"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Selected Agent Preview & CTA */}
         <AnimatePresence mode="wait">
@@ -178,11 +278,19 @@ export default function AgentSelection() {
                       <Loader2 className="h-5 w-5 animate-spin" />
                     ) : (
                       <>
-                        Começar minha jornada
+                        Começar meu diagnóstico
                         <ArrowRight className="h-5 w-5" />
                       </>
                     )}
                   </Button>
+                </div>
+                
+                {/* What happens next */}
+                <div className="mt-4 pt-4 border-t border-border/50">
+                  <p className="text-xs text-muted-foreground text-center flex items-center justify-center gap-2">
+                    <Sparkles className="h-3.5 w-3.5 text-primary" />
+                    Em 5 minutos você terá seu diagnóstico de carreira personalizado
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -199,7 +307,7 @@ export default function AgentSelection() {
           >
             <p className="text-muted-foreground text-sm flex items-center justify-center gap-2">
               <Star className="h-4 w-4" />
-              Clique em um mentor para selecioná-lo
+              Clique em um mentor para ver mais detalhes
             </p>
           </motion.div>
         )}
@@ -211,7 +319,7 @@ export default function AgentSelection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
         >
-          Você pode alterar seu mentor a qualquer momento nas Configurações
+          Você pode trocar de mentor a qualquer momento nas Configurações
         </motion.p>
       </div>
     </div>
@@ -230,6 +338,7 @@ interface AgentCardProps {
 
 function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, index }: AgentCardProps) {
   const avatarUrl = agentAvatars[agent.name] || lumiAvatar;
+  const personality = agentPersonalities[agent.name];
 
   return (
     <motion.div
@@ -266,7 +375,7 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Avatar container */}
         <motion.div
-          className="relative mb-4"
+          className="relative mb-3"
           animate={{ 
             scale: isSelected ? 1.08 : isHovered ? 1.04 : 1,
           }}
@@ -314,14 +423,19 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
         </motion.div>
 
         {/* Info */}
-        <h3 className="font-display text-lg md:text-xl font-bold text-foreground mb-1">
+        <h3 className="font-display text-lg md:text-xl font-bold text-foreground mb-0.5">
           {agent.name}
         </h3>
         <p className={cn(
-          "text-sm md:text-base font-medium transition-colors",
+          "text-sm font-medium transition-colors mb-2",
           isSelected ? "text-primary" : "text-muted-foreground"
         )}>
           {agent.title}
+        </p>
+        
+        {/* Quick personality hint */}
+        <p className="text-xs text-muted-foreground/80 line-clamp-1">
+          {personality?.style || "Estilo adaptável"}
         </p>
       </div>
     </motion.div>

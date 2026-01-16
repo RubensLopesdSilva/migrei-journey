@@ -5,12 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Target, Clock } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
 import { AuthMigreiWheel } from "@/components/auth/AuthMigreiWheel";
+import { motion } from "framer-motion";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -169,8 +170,8 @@ export default function Auth() {
         } else {
           setIsNewUser(true);
           toast({
-            title: "Conta criada!",
-            description: "Agora escolha seu agente de IA!",
+            title: "🎉 Conta criada com sucesso!",
+            description: "Agora você vai escolher seu mentor IA personalizado.",
           });
         }
       }
@@ -193,21 +194,55 @@ export default function Auth() {
             />
           </div>
 
-          {/* Title */}
+          {/* Title with context */}
           <h2 className="text-2xl font-semibold text-foreground mb-2">
             {isForgotPassword 
               ? "Recuperar senha" 
               : isLogin 
                 ? "Bem-vindo de volta!" 
-                : "Crie sua conta"}
+                : "Crie sua conta grátis"}
           </h2>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-6">
             {isForgotPassword
               ? "Digite seu email para receber um link de recuperação"
               : isLogin 
                 ? "Entre para continuar sua jornada de transição" 
-                : "Comece sua jornada de transição de carreira"}
+                : "Em 5 minutos você terá seu primeiro diagnóstico de carreira"}
           </p>
+
+          {/* What happens next - only for signup */}
+          {!isLogin && !isForgotPassword && (
+            <motion.div
+              className="mb-6 p-4 rounded-xl bg-primary/5 border border-primary/10"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-sm font-medium text-foreground mb-3">
+                O que acontece depois do cadastro:
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-primary">1</span>
+                  </div>
+                  <span>Escolha seu mentor IA (30 seg)</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-primary">2</span>
+                  </div>
+                  <span>Faça seu 1º diagnóstico (5 min)</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-primary">3</span>
+                  </div>
+                  <span>Receba seu plano personalizado</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Forgot Password Form */}
           {isForgotPassword ? (
@@ -330,13 +365,13 @@ export default function Auth() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {!isLogin && (
                   <div className="space-y-2">
-                    <Label htmlFor="fullName">Nome completo</Label>
+                    <Label htmlFor="fullName">Como quer ser chamado?</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                       <Input
                         id="fullName"
                         type="text"
-                        placeholder="Seu nome"
+                        placeholder="Seu primeiro nome"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         className="pl-10"
@@ -408,7 +443,7 @@ export default function Auth() {
                     "Carregando..."
                   ) : (
                     <>
-                      {isLogin ? "Entrar" : "Criar conta"}
+                      {isLogin ? "Entrar" : "Criar conta e começar"}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </>
                   )}
@@ -420,7 +455,7 @@ export default function Auth() {
           {/* Toggle */}
           {!isForgotPassword && (
             <p className="text-center mt-6 text-muted-foreground">
-              {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
+              {isLogin ? "Ainda não tem conta?" : "Já tem uma conta?"}{" "}
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);
@@ -428,9 +463,32 @@ export default function Auth() {
                 }}
                 className="text-primary hover:underline font-medium"
               >
-                {isLogin ? "Criar conta" : "Entrar"}
+                {isLogin ? "Criar conta grátis" : "Entrar"}
               </button>
             </p>
+          )}
+
+          {/* Quick benefits for signup */}
+          {!isLogin && !isForgotPassword && (
+            <motion.div
+              className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-primary" />
+                <span>Resultado em 5 min</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Target className="h-3.5 w-3.5 text-primary" />
+                <span>Plano personalizado</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <span>100% grátis</span>
+              </div>
+            </motion.div>
           )}
         </div>
       </div>

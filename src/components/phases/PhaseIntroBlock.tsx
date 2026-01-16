@@ -206,7 +206,7 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <motion.div variants={itemVariants}>
           <ClarityCard
-            title="O que você vai aprender"
+            title="Você vai aprender"
             icon={<BookOpen className="h-4 w-4" style={{ color: phaseColor }} />}
             items={learnings}
             phaseColor={phaseColor}
@@ -216,7 +216,7 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
 
         <motion.div variants={itemVariants}>
           <ClarityCard
-            title="Para que isso serve"
+            title="Valor gerado"
             icon={<Target className="h-4 w-4" style={{ color: phaseColor }} />}
             items={benefits}
             phaseColor={phaseColor}
@@ -226,7 +226,7 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
 
         <motion.div variants={itemVariants}>
           <ClarityCard
-            title="O que você terá pronto"
+            title="Entregas"
             icon={<CheckCircle2 className="h-4 w-4" style={{ color: phaseColor }} />}
             items={deliverables}
             phaseColor={phaseColor}

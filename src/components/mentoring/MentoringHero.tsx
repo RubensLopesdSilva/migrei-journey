@@ -130,9 +130,9 @@ export function MentoringHero({
               >
                 <div className="space-y-4">
                   {/* Value proposition - honest message */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center">
-                      <Target className="h-5 w-5 text-primary" />
+                  <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20">
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-md">
+                      <Users className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <div className="text-sm">
                       <span className="font-semibold text-foreground">Orientação direcionada</span>

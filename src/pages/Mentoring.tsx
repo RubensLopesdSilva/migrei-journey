@@ -149,22 +149,6 @@ export default function Mentoring() {
             )}
 
             {/* Cancellation Info */}
-            {!isFreePlan && cancellationInfo && (
-              <motion.div 
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="p-3 bg-muted/50 rounded-xl flex items-center gap-3 text-sm"
-              >
-                <Info className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="text-muted-foreground">
-                  {cancellationInfo.canCancelFree 
-                    ? "Você tem 1 cancelamento gratuito disponível este mês."
-                    : `Cancelamentos adicionais serão descontados do seu plano. (${cancellationInfo.paidCancellations} cancelamento(s) pago(s) este mês)`
-                  }
-                </span>
-              </motion.div>
-            )}
           </div>
 
           {/* Mentors Grid */}

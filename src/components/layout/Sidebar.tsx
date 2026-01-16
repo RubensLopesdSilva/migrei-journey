@@ -63,7 +63,7 @@ const mainNavItems: NavItem[] = [
   },
   {
     icon: Users,
-    label: "Networking",
+    label: "Comunidade",
     href: "/comunidade"
   },
   {

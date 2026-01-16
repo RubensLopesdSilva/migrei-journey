@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { 
   Lightbulb, 
   Search, 
@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useProgress } from "@/hooks/useProgress";
 import { cn } from "@/lib/utils";
 import { AgentCenterAvatar } from "./AgentCenterAvatar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Phase {
   id: string;
@@ -113,6 +114,7 @@ const phases: Phase[] = [
 export function MigreiCircle() {
   const navigate = useNavigate();
   const { phasesWithProgress, currentPhase } = useProgress();
+  const isMobile = useIsMobile();
   
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
   const [isEntered, setIsEntered] = useState(false);
@@ -150,15 +152,15 @@ export function MigreiCircle() {
     return () => clearInterval(interval);
   }, []);
 
-  // Dimensões responsivas - maior para preencher o espaço
-  const size = 420;
+  // Dimensões responsivas - baseadas no viewport
+  const size = isMobile ? 300 : 420;
   const center = size / 2;
-  const outerRadius = 195;
-  const innerRadius = 70;
+  const outerRadius = isMobile ? 138 : 195;
+  const innerRadius = isMobile ? 50 : 70;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
-  const gapAngle = 5;
-  const cornerRadius = 10;
+  const gapAngle = isMobile ? 4 : 5;
+  const cornerRadius = isMobile ? 8 : 10;
 
   // Criar caminho do segmento arredondado
   const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {
@@ -399,10 +401,10 @@ export function MigreiCircle() {
 
                 {/* Container do ícone */}
                 <foreignObject
-                  x={iconPos.x - 24}
-                  y={iconPos.y - 24}
-                  width={48}
-                  height={48}
+                  x={iconPos.x - (isMobile ? 18 : 24)}
+                  y={iconPos.y - (isMobile ? 18 : 24)}
+                  width={isMobile ? 36 : 48}
+                  height={isMobile ? 36 : 48}
                   className="pointer-events-none"
                 >
                   <motion.div 
@@ -425,14 +427,15 @@ export function MigreiCircle() {
                   >
                     {isCompleted ? (
                       <Check 
-                        className="h-5 w-5" 
+                        className={isMobile ? "h-4 w-4" : "h-5 w-5"}
                         style={{ color: '#FFFFFF' }}
                         strokeWidth={3}
                       />
                     ) : (
                       <phase.icon 
                         className={cn(
-                          "h-5 w-5 transition-transform duration-200",
+                          isMobile ? "h-4 w-4" : "h-5 w-5",
+                          "transition-transform duration-200",
                           isHovered && "scale-110"
                         )}
                         style={{ 

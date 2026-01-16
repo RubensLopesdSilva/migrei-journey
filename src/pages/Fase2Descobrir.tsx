@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
-import { getPhaseIntroData } from '@/data/phaseIntroData';
+import { PhaseSteps, type PhaseStep } from '@/components/phases/PhaseSteps';
+import { getPhaseIntroData, PHASE_COLORS } from '@/data/phaseIntroData';
 import { DiagnosticHub } from '@/components/discovery/DiagnosticHub';
 import { CareerWheel } from '@/components/discovery/CareerWheel';
 import { DiscoveryDiary } from '@/components/discovery/DiscoveryDiary';
@@ -22,13 +22,12 @@ import {
   Clock, 
   Radar, 
   Sparkles,
-  FileText,
-  Check
+  FileText
 } from 'lucide-react';
 
 type Step = 'diagnosticos' | 'roda' | 'diario' | 'timeline' | 'radar' | 'profissoes' | 'relatorio';
 
-const steps: { key: Step; label: string; icon: typeof Brain }[] = [
+const steps: PhaseStep[] = [
   { key: 'diagnosticos', label: 'Diagnósticos', icon: Brain },
   { key: 'roda', label: 'Roda', icon: Target },
   { key: 'diario', label: 'Diário', icon: BookOpen },
@@ -61,6 +60,19 @@ export default function Fase2Descobrir() {
     }
   };
 
+  const renderStepContent = () => {
+    switch (activeStep) {
+      case 'diagnosticos': return <DiagnosticHub />;
+      case 'roda': return <CareerWheel />;
+      case 'diario': return <DiscoveryDiary />;
+      case 'timeline': return <ProfessionalTimeline />;
+      case 'radar': return <SkillsRadar />;
+      case 'profissoes': return <ProfessionRecommendations />;
+      case 'relatorio': return <ClarityReport />;
+      default: return null;
+    }
+  };
+
   if (isLoading) {
     return (
       <PageLayout>
@@ -83,48 +95,19 @@ export default function Fase2Descobrir() {
         {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
         <PhaseIntroBlock data={phaseIntroData} />
 
-        {/* Main Content - Full Width */}
-        <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>
-          <AnimatedTabsList className="grid grid-cols-7 mb-6">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
-              const isCompleted = index < progress.completed;
-              return (
-                <AnimatedTabsTrigger key={step.key} value={step.key} className="relative">
-                  <Icon className="h-4 w-4 mr-2" aria-hidden="true" />
-                  {step.label}
-                  {isCompleted && (
-                    <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                    </div>
-                  )}
-                </AnimatedTabsTrigger>
-              );
-            })}
-          </AnimatedTabsList>
+        {/* Phase Steps Navigation */}
+        <PhaseSteps
+          steps={steps}
+          activeStep={activeStep}
+          onStepChange={(step) => setActiveStep(step as Step)}
+          completedSteps={progress.completed}
+          phaseColor={PHASE_COLORS[2]}
+        />
 
-          <AnimatedTabsContent value="diagnosticos">
-            <DiagnosticHub />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="roda">
-            <CareerWheel />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="diario">
-            <DiscoveryDiary />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="timeline">
-            <ProfessionalTimeline />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="radar">
-            <SkillsRadar />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="profissoes">
-            <ProfessionRecommendations />
-          </AnimatedTabsContent>
-          <AnimatedTabsContent value="relatorio">
-            <ClarityReport />
-          </AnimatedTabsContent>
-        </AnimatedTabs>
+        {/* Step Content */}
+        <div className="mt-6">
+          {renderStepContent()}
+        </div>
 
         {/* Floating Coach Button */}
         <FloatingCoachButton

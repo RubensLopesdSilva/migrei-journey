@@ -58,10 +58,10 @@ export function MentoringHero({
         <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative p-6 md:p-8 lg:p-10">
-        <div className="flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-10">
+      <div className="relative p-5 md:p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-8">
           {/* Left content */}
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-3">
             <div className="flex items-center gap-2">
               <Badge 
                 variant="secondary" 
@@ -95,20 +95,12 @@ export function MentoringHero({
 
             {/* Benefits for free/essential - show value instead of stats */}
             {needsUpgrade ? (
-              <div className="space-y-3 pt-2">
+              <div className="flex flex-wrap items-center gap-4 pt-1">
                 {benefits.map((benefit, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * (index + 1) }}
-                    className="flex items-center gap-3 text-sm"
-                  >
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="h-4 w-4 text-primary" />
-                    </div>
-                    <span className="text-foreground">{benefit.text}</span>
-                  </motion.div>
+                  <div key={index} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <benefit.icon className="h-4 w-4 text-primary" />
+                    <span>{benefit.text}</span>
+                  </div>
                 ))}
               </div>
             ) : (
@@ -132,9 +124,9 @@ export function MentoringHero({
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="p-6 rounded-xl bg-card border shadow-lg"
+                className="p-5 rounded-xl bg-card border shadow-lg"
               >
-                <div className="space-y-5">
+                <div className="space-y-4">
                   {/* Value proposition - honest message */}
                   <div className="flex items-center gap-3 p-3 rounded-lg bg-primary/5 border border-primary/10">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary/40 to-primary/20 flex items-center justify-center">

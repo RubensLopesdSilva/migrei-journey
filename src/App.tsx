@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AgentProvider } from "@/hooks/useAgent";
 import { SubscriptionProvider } from "@/hooks/useSubscription";
+import { CelebrationProvider } from "@/components/ui/celebration-provider";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { SkipToContent } from "@/components/ui/focus-ring";
@@ -42,40 +43,42 @@ const App = () => (
         <AuthProvider>
           <AgentProvider>
             <SubscriptionProvider>
-              <SkipToContent />
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/landing" element={<Landing />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/escolher-agente" element={<AgentSelection />} />
-                    <Route path="/configuracoes" element={<Settings />} />
-                    <Route path="/mentoria" element={<Mentoring />} />
-                    <Route path="/mentor" element={<MentorDashboard />} />
-                    <Route path="/seja-mentor" element={<BecomeMentor />} />
-                    <Route path="/admin" element={<AdminDashboard />} />
-                    <Route path="/admin/mentores" element={<AdminMentors />} />
-                    <Route path="/admin/usuarios" element={<AdminUsers />} />
-                    <Route path="/admin/configuracoes" element={<AdminSettings />} />
-                    <Route path="/admin/metricas" element={<AdminMetrics />} />
-                    <Route path="/progresso" element={<Progress />} />
-                    <Route path="/comunidade" element={<Community />} />
-                    <Route path="/networking" element={<PositioningAcademy />} />
-                    <Route path="/fase" element={<Fase1Despertar />} />
-                    <Route path="/fase/despertar" element={<Fase1Despertar />} />
-                    <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
-                    <Route path="/fase/decidir" element={<Fase3Decidir />} />
-                    <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
-                    <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
-                    <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AppLayout>
-              </BrowserRouter>
+              <CelebrationProvider>
+                <SkipToContent />
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <AppLayout>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/landing" element={<Landing />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/escolher-agente" element={<AgentSelection />} />
+                      <Route path="/configuracoes" element={<Settings />} />
+                      <Route path="/mentoria" element={<Mentoring />} />
+                      <Route path="/mentor" element={<MentorDashboard />} />
+                      <Route path="/seja-mentor" element={<BecomeMentor />} />
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="/admin/mentores" element={<AdminMentors />} />
+                      <Route path="/admin/usuarios" element={<AdminUsers />} />
+                      <Route path="/admin/configuracoes" element={<AdminSettings />} />
+                      <Route path="/admin/metricas" element={<AdminMetrics />} />
+                      <Route path="/progresso" element={<Progress />} />
+                      <Route path="/comunidade" element={<Community />} />
+                      <Route path="/networking" element={<PositioningAcademy />} />
+                      <Route path="/fase" element={<Fase1Despertar />} />
+                      <Route path="/fase/despertar" element={<Fase1Despertar />} />
+                      <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
+                      <Route path="/fase/decidir" element={<Fase3Decidir />} />
+                      <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
+                      <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
+                      <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </AppLayout>
+                </BrowserRouter>
+              </CelebrationProvider>
             </SubscriptionProvider>
           </AgentProvider>
         </AuthProvider>

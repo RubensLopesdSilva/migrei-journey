@@ -3163,6 +3163,28 @@ export type Database = {
           id: string
         }[]
       }
+      get_conversion_funnel: {
+        Args: { end_date?: string; start_date?: string }
+        Returns: {
+          active_last_7_days: number
+          churned_users: number
+          completed_onboarding: number
+          completed_phase1: number
+          converted_to_paid: number
+          selected_agent: number
+          started_phase1: number
+          total_signups: number
+        }[]
+      }
+      get_daily_signups: {
+        Args: { end_date?: string; start_date?: string }
+        Returns: {
+          day: string
+          paid: number
+          signups: number
+          with_agent: number
+        }[]
+      }
       get_mentor_booked_slots: {
         Args: { p_end_date: string; p_mentor_id: string; p_start_date: string }
         Returns: {
@@ -3175,6 +3197,25 @@ export type Database = {
           can_cancel_free: boolean
           free_cancellations_used: number
           paid_cancellations: number
+        }[]
+      }
+      get_phase_distribution: {
+        Args: never
+        Returns: {
+          avg_days_in_phase: number
+          phase_name: string
+          phase_number: number
+          user_count: number
+        }[]
+      }
+      get_retention_cohorts: {
+        Args: never
+        Returns: {
+          cohort_week: string
+          total_users: number
+          week_1_retention: number
+          week_2_retention: number
+          week_4_retention: number
         }[]
       }
       get_user_feature: {

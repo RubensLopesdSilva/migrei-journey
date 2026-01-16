@@ -104,7 +104,7 @@ export default function Fase1Despertar() {
       case 'commitment':
         return <CommitmentDeclaration onComplete={async () => {
           await handleStepComplete('commitment', 'commitment');
-          navigate('/fase-2-descobrir');
+          navigate('/fase/descobrir');
         }} />;
       default:
         return null;

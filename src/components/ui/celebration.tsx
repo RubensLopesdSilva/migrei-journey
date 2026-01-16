@@ -10,7 +10,8 @@ export type CelebrationType =
   | "phase_complete" 
   | "badge_earned" 
   | "xp_milestone" 
-  | "streak";
+  | "streak"
+  | "first_login";
 
 interface CelebrationConfig {
   confettiCount: number;
@@ -63,6 +64,15 @@ const celebrationConfigs: Record<CelebrationType, CelebrationConfig> = {
     icon: Sparkles,
     title: "Sequência Mantida!",
     duration: 2500,
+  },
+  first_login: {
+    confettiCount: 40,
+    spread: 45,
+    colors: ["#F59E0B", "#FBBF24", "#FCD34D"],
+    icon: Sparkles,
+    title: "Bem-vindo de volta!",
+    subtitle: "Mais um dia na sua jornada",
+    duration: 2000,
   },
 };
 

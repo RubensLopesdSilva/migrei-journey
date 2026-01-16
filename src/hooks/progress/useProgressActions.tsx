@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { progressRepository } from '@/lib/repositories';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useCelebration } from '@/components/ui/celebration';
 import type { 
   PhaseActivity, 
   UserProgress, 
@@ -39,6 +40,7 @@ export function useProgressActions({
 }: UseProgressActionsProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { celebrate } = useCelebration();
 
   /**
    * Award a badge to the user
@@ -69,6 +71,13 @@ export function useProgressActions({
         total_xp: (userProgress?.total_xp || 0) + badge.xp_reward,
       });
 
+      // 🎉 Trigger celebration for badge earned
+      celebrate("badge_earned", {
+        title: "🏆 Nova Conquista!",
+        subtitle: badge.name,
+        xp: badge.xp_reward,
+      });
+
       toast({
         title: '🏆 Nova Conquista!',
         description: `Você desbloqueou: ${badge.name}`,
@@ -76,16 +85,41 @@ export function useProgressActions({
     } catch (error) {
       console.error('Error awarding badge:', error);
     }
-  }, [user, badges, userBadges, userProgress, toast]);
+  }, [user, badges, userBadges, userProgress, toast, celebrate]);
+
+  /**
+   * XP milestones to celebrate
+   */
+  const XP_MILESTONES = [100, 250, 500, 1000, 2500, 5000, 10000];
+
+  /**
+   * Check and celebrate XP milestones
+   */
+  const checkXpMilestones = useCallback((oldXp: number, newXp: number) => {
+    for (const milestone of XP_MILESTONES) {
+      if (oldXp < milestone && newXp >= milestone) {
+        celebrate("xp_milestone", {
+          title: `🌟 ${milestone} XP alcançados!`,
+          subtitle: "Continue assim, você está arrasando!",
+          xp: milestone,
+        });
+        break; // Only celebrate one milestone at a time
+      }
+    }
+  }, [celebrate]);
 
   /**
    * Check and award any unlocked badges
    */
   const checkBadgeUnlocks = useCallback(async (
     totalXp: number, 
-    activitiesCount: number
+    activitiesCount: number,
+    oldXp: number = 0
   ) => {
     if (!user) return;
+
+    // Check XP milestones
+    checkXpMilestones(oldXp, totalXp);
 
     for (const badge of badges) {
       if (userBadges.some(ub => ub.badge_id === badge.id)) continue;
@@ -105,7 +139,7 @@ export function useProgressActions({
           break;
       }
     }
-  }, [user, badges, userBadges, userProgress, awardBadge]);
+  }, [user, badges, userBadges, userProgress, awardBadge, checkXpMilestones]);
 
   /**
    * Handle phase completion
@@ -152,11 +186,20 @@ export function useProgressActions({
       metadata: { phase_number: phase.phase_number, phase_name: phase.name },
     });
 
+    // 🎉 Trigger big celebration for phase completion
+    celebrate("phase_complete", {
+      title: `🎉 Fase ${phase.name} Concluída!`,
+      subtitle: nextPhase 
+        ? `Você desbloqueou a fase ${nextPhase.name}!` 
+        : "Parabéns pela sua jornada!",
+      xp: 500,
+    });
+
     toast({
       title: '🎉 Fase Concluída!',
       description: `Você completou a fase ${phase.name}!`,
     });
-  }, [user, phases, badges, awardBadge, toast]);
+  }, [user, phases, badges, awardBadge, toast, celebrate]);
 
   /**
    * Complete an activity
@@ -249,6 +292,13 @@ export function useProgressActions({
         metadata: { activity_id: activityId, xp_earned: activity.xp_reward },
       });
 
+      // 🎉 Trigger celebration for activity completion
+      celebrate("mission_complete", {
+        title: "✨ Atividade Concluída!",
+        subtitle: activity.title,
+        xp: activity.xp_reward,
+      });
+
       toast({
         title: `+${activity.xp_reward} XP`,
         description: `Atividade "${activity.title}" concluída!`,
@@ -259,8 +309,9 @@ export function useProgressActions({
         await handlePhaseCompletion(phaseId);
       }
 
-      // Check for badge unlocks
-      await checkBadgeUnlocks(newTotalXp, newCompletedActivities.length);
+      // Check for badge unlocks and XP milestones
+      const oldTotalXp = userProgress?.total_xp || 0;
+      await checkBadgeUnlocks(newTotalXp, newCompletedActivities.length, oldTotalXp);
 
       // Refresh data
       await onRefetch();
@@ -281,7 +332,8 @@ export function useProgressActions({
     handlePhaseCompletion, 
     checkBadgeUnlocks, 
     onRefetch, 
-    toast
+    toast,
+    celebrate
   ]);
 
   /**

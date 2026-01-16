@@ -15,6 +15,8 @@ interface PhaseStepsProps {
   onStepChange: (step: string) => void;
   completedSteps?: number;
   phaseColor?: string;
+  /** If true, only allows navigation to completed steps and current step */
+  lockSequential?: boolean;
 }
 
 export function PhaseSteps({ 
@@ -22,9 +24,22 @@ export function PhaseSteps({
   activeStep, 
   onStepChange, 
   completedSteps = 0,
-  phaseColor = "hsl(var(--primary))"
+  phaseColor = "hsl(var(--primary))",
+  lockSequential = false
 }: PhaseStepsProps) {
   const activeIndex = steps.findIndex(s => s.key === activeStep);
+
+  const canNavigate = (index: number) => {
+    if (!lockSequential) return true;
+    // Can navigate to completed steps or the next available step
+    return index <= completedSteps;
+  };
+
+  const handleStepClick = (step: string, index: number) => {
+    if (canNavigate(index)) {
+      onStepChange(step);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -36,14 +51,17 @@ export function PhaseSteps({
           const isCompleted = index < completedSteps;
           const isPast = index < activeIndex;
           const isLast = index === steps.length - 1;
+          const isLocked = lockSequential && !canNavigate(index);
 
           return (
             <div key={step.key} className="flex items-center flex-1 last:flex-none">
               <button
-                onClick={() => onStepChange(step.key)}
+                onClick={() => handleStepClick(step.key, index)}
+                disabled={isLocked}
                 className={cn(
                   "flex flex-col items-center gap-2 relative z-10 group transition-all duration-200",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-2"
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-2",
+                  isLocked && "opacity-40 cursor-not-allowed"
                 )}
               >
                 {/* Step Circle */}
@@ -53,14 +71,15 @@ export function PhaseSteps({
                     "border-2 shadow-sm bg-background",
                     isActive && "shadow-lg scale-110",
                     !isActive && !isCompleted && !isPast && "bg-muted border-muted-foreground/20",
-                    (isCompleted || isPast) && !isActive && "border-transparent"
+                    (isCompleted || isPast) && !isActive && "border-transparent",
+                    isLocked && "bg-muted/50"
                   )}
                   style={{
-                    backgroundColor: isActive ? phaseColor : (isCompleted || isPast) ? `${phaseColor}20` : undefined,
-                    borderColor: isActive ? phaseColor : (isCompleted || isPast) ? phaseColor : undefined,
+                    backgroundColor: isLocked ? undefined : (isActive ? phaseColor : (isCompleted || isPast) ? `${phaseColor}20` : undefined),
+                    borderColor: isLocked ? undefined : (isActive ? phaseColor : (isCompleted || isPast) ? phaseColor : undefined),
                   }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={!isLocked ? { scale: 1.05 } : undefined}
+                  whileTap={!isLocked ? { scale: 0.95 } : undefined}
                 >
                   {isCompleted ? (
                     <Check className="h-5 w-5" style={{ color: phaseColor }} />
@@ -68,7 +87,8 @@ export function PhaseSteps({
                     <Icon 
                       className={cn(
                         "h-5 w-5 transition-colors",
-                        isActive ? "text-white" : (isPast ? "text-primary" : "text-muted-foreground")
+                        isActive ? "text-white" : (isPast ? "text-primary" : "text-muted-foreground"),
+                        isLocked && "text-muted-foreground/50"
                       )}
                     />
                   )}
@@ -79,13 +99,20 @@ export function PhaseSteps({
                   className={cn(
                     "text-xs font-medium transition-colors text-center max-w-[80px]",
                     isActive ? "font-semibold" : "text-muted-foreground",
-                    "group-hover:text-foreground"
+                    !isLocked && "group-hover:text-foreground",
+                    isLocked && "text-muted-foreground/50"
                   )}
-                  style={{ color: isActive ? phaseColor : undefined }}
+                  style={{ color: isActive && !isLocked ? phaseColor : undefined }}
                 >
                   {step.label}
                 </span>
 
+                {/* Lock indicator */}
+                {isLocked && (
+                  <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-muted border flex items-center justify-center">
+                    <span className="text-[8px]">🔒</span>
+                  </div>
+                )}
               </button>
 
               {/* Connecting Line - between circles, not through them */}
@@ -117,24 +144,29 @@ export function PhaseSteps({
             const Icon = step.icon;
             const isActive = step.key === activeStep;
             const isCompleted = index < completedSteps;
+            const isLocked = lockSequential && !canNavigate(index);
 
             return (
               <button
                 key={step.key}
-                onClick={() => onStepChange(step.key)}
+                onClick={() => handleStepClick(step.key, index)}
+                disabled={isLocked}
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-2 rounded-md transition-all duration-200 whitespace-nowrap",
                   "text-xs font-medium flex-1 justify-center min-w-0",
                   isActive 
                     ? "bg-background shadow-sm" 
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                  isLocked && "opacity-40 cursor-not-allowed"
                 )}
                 style={{
-                  color: isActive ? phaseColor : undefined
+                  color: isActive && !isLocked ? phaseColor : undefined
                 }}
               >
                 {isCompleted ? (
                   <Check className="h-3.5 w-3.5 shrink-0" style={{ color: phaseColor }} />
+                ) : isLocked ? (
+                  <span className="text-[10px] shrink-0">🔒</span>
                 ) : (
                   <Icon className="h-3.5 w-3.5 shrink-0" />
                 )}

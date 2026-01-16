@@ -48,8 +48,8 @@ const categoryConfig = {
 // Mock mission for demo
 const defaultMission: Mission = {
   id: '1',
-  title: 'Inicie 3 conversas profissionais',
-  description: 'Conecte-se com pessoas da sua área no LinkedIn, eventos ou coffee chats',
+  title: 'Inicie 3 conversas com profissionais da área',
+  description: 'Networking não é pedir emprego. É aprender com quem já vive a realidade que você busca.',
   target: 3,
   current: 1,
   xp: 150,
@@ -103,10 +103,10 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
                   <Target className="h-6 w-6 text-primary" />
                 )}
               </div>
-              <div className="min-w-0">
+                <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Missão da Semana
+                    Sua missão desta semana
                   </span>
                   <Badge variant="outline" className={cn("text-xs", config.bgClass, config.borderClass)}>
                     {config.icon} {config.label}
@@ -133,7 +133,7 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
           {/* Progress Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Progresso</span>
+              <span className="text-sm font-medium">Conversas realizadas</span>
               <span className={cn(
                 "text-sm font-bold tabular-nums",
                 isCompleted ? "text-green-500" : "text-foreground"
@@ -175,7 +175,7 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
                 </Button>
                 <div className="flex flex-col items-center">
                   <span className="text-2xl font-bold tabular-nums">{localProgress}</span>
-                  <span className="text-xs text-muted-foreground">concluídas</span>
+                  <span className="text-xs text-muted-foreground">conversas</span>
                 </div>
                 <Button
                   variant="default"
@@ -193,10 +193,13 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-center gap-2 pt-2 text-green-600"
+                className="flex flex-col items-center justify-center gap-1 pt-2 text-green-600"
               >
-                <Trophy className="h-5 w-5" />
-                <span className="font-semibold">Missão Completa! 🎉</span>
+                <div className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5" />
+                  <span className="font-semibold">Parabéns! Você completou a missão 🎉</span>
+                </div>
+                <span className="text-xs text-muted-foreground">Cada conversa amplia sua visão e abre novas portas</span>
               </motion.div>
             )}
           </div>

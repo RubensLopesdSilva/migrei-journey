@@ -24,46 +24,46 @@ interface PillarContent {
 const pillars: PillarContent[] = [
   {
     id: 'digital',
-    title: 'Digital',
-    subtitle: 'LinkedIn & Comunidades',
+    title: 'Networking Digital',
+    subtitle: 'LinkedIn, grupos e comunidades online',
     icon: <Smartphone className="h-5 w-5" />,
     scripts: [
       {
-        title: 'Mensagem de Conexão',
-        description: 'Convites personalizados no LinkedIn',
+        title: 'Pedido de conexão',
+        description: 'Seja aceito mesmo sem conhecer a pessoa',
         icon: <UserPlus className="h-4 w-4" />
       },
       {
-        title: 'Comentário Estratégico',
-        description: 'Seja notado por recrutadores',
+        title: 'Comentário que gera conversa',
+        description: 'Apareça para recrutadores de forma natural',
         icon: <MessageSquare className="h-4 w-4" />
       },
       {
-        title: 'InMail que Funciona',
-        description: 'Abordagem fora da sua rede',
+        title: 'Mensagem para desconhecidos',
+        description: 'Aborde pessoas fora da sua rede com confiança',
         icon: <Send className="h-4 w-4" />
       }
     ]
   },
   {
     id: 'presencial',
-    title: 'Presencial',
-    subtitle: 'Eventos & Meetups',
+    title: 'Networking Presencial',
+    subtitle: 'Eventos, meetups e workshops',
     icon: <Mic className="h-5 w-5" />,
     scripts: [
       {
-        title: 'Elevator Pitch',
-        description: 'Apresente-se em 30 segundos',
+        title: 'Apresentação pessoal',
+        description: 'Seja memorável em 30 segundos',
         icon: <Mic className="h-4 w-4" />
       },
       {
-        title: 'Troca de Contatos',
-        description: 'Peça LinkedIn naturalmente',
+        title: 'Troca de contatos',
+        description: 'Saia do evento com conexões reais',
         icon: <Users className="h-4 w-4" />
       },
       {
-        title: 'Follow-up Pós-Evento',
-        description: 'Mantenha o contato aquecido',
+        title: 'Mensagem pós-evento',
+        description: 'Transforme contato em relacionamento',
         icon: <Calendar className="h-4 w-4" />
       }
     ]
@@ -71,22 +71,22 @@ const pillars: PillarContent[] = [
   {
     id: 'onetoone',
     title: 'Conversas 1:1',
-    subtitle: 'Coffee Chats & Indicações',
+    subtitle: 'Coffee chats e pedidos de indicação',
     icon: <Coffee className="h-5 w-5" />,
     scripts: [
       {
-        title: 'Pedir um Coffee Chat',
-        description: 'Convide sem parecer oportunista',
+        title: 'Convite para um café',
+        description: 'Peça tempo sem parecer invasivo',
         icon: <Coffee className="h-4 w-4" />
       },
       {
-        title: 'Conduzir a Conversa',
-        description: 'Perguntas e escuta ativa',
+        title: 'Roteiro da conversa',
+        description: 'Perguntas certas para aprender de verdade',
         icon: <MessageSquare className="h-4 w-4" />
       },
       {
-        title: 'Pedir Indicação',
-        description: 'Referência de forma elegante',
+        title: 'Pedido de indicação',
+        description: 'Peça referência sem constrangimento',
         icon: <UserPlus className="h-4 w-4" />
       }
     ]
@@ -104,8 +104,8 @@ export function NetworkingPillars({ onSelectScript }: NetworkingPillarsProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold">Scripts & Templates</h2>
-          <p className="text-sm text-muted-foreground">Escolha o contexto e acesse modelos prontos</p>
+          <h2 className="text-lg font-bold">Abordagens prontas para usar</h2>
+          <p className="text-sm text-muted-foreground">Copie, personalize e aplique — sem medo de errar</p>
         </div>
       </div>
 

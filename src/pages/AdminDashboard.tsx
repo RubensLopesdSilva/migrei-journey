@@ -14,9 +14,18 @@ import {
   ShieldCheck,
   ShieldX,
   ArrowRight,
+  BarChart3,
 } from "lucide-react";
 
 const adminModules = [
+  {
+    icon: BarChart3,
+    title: "Métricas de Conversão",
+    description: "Funil, retenção e análise de cohorts",
+    href: "/admin/metricas",
+    color: "text-amber-600",
+    bgColor: "bg-amber-500/10",
+  },
   {
     icon: UserCog,
     title: "Gerenciar Mentores",

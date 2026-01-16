@@ -20,6 +20,7 @@ import AdminMentors from "./pages/AdminMentors";
 import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminMetrics from "./pages/AdminMetrics";
 import Progress from "./pages/Progress";
 import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -58,6 +59,7 @@ const App = () => (
                     <Route path="/admin/mentores" element={<AdminMentors />} />
                     <Route path="/admin/usuarios" element={<AdminUsers />} />
                     <Route path="/admin/configuracoes" element={<AdminSettings />} />
+                    <Route path="/admin/metricas" element={<AdminMetrics />} />
                     <Route path="/progresso" element={<Progress />} />
                     <Route path="/comunidade" element={<PositioningAcademy />} />
                     <Route path="/fase" element={<Fase1Despertar />} />

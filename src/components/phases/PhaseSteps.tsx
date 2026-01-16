@@ -29,86 +29,92 @@ export function PhaseSteps({
   return (
     <div className="w-full">
       {/* Desktop Version */}
-      <div className="hidden md:flex items-center justify-between relative">
-        {/* Progress Line Background */}
-        <div className="absolute top-5 left-0 right-0 h-0.5 bg-muted mx-10" />
-        
-        {/* Progress Line Active */}
-        <motion.div 
-          className="absolute top-5 left-0 h-0.5 mx-10"
-          style={{ backgroundColor: phaseColor }}
-          initial={{ width: "0%" }}
-          animate={{ 
-            width: `${(activeIndex / (steps.length - 1)) * 100}%` 
-          }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-        />
-
+      <div className="hidden md:flex items-center justify-between relative px-4">
         {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = step.key === activeStep;
           const isCompleted = index < completedSteps;
           const isPast = index < activeIndex;
+          const isLast = index === steps.length - 1;
 
           return (
-            <button
-              key={step.key}
-              onClick={() => onStepChange(step.key)}
-              className={cn(
-                "flex flex-col items-center gap-2 relative z-10 group transition-all duration-200",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-2"
-              )}
-            >
-              {/* Step Circle */}
-              <motion.div
+            <div key={step.key} className="flex items-center flex-1 last:flex-none">
+              <button
+                onClick={() => onStepChange(step.key)}
                 className={cn(
-                  "h-10 w-10 rounded-full flex items-center justify-center transition-all duration-200",
-                  "border-2 shadow-sm",
-                  isActive && "shadow-lg scale-110",
-                  !isActive && !isCompleted && !isPast && "bg-muted border-muted-foreground/20",
-                  (isCompleted || isPast) && !isActive && "border-transparent"
+                  "flex flex-col items-center gap-2 relative z-10 group transition-all duration-200",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg p-2"
                 )}
-                style={{
-                  backgroundColor: isActive ? phaseColor : (isCompleted || isPast) ? `${phaseColor}30` : undefined,
-                  borderColor: isActive ? phaseColor : (isCompleted || isPast) ? phaseColor : undefined,
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
-                {isCompleted ? (
-                  <Check className="h-5 w-5" style={{ color: phaseColor }} />
-                ) : (
-                  <Icon 
-                    className={cn(
-                      "h-5 w-5 transition-colors",
-                      isActive ? "text-white" : (isPast ? "text-primary" : "text-muted-foreground")
-                    )}
+                {/* Step Circle */}
+                <motion.div
+                  className={cn(
+                    "h-11 w-11 rounded-full flex items-center justify-center transition-all duration-200",
+                    "border-2 shadow-sm bg-background",
+                    isActive && "shadow-lg scale-110",
+                    !isActive && !isCompleted && !isPast && "bg-muted border-muted-foreground/20",
+                    (isCompleted || isPast) && !isActive && "border-transparent"
+                  )}
+                  style={{
+                    backgroundColor: isActive ? phaseColor : (isCompleted || isPast) ? `${phaseColor}20` : undefined,
+                    borderColor: isActive ? phaseColor : (isCompleted || isPast) ? phaseColor : undefined,
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {isCompleted ? (
+                    <Check className="h-5 w-5" style={{ color: phaseColor }} />
+                  ) : (
+                    <Icon 
+                      className={cn(
+                        "h-5 w-5 transition-colors",
+                        isActive ? "text-white" : (isPast ? "text-primary" : "text-muted-foreground")
+                      )}
+                    />
+                  )}
+                </motion.div>
+
+                {/* Step Label */}
+                <span 
+                  className={cn(
+                    "text-xs font-medium transition-colors text-center max-w-[80px]",
+                    isActive ? "font-semibold" : "text-muted-foreground",
+                    "group-hover:text-foreground"
+                  )}
+                  style={{ color: isActive ? phaseColor : undefined }}
+                >
+                  {step.label}
+                </span>
+
+                {/* Active Indicator Dot */}
+                {isActive && (
+                  <motion.div
+                    className="absolute -bottom-1 h-1 w-1 rounded-full"
+                    style={{ backgroundColor: phaseColor }}
+                    layoutId="activeIndicator"
+                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
                   />
                 )}
-              </motion.div>
+              </button>
 
-              {/* Step Label */}
-              <span 
-                className={cn(
-                  "text-xs font-medium transition-colors text-center max-w-[80px]",
-                  isActive ? "font-semibold" : "text-muted-foreground",
-                  "group-hover:text-foreground"
-                )}
-                style={{ color: isActive ? phaseColor : undefined }}
-              >
-                {step.label}
-              </span>
-
-              {/* Active Indicator Dot */}
-              {isActive && (
-                <motion.div
-                  className="absolute -bottom-1 h-1 w-1 rounded-full"
-                  style={{ backgroundColor: phaseColor }}
-                  layoutId="activeIndicator"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
+              {/* Connecting Line - between circles, not through them */}
+              {!isLast && (
+                <div className="flex-1 h-0.5 mx-1 relative self-start mt-[1.625rem]">
+                  {/* Background line */}
+                  <div className="absolute inset-0 bg-muted rounded-full" />
+                  {/* Active line */}
+                  <motion.div
+                    className="absolute inset-y-0 left-0 rounded-full"
+                    style={{ backgroundColor: phaseColor }}
+                    initial={{ width: "0%" }}
+                    animate={{ 
+                      width: isPast ? "100%" : "0%" 
+                    }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  />
+                </div>
               )}
-            </button>
+            </div>
           );
         })}
       </div>

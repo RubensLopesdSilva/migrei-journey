@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { 
   Home, 
   Layers, 
@@ -21,15 +21,27 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useMentorStatus } from "@/hooks/useMentorStatus";
+import { useProgress } from "@/hooks/useProgress";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
+// Map phase numbers to URL slugs
+const phaseNumberToSlug: Record<number, string> = {
+  1: "despertar",
+  2: "descobrir",
+  3: "decidir",
+  4: "desenvolver",
+  5: "deslanchar",
+  6: "desfrutar",
+};
+
 interface NavItem {
   icon: React.ElementType;
   label: string;
   href: string;
+  isDynamic?: boolean; // Flag for items that need dynamic routing
 }
 
 const mainNavItems: NavItem[] = [
@@ -41,7 +53,8 @@ const mainNavItems: NavItem[] = [
   {
     icon: Layers,
     label: "Fase atual",
-    href: "/fase"
+    href: "/fase", // Base path, will be dynamically replaced
+    isDynamic: true
   },
   {
     icon: TrendingUp,
@@ -97,9 +110,17 @@ export function Sidebar() {
   const { signOut } = useAuth();
   const { isAdmin } = useAdmin();
   const { isMentor } = useMentorStatus();
+  const { currentPhase, userProgress } = useProgress();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
   const [mentorMenuOpen, setMentorMenuOpen] = useState(false);
+
+  // Calculate dynamic route for "Fase atual" based on user's current phase
+  const currentPhaseRoute = useMemo(() => {
+    const phaseNumber = userProgress?.current_phase_number || currentPhase?.phase_number || 1;
+    const slug = phaseNumberToSlug[phaseNumber] || "despertar";
+    return `/fase/${slug}`;
+  }, [currentPhase, userProgress]);
 
   // Open admin menu if we're on an admin route
   useEffect(() => {
@@ -137,7 +158,15 @@ export function Sidebar() {
       <nav className="flex-1 px-3 overflow-y-auto">
         <ul className="space-y-1">
           {mainNavItems.map(item => {
-            // Determine data-tour attribute based on href
+            // Use dynamic route for "Fase atual" based on user's current phase
+            const href = item.isDynamic ? currentPhaseRoute : item.href;
+            
+            // Check if current path matches - for phase routes, also check if we're on any /fase/ path
+            const isActive = item.isDynamic 
+              ? location.pathname.startsWith("/fase")
+              : location.pathname === item.href;
+            
+            // Determine data-tour attribute based on original href
             const tourAttr = 
               item.href === "/fase" ? "sidebar-current-phase" :
               item.href === "/progresso" ? "sidebar-progress" :
@@ -148,9 +177,9 @@ export function Sidebar() {
             return (
               <li key={item.label}>
                 <Link 
-                  to={item.href} 
+                  to={href} 
                   onClick={closeMobile} 
-                  className={cn("sidebar-item", location.pathname === item.href && "active")}
+                  className={cn("sidebar-item", isActive && "active")}
                   data-tour={tourAttr}
                 >
                   <item.icon className="h-5 w-5" />

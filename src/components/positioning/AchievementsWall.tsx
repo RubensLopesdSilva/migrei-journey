@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, Heart, MessageCircle, Sparkles, ChevronDown, PartyPopper, TrendingUp, Users } from 'lucide-react';
+import { Trophy, Heart, MessageCircle, ChevronDown, TrendingUp, Users, Plus } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,46 +25,21 @@ interface Achievement {
 }
 
 const achievementConfig = {
-  connection: {
-    icon: Users,
-    emoji: '🤝',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10'
-  },
-  interview: {
-    icon: MessageCircle,
-    emoji: '💼',
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-500/10'
-  },
-  offer: {
-    icon: Trophy,
-    emoji: '🎉',
-    color: 'text-green-500',
-    bgColor: 'bg-green-500/10'
-  },
-  event: {
-    icon: PartyPopper,
-    emoji: '🎤',
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-500/10'
-  },
-  coffee: {
-    icon: TrendingUp,
-    emoji: '☕',
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-500/10'
-  }
+  connection: { emoji: '🤝', label: 'Conexão' },
+  interview: { emoji: '💼', label: 'Entrevista' },
+  offer: { emoji: '🎉', label: 'Proposta' },
+  event: { emoji: '🎤', label: 'Evento' },
+  coffee: { emoji: '☕', label: 'Coffee Chat' }
 };
 
 // Mock data
 const mockAchievements: Achievement[] = [
   {
     id: '1',
-    user: { name: 'Ana Silva', avatar: '' },
+    user: { name: 'Ana Silva' },
     type: 'interview',
     title: 'Consegui uma entrevista!',
-    description: 'Depois de usar o template de mensagem do LinkedIn, recebi uma resposta e marquei uma entrevista para próxima semana! 🚀',
+    description: 'Depois de usar o template de mensagem do LinkedIn, recebi uma resposta e marquei uma entrevista! 🚀',
     likes: 24,
     comments: 5,
     isLiked: false,
@@ -72,10 +47,10 @@ const mockAchievements: Achievement[] = [
   },
   {
     id: '2',
-    user: { name: 'Carlos Mendes', avatar: '' },
+    user: { name: 'Carlos Mendes' },
     type: 'coffee',
-    title: 'Primeiro coffee chat da vida!',
-    description: 'Usei o script de convite e deu certo! A pessoa foi super receptiva e me deu dicas valiosas sobre a área de produto.',
+    title: 'Primeiro coffee chat!',
+    description: 'Usei o script de convite e deu certo! A pessoa foi super receptiva.',
     likes: 18,
     comments: 3,
     isLiked: true,
@@ -83,10 +58,10 @@ const mockAchievements: Achievement[] = [
   },
   {
     id: '3',
-    user: { name: 'Mariana Costa', avatar: '' },
+    user: { name: 'Mariana Costa' },
     type: 'offer',
     title: 'Recebi uma proposta! 🎉',
-    description: 'Depois de 3 meses usando as técnicas do Migrei, finalmente recebi uma proposta. Networking funciona!',
+    description: 'Depois de 3 meses usando as técnicas do Migrei, finalmente consegui!',
     likes: 89,
     comments: 15,
     isLiked: false,
@@ -108,7 +83,7 @@ export function AchievementsWall({
   const [showAll, setShowAll] = useState(false);
   const [localAchievements, setLocalAchievements] = useState(achievements);
   
-  const displayedAchievements = showAll ? localAchievements : localAchievements.slice(0, 3);
+  const displayedAchievements = showAll ? localAchievements : localAchievements.slice(0, 2);
 
   const handleLike = (id: string) => {
     setLocalAchievements(prev => prev.map(a => 
@@ -120,82 +95,75 @@ export function AchievementsWall({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20">
-            <Trophy className="h-5 w-5 text-amber-500" />
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
+              <Trophy className="h-4 w-4 text-amber-500" />
+            </div>
+            <div>
+              <CardTitle className="text-base">Mural de Conquistas</CardTitle>
+              <p className="text-xs text-muted-foreground">Celebre com a comunidade</p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold">Mural de Conquistas</h2>
-            <p className="text-xs text-muted-foreground">
-              Celebre as vitórias da comunidade
-            </p>
-          </div>
+          <Button
+            onClick={onShare}
+            size="sm"
+            variant="outline"
+            className="h-8 gap-1.5"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Compartilhar
+          </Button>
         </div>
-        <Button
-          onClick={onShare}
-          className="gap-2"
-          size="sm"
-        >
-          <Sparkles className="h-4 w-4" />
-          Compartilhar Vitória
-        </Button>
-      </div>
+      </CardHeader>
 
-      {/* Stats summary */}
-      <div className="grid grid-cols-3 gap-3">
-        {[
-          { label: 'Conquistas', value: '247', icon: Trophy, color: 'text-amber-500' },
-          { label: 'Esta semana', value: '32', icon: TrendingUp, color: 'text-green-500' },
-          { label: 'Migrantes', value: '1.2k', icon: Users, color: 'text-blue-500' }
-        ].map((stat) => (
-          <Card key={stat.label} className="p-3">
-            <div className="flex items-center gap-2">
-              <stat.icon className={cn("h-4 w-4", stat.color)} />
+      <CardContent className="space-y-3">
+        {/* Quick Stats */}
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { label: 'Total', value: '247', icon: Trophy },
+            { label: 'Semana', value: '32', icon: TrendingUp },
+            { label: 'Membros', value: '1.2k', icon: Users }
+          ].map((stat) => (
+            <div key={stat.label} className="flex items-center gap-2 p-2 rounded-lg bg-muted/50">
+              <stat.icon className="h-3.5 w-3.5 text-muted-foreground" />
               <div>
-                <p className="font-bold text-lg leading-none">{stat.value}</p>
+                <p className="font-semibold text-sm leading-none">{stat.value}</p>
                 <p className="text-xs text-muted-foreground">{stat.label}</p>
               </div>
             </div>
-          </Card>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Achievements list */}
-      <div className="space-y-3">
-        <AnimatePresence mode="popLayout">
-          {displayedAchievements.map((achievement, index) => {
-            const config = achievementConfig[achievement.type];
-            const Icon = config.icon;
-            
-            return (
-              <motion.div
-                key={achievement.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="group hover:shadow-md transition-all">
-                  <CardContent className="p-4">
+        {/* Achievements list */}
+        <div className="space-y-2">
+          <AnimatePresence mode="popLayout">
+            {displayedAchievements.map((achievement, index) => {
+              const config = achievementConfig[achievement.type];
+              
+              return (
+                <motion.div
+                  key={achievement.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <div className="p-3 rounded-lg border bg-card hover:bg-muted/30 transition-colors">
                     <div className="flex gap-3">
-                      {/* Avatar */}
-                      <Avatar className="h-10 w-10 ring-2 ring-background shadow-sm">
+                      <Avatar className="h-8 w-8">
                         <AvatarImage src={achievement.user.avatar} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-medium">
                           {achievement.user.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
 
                       <div className="flex-1 min-w-0">
-                        {/* Header */}
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                           <span className="font-medium text-sm">{achievement.user.name}</span>
-                          <Badge 
-                            variant="outline" 
-                            className={cn("text-xs px-1.5 py-0", config.color, config.bgColor)}
-                          >
+                          <Badge variant="secondary" className="text-xs h-5 px-1.5">
                             {config.emoji}
                           </Badge>
                           <span className="text-xs text-muted-foreground">
@@ -206,25 +174,23 @@ export function AchievementsWall({
                           </span>
                         </div>
 
-                        {/* Content */}
-                        <h4 className="font-semibold text-sm mb-1">{achievement.title}</h4>
-                        <p className="text-sm text-muted-foreground line-clamp-2">
+                        <h4 className="font-medium text-sm">{achievement.title}</h4>
+                        <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
                           {achievement.description}
                         </p>
 
-                        {/* Actions */}
-                        <div className="flex items-center gap-4 mt-3">
+                        <div className="flex items-center gap-3 mt-2">
                           <Button
                             variant="ghost"
                             size="sm"
                             className={cn(
-                              "h-8 px-2 gap-1.5",
+                              "h-7 px-2 gap-1",
                               achievement.isLiked && "text-red-500"
                             )}
                             onClick={() => handleLike(achievement.id)}
                           >
                             <Heart className={cn(
-                              "h-4 w-4",
+                              "h-3.5 w-3.5",
                               achievement.isLiked && "fill-current"
                             )} />
                             <span className="text-xs">{achievement.likes}</span>
@@ -232,36 +198,37 @@ export function AchievementsWall({
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="h-8 px-2 gap-1.5"
+                            className="h-7 px-2 gap-1"
                           >
-                            <MessageCircle className="h-4 w-4" />
+                            <MessageCircle className="h-3.5 w-3.5" />
                             <span className="text-xs">{achievement.comments}</span>
                           </Button>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
 
-      {/* Show more/less */}
-      {localAchievements.length > 3 && (
-        <Button
-          variant="ghost"
-          className="w-full gap-2"
-          onClick={() => setShowAll(!showAll)}
-        >
-          {showAll ? 'Ver menos' : `Ver mais ${localAchievements.length - 3} conquistas`}
-          <ChevronDown className={cn(
-            "h-4 w-4 transition-transform",
-            showAll && "rotate-180"
-          )} />
-        </Button>
-      )}
-    </div>
+        {/* Show more/less */}
+        {localAchievements.length > 2 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full gap-1.5 text-xs"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? 'Ver menos' : `Ver mais ${localAchievements.length - 2}`}
+            <ChevronDown className={cn(
+              "h-3.5 w-3.5 transition-transform",
+              showAll && "rotate-180"
+            )} />
+          </Button>
+        )}
+      </CardContent>
+    </Card>
   );
 }

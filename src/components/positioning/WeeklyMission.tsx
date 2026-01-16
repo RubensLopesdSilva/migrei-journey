@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Target, CheckCircle2, ChevronRight, Sparkles, Trophy, Clock, TrendingUp } from 'lucide-react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Target, CheckCircle2, Sparkles, Trophy, Clock, Plus, Minus } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -21,23 +21,27 @@ interface Mission {
 interface WeeklyMissionProps {
   mission?: Mission;
   onComplete?: (missionId: string) => void;
+  onUpdateProgress?: (missionId: string, increment: number) => void;
 }
 
 const categoryConfig = {
   digital: {
     label: 'Digital',
-    color: 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-    icon: '📱'
+    icon: '📱',
+    bgClass: 'bg-primary/5',
+    borderClass: 'border-primary/20'
   },
   presencial: {
     label: 'Presencial',
-    color: 'bg-amber-500/10 text-amber-600 border-amber-500/30',
-    icon: '🎤'
+    icon: '🎤',
+    bgClass: 'bg-accent/50',
+    borderClass: 'border-accent'
   },
   onetoone: {
     label: '1:1',
-    color: 'bg-purple-500/10 text-purple-600 border-purple-500/30',
-    icon: '☕'
+    icon: '☕',
+    bgClass: 'bg-secondary/50',
+    borderClass: 'border-secondary'
   }
 };
 
@@ -53,34 +57,45 @@ const defaultMission: Mission = {
   daysLeft: 5
 };
 
-export function WeeklyMission({ mission = defaultMission, onComplete }: WeeklyMissionProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const progress = (mission.current / mission.target) * 100;
-  const isCompleted = mission.current >= mission.target;
+export function WeeklyMission({ mission = defaultMission, onComplete, onUpdateProgress }: WeeklyMissionProps) {
+  const [localProgress, setLocalProgress] = useState(mission.current);
+  const progress = (localProgress / mission.target) * 100;
+  const isCompleted = localProgress >= mission.target;
   const config = categoryConfig[mission.category];
+
+  const handleIncrement = () => {
+    if (localProgress < mission.target) {
+      setLocalProgress(prev => prev + 1);
+      onUpdateProgress?.(mission.id, 1);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (localProgress > 0) {
+      setLocalProgress(prev => prev - 1);
+      onUpdateProgress?.(mission.id, -1);
+    }
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3 }}
     >
       <Card className={cn(
-        "relative overflow-hidden border-2 transition-all duration-300",
+        "relative overflow-hidden transition-all duration-300",
         isCompleted 
-          ? "border-green-500/50 bg-gradient-to-br from-green-500/5 to-emerald-500/10" 
-          : "border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 hover:border-primary/40"
+          ? "border-green-500/50 bg-green-500/5" 
+          : "border-border bg-card hover:border-primary/30"
       )}>
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
-        <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-gradient-to-tr from-primary/5 to-transparent rounded-tr-full" />
-
-        <CardHeader className="pb-2 relative z-10">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
+        <CardContent className="p-5">
+          {/* Header Row */}
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="flex items-center gap-3 min-w-0">
               <div className={cn(
-                "p-3 rounded-xl",
-                isCompleted ? "bg-green-500/20" : "bg-primary/20"
+                "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
+                isCompleted ? "bg-green-500/10" : "bg-primary/10"
               )}>
                 {isCompleted ? (
                   <Trophy className="h-6 w-6 text-green-500" />
@@ -88,51 +103,51 @@ export function WeeklyMission({ mission = defaultMission, onComplete }: WeeklyMi
                   <Target className="h-6 w-6 text-primary" />
                 )}
               </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Missão da Semana
                   </span>
-                  <Badge variant="outline" className={cn("text-xs", config.color)}>
+                  <Badge variant="outline" className={cn("text-xs", config.bgClass, config.borderClass)}>
                     {config.icon} {config.label}
                   </Badge>
                 </div>
-                <h3 className="font-bold text-lg">{mission.title}</h3>
+                <h3 className="font-bold text-base leading-tight">{mission.title}</h3>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-1">
-              <Badge className="bg-primary/10 text-primary border-primary/20">
-                <Sparkles className="h-3 w-3 mr-1" />
+            
+            <div className="flex flex-col items-end gap-1 shrink-0">
+              <Badge variant="secondary" className="gap-1">
+                <Sparkles className="h-3 w-3" />
                 {mission.xp} XP
               </Badge>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                {mission.daysLeft} dias restantes
-              </div>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="relative z-10 space-y-4">
-          <p className="text-sm text-muted-foreground">{mission.description}</p>
-
-          {/* Progress section */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">Progresso</span>
-              <span className={cn(
-                "font-bold",
-                isCompleted ? "text-green-500" : "text-primary"
-              )}>
-                {mission.current}/{mission.target}
+                {mission.daysLeft}d restantes
               </span>
             </div>
+          </div>
+
+          <p className="text-sm text-muted-foreground mb-4">{mission.description}</p>
+
+          {/* Progress Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Progresso</span>
+              <span className={cn(
+                "text-sm font-bold tabular-nums",
+                isCompleted ? "text-green-500" : "text-foreground"
+              )}>
+                {localProgress} / {mission.target}
+              </span>
+            </div>
+            
             <div className="relative">
               <Progress 
                 value={progress} 
                 className={cn(
-                  "h-3 rounded-full",
-                  isCompleted ? "[&>div]:bg-green-500" : ""
+                  "h-2",
+                  isCompleted && "[&>div]:bg-green-500"
                 )}
               />
               {isCompleted && (
@@ -141,69 +156,50 @@ export function WeeklyMission({ mission = defaultMission, onComplete }: WeeklyMi
                   animate={{ scale: 1 }}
                   className="absolute -right-1 -top-1"
                 >
-                  <CheckCircle2 className="h-5 w-5 text-green-500 fill-green-500/20" />
+                  <CheckCircle2 className="h-4 w-4 text-green-500 fill-green-100" />
                 </motion.div>
               )}
             </div>
-          </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-3 pt-2">
-            {isCompleted ? (
-              <Button className="w-full gap-2 bg-green-500 hover:bg-green-600">
-                <Trophy className="h-4 w-4" />
-                Missão Completa!
-              </Button>
-            ) : (
-              <>
-                <Button 
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  variant="outline" 
-                  className="flex-1 gap-2"
+            {/* Quick Progress Controls */}
+            {!isCompleted && (
+              <div className="flex items-center justify-center gap-4 pt-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-10 w-10 rounded-full"
+                  onClick={handleDecrement}
+                  disabled={localProgress === 0}
                 >
-                  <TrendingUp className="h-4 w-4" />
-                  Registrar Progresso
-                  <ChevronRight className={cn(
-                    "h-4 w-4 transition-transform",
-                    isExpanded && "rotate-90"
-                  )} />
+                  <Minus className="h-4 w-4" />
                 </Button>
-              </>
-            )}
-          </div>
-
-          {/* Expanded section */}
-          <AnimatePresence>
-            {isExpanded && !isCompleted && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="overflow-hidden"
-              >
-                <div className="pt-4 space-y-3 border-t">
-                  <p className="text-sm font-medium">Onde você fez networking?</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { label: 'LinkedIn', icon: '📱', type: 'digital' },
-                      { label: 'Evento', icon: '🎤', type: 'presencial' },
-                      { label: 'Coffee Chat', icon: '☕', type: 'onetoone' }
-                    ].map((option) => (
-                      <Button
-                        key={option.type}
-                        variant="outline"
-                        className="flex-col h-auto py-3 hover:bg-primary/5 hover:border-primary"
-                        onClick={() => onComplete?.(mission.id)}
-                      >
-                        <span className="text-2xl mb-1">{option.icon}</span>
-                        <span className="text-xs">{option.label}</span>
-                      </Button>
-                    ))}
-                  </div>
+                <div className="flex flex-col items-center">
+                  <span className="text-2xl font-bold tabular-nums">{localProgress}</span>
+                  <span className="text-xs text-muted-foreground">concluídas</span>
                 </div>
+                <Button
+                  variant="default"
+                  size="icon"
+                  className="h-10 w-10 rounded-full"
+                  onClick={handleIncrement}
+                  disabled={localProgress >= mission.target}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+
+            {isCompleted && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center justify-center gap-2 pt-2 text-green-600"
+              >
+                <Trophy className="h-5 w-5" />
+                <span className="font-semibold">Missão Completa! 🎉</span>
               </motion.div>
             )}
-          </AnimatePresence>
+          </div>
         </CardContent>
       </Card>
     </motion.div>

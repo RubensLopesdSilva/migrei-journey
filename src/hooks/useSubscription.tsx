@@ -8,6 +8,7 @@ interface PlanFeatures {
   ai_assistant?: boolean;
   priority_support?: boolean;
   exclusive_content?: boolean;
+  max_phase_access?: number;
   [key: string]: unknown;
 }
 
@@ -30,6 +31,8 @@ interface SubscriptionContextType extends SubscriptionState {
   validateCoupon: (couponCode: string, planId?: string) => Promise<CouponValidation | null>;
   hasFeature: (featureKey: string) => boolean;
   getFeatureValue: <T = unknown>(featureKey: string, defaultValue: T) => T;
+  canAccessPhase: (phaseNumber: number) => boolean;
+  getMaxPhaseAccess: () => number;
 }
 
 interface CouponValidation {
@@ -215,6 +218,20 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     [state.features]
   );
 
+  const getMaxPhaseAccess = useCallback((): number => {
+    const maxPhase = state.features.max_phase_access;
+    if (typeof maxPhase === "number") return maxPhase;
+    // Default: free plan = 2, others = 6
+    return state.planSlug === "free" ? 2 : 6;
+  }, [state.features, state.planSlug]);
+
+  const canAccessPhase = useCallback(
+    (phaseNumber: number): boolean => {
+      return phaseNumber <= getMaxPhaseAccess();
+    },
+    [getMaxPhaseAccess]
+  );
+
   // Check subscription on mount and when user changes
   useEffect(() => {
     if (user) {
@@ -258,6 +275,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         validateCoupon,
         hasFeature,
         getFeatureValue,
+        canAccessPhase,
+        getMaxPhaseAccess,
       }}
     >
       {children}

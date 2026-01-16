@@ -1,15 +1,16 @@
-import { useCallback, useMemo, useEffect, useRef } from 'react';
+import { useCallback, useMemo, useEffect, useRef, useState } from 'react';
 import { useProgress } from '@/hooks/useProgress';
 import { useAwakening } from '@/hooks/useAwakening';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 // Phase 1 activity IDs from the database
 // These map directly to the phase_activities table for Phase 1: Despertar
 const PHASE_1_ACTIVITY_MAP = {
-  // Note: consciousness doesn't have a direct activity - it's implicit
-  readiness: '2f34121f-5e30-4a93-94c7-4edfdd9f768b',    // "Faça o Teste de Prontidão"
-  painmap: 'a232858c-4d50-4743-9e52-d4b45fc19baf',      // "Mapeie suas dores profissionais"
-  commitment: '44d7c7cb-2551-4497-ab4a-fd92d281e9f5',   // "Declare seu compromisso"
+  profile: 'a7f1c071-7232-43a9-af06-b84207db86f3',        // "Complete seu perfil profissional"
+  readiness: '2f34121f-5e30-4a93-94c7-4edfdd9f768b',      // "Faça o Teste de Prontidão"
+  painmap: 'a232858c-4d50-4743-9e52-d4b45fc19baf',        // "Mapeie suas dores profissionais"
+  commitment: '44d7c7cb-2551-4497-ab4a-fd92d281e9f5',     // "Declare seu compromisso"
 } as const;
 
 const PHASE_1_ID = '25fd7273-3ba2-4104-964d-d0126db222a7';
@@ -24,9 +25,28 @@ export function usePhase1Activities() {
   const { user } = useAuth();
   const { completeActivity, completedActivities, refreshProgress, loading: progressLoading } = useProgress();
   const { readinessAssessment, painMap, commitment } = useAwakening();
+  const [profileComplete, setProfileComplete] = useState(false);
   
   // Track what we've already processed to avoid duplicate calls
   const processedRef = useRef<Set<string>>(new Set());
+
+  // Check if profile is complete
+  useEffect(() => {
+    const checkProfile = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, bio')
+        .eq('user_id', user.id)
+        .single();
+      
+      // Profile is complete if user has a full name
+      setProfileComplete(!!(data?.full_name && data.full_name.trim().length > 0));
+    };
+    
+    checkProfile();
+  }, [user]);
 
   /**
    * Check if a step's activity is already completed
@@ -66,6 +86,7 @@ export function usePhase1Activities() {
    */
   const stepCompletionStatus = useMemo(() => {
     return {
+      profile: profileComplete,
       readiness: !!(readinessAssessment && 
         readinessAssessment.emotional_score > 0 && 
         readinessAssessment.financial_score > 0 && 
@@ -73,7 +94,7 @@ export function usePhase1Activities() {
       painmap: painMap.length >= 2,
       commitment: !!commitment,
     };
-  }, [readinessAssessment, painMap, commitment]);
+  }, [profileComplete, readinessAssessment, painMap, commitment]);
 
   /**
    * Auto-complete activities when data criteria is met
@@ -101,5 +122,6 @@ export function usePhase1Activities() {
     refreshProgress,
     activityIds: PHASE_1_ACTIVITY_MAP,
     phaseId: PHASE_1_ID,
+    profileComplete,
   };
 }

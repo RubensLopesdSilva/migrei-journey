@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
 import { AgentSettingsCard } from "@/components/settings/AgentSettingsCard";
+import { usePhase1Activities } from "@/hooks/usePhase1Activities";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
@@ -45,6 +46,7 @@ export default function Settings() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { completeStepActivity, isActivityCompleted } = usePhase1Activities();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -206,6 +208,11 @@ export default function Settings() {
         description: "Suas informações foram salvas com sucesso.",
       });
       fetchProfile();
+      
+      // Complete the profile activity for gamification if not already done
+      if (fullName && fullName.trim().length > 0 && !isActivityCompleted('profile')) {
+        await completeStepActivity('profile');
+      }
     }
 
     setSaving(false);

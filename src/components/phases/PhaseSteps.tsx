@@ -86,15 +86,6 @@ export function PhaseSteps({
                   {step.label}
                 </span>
 
-                {/* Active Indicator Dot */}
-                {isActive && (
-                  <motion.div
-                    className="absolute -bottom-1 h-1 w-1 rounded-full"
-                    style={{ backgroundColor: phaseColor }}
-                    layoutId="activeIndicator"
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
               </button>
 
               {/* Connecting Line - between circles, not through them */}

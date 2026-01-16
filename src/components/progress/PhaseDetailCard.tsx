@@ -21,7 +21,6 @@ interface PhaseDetailCardProps {
   phase: PhaseWithProgress;
   completedActivities: string[];
   onStartPhase?: () => void;
-  onCompleteActivity?: (activityId: string) => void;
 }
 
 const activityIcons: Record<ActivityType, React.ElementType> = {
@@ -52,8 +51,7 @@ const phaseColors: Record<number, string> = {
 export function PhaseDetailCard({ 
   phase, 
   completedActivities,
-  onStartPhase,
-  onCompleteActivity 
+  onStartPhase 
 }: PhaseDetailCardProps) {
   const isLocked = phase.userProgress?.status === 'locked';
   const isCompleted = phase.userProgress?.status === 'completed';
@@ -158,7 +156,6 @@ export function PhaseDetailCard({
                     activity={activity}
                     isCompleted={isActivityCompleted}
                     isLocked={isLocked}
-                    onComplete={() => onCompleteActivity?.(activity.id)}
                     color={color}
                   />
                 );
@@ -179,7 +176,6 @@ export function PhaseDetailCard({
                   activity={activity}
                   isCompleted={isActivityCompleted}
                   isLocked={isLocked}
-                  onComplete={() => onCompleteActivity?.(activity.id)}
                   color={color}
                 />
               );
@@ -216,11 +212,10 @@ interface ActivityItemProps {
   activity: PhaseActivity;
   isCompleted: boolean;
   isLocked: boolean;
-  onComplete: () => void;
   color: string;
 }
 
-function ActivityItem({ activity, isCompleted, isLocked, onComplete, color }: ActivityItemProps) {
+function ActivityItem({ activity, isCompleted, isLocked, color }: ActivityItemProps) {
   const Icon = activityIcons[activity.activity_type];
 
   return (
@@ -228,10 +223,9 @@ function ActivityItem({ activity, isCompleted, isLocked, onComplete, color }: Ac
       className={cn(
         "flex items-center gap-3 p-3 rounded-lg border transition-all",
         isCompleted && "bg-green-500/5 border-green-200",
-        !isCompleted && !isLocked && "bg-card hover:bg-muted/50 cursor-pointer",
+        !isCompleted && !isLocked && "bg-card",
         isLocked && "opacity-50"
       )}
-      onClick={() => !isCompleted && !isLocked && onComplete()}
     >
       <div 
         className={cn(

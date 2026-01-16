@@ -28,7 +28,6 @@ export default function Progress() {
     userProgress,
     phaseProgress,
     completedActivities,
-    completeActivity,
     startPhase,
     getProgressSummary
   } = useProgress();
@@ -64,11 +63,6 @@ export default function Progress() {
     setSelectedPhase(phase);
   };
 
-  const handleCompleteActivity = (activityId: string) => {
-    if (selectedPhase) {
-      completeActivity(activityId, selectedPhase.id);
-    }
-  };
 
   const handleStartPhase = () => {
     if (selectedPhase) {
@@ -125,7 +119,6 @@ export default function Progress() {
               phase={selectedPhase}
               completedActivities={completedActivities}
               onStartPhase={handleStartPhase}
-              onCompleteActivity={handleCompleteActivity}
             />
           </motion.div>
         ) : (

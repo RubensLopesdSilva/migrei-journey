@@ -5,6 +5,8 @@ import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 import { PhaseWelcomeModal } from "@/components/dashboard/PhaseWelcomeModal";
+import { ReengagementCard } from "@/components/dashboard/ReengagementCard";
+import { UpgradeNudge, useUpgradeNudgeTrigger } from "@/components/subscription/UpgradeNudge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { PageContent } from "@/components/ui/page-transition";
@@ -15,8 +17,10 @@ const Index = () => {
   const { loading: progressLoading } = useProgress();
   const { loading: agentLoading } = useAgent();
   const [showPhaseModal, setShowPhaseModal] = useState(false);
+  const { shouldShowNudge } = useUpgradeNudgeTrigger();
 
   const loading = progressLoading || agentLoading;
+  const nudgeData = shouldShowNudge();
 
   const handleTourComplete = () => {
     // Show phase modal after tour completes
@@ -71,6 +75,23 @@ const Index = () => {
               </>
             ) : (
               <>
+                {/* Reengagement Card - for inactive users */}
+                <ReengagementCard />
+
+                {/* Upgrade Nudge - appears after achievements for free users */}
+                {nudgeData && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <UpgradeNudge 
+                      trigger={nudgeData.trigger} 
+                      context={nudgeData.context} 
+                    />
+                  </motion.div>
+                )}
+
                 {/* Missions Card - Phase contextual */}
                 <motion.div
                   className="flex-1"

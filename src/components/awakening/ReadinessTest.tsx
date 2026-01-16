@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Heart, Wallet, Briefcase, Check, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { Heart, Wallet, Briefcase, Check, ArrowRight, Loader2, ChevronLeft } from 'lucide-react';
 import { READINESS_QUESTIONS, ReadinessCategory, ReadinessAnswer } from '@/types/awakening';
 import { useAwakening } from '@/hooks/useAwakening';
 import { cn } from '@/lib/utils';
@@ -10,58 +10,101 @@ interface ReadinessTestProps {
   onComplete: () => void;
 }
 
-const scaleLabels = [
-  { value: 1, emoji: '😟', label: 'Nada' },
-  { value: 3, emoji: '😕', label: 'Pouco' },
-  { value: 5, emoji: '😐', label: 'Médio' },
-  { value: 7, emoji: '🙂', label: 'Bem' },
-  { value: 10, emoji: '😄', label: 'Muito' }
+const scaleOptions = [
+  { value: 1, label: 'Discordo totalmente' },
+  { value: 3, label: 'Discordo parcialmente' },
+  { value: 5, label: 'Neutro' },
+  { value: 7, label: 'Concordo parcialmente' },
+  { value: 10, label: 'Concordo totalmente' }
 ];
 
 export function ReadinessTest({ onComplete }: ReadinessTestProps) {
   const { readinessAssessment, saveReadinessAssessment } = useAwakening();
-  const [activeTab, setActiveTab] = useState<ReadinessCategory>('emotional');
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<ReadinessCategory, Record<number, number>>>({
     emotional: {},
     financial: {},
     professional: {}
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [showCategorySummary, setShowCategorySummary] = useState(false);
 
-  const categories: { key: ReadinessCategory; label: string; icon: typeof Heart; gradient: string }[] = [
-    { key: 'emotional', label: 'Emocional', icon: Heart, gradient: 'from-rose-500 to-pink-500' },
-    { key: 'financial', label: 'Financeiro', icon: Wallet, gradient: 'from-emerald-500 to-teal-500' },
-    { key: 'professional', label: 'Profissional', icon: Briefcase, gradient: 'from-blue-500 to-indigo-500' }
+  const categories: { key: ReadinessCategory; label: string; icon: typeof Heart; color: string }[] = [
+    { key: 'emotional', label: 'Emocional', icon: Heart, color: 'text-rose-500' },
+    { key: 'financial', label: 'Financeiro', icon: Wallet, color: 'text-emerald-500' },
+    { key: 'professional', label: 'Profissional', icon: Briefcase, color: 'text-blue-500' }
   ];
 
-  const handleAnswerChange = (category: ReadinessCategory, questionIndex: number, value: number) => {
+  const currentCategory = categories[currentCategoryIndex];
+  const currentQuestions = READINESS_QUESTIONS[currentCategory.key];
+  const currentQuestion = currentQuestions[currentQuestionIndex];
+  
+  // Total progress
+  const totalQuestions = categories.reduce((acc, cat) => acc + READINESS_QUESTIONS[cat.key].length, 0);
+  const answeredQuestions = categories.reduce((acc, cat, idx) => {
+    if (idx < currentCategoryIndex) {
+      return acc + READINESS_QUESTIONS[cat.key].length;
+    } else if (idx === currentCategoryIndex) {
+      return acc + Object.keys(answers[cat.key]).length;
+    }
+    return acc;
+  }, 0);
+
+  const handleAnswer = async (value: number) => {
     setAnswers(prev => ({
       ...prev,
-      [category]: { ...prev[category], [questionIndex]: value }
+      [currentCategory.key]: { ...prev[currentCategory.key], [currentQuestionIndex]: value }
     }));
+
+    // Auto advance after short delay
+    setTimeout(() => {
+      if (currentQuestionIndex < currentQuestions.length - 1) {
+        // Next question in same category
+        setCurrentQuestionIndex(prev => prev + 1);
+      } else {
+        // End of category - save and show summary or move to next
+        handleSaveCategory();
+      }
+    }, 300);
   };
 
-  const handleSaveCategory = async (category: ReadinessCategory) => {
-    const questions = READINESS_QUESTIONS[category];
-    const categoryAnswers = answers[category];
+  const handleSaveCategory = async () => {
+    const categoryAnswers = answers[currentCategory.key];
     
-    if (Object.keys(categoryAnswers).length !== questions.length) return;
-
     setIsSaving(true);
-    const answersToSave: ReadinessAnswer[] = questions.map((q, i) => ({
+    const answersToSave: ReadinessAnswer[] = currentQuestions.map((q, i) => ({
       question: q.question,
       value: categoryAnswers[i] ?? 5,
       weight: q.weight
     }));
 
-    await saveReadinessAssessment(category, answersToSave);
+    await saveReadinessAssessment(currentCategory.key, answersToSave);
     setIsSaving(false);
 
-    const currentIndex = categories.findIndex(c => c.key === category);
-    if (currentIndex < categories.length - 1) {
-      setActiveTab(categories[currentIndex + 1].key);
+    if (currentCategoryIndex < categories.length - 1) {
+      // Move to next category
+      setCurrentCategoryIndex(prev => prev + 1);
+      setCurrentQuestionIndex(0);
+    } else {
+      // All done
+      setShowCategorySummary(true);
     }
   };
+
+  const handleBack = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    } else if (currentCategoryIndex > 0) {
+      const prevCategoryIndex = currentCategoryIndex - 1;
+      const prevCategory = categories[prevCategoryIndex];
+      setCurrentCategoryIndex(prevCategoryIndex);
+      setCurrentQuestionIndex(READINESS_QUESTIONS[prevCategory.key].length - 1);
+    }
+  };
+
+  const canGoBack = currentQuestionIndex > 0 || currentCategoryIndex > 0;
+  const currentAnswer = answers[currentCategory.key][currentQuestionIndex];
 
   const getCategoryScore = (category: ReadinessCategory) => {
     if (!readinessAssessment) return null;
@@ -69,247 +112,190 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
     return readinessAssessment[scoreKey] as number;
   };
 
-  const isCategoryComplete = (category: ReadinessCategory) => {
-    const score = getCategoryScore(category);
-    return score !== null && score > 0;
-  };
-
-  const allComplete = categories.every(c => isCategoryComplete(c.key));
-  const currentCategoryIndex = categories.findIndex(c => c.key === activeTab);
-  const currentCategory = categories[currentCategoryIndex];
-
   const getReadinessInfo = (level: string | undefined) => {
     switch (level) {
-      case 'not_ready': return { label: 'Em preparação', color: 'text-amber-600', bg: 'bg-amber-500/10' };
-      case 'preparing': return { label: 'Quase lá', color: 'text-blue-600', bg: 'bg-blue-500/10' };
-      case 'ready': return { label: 'Pronto para migrar!', color: 'text-emerald-600', bg: 'bg-emerald-500/10' };
+      case 'not_ready': return { label: 'Em preparação', sublabel: 'Você está começando sua jornada' };
+      case 'preparing': return { label: 'Quase lá', sublabel: 'Você está no caminho certo' };
+      case 'ready': return { label: 'Pronto!', sublabel: 'Você está preparado para a transição' };
       default: return null;
     }
   };
 
-  const readinessInfo = getReadinessInfo(readinessAssessment?.readiness_level);
+  // Show final summary
+  if (showCategorySummary && readinessAssessment) {
+    const readinessInfo = getReadinessInfo(readinessAssessment.readiness_level);
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-md mx-auto text-center py-8"
+      >
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+          <Check className="h-10 w-10 text-primary" />
+        </div>
+        
+        <h2 className="text-2xl font-bold mb-2">Diagnóstico Completo</h2>
+        
+        {readinessInfo && (
+          <div className="mb-8">
+            <p className="text-4xl font-bold text-primary mb-2">
+              {readinessAssessment.total_score}%
+            </p>
+            <p className="text-lg font-medium">{readinessInfo.label}</p>
+            <p className="text-muted-foreground">{readinessInfo.sublabel}</p>
+          </div>
+        )}
+
+        {/* Category breakdown */}
+        <div className="space-y-3 mb-8">
+          {categories.map(cat => {
+            const Icon = cat.icon;
+            const score = getCategoryScore(cat.key);
+            return (
+              <div key={cat.key} className="flex items-center gap-3 p-3 rounded-xl bg-muted/50">
+                <Icon className={cn("h-5 w-5", cat.color)} />
+                <span className="flex-1 text-left font-medium">{cat.label}</span>
+                <span className="font-semibold">{score}%</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <Button onClick={onComplete} size="lg" className="w-full h-12 gap-2">
+          Continuar
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </motion.div>
+    );
+  }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-          <Sparkles className="h-4 w-4" />
-          Diagnóstico rápido
-        </div>
-        <h2 className="text-2xl font-bold mb-2">
-          Qual sua prontidão para a transição?
-        </h2>
-        <p className="text-muted-foreground">
-          Responda com sinceridade — não existe certo ou errado
-        </p>
-      </motion.div>
-
-      {/* Result Badge */}
-      {readinessInfo && readinessAssessment && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className={cn("flex items-center justify-center gap-2 py-3 px-4 rounded-xl mb-6", readinessInfo.bg)}
-        >
-          <span className={cn("font-semibold", readinessInfo.color)}>
-            {readinessInfo.label}
-          </span>
-          <span className="text-muted-foreground">•</span>
-          <span className="font-medium">{readinessAssessment.total_score}% preparado</span>
-        </motion.div>
-      )}
-
-      {/* Category Navigation */}
-      <div className="flex gap-2 mb-8">
-        {categories.map((cat, index) => {
-          const Icon = cat.icon;
-          const isActive = activeTab === cat.key;
-          const isComplete = isCategoryComplete(cat.key);
-          const score = getCategoryScore(cat.key);
-          
-          return (
-            <button
-              key={cat.key}
-              onClick={() => setActiveTab(cat.key)}
-              className={cn(
-                "flex-1 relative p-4 rounded-2xl transition-all duration-300",
-                isActive 
-                  ? "bg-background shadow-lg ring-2 ring-primary/20" 
-                  : "bg-muted/50 hover:bg-muted"
-              )}
-            >
-              {/* Complete indicator */}
-              {isComplete && (
-                <div className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-emerald-500 flex items-center justify-center shadow-sm">
-                  <Check className="h-3 w-3 text-white" />
+    <div className="w-full max-w-lg mx-auto">
+      {/* Progress Header */}
+      <div className="mb-8">
+        {/* Category indicator */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          {categories.map((cat, idx) => {
+            const Icon = cat.icon;
+            const isActive = idx === currentCategoryIndex;
+            const isComplete = idx < currentCategoryIndex;
+            
+            return (
+              <div key={cat.key} className="flex items-center gap-2">
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center transition-all",
+                  isActive ? "bg-primary text-primary-foreground" :
+                  isComplete ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
+                )}>
+                  {isComplete ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
                 </div>
-              )}
-              
-              <div className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all",
-                isActive 
-                  ? `bg-gradient-to-br ${cat.gradient} text-white shadow-md` 
-                  : "bg-muted text-muted-foreground"
-              )}>
-                <Icon className="h-5 w-5" />
+                {idx < categories.length - 1 && (
+                  <div className={cn(
+                    "w-8 h-0.5 rounded-full transition-colors",
+                    idx < currentCategoryIndex ? "bg-primary" : "bg-muted"
+                  )} />
+                )}
               </div>
-              
-              <p className={cn(
-                "text-sm font-medium transition-colors",
-                isActive ? "text-foreground" : "text-muted-foreground"
-              )}>
-                {cat.label}
-              </p>
-              
-              {score !== null && score > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">{score}%</p>
-              )}
-            </button>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        {/* Current category label */}
+        <div className="text-center mb-4">
+          <span className={cn("text-sm font-medium", currentCategory.color)}>
+            {currentCategory.label}
+          </span>
+          <span className="text-muted-foreground text-sm ml-2">
+            {currentQuestionIndex + 1} de {currentQuestions.length}
+          </span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="h-1 bg-muted rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${(answeredQuestions / totalQuestions) * 100}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
       </div>
 
-      {/* Questions */}
+      {/* Question */}
       <AnimatePresence mode="wait">
-        {categories.map(cat => {
-          if (activeTab !== cat.key) return null;
-          const questions = READINESS_QUESTIONS[cat.key];
-          const answeredCount = Object.keys(answers[cat.key]).length;
-          
-          return (
-            <motion.div
-              key={cat.key}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
-              className="space-y-6"
-            >
-              {/* Progress */}
-              <div className="flex items-center gap-3 text-sm">
-                <div className="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
-                  <motion.div
-                    className={cn("h-full rounded-full bg-gradient-to-r", cat.gradient)}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(answeredCount / questions.length) * 100}%` }}
-                    transition={{ duration: 0.3 }}
-                  />
-                </div>
-                <span className="text-muted-foreground font-medium">
-                  {answeredCount}/{questions.length}
-                </span>
-              </div>
-
-              {/* Question Cards */}
-              <div className="space-y-4">
-                {questions.map((q, index) => {
-                  const value = answers[cat.key][index];
-                  
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className={cn(
-                        "p-5 rounded-2xl border-2 transition-all duration-200",
-                        value !== undefined 
-                          ? "border-primary/20 bg-primary/5" 
-                          : "border-transparent bg-muted/30"
-                      )}
-                    >
-                      <p className="font-medium text-[15px] mb-4">{q.question}</p>
-                      
-                      {/* Scale Options */}
-                      <div className="flex gap-2">
-                        {scaleLabels.map((option) => (
-                          <button
-                            key={option.value}
-                            onClick={() => handleAnswerChange(cat.key, index, option.value)}
-                            className={cn(
-                              "flex-1 flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl transition-all duration-200",
-                              value === option.value 
-                                ? `bg-gradient-to-br ${cat.gradient} text-white shadow-md scale-105` 
-                                : "bg-background hover:bg-muted border border-border hover:border-primary/30"
-                            )}
-                          >
-                            <span className="text-xl">{option.emoji}</span>
-                            <span className={cn(
-                              "text-[11px] font-medium",
-                              value === option.value ? "text-white/90" : "text-muted-foreground"
-                            )}>
-                              {option.label}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* Save Button */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Button
-                  onClick={() => handleSaveCategory(cat.key)}
-                  disabled={answeredCount !== questions.length || isSaving}
-                  className={cn(
-                    "w-full h-14 text-base font-semibold rounded-2xl transition-all",
-                    answeredCount === questions.length && !isSaving
-                      ? `bg-gradient-to-r ${cat.gradient} hover:opacity-90 shadow-lg`
-                      : ""
-                  )}
-                >
-                  {isSaving ? (
-                    <>
-                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                      Salvando...
-                    </>
-                  ) : (
-                    <>
-                      {isCategoryComplete(cat.key) ? 'Atualizar' : 'Salvar'} e continuar
-                      <ArrowRight className="h-5 w-5 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </motion.div>
-            </motion.div>
-          );
-        })}
+        <motion.div
+          key={`${currentCategory.key}-${currentQuestionIndex}`}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.2 }}
+          className="mb-8"
+        >
+          <h2 className="text-xl font-semibold text-center leading-relaxed">
+            {currentQuestion.question}
+          </h2>
+        </motion.div>
       </AnimatePresence>
 
-      {/* Complete All */}
-      {allComplete && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-8 pt-6 border-t"
-        >
-          <div className="text-center mb-4">
-            <div className="inline-flex items-center gap-2 text-emerald-600 font-medium">
-              <Check className="h-5 w-5" />
-              Diagnóstico completo!
-            </div>
-          </div>
-          <Button 
-            onClick={onComplete} 
-            size="lg"
-            className="w-full h-14 text-base font-semibold rounded-2xl bg-gradient-to-r from-primary to-primary/80 hover:opacity-90 shadow-lg"
+      {/* Answer Options */}
+      <div className="space-y-3 mb-8">
+        {scaleOptions.map((option, idx) => (
+          <motion.button
+            key={option.value}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+            onClick={() => handleAnswer(option.value)}
+            disabled={isSaving}
+            className={cn(
+              "w-full p-4 rounded-xl text-left transition-all duration-200 border-2",
+              currentAnswer === option.value
+                ? "border-primary bg-primary/5 text-foreground"
+                : "border-transparent bg-muted/50 hover:bg-muted hover:border-border"
+            )}
           >
-            Avançar para próxima etapa
-            <ArrowRight className="h-5 w-5 ml-2" />
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
+                currentAnswer === option.value
+                  ? "border-primary bg-primary"
+                  : "border-muted-foreground/30"
+              )}>
+                {currentAnswer === option.value && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-2 h-2 rounded-full bg-primary-foreground"
+                  />
+                )}
+              </div>
+              <span className="font-medium">{option.label}</span>
+            </div>
+          </motion.button>
+        ))}
+      </div>
+
+      {/* Navigation */}
+      <div className="flex gap-3">
+        {canGoBack && (
+          <Button
+            variant="outline"
+            onClick={handleBack}
+            disabled={isSaving}
+            className="h-12 px-4"
+          >
+            <ChevronLeft className="h-4 w-4" />
           </Button>
-        </motion.div>
-      )}
+        )}
+        
+        {isSaving && (
+          <Button disabled className="flex-1 h-12 gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Salvando...
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

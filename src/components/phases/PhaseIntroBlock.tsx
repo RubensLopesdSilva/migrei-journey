@@ -1,11 +1,13 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   BookOpen, 
   Target, 
   CheckCircle2, 
   Sparkles, 
   ArrowRight,
-  Brain
+  Brain,
+  ChevronDown
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +46,95 @@ const itemVariants = {
   visible: { opacity: 1, y: 0 }
 };
 
+// Hook para controle de primeira visita por fase
+const useFirstVisit = (phaseNumber: number) => {
+  const storageKey = `migrei_phase_${phaseNumber}_visited`;
+  
+  const [isFirstVisit, setIsFirstVisit] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem(storageKey) !== 'true';
+  });
+
+  useEffect(() => {
+    if (isFirstVisit) {
+      // Marca como visitado após um pequeno delay para dar tempo do usuário ver
+      const timer = setTimeout(() => {
+        localStorage.setItem(storageKey, 'true');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isFirstVisit, storageKey]);
+
+  return isFirstVisit;
+};
+
+interface ClarityCardProps {
+  title: string;
+  icon: React.ReactNode;
+  items: string[];
+  phaseColor: string;
+  isDeliverable?: boolean;
+  defaultOpen: boolean;
+}
+
+function ClarityCard({ title, icon, items, phaseColor, isDeliverable, defaultOpen }: ClarityCardProps) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <Card 
+      className={cn(
+        "h-full border-l-4 hover:shadow-md transition-all cursor-pointer",
+        isDeliverable && "bg-gradient-to-br from-background to-muted/30"
+      )} 
+      style={{ borderLeftColor: phaseColor }}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div 
+              className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: `${phaseColor}20` }}
+            >
+              {icon}
+            </div>
+            <h3 className="font-semibold text-sm">{title}</h3>
+          </div>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          </motion.div>
+        </div>
+        
+        <AnimatePresence>
+          {isOpen && (
+            <motion.ul 
+              className="space-y-1.5 mt-3"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {items.map((item, index) => (
+                <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  {isDeliverable ? (
+                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-green-500" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4 shrink-0 mt-0.5" style={{ color: phaseColor }} />
+                  )}
+                  <span>{item}</span>
+                </li>
+              ))}
+            </motion.ul>
+          )}
+        </AnimatePresence>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
   const {
     phaseNumber,
@@ -58,6 +149,8 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
     progressPercentage,
     isComplete
   } = data;
+
+  const isFirstVisit = useFirstVisit(phaseNumber);
 
   return (
     <motion.div 
@@ -104,87 +197,42 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
           value={progressPercentage} 
           className="h-2"
           style={{ 
-            // @ts-ignore - Custom CSS property for progress color
             '--progress-color': phaseColor 
           } as React.CSSProperties}
         />
       </motion.div>
 
-      {/* 3 Blocos de Clareza */}
+      {/* 3 Blocos de Clareza - Colapsáveis */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Bloco 1 - O que você vai aprender */}
         <motion.div variants={itemVariants}>
-          <Card className="h-full border-l-4 hover:shadow-md transition-shadow" style={{ borderLeftColor: phaseColor }}>
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="h-8 w-8 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: `${phaseColor}20` }}
-                >
-                  <BookOpen className="h-4 w-4" style={{ color: phaseColor }} />
-                </div>
-                <h3 className="font-semibold text-sm">O que você vai aprender</h3>
-              </div>
-              <ul className="space-y-2">
-                {learnings.map((item, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <ArrowRight className="h-4 w-4 shrink-0 mt-0.5" style={{ color: phaseColor }} />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <ClarityCard
+            title="O que você vai aprender"
+            icon={<BookOpen className="h-4 w-4" style={{ color: phaseColor }} />}
+            items={learnings}
+            phaseColor={phaseColor}
+            defaultOpen={isFirstVisit}
+          />
         </motion.div>
 
-        {/* Bloco 2 - Para que isso serve */}
         <motion.div variants={itemVariants}>
-          <Card className="h-full border-l-4 hover:shadow-md transition-shadow" style={{ borderLeftColor: phaseColor }}>
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="h-8 w-8 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: `${phaseColor}20` }}
-                >
-                  <Target className="h-4 w-4" style={{ color: phaseColor }} />
-                </div>
-                <h3 className="font-semibold text-sm">Para que isso serve</h3>
-              </div>
-              <ul className="space-y-2">
-                {benefits.map((item, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <ArrowRight className="h-4 w-4 shrink-0 mt-0.5" style={{ color: phaseColor }} />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <ClarityCard
+            title="Para que isso serve"
+            icon={<Target className="h-4 w-4" style={{ color: phaseColor }} />}
+            items={benefits}
+            phaseColor={phaseColor}
+            defaultOpen={isFirstVisit}
+          />
         </motion.div>
 
-        {/* Bloco 3 - O que você vai ter pronto */}
         <motion.div variants={itemVariants}>
-          <Card className="h-full border-l-4 hover:shadow-md transition-shadow bg-gradient-to-br from-background to-muted/30" style={{ borderLeftColor: phaseColor }}>
-            <CardContent className="p-4 space-y-3">
-              <div className="flex items-center gap-2">
-                <div 
-                  className="h-8 w-8 rounded-lg flex items-center justify-center"
-                  style={{ backgroundColor: `${phaseColor}20` }}
-                >
-                  <CheckCircle2 className="h-4 w-4" style={{ color: phaseColor }} />
-                </div>
-                <h3 className="font-semibold text-sm">O que você terá pronto</h3>
-              </div>
-              <ul className="space-y-2">
-                {deliverables.map((item, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-green-500" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
+          <ClarityCard
+            title="O que você terá pronto"
+            icon={<CheckCircle2 className="h-4 w-4" style={{ color: phaseColor }} />}
+            items={deliverables}
+            phaseColor={phaseColor}
+            isDeliverable
+            defaultOpen={isFirstVisit}
+          />
         </motion.div>
       </div>
 

@@ -19,7 +19,7 @@ export const PHASE_COLORS = {
   6: "#10B981", // Emerald - Desfrutar
 } as const;
 
-// Dados estruturados para cada fase seguindo o script UX/UI
+// Dados estruturados para cada fase - TEXTOS SIMPLIFICADOS E OBJETIVOS
 export const PHASE_INTRO_DATA: Record<number, Omit<PhaseIntroData, 'progressPercentage' | 'isComplete' | 'phaseIcon'>> = {
   1: {
     phaseNumber: 1,
@@ -27,24 +27,24 @@ export const PHASE_INTRO_DATA: Record<number, Omit<PhaseIntroData, 'progressPerc
     phaseSubtitle: "Consciência e decisão de mudar",
     phaseColor: PHASE_COLORS[1],
     learnings: [
-      "Reconhecer o momento de mudança na sua vida",
-      "Avaliar sua prontidão emocional, financeira e profissional",
-      "Mapear seus pontos de dor e motivações reais"
+      "Reconhecer seu momento de mudança",
+      "Avaliar sua prontidão para transição",
+      "Mapear suas dores e motivações"
     ],
     benefits: [
-      "Tomar uma decisão consciente sobre sua transição",
-      "Reduzir ansiedade ao entender seu ponto de partida",
-      "Criar um compromisso sólido com sua mudança"
+      "Decidir com consciência",
+      "Reduzir ansiedade inicial",
+      "Firmar compromisso real"
     ],
     deliverables: [
-      "Mapa de Dor pessoal documentado",
-      "Avaliação de Prontidão concluída",
-      "Declaração de Compromisso assinada"
+      "Mapa de Dor documentado",
+      "Avaliação de Prontidão",
+      "Declaração de Compromisso"
     ],
     aiCapabilities: [
-      "Análise de padrões emocionais",
-      "Reflexões guiadas personalizadas",
-      "Resumo de insights automatizado"
+      "Análise de padrões",
+      "Reflexões guiadas",
+      "Resumo de insights"
     ]
   },
   2: {
@@ -53,24 +53,24 @@ export const PHASE_INTRO_DATA: Record<number, Omit<PhaseIntroData, 'progressPerc
     phaseSubtitle: "Autoconhecimento e diagnóstico profundo",
     phaseColor: PHASE_COLORS[2],
     learnings: [
-      "Mapear suas competências e pontos fortes",
-      "Identificar gaps e áreas de desenvolvimento",
-      "Explorar possibilidades de carreira alinhadas a você"
+      "Mapear competências e forças",
+      "Identificar gaps de desenvolvimento",
+      "Explorar carreiras alinhadas"
     ],
     benefits: [
-      "Ter clareza sobre quem você é profissionalmente",
-      "Descobrir carreiras compatíveis com seu perfil",
-      "Entender seu diferencial competitivo no mercado"
+      "Clareza sobre quem você é",
+      "Descobrir carreiras compatíveis",
+      "Entender seu diferencial"
     ],
     deliverables: [
-      "Radar de Competências completo",
-      "Roda da Vida Profissional atualizada",
-      "Relatório de Clareza personalizado"
+      "Radar de Competências",
+      "Roda da Vida Profissional",
+      "Relatório de Clareza"
     ],
     aiCapabilities: [
-      "Diagnósticos automatizados",
-      "Recomendações de profissões por IA",
-      "Análise de timeline profissional"
+      "Diagnósticos automáticos",
+      "Recomendações de profissões",
+      "Análise de timeline"
     ]
   },
   3: {
@@ -79,76 +79,76 @@ export const PHASE_INTRO_DATA: Record<number, Omit<PhaseIntroData, 'progressPerc
     phaseSubtitle: "Planejamento estratégico e foco",
     phaseColor: PHASE_COLORS[3],
     learnings: [
-      "Analisar rotas possíveis de transição",
-      "Definir metas SMART para sua mudança",
-      "Criar um plano de ação de 90 dias"
+      "Analisar rotas de transição",
+      "Definir metas SMART",
+      "Criar plano de 90 dias"
     ],
     benefits: [
-      "Sair da paralisia e tomar uma decisão clara",
-      "Ter um plano concreto e executável",
-      "Identificar gaps a preencher antes de agir"
+      "Sair da paralisia decisória",
+      "Ter plano executável",
+      "Identificar gaps a preencher"
     ],
     deliverables: [
-      "Rota de transição escolhida e validada",
+      "Rota de transição validada",
       "Metas SMART documentadas",
-      "Plano de 90 dias estruturado"
+      "Plano de 90 dias"
     ],
     aiCapabilities: [
-      "Comparador de rotas inteligente",
-      "Gerador de metas SMART",
-      "Análise de gaps automatizada"
+      "Comparador de rotas",
+      "Gerador de metas",
+      "Análise de gaps"
     ]
   },
   4: {
     phaseNumber: 4,
     phaseName: "Desenvolver",
-    phaseSubtitle: "Prepare-se para ser visto como profissional da nova área",
+    phaseSubtitle: "Prepare-se para ser visto na nova área",
     phaseColor: PHASE_COLORS[4],
     learnings: [
-      "Construir materiais profissionais de impacto",
-      "Otimizar sua presença digital no LinkedIn",
-      "Desenvolver seu pitch e narrativa de carreira"
+      "Construir materiais de impacto",
+      "Otimizar presença no LinkedIn",
+      "Desenvolver seu pitch"
     ],
     benefits: [
-      "Ser reconhecido como profissional da nova área",
-      "Aumentar sua visibilidade no mercado",
-      "Ter confiança para se apresentar profissionalmente"
+      "Ser reconhecido na nova área",
+      "Aumentar visibilidade",
+      "Ganhar confiança profissional"
     ],
     deliverables: [
-      "Currículo otimizado para transição",
-      "Pitch profissional de 60 segundos",
-      "Perfil LinkedIn atualizado e otimizado"
+      "Currículo otimizado",
+      "Pitch de 60 segundos",
+      "LinkedIn atualizado"
     ],
     aiCapabilities: [
-      "Gerador de pitch por IA",
-      "Feedback automático de materiais",
-      "Sugestões de palavras-chave"
+      "Gerador de pitch",
+      "Feedback de materiais",
+      "Sugestões de keywords"
     ]
   },
   5: {
     phaseNumber: 5,
     phaseName: "Deslanchar",
-    phaseSubtitle: "Coloque seu plano em movimento e gere oportunidades",
+    phaseSubtitle: "Coloque seu plano em movimento",
     phaseColor: PHASE_COLORS[5],
     learnings: [
-      "Executar sua estratégia de busca ativa",
-      "Praticar entrevistas e apresentações",
-      "Construir rotina consistente de networking"
+      "Executar busca ativa",
+      "Praticar entrevistas",
+      "Manter rotina de networking"
     ],
     benefits: [
-      "Transformar planejamento em ação real",
-      "Gerar oportunidades concretas de trabalho",
-      "Manter momentum mesmo com rejeições"
+      "Transformar plano em ação",
+      "Gerar oportunidades reais",
+      "Manter momentum"
     ],
     deliverables: [
-      "Painel de oportunidades ativo",
-      "Diário de candidaturas atualizado",
-      "Simulações de entrevista praticadas"
+      "Painel de oportunidades",
+      "Diário de candidaturas",
+      "Simulações praticadas"
     ],
     aiCapabilities: [
-      "Simulador de entrevistas com IA",
-      "Feedback de respostas em tempo real",
-      "Sugestões de follow-up inteligentes"
+      "Simulador de entrevistas",
+      "Feedback em tempo real",
+      "Sugestões de follow-up"
     ]
   },
   6: {
@@ -157,24 +157,24 @@ export const PHASE_INTRO_DATA: Record<number, Omit<PhaseIntroData, 'progressPerc
     phaseSubtitle: "Consolidação, celebração e novo ciclo",
     phaseColor: PHASE_COLORS[6],
     learnings: [
-      "Avaliar os resultados da sua jornada",
-      "Celebrar conquistas de forma significativa",
-      "Planejar o próximo ciclo de evolução"
+      "Avaliar resultados da jornada",
+      "Celebrar conquistas",
+      "Planejar próximo ciclo"
     ],
     benefits: [
-      "Reconhecer o quanto você evoluiu",
-      "Consolidar aprendizados para o futuro",
-      "Preparar-se para desafios de nível superior"
+      "Reconhecer sua evolução",
+      "Consolidar aprendizados",
+      "Preparar próximo nível"
     ],
     deliverables: [
-      "Relatório Final de Jornada",
+      "Relatório Final",
       "Linha do Tempo de Conquistas",
-      "Plano para o próximo ciclo profissional"
+      "Plano do próximo ciclo"
     ],
     aiCapabilities: [
-      "Geração de relatório personalizado",
-      "Análise de evolução por IA",
-      "Sugestões para próximo nível"
+      "Relatório personalizado",
+      "Análise de evolução",
+      "Sugestões de próximo nível"
     ]
   }
 };

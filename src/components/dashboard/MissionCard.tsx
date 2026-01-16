@@ -63,21 +63,14 @@ function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
             : 'hover:bg-muted/50'
         )}
       >
-        <div className="flex-1 min-w-0">
-          <p className={cn(
-            "text-sm font-medium truncate",
-            isCompleted 
-              ? 'text-muted-foreground line-through' 
-              : 'text-foreground'
-          )}>
-            {activity.title}
-          </p>
-          {activity.description && (
-            <p className="text-[10px] text-muted-foreground truncate">
-              {activity.description}
-            </p>
-          )}
-        </div>
+        <p className={cn(
+          "flex-1 text-sm font-medium truncate",
+          isCompleted 
+            ? 'text-muted-foreground line-through' 
+            : 'text-foreground'
+        )}>
+          {activity.title}
+        </p>
         
         <span className={cn(
           "text-xs font-medium flex-shrink-0 px-2 py-1 rounded-full",

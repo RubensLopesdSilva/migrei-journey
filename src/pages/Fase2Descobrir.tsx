@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
+import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
+import { getPhaseIntroData } from '@/data/phaseIntroData';
 import { DiagnosticHub } from '@/components/discovery/DiagnosticHub';
 import { CareerWheel } from '@/components/discovery/CareerWheel';
 import { DiscoveryDiary } from '@/components/discovery/DiscoveryDiary';
@@ -23,7 +23,6 @@ import {
   Radar, 
   Sparkles,
   FileText,
-  Search,
   Check
 } from 'lucide-react';
 
@@ -43,8 +42,11 @@ export default function Fase2Descobrir() {
   const [activeStep, setActiveStep] = useState<Step>('diagnosticos');
   const { phaseProgress, isLoading } = useDiscovery();
 
-  const progress = { percentage: phaseProgress, completed: Math.floor(phaseProgress / 14.3) }; // 7 steps = ~14.3% each
+  const progress = { percentage: phaseProgress, completed: Math.floor(phaseProgress / 14.3) };
   const isPhaseComplete = progress.percentage === 100;
+
+  // Dados do bloco introdutório com clareza UX
+  const phaseIntroData = getPhaseIntroData(2, phaseProgress, isPhaseComplete);
 
   const getCoachContext = () => {
     switch (activeStep) {
@@ -78,31 +80,8 @@ export default function Fase2Descobrir() {
           ]}
         />
 
-        {/* Phase Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-              <Search className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">Fase 2: Descobrir</h1>
-              <p className="text-muted-foreground">Autoconhecimento e diagnóstico profundo</p>
-            </div>
-          </div>
-          <Badge variant={isPhaseComplete ? 'default' : 'secondary'} className="text-sm">
-            {isPhaseComplete ? (
-              <>
-                <Check className="h-3 w-3 mr-1" />
-                Fase Completa
-              </>
-            ) : (
-              `${progress.percentage}% concluído`
-            )}
-          </Badge>
-        </div>
-
-        {/* Progress Bar */}
-        <Progress value={progress.percentage} className="h-2" />
+        {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+        <PhaseIntroBlock data={phaseIntroData} />
 
         {/* Main Content - Full Width */}
         <AnimatedTabs value={activeStep} onValueChange={(v) => setActiveStep(v as Step)}>

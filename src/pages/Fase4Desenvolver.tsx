@@ -6,6 +6,8 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
+import { getPhaseIntroData } from '@/data/phaseIntroData';
 import { ResumeBuilder } from '@/components/develop/ResumeBuilder';
 import { PitchGenerator } from '@/components/develop/PitchGenerator';
 import { LinkedInChecklist } from '@/components/develop/LinkedInChecklist';
@@ -14,12 +16,8 @@ import { DevelopmentTrack } from '@/components/develop/DevelopmentTrack';
 import { DevelopCoachFeedback } from '@/components/develop/DevelopCoachFeedback';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { PhaseAccessGate } from '@/components/subscription/PhaseAccessGate';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
-import { Badge } from '@/components/ui/badge';
 import { 
-  Wrench, 
   FileText, 
   Mic, 
   Linkedin, 
@@ -70,6 +68,10 @@ export default function Fase4Desenvolver() {
   }
 
   const phaseProgress = getPhaseProgress();
+  const isPhaseComplete = phaseProgress === 100;
+
+  // Dados do bloco introdutório com clareza UX
+  const phaseIntroData = getPhaseIntroData(4, phaseProgress, isPhaseComplete);
 
   const tabs = [
     { id: 'resume', label: 'Currículo', icon: FileText, completed: resumes.length > 0 },
@@ -84,53 +86,17 @@ export default function Fase4Desenvolver() {
     <PhaseAccessGate phaseNumber={4} phaseName="Fase 4: Desenvolver">
       <PageLayout>
         <PageContent>
-          <div className="container mx-auto max-w-6xl">
+          <div className="container mx-auto max-w-6xl space-y-6">
             {/* Breadcrumb */}
             <PageBreadcrumb
               items={[
                 { label: "Jornada", href: "/progresso" },
                 { label: "Fase 4: Desenvolver", current: true }
               ]}
-              className="mb-4"
             />
 
-            {/* Phase header */}
-            <div className="mb-8">            
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg">
-                  <Wrench className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold">Desenvolver</h1>
-                  <p className="text-muted-foreground">
-                    Prepare-se para ser visto como profissional da nova área
-                  </p>
-                </div>
-              </div>
-
-              {/* Progress */}
-              <Card className="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange-200 dark:border-orange-800">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Progresso da Fase</span>
-                    <span className="text-lg font-bold text-orange-600">{phaseProgress}%</span>
-                  </div>
-                  <Progress value={phaseProgress} className="h-2" />
-                  <div className="flex gap-2 mt-3">
-                    {tabs.map((tab) => (
-                      <Badge 
-                        key={tab.id}
-                        variant={tab.completed ? 'default' : 'outline'}
-                        className={tab.completed ? 'bg-orange-500' : ''}
-                      >
-                        <tab.icon className="w-3 h-3 mr-1" />
-                        {tab.label}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+            <PhaseIntroBlock data={phaseIntroData} />
 
             {/* Main content - Full Width */}
             <AnimatedTabs value={activeTab} onValueChange={setActiveTab}>

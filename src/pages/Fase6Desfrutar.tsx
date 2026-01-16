@@ -3,9 +3,10 @@ import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { PageSkeleton } from '@/components/layout/PageSkeleton';
+import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
+import { getPhaseIntroData } from '@/data/phaseIntroData';
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
-import { Badge } from '@/components/ui/badge';
-import { Sparkles, BarChart3, Trophy, FileText, PartyPopper, RefreshCw } from 'lucide-react';
+import { BarChart3, Trophy, FileText, PartyPopper, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useEnjoy } from '@/hooks/useEnjoy';
 import { ResultsEvaluation } from '@/components/enjoy/ResultsEvaluation';
@@ -35,6 +36,23 @@ const Fase6Desfrutar = () => {
 
   const [activeTab, setActiveTab] = useState('evaluation');
 
+  // Calcular progresso da fase 6 baseado nas atividades concluídas
+  const calculateProgress = () => {
+    let completed = 0;
+    if (resultsEvaluation && resultsEvaluation.length > 0) completed++;
+    if (achievements && achievements.length > 0) completed++;
+    if (finalReport) completed++;
+    if (celebration) completed++;
+    if (cycleReentries && cycleReentries.length > 0) completed++;
+    return Math.round((completed / 5) * 100);
+  };
+
+  const progress = calculateProgress();
+  const isPhaseComplete = progress === 100;
+
+  // Dados do bloco introdutório com clareza UX
+  const phaseIntroData = getPhaseIntroData(6, progress, isPhaseComplete);
+
   if (authLoading) {
     return (
       <PageLayout>
@@ -47,33 +65,17 @@ const Fase6Desfrutar = () => {
     <PhaseAccessGate phaseNumber={6} phaseName="Fase 6: Desfrutar">
       <PageLayout>
         <PageContent>
-          <div className="container mx-auto max-w-6xl">
+          <div className="container mx-auto max-w-6xl space-y-6">
             {/* Breadcrumb */}
             <PageBreadcrumb
               items={[
                 { label: "Jornada", href: "/progresso" },
                 { label: "Fase 6: Desfrutar", current: true }
               ]}
-              className="mb-4"
             />
 
-            {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-3 rounded-full bg-gradient-to-r from-amber-500/20 to-primary/20">
-                  <Sparkles className="h-8 w-8 text-amber-500" />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold">Fase 6: Desfrutar</h1>
-                  <p className="text-muted-foreground">
-                    Consolidação, celebração e novo ciclo profissional
-                  </p>
-                </div>
-                <Badge className="ml-auto bg-gradient-to-r from-amber-500 to-primary">
-                  Fase Final
-                </Badge>
-              </div>
-            </div>
+            {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+            <PhaseIntroBlock data={phaseIntroData} />
 
             {loading ? (
               <PageSkeleton variant="dashboard" showHeader={false} />

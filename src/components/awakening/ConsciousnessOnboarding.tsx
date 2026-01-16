@@ -1,11 +1,8 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Slider } from '@/components/ui/slider';
-import { Badge } from '@/components/ui/badge';
-import { ChevronRight, ChevronLeft, Check, Sparkles } from 'lucide-react';
-import { CONSCIOUSNESS_QUESTIONS, ConsciousnessQuestion } from '@/types/awakening';
+import { ChevronRight, ChevronLeft, Check } from 'lucide-react';
+import { CONSCIOUSNESS_QUESTIONS } from '@/types/awakening';
 import { useAwakening } from '@/hooks/useAwakening';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +18,6 @@ export function ConsciousnessOnboarding({ onComplete }: ConsciousnessOnboardingP
 
   const questions = CONSCIOUSNESS_QUESTIONS;
   const currentQuestion = questions[currentIndex];
-  const isAnswered = consciousnessResponses.some(r => r.question_key === currentQuestion.key);
   const existingResponse = consciousnessResponses.find(r => r.question_key === currentQuestion.key);
 
   const handleAnswer = async () => {
@@ -37,105 +33,109 @@ export function ConsciousnessOnboarding({ onComplete }: ConsciousnessOnboardingP
     }
   };
 
-  const getValueLabel = (value: number) => {
-    if (value <= 2) return 'Discordo totalmente';
-    if (value <= 4) return 'Discordo';
-    if (value <= 6) return 'Neutro';
-    if (value <= 8) return 'Concordo';
-    return 'Concordo totalmente';
-  };
+  const scaleOptions = [
+    { value: 1, label: 'Discordo totalmente' },
+    { value: 3, label: 'Discordo' },
+    { value: 5, label: 'Neutro' },
+    { value: 7, label: 'Concordo' },
+    { value: 10, label: 'Concordo totalmente' },
+  ];
 
-  const getValueColor = (value: number) => {
-    if (value <= 3) return 'text-destructive';
-    if (value <= 5) return 'text-amber-500';
-    if (value <= 7) return 'text-primary';
-    return 'text-emerald-500';
-  };
-
-  const progress = ((currentIndex + (isAnswered ? 1 : 0)) / questions.length) * 100;
-  const answeredCount = consciousnessResponses.length;
+  const progress = ((currentIndex + 1) / questions.length) * 100;
 
   return (
-    <Card className="w-full max-w-2xl mx-auto card-elevated">
-      <CardHeader className="text-center pb-2">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <Badge variant="secondary">Fase 1 - Despertar</Badge>
+    <div className="w-full max-w-xl mx-auto">
+      {/* Minimal Progress */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden">
+          <motion.div 
+            className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+          />
         </div>
-        <CardTitle className="text-2xl">Reflexão de Consciência</CardTitle>
-        <CardDescription>
-          Responda com sinceridade para entender melhor sua situação atual
-        </CardDescription>
-      </CardHeader>
+        <span className="text-sm text-muted-foreground font-medium">
+          {currentIndex + 1}/{questions.length}
+        </span>
+      </div>
 
-      <CardContent className="space-y-6">
-        {/* Progress */}
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm text-muted-foreground">
-            <span>Pergunta {currentIndex + 1} de {questions.length}</span>
-            <span>{answeredCount} respondida{answeredCount !== 1 ? 's' : ''}</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-
-        {/* Question */}
-        <div className="py-8 text-center space-y-8">
-          <h3 className="text-xl font-medium leading-relaxed">
+      {/* Question Card */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.2 }}
+          className="space-y-8"
+        >
+          {/* Question */}
+          <h2 className="text-xl md:text-2xl font-semibold text-center leading-relaxed">
             {currentQuestion.text}
-          </h3>
+          </h2>
 
-          <div className="space-y-4 max-w-md mx-auto">
-            <Slider
-              value={[existingResponse?.response_value ?? currentValue]}
-              onValueChange={([val]) => setCurrentValue(val)}
-              min={1}
-              max={10}
-              step={1}
-              className="py-4"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Discordo</span>
-              <span>Neutro</span>
-              <span>Concordo</span>
-            </div>
-            <p className={cn("text-lg font-medium transition-colors", getValueColor(currentValue))}>
-              {getValueLabel(currentValue)}
-            </p>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between pt-4">
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setCurrentIndex(prev => prev - 1);
-              const prevResponse = consciousnessResponses.find(
-                r => r.question_key === questions[currentIndex - 1]?.key
+          {/* Scale Buttons */}
+          <div className="space-y-3">
+            {scaleOptions.map((option) => {
+              const isSelected = (existingResponse?.response_value ?? currentValue) === option.value;
+              
+              return (
+                <button
+                  key={option.value}
+                  onClick={() => setCurrentValue(option.value)}
+                  className={cn(
+                    "w-full p-4 rounded-xl text-left transition-all duration-200",
+                    "border-2 hover:border-primary/50",
+                    isSelected 
+                      ? "border-primary bg-primary/5 shadow-sm" 
+                      : "border-border bg-background hover:bg-muted/30"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors",
+                      isSelected ? "border-primary bg-primary" : "border-muted-foreground/30"
+                    )}>
+                      {isSelected && <Check className="h-3 w-3 text-primary-foreground" />}
+                    </div>
+                    <span className={cn(
+                      "font-medium",
+                      isSelected ? "text-foreground" : "text-muted-foreground"
+                    )}>
+                      {option.label}
+                    </span>
+                  </div>
+                </button>
               );
-              setCurrentValue(prevResponse?.response_value ?? 5);
-            }}
-            disabled={currentIndex === 0}
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Anterior
-          </Button>
+            })}
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-          <Button onClick={handleAnswer} disabled={isSubmitting}>
-            {currentIndex === questions.length - 1 ? (
-              <>
-                Concluir
-                <Check className="h-4 w-4 ml-1" />
-              </>
-            ) : (
-              <>
-                Próxima
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </>
-            )}
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+      {/* Navigation */}
+      <div className="flex items-center justify-between mt-10 pt-6 border-t">
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setCurrentIndex(prev => prev - 1);
+            const prevResponse = consciousnessResponses.find(
+              r => r.question_key === questions[currentIndex - 1]?.key
+            );
+            setCurrentValue(prevResponse?.response_value ?? 5);
+          }}
+          disabled={currentIndex === 0}
+          className="gap-2"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Anterior
+        </Button>
+
+        <Button onClick={handleAnswer} disabled={isSubmitting} className="gap-2 min-w-[120px]">
+          {currentIndex === questions.length - 1 ? 'Concluir' : 'Próxima'}
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
   );
 }

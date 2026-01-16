@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Sparkles, Heart, Rocket, Check } from 'lucide-react';
+import { Rocket, Check, Sparkles } from 'lucide-react';
 import { useAwakening } from '@/hooks/useAwakening';
 import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
@@ -19,7 +18,7 @@ export function CommitmentDeclaration({ onComplete }: CommitmentDeclarationProps
   const [agreed, setAgreed] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const baseDeclaration = "Eu assumo o compromisso de conduzir minha transição profissional";
+  const baseDeclaration = "Eu assumo o compromisso de conduzir minha transição profissional com dedicação e propósito.";
 
   const handleConfirm = async () => {
     if (!agreed) return;
@@ -27,7 +26,6 @@ export function CommitmentDeclaration({ onComplete }: CommitmentDeclarationProps
     setIsSaving(true);
     await saveCommitment(customText || undefined);
     
-    // Celebration!
     confetti({
       particleCount: 100,
       spread: 70,
@@ -38,108 +36,124 @@ export function CommitmentDeclaration({ onComplete }: CommitmentDeclarationProps
     setTimeout(onComplete, 1500);
   };
 
+  // Already committed state
   if (commitment) {
     return (
-      <Card className="w-full max-w-2xl mx-auto card-elevated">
-        <CardContent className="py-12 text-center space-y-6">
-          <div className="h-20 w-20 mx-auto rounded-full bg-emerald-500/10 flex items-center justify-center">
-            <Check className="h-10 w-10 text-emerald-500" />
-          </div>
-          
-          <div className="space-y-2">
-            <CardTitle className="text-2xl">Compromisso Firmado! 🎉</CardTitle>
-            <p className="text-muted-foreground">
-              Você deu o primeiro passo na sua jornada de transformação.
-            </p>
-          </div>
+      <div className="w-full max-w-lg mx-auto text-center space-y-6">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className="h-20 w-20 mx-auto rounded-full bg-emerald-500/10 flex items-center justify-center"
+        >
+          <Check className="h-10 w-10 text-emerald-500" />
+        </motion.div>
+        
+        <div className="space-y-2">
+          <h2 className="text-2xl font-semibold">Compromisso firmado! 🎉</h2>
+          <p className="text-muted-foreground">
+            Você deu o primeiro passo na sua jornada.
+          </p>
+        </div>
 
-          <div className="p-6 rounded-lg bg-muted/50 border">
-            <p className="text-lg font-medium italic">"{commitment.declaration_text}"</p>
-            {commitment.custom_text && (
-              <p className="mt-2 text-sm text-muted-foreground">{commitment.custom_text}</p>
-            )}
-            <p className="mt-4 text-xs text-muted-foreground">
-              Confirmado em {new Date(commitment.confirmed_at).toLocaleDateString('pt-BR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              })}
+        <div className="p-6 rounded-2xl bg-muted/30 border text-left">
+          <p className="text-lg font-medium">"{commitment.declaration_text}"</p>
+          {commitment.custom_text && (
+            <p className="mt-3 text-sm text-muted-foreground italic">
+              {commitment.custom_text}
             </p>
-          </div>
+          )}
+          <p className="mt-4 text-xs text-muted-foreground">
+            {new Date(commitment.confirmed_at).toLocaleDateString('pt-BR', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}
+          </p>
+        </div>
 
-          <Button onClick={onComplete} size="lg" className="w-full">
-            <Rocket className="h-4 w-4 mr-2" />
-            Continuar minha jornada
-          </Button>
-        </CardContent>
-      </Card>
+        <Button onClick={onComplete} size="lg" className="w-full h-12 gap-2">
+          <Rocket className="h-4 w-4" />
+          Continuar jornada
+        </Button>
+      </div>
     );
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto card-elevated">
-      <CardHeader className="text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
-          <Heart className="h-5 w-5 text-rose-500" />
-          <Badge variant="secondary">Ritual de Compromisso</Badge>
+    <div className="w-full max-w-lg mx-auto space-y-8">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-2">
+          <Sparkles className="h-6 w-6 text-primary" />
         </div>
-        <CardTitle className="text-2xl">Declaração de Compromisso MIGREI</CardTitle>
-        <CardDescription>
-          Este é um momento simbólico importante. Ao firmar esse compromisso, você está 
-          oficializando sua decisão de transformar sua carreira.
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-6">
-        {/* Main Declaration */}
-        <div className="p-6 rounded-lg bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/20">
-          <p className="text-xl font-medium text-center leading-relaxed">
-            "{baseDeclaration}"
-          </p>
-        </div>
-
-        {/* Optional Custom Text */}
-        <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">
-            Adicione uma motivação pessoal (opcional):
-          </label>
-          <Textarea
-            value={customText}
-            onChange={(e) => setCustomText(e.target.value)}
-            placeholder="Por que essa mudança é importante para mim..."
-            rows={3}
-          />
-        </div>
-
-        {/* Agreement Checkbox */}
-        <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/30">
-          <Checkbox
-            id="agreement"
-            checked={agreed}
-            onCheckedChange={(checked) => setAgreed(checked as boolean)}
-            className="mt-0.5"
-          />
-          <label htmlFor="agreement" className="text-sm cursor-pointer leading-relaxed">
-            Eu entendo que essa é uma jornada que exige dedicação e compromisso. 
-            Estou pronto(a) para investir tempo e energia na minha transformação profissional.
-          </label>
-        </div>
-
-        {/* Confirm Button */}
-        <Button
-          onClick={handleConfirm}
-          disabled={!agreed || isSaving}
-          size="lg"
-          className="w-full bg-gradient-to-r from-primary to-primary/80"
-        >
-          <Sparkles className="h-4 w-4 mr-2" />
-          Firmar meu compromisso
-        </Button>
-
-        <p className="text-center text-xs text-muted-foreground">
-          🔒 Este compromisso é pessoal e privado. Apenas você terá acesso a ele.
+        <h2 className="text-xl md:text-2xl font-semibold">
+          Declaração de Compromisso
+        </h2>
+        <p className="text-muted-foreground text-sm">
+          Um momento simbólico para oficializar sua decisão
         </p>
-      </CardContent>
-    </Card>
+      </div>
+
+      {/* Declaration */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/20"
+      >
+        <p className="text-lg md:text-xl font-medium text-center leading-relaxed">
+          "{baseDeclaration}"
+        </p>
+      </motion.div>
+
+      {/* Optional Personal Note */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          Adicione uma nota pessoal <span className="text-muted-foreground">(opcional)</span>
+        </label>
+        <Textarea
+          value={customText}
+          onChange={(e) => setCustomText(e.target.value)}
+          placeholder="Por que essa mudança é importante para mim..."
+          rows={3}
+          className="resize-none"
+        />
+      </div>
+
+      {/* Agreement */}
+      <label 
+        htmlFor="agreement" 
+        className={cn(
+          "flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all",
+          agreed ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+        )}
+      >
+        <Checkbox
+          id="agreement"
+          checked={agreed}
+          onCheckedChange={(checked) => setAgreed(checked === true)}
+          className="mt-0.5"
+        />
+        <span className="text-sm leading-relaxed">
+          Declaro que estou comprometido(a) com minha transformação profissional
+        </span>
+      </label>
+
+      {/* Confirm Button */}
+      <Button
+        onClick={handleConfirm}
+        disabled={!agreed || isSaving}
+        size="lg"
+        className="w-full h-12 gap-2"
+      >
+        {isSaving ? (
+          <>Confirmando...</>
+        ) : (
+          <>
+            <Sparkles className="h-4 w-4" />
+            Firmar compromisso
+          </>
+        )}
+      </Button>
+    </div>
   );
 }

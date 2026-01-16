@@ -1,11 +1,8 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
-import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from '@/components/ui/animated-tabs';
-import { Heart, Wallet, Briefcase, Check, AlertCircle, Loader2 } from 'lucide-react';
+import { Heart, Wallet, Briefcase, Check, ArrowRight, Loader2 } from 'lucide-react';
 import { READINESS_QUESTIONS, ReadinessCategory, ReadinessAnswer } from '@/types/awakening';
 import { useAwakening } from '@/hooks/useAwakening';
 import { cn } from '@/lib/utils';
@@ -33,10 +30,7 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
   const handleAnswerChange = (category: ReadinessCategory, questionIndex: number, value: number) => {
     setAnswers(prev => ({
       ...prev,
-      [category]: {
-        ...prev[category],
-        [questionIndex]: value
-      }
+      [category]: { ...prev[category], [questionIndex]: value }
     }));
   };
 
@@ -44,10 +38,7 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
     const questions = READINESS_QUESTIONS[category];
     const categoryAnswers = answers[category];
     
-    // Check if all questions are answered
-    if (Object.keys(categoryAnswers).length !== questions.length) {
-      return;
-    }
+    if (Object.keys(categoryAnswers).length !== questions.length) return;
 
     setIsSaving(true);
     const answersToSave: ReadinessAnswer[] = questions.map((q, i) => ({
@@ -59,7 +50,6 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
     await saveReadinessAssessment(category, answersToSave);
     setIsSaving(false);
 
-    // Move to next tab or complete
     const currentIndex = categories.findIndex(c => c.key === category);
     if (currentIndex < categories.length - 1) {
       setActiveTab(categories[currentIndex + 1].key);
@@ -79,80 +69,103 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
 
   const allComplete = categories.every(c => isCategoryComplete(c.key));
 
-  const getReadinessLabel = (level: string | undefined) => {
+  const getReadinessInfo = (level: string | undefined) => {
     switch (level) {
-      case 'not_ready': return { label: 'Não pronto', color: 'text-destructive', bg: 'bg-destructive/10' };
-      case 'preparing': return { label: 'Em preparação', color: 'text-amber-600', bg: 'bg-amber-500/10' };
-      case 'ready': return { label: 'Pronto para avançar', color: 'text-emerald-600', bg: 'bg-emerald-500/10' };
-      default: return { label: 'Não avaliado', color: 'text-muted-foreground', bg: 'bg-muted' };
+      case 'not_ready': return { label: 'Em preparação', color: 'bg-amber-500/10 text-amber-600' };
+      case 'preparing': return { label: 'Quase lá', color: 'bg-blue-500/10 text-blue-600' };
+      case 'ready': return { label: 'Pronto!', color: 'bg-emerald-500/10 text-emerald-600' };
+      default: return null;
     }
   };
 
-  const readinessInfo = getReadinessLabel(readinessAssessment?.readiness_level);
+  const readinessInfo = getReadinessInfo(readinessAssessment?.readiness_level);
 
   return (
-    <Card className="w-full max-w-3xl mx-auto card-elevated">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Teste de Prontidão</CardTitle>
-        <CardDescription>
-          Avalie sua preparação para a transição de carreira em três dimensões
-        </CardDescription>
-
-        {readinessAssessment && readinessAssessment.total_score > 0 && (
-          <div className="mt-4 flex flex-col items-center gap-2">
-            <Badge className={cn("text-sm", readinessInfo.bg, readinessInfo.color)}>
-              {readinessInfo.label}
-            </Badge>
-            <div className="flex gap-4 text-sm text-muted-foreground">
-              <span>Score geral: <strong className="text-foreground">{readinessAssessment.total_score}%</strong></span>
-            </div>
-          </div>
+    <div className="w-full max-w-2xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="text-center space-y-2">
+        <h2 className="text-xl md:text-2xl font-semibold">
+          Teste de Prontidão
+        </h2>
+        <p className="text-muted-foreground">
+          Avalie sua preparação em 3 dimensões
+        </p>
+        {readinessInfo && readinessAssessment && (
+          <Badge className={cn("mt-2", readinessInfo.color)}>
+            {readinessInfo.label} • {readinessAssessment.total_score}%
+          </Badge>
         )}
-      </CardHeader>
+      </div>
 
-      <CardContent>
-        <AnimatedTabs value={activeTab} onValueChange={(v) => setActiveTab(v as ReadinessCategory)}>
-          <AnimatedTabsList className="grid grid-cols-3 mb-6">
-            {categories.map(cat => {
-              const Icon = cat.icon;
-              const isComplete = isCategoryComplete(cat.key);
-              const score = getCategoryScore(cat.key);
+      {/* Category Tabs */}
+      <div className="flex p-1 bg-muted rounded-xl">
+        {categories.map(cat => {
+          const Icon = cat.icon;
+          const isActive = activeTab === cat.key;
+          const isComplete = isCategoryComplete(cat.key);
+          const score = getCategoryScore(cat.key);
+          
+          return (
+            <button
+              key={cat.key}
+              onClick={() => setActiveTab(cat.key)}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 px-2 rounded-lg transition-all font-medium text-sm relative",
+                isActive 
+                  ? "bg-background shadow-sm" 
+                  : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Icon className={cn("h-4 w-4", isActive ? cat.color : "")} />
+              <span className="hidden sm:inline">{cat.label}</span>
+              {isComplete && (
+                <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
+                  <Check className="h-2.5 w-2.5 text-white" />
+                </div>
+              )}
+              {score !== null && score > 0 && (
+                <span className="text-xs opacity-60">{score}%</span>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
-              return (
-                <AnimatedTabsTrigger key={cat.key} value={cat.key} className="relative">
-                  <Icon className={cn("h-4 w-4 mr-2", cat.color)} aria-hidden="true" />
-                  {cat.label}
-                  {isComplete && (
-                    <div className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 flex items-center justify-center">
-                      <Check className="h-3 w-3 text-white" aria-hidden="true" />
-                    </div>
-                  )}
-                  {score !== null && score > 0 && (
-                    <span className="ml-2 text-xs text-muted-foreground">{score}%</span>
-                  )}
-                </AnimatedTabsTrigger>
-              );
-            })}
-          </AnimatedTabsList>
-
-          {categories.map(cat => (
-            <AnimatedTabsContent key={cat.key} value={cat.key} className="space-y-6">
-              {READINESS_QUESTIONS[cat.key].map((q, index) => {
-                const value = answers[cat.key][index] ?? 5;
+      {/* Questions */}
+      <AnimatePresence mode="wait">
+        {categories.map(cat => {
+          if (activeTab !== cat.key) return null;
+          const questions = READINESS_QUESTIONS[cat.key];
+          
+          return (
+            <motion.div
+              key={cat.key}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-4"
+            >
+              {questions.map((q, index) => {
+                const value = answers[cat.key][index];
+                
                 return (
-                  <div key={index} className="space-y-3 p-4 rounded-lg bg-muted/30">
-                    <p className="font-medium">{q.question}</p>
-                    <Slider
-                      value={[value]}
-                      onValueChange={([v]) => handleAnswerChange(cat.key, index, v)}
-                      min={1}
-                      max={10}
-                      step={1}
-                    />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Discordo</span>
-                      <span className="font-medium text-foreground">{value}/10</span>
-                      <span>Concordo</span>
+                  <div key={index} className="space-y-3 p-4 bg-muted/30 rounded-xl">
+                    <p className="font-medium text-sm">{q.question}</p>
+                    <div className="flex gap-2">
+                      {[1, 3, 5, 7, 10].map(level => (
+                        <button
+                          key={level}
+                          onClick={() => handleAnswerChange(cat.key, index, level)}
+                          className={cn(
+                            "flex-1 py-2 rounded-lg text-sm font-medium transition-all",
+                            value === level 
+                              ? "bg-primary text-primary-foreground" 
+                              : "bg-background border hover:border-primary/50"
+                          )}
+                        >
+                          {level === 1 ? '👎' : level === 3 ? '😕' : level === 5 ? '😐' : level === 7 ? '🙂' : '👍'}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 );
@@ -160,28 +173,30 @@ export function ReadinessTest({ onComplete }: ReadinessTestProps) {
 
               <Button
                 onClick={() => handleSaveCategory(cat.key)}
-                disabled={Object.keys(answers[cat.key]).length !== READINESS_QUESTIONS[cat.key].length || isSaving}
-                className="w-full"
+                disabled={Object.keys(answers[cat.key]).length !== questions.length || isSaving}
+                className="w-full h-12 gap-2"
               >
-                {isSaving ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden="true" />
-                ) : isCategoryComplete(cat.key) ? (
-                  <Check className="h-4 w-4 mr-2" aria-hidden="true" />
-                ) : null}
-                {isCategoryComplete(cat.key) ? 'Atualizar' : 'Salvar'} avaliação {cat.label.toLowerCase()}
+                {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
+                {isCategoryComplete(cat.key) ? 'Atualizar' : 'Salvar'} {cat.label}
               </Button>
-            </AnimatedTabsContent>
-          ))}
-        </AnimatedTabs>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
 
-        {allComplete && (
-          <div className="mt-6 pt-6 border-t">
-            <Button onClick={onComplete} className="w-full" size="lg">
-              Continuar para próxima etapa
-            </Button>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      {/* Continue */}
+      {allComplete && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="pt-4 border-t"
+        >
+          <Button onClick={onComplete} className="w-full h-12 gap-2" size="lg">
+            Continuar
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </motion.div>
+      )}
+    </div>
   );
 }

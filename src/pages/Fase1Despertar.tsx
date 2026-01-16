@@ -33,8 +33,8 @@ export default function Fase1Despertar() {
   const progress = getPhaseProgress();
   const isPhaseComplete = commitment !== null;
 
-  // Calculate which steps are completed
-  const getCompletedStepsCount = () => {
+  // Calculate which steps are completed based on data
+  const getCompletedStepsFromData = () => {
     let count = 0;
     // Consciousness: at least 3 responses
     if (consciousnessResponses.length >= 3) count++;
@@ -45,12 +45,19 @@ export default function Fase1Despertar() {
         readinessAssessment.professional_score > 0) count++;
     // Pain map: at least 2 items
     if (painMap.length >= 2) count++;
+    // Evaluation is considered complete when pain map is done (it's a view step)
+    if (painMap.length >= 2) count++;
     // Commitment declared
     if (commitment) count++;
     return count;
   };
 
-  const completedStepsCount = getCompletedStepsCount();
+  // Get the active step index
+  const activeIndex = steps.findIndex(s => s.key === activeStep);
+  
+  // Use the maximum between data-based completion and current step position
+  // This ensures that when navigating forward, previous steps are accessible
+  const completedStepsCount = Math.max(getCompletedStepsFromData(), activeIndex);
 
   // Auto-navigate to the correct step based on progress
   useEffect(() => {

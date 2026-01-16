@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Target, CheckCircle2, Sparkles, Trophy, Clock, Plus, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Target, CheckCircle2, Sparkles, Trophy, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
@@ -20,8 +18,7 @@ interface Mission {
 
 interface WeeklyMissionProps {
   mission?: Mission;
-  onComplete?: (missionId: string) => void;
-  onUpdateProgress?: (missionId: string, increment: number) => void;
+  completedCount?: number;
 }
 
 const categoryConfig = {
@@ -57,25 +54,10 @@ const defaultMission: Mission = {
   daysLeft: 5
 };
 
-export function WeeklyMission({ mission = defaultMission, onComplete, onUpdateProgress }: WeeklyMissionProps) {
-  const [localProgress, setLocalProgress] = useState(mission.current);
-  const progress = (localProgress / mission.target) * 100;
-  const isCompleted = localProgress >= mission.target;
+export function WeeklyMission({ mission = defaultMission, completedCount = 0 }: WeeklyMissionProps) {
+  const progress = (completedCount / mission.target) * 100;
+  const isCompleted = completedCount >= mission.target;
   const config = categoryConfig[mission.category];
-
-  const handleIncrement = () => {
-    if (localProgress < mission.target) {
-      setLocalProgress(prev => prev + 1);
-      onUpdateProgress?.(mission.id, 1);
-    }
-  };
-
-  const handleDecrement = () => {
-    if (localProgress > 0) {
-      setLocalProgress(prev => prev - 1);
-      onUpdateProgress?.(mission.id, -1);
-    }
-  };
 
   return (
     <motion.div
@@ -133,12 +115,12 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
           {/* Progress Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Conversas realizadas</span>
+              <span className="text-sm font-medium">Desafios concluídos</span>
               <span className={cn(
                 "text-sm font-bold tabular-nums",
                 isCompleted ? "text-green-500" : "text-foreground"
               )}>
-                {localProgress} / {mission.target}
+                {completedCount} / {mission.target}
               </span>
             </div>
             
@@ -160,34 +142,6 @@ export function WeeklyMission({ mission = defaultMission, onComplete, onUpdatePr
                 </motion.div>
               )}
             </div>
-
-            {/* Quick Progress Controls */}
-            {!isCompleted && (
-              <div className="flex items-center justify-center gap-4 pt-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={handleDecrement}
-                  disabled={localProgress === 0}
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
-                <div className="flex flex-col items-center">
-                  <span className="text-2xl font-bold tabular-nums">{localProgress}</span>
-                  <span className="text-xs text-muted-foreground">conversas</span>
-                </div>
-                <Button
-                  variant="default"
-                  size="icon"
-                  className="h-10 w-10 rounded-full"
-                  onClick={handleIncrement}
-                  disabled={localProgress >= mission.target}
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
 
             {isCompleted && (
               <motion.div

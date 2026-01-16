@@ -19,6 +19,9 @@ const PositioningAcademy = () => {
     scriptIndex: number;
   }>({ open: false, pillarId: 'digital', scriptIndex: 0 });
 
+  // Track completed challenges count - starts with 1 because one is already complete in mock data
+  const [completedChallenges, setCompletedChallenges] = useState(1);
+
   const handleSelectScript = (pillarId: PillarType, scriptIndex: number) => {
     setScriptModal({ open: true, pillarId, scriptIndex });
   };
@@ -54,7 +57,7 @@ const PositioningAcademy = () => {
           {/* Main Content */}
           <div className="lg:col-span-7 xl:col-span-8 space-y-6">
             {/* Weekly Mission */}
-            <WeeklyMission />
+            <WeeklyMission completedCount={completedChallenges} />
 
             {/* Networking Pillars - Scripts */}
             <NetworkingPillars onSelectScript={handleSelectScript} />
@@ -71,7 +74,7 @@ const PositioningAcademy = () => {
             <MyPitch />
 
             {/* Weekly Challenges */}
-            <WeeklyChallenges />
+            <WeeklyChallenges onProgressChange={setCompletedChallenges} />
 
             {/* Achievements Wall - Mobile/Tablet */}
             <div className="lg:hidden">

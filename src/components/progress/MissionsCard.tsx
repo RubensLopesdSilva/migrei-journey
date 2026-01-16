@@ -64,11 +64,11 @@ export function MissionsCard({ missions, userMissions, currentPhaseId }: Mission
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5 text-primary" />
-            Missões Ativas
+            Missões
           </CardTitle>
           <Badge variant="secondary" className="gap-1">
             <Check className="h-3 w-3" />
-            {completedCount} concluídas
+            {completedCount}
           </Badge>
         </div>
       </CardHeader>
@@ -76,8 +76,8 @@ export function MissionsCard({ missions, userMissions, currentPhaseId }: Mission
         {activeMissions.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Target className="h-12 w-12 mx-auto mb-3 opacity-30" />
-            <p>Nenhuma missão ativa no momento</p>
-            <p className="text-sm">Novas missões serão liberadas em breve!</p>
+            <p>Sem missões no momento</p>
+            <p className="text-sm">Em breve teremos novidades!</p>
           </div>
         ) : (
           activeMissions.map(mission => {
@@ -135,7 +135,7 @@ export function MissionsCard({ missions, userMissions, currentPhaseId }: Mission
                       <div className="mt-3 space-y-1.5">
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-muted-foreground">
-                            Progresso: {userMission.progress}/{userMission.target}
+                            {userMission.progress}/{userMission.target}
                           </span>
                           <span className="font-medium text-primary">
                             {Math.round(progress)}%
@@ -177,7 +177,7 @@ export function MissionsCard({ missions, userMissions, currentPhaseId }: Mission
         {/* View all missions button */}
         {activeMissions.length > 0 && (
           <Button variant="ghost" className="w-full gap-2">
-            Ver todas as missões
+            Ver todas
             <ChevronRight className="h-4 w-4" />
           </Button>
         )}

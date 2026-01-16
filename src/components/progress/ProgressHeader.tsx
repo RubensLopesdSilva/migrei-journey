@@ -45,7 +45,7 @@ export function ProgressHeader({
             <Flame className="h-5 w-5 text-orange-500" />
             <div>
               <p className="text-lg font-bold text-foreground">{streak}</p>
-              <p className="text-xs text-muted-foreground">dias na jornada</p>
+              <p className="text-xs text-muted-foreground">dias</p>
             </div>
           </div>
 
@@ -54,7 +54,7 @@ export function ProgressHeader({
             <TrendingUp className="h-5 w-5 text-primary" />
             <div>
               <p className="text-lg font-bold text-foreground">{overallProgress}%</p>
-              <p className="text-xs text-muted-foreground">cada avanço reduz a incerteza</p>
+              <p className="text-xs text-muted-foreground">completo</p>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@ export function ProgressHeader({
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground flex items-center gap-1">
             <Award className="h-4 w-4" />
-            Seu progresso geral
+            Próximo nível
           </span>
           <span className="text-foreground font-medium">
             {xpProgress.current.toLocaleString()} / {xpProgress.max.toLocaleString()} XP

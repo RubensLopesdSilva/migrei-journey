@@ -88,8 +88,8 @@ export default function Progress() {
           <PageBreadcrumb
             items={[
               ...(selectedPhase 
-                ? [{ label: "Meu progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
-                : [{ label: "Meu progresso", current: true }]
+                ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
+                : [{ label: "Progresso", current: true }]
               )
             ]}
             className="mb-4"
@@ -113,7 +113,7 @@ export default function Progress() {
                 className="gap-2"
               >
                 <ChevronLeft className="h-4 w-4" />
-                Voltar para visão geral
+                Voltar
               </Button>
               
               <PhaseDetailCard
@@ -128,7 +128,7 @@ export default function Progress() {
               <AnimatedTabsList className="grid w-full max-w-2xl grid-cols-4">
                 <AnimatedTabsTrigger value="overview" className="gap-2">
                   <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
-                  Visão Geral
+                  Geral
                 </AnimatedTabsTrigger>
                 <AnimatedTabsTrigger value="badges" className="gap-2">
                   <Trophy className="h-4 w-4" aria-hidden="true" />
@@ -150,7 +150,7 @@ export default function Progress() {
                   <div className="lg:col-span-7">
                     <div className="bg-card rounded-2xl border border-border p-4 md:p-8">
                       <h3 className="text-lg font-semibold mb-6 text-center">
-                        Sua Jornada Migrei
+                        Sua Jornada
                       </h3>
                       <InteractiveRodaMigrei
                         phases={phasesWithProgress}
@@ -165,7 +165,7 @@ export default function Progress() {
                     {/* Current Phase Quick View */}
                     {summary.currentPhase && (
                       <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl border border-primary/20 p-6">
-                        <h4 className="text-sm text-muted-foreground mb-2">Fase Atual</h4>
+                        <h4 className="text-sm text-muted-foreground mb-2">Agora</h4>
                         <div className="flex items-center gap-3 mb-4">
                           <div 
                             className="h-12 w-12 rounded-xl flex items-center justify-center text-white font-bold"
@@ -191,7 +191,7 @@ export default function Progress() {
                             }
                           }}
                         >
-                          Ver Atividades
+                          Continuar
                         </Button>
                       </div>
                     )}
@@ -207,7 +207,7 @@ export default function Progress() {
 
                 {/* Phase Cards Grid */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Todas as Fases</h3>
+                  <h3 className="text-lg font-semibold mb-4">Fases</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {phasesWithProgress.map(phase => {
                       const isLocked = phase.userProgress?.status === 'locked';

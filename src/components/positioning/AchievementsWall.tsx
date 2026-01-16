@@ -38,8 +38,8 @@ const mockAchievements: Achievement[] = [
     id: '1',
     user: { name: 'Ana Silva' },
     type: 'interview',
-    title: 'Minha primeira entrevista na nova área!',
-    description: 'Usei o template de conexão do LinkedIn, a pessoa respondeu e me indicou para o RH. Em 3 dias, já tinha entrevista marcada!',
+    title: 'Primeira entrevista na nova área!',
+    description: 'Usei o template de conexão. A pessoa respondeu e me indicou pro RH.',
     likes: 24,
     comments: 5,
     isLiked: false,
@@ -49,8 +49,8 @@ const mockAchievements: Achievement[] = [
     id: '2',
     user: { name: 'Carlos Mendes' },
     type: 'coffee',
-    title: 'Fiz meu primeiro coffee chat!',
-    description: 'Estava com medo de parecer oportunista, mas usei o script e a pessoa adorou minha abordagem. Saí do papo com 2 indicações!',
+    title: 'Primeiro coffee chat!',
+    description: 'Usei o script e a pessoa adorou. Saí com 2 indicações.',
     likes: 18,
     comments: 3,
     isLiked: true,
@@ -61,7 +61,7 @@ const mockAchievements: Achievement[] = [
     user: { name: 'Mariana Costa' },
     type: 'offer',
     title: 'Recebi uma proposta! 🎉',
-    description: 'Foram 3 meses de networking consistente. Cada conversa me aproximou do objetivo. Hoje assino o contrato!',
+    description: '3 meses de networking. Hoje assino o contrato.',
     likes: 89,
     comments: 15,
     isLiked: false,
@@ -103,8 +103,8 @@ export function AchievementsWall({
               <Trophy className="h-4 w-4 text-amber-500" />
             </div>
             <div>
-              <CardTitle className="text-base">Conquistas da comunidade</CardTitle>
-              <p className="text-xs text-muted-foreground">Inspire-se com quem está no mesmo caminho</p>
+              <CardTitle className="text-base">Conquistas</CardTitle>
+              <p className="text-xs text-muted-foreground">Inspire-se com a comunidade</p>
             </div>
           </div>
           <Button
@@ -114,7 +114,7 @@ export function AchievementsWall({
             className="h-8 gap-1.5"
           >
             <Plus className="h-3.5 w-3.5" />
-            Celebrar vitória
+            Compartilhar
           </Button>
         </div>
       </CardHeader>

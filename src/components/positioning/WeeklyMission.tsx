@@ -45,8 +45,8 @@ const categoryConfig = {
 // Mock mission for demo
 const defaultMission: Mission = {
   id: '1',
-  title: 'Inicie 3 conversas com profissionais da área',
-  description: 'Networking não é pedir emprego. É aprender com quem já vive a realidade que você busca.',
+  title: 'Inicie 3 conversas',
+  description: 'Converse com profissionais da sua área-alvo.',
   target: 3,
   current: 1,
   xp: 150,
@@ -85,10 +85,10 @@ export function WeeklyMission({ mission = defaultMission, completedCount = 0 }: 
                   <Target className="h-6 w-6 text-primary" />
                 )}
               </div>
-                <div className="min-w-0">
+              <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Sua missão desta semana
+                    Missão da semana
                   </span>
                   <Badge variant="outline" className={cn("text-xs", config.bgClass, config.borderClass)}>
                     {config.icon} {config.label}
@@ -105,7 +105,7 @@ export function WeeklyMission({ mission = defaultMission, completedCount = 0 }: 
               </Badge>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <Clock className="h-3 w-3" />
-                {mission.daysLeft}d restantes
+                {mission.daysLeft} dias
               </span>
             </div>
           </div>
@@ -115,7 +115,7 @@ export function WeeklyMission({ mission = defaultMission, completedCount = 0 }: 
           {/* Progress Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Desafios concluídos</span>
+              <span className="text-sm font-medium">Progresso</span>
               <span className={cn(
                 "text-sm font-bold tabular-nums",
                 isCompleted ? "text-green-500" : "text-foreground"
@@ -147,13 +147,10 @@ export function WeeklyMission({ mission = defaultMission, completedCount = 0 }: 
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center gap-1 pt-2 text-green-600"
+                className="flex items-center justify-center gap-2 pt-2 text-green-600"
               >
-                <div className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5" />
-                  <span className="font-semibold">Parabéns! Você completou a missão 🎉</span>
-                </div>
-                <span className="text-xs text-muted-foreground">Cada conversa amplia sua visão e abre novas portas</span>
+                <Trophy className="h-5 w-5" />
+                <span className="font-semibold">Missão concluída! 🎉</span>
               </motion.div>
             )}
           </div>

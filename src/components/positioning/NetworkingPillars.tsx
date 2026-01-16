@@ -104,8 +104,8 @@ export function NetworkingPillars({ onSelectScript }: NetworkingPillarsProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold">Abordagens prontas para usar</h2>
-          <p className="text-sm text-muted-foreground">Copie, personalize e aplique — sem medo de errar</p>
+          <h2 className="text-lg font-bold">Scripts prontos</h2>
+          <p className="text-sm text-muted-foreground">Copie, adapte e use</p>
         </div>
       </div>
 

@@ -19,10 +19,10 @@ const PITCH_MAX_CHARS = 300;
 const PITCH_TARGET_SECONDS = 30;
 
 const pitchTips = [
-  "Comece dizendo quem você é e o que busca",
-  "Mencione sua experiência mais relevante",
-  "Deixe claro o valor que você entrega",
-  "Termine com algo que gere conversa"
+  "Diga quem você é",
+  "Sua experiência principal",
+  "Seu diferencial",
+  "Deixe espaço para conversa"
 ];
 
 const pitchTemplates = [
@@ -86,7 +86,7 @@ export function MyPitch({ onSave, initialPitch = '' }: MyPitchProps) {
               <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Mic className="h-4 w-4 text-primary" />
               </div>
-              <CardTitle className="text-base">Sua apresentação pessoal</CardTitle>
+              <CardTitle className="text-base">Seu pitch</CardTitle>
             </div>
             <Badge variant="outline" className="text-xs">
               <Clock className="h-3 w-3 mr-1" />
@@ -106,7 +106,7 @@ export function MyPitch({ onSave, initialPitch = '' }: MyPitchProps) {
               >
                 <span className="flex items-center gap-1.5">
                   <Lightbulb className="h-3.5 w-3.5 text-amber-500" />
-                  Precisa de ajuda? Veja dicas e modelos prontos
+                  Ver dicas e modelos
                 </span>
                 <ChevronDown className={cn(
                   "h-3.5 w-3.5 transition-transform",
@@ -143,7 +143,7 @@ export function MyPitch({ onSave, initialPitch = '' }: MyPitchProps) {
           <Textarea
             value={pitch}
             onChange={(e) => setPitch(e.target.value.slice(0, PITCH_MAX_CHARS))}
-            placeholder="Escreva aqui como você se apresentaria para alguém da sua área-alvo em 30 segundos..."
+            placeholder="Como você se apresentaria em 30 segundos?"
             className="min-h-[120px] resize-none text-sm"
           />
           

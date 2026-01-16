@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Users, ArrowRight, UserPlus, MessageCircle, MessageSquare, Check, Loader2 } from "lucide-react";
+import { Users, ArrowRight, UserPlus, MessageCircle, MessageSquare, Check, Loader2, Sparkles, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
@@ -34,6 +34,29 @@ const getActionIcon = (type: 'connect' | 'comment' | 'message') => {
     case 'comment': return MessageCircle;
     case 'message': return MessageSquare;
     default: return Users;
+  }
+};
+
+// Strategic context for each action type - explains WHY this matters
+const actionStrategicContext: Record<string, { 
+  why: string; 
+  tip: string;
+  example: string;
+}> = {
+  connect: {
+    why: "Cada conexão abre portas para oportunidades invisíveis",
+    tip: "Conecte com pessoas 1-2 níveis acima de onde você quer chegar",
+    example: "Ex: 'Vi seu post sobre [tema]. Estou em transição para [área] e adoraria trocar ideias.'"
+  },
+  comment: {
+    why: "Comentários estratégicos te posicionam como referência",
+    tip: "Pergunte sobre desafios reais, não elogie superficialmente",
+    example: "Ex: 'Interessante! Como você lidou com [desafio específico] no início?'"
+  },
+  message: {
+    why: "Mensagens diretas criam relacionamentos reais",
+    tip: "Seja específico sobre o que quer aprender, não peça emprego",
+    example: "Ex: 'Posso te fazer 2 perguntas sobre sua transição para [área]?'"
   }
 };
 
@@ -272,9 +295,9 @@ export function NetworkingCard() {
         </div>
       </motion.div>
 
-      {/* Evidence Dialog */}
+      {/* Evidence Dialog with Strategic Context */}
       <Dialog open={!!selectedAction} onOpenChange={(open) => !open && setSelectedAction(null)}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               {selectedAction && (
@@ -287,17 +310,33 @@ export function NetworkingCard() {
                 </>
               )}
             </DialogTitle>
-            <DialogDescription>
-              Networking não é pedir emprego. É aprender com quem já vive a realidade que você busca.
+            <DialogDescription className="text-left">
+              {selectedAction && actionStrategicContext[selectedAction.actionType]?.why}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4 py-4">
+          {/* Strategic tip box */}
+          {selectedAction && (
+            <div className="bg-phase-deslanchar/5 border border-phase-deslanchar/20 rounded-lg p-3 space-y-2">
+              <p className="text-xs font-medium text-phase-deslanchar flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5" />
+                Dica estratégica
+              </p>
+              <p className="text-sm text-foreground">
+                {actionStrategicContext[selectedAction.actionType]?.tip}
+              </p>
+              <p className="text-xs text-muted-foreground italic">
+                {actionStrategicContext[selectedAction.actionType]?.example}
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="targetName">Nome do contato *</Label>
+              <Label htmlFor="targetName">Com quem você interagiu? *</Label>
               <Input
                 id="targetName"
-                placeholder="Ex: João Silva"
+                placeholder="Ex: Maria Santos, Head de Marketing na XYZ"
                 value={formData.targetName}
                 onChange={(e) => setFormData(prev => ({ ...prev, targetName: e.target.value }))}
               />
@@ -314,14 +353,17 @@ export function NetworkingCard() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Descrição da ação</Label>
+              <Label htmlFor="description">O que você aprendeu ou descobriu?</Label>
               <Textarea
                 id="description"
-                placeholder="Descreva brevemente a ação realizada..."
+                placeholder="Ex: Descobri que a área de UX valoriza mais portfólio do que certificações..."
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                 rows={3}
               />
+              <p className="text-[10px] text-muted-foreground">
+                Registrar aprendizados ajuda a consolidar insights da sua jornada
+              </p>
             </div>
           </div>
 

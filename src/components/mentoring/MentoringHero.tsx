@@ -7,8 +7,7 @@ import {
   Sparkles, 
   ArrowRight, 
   Users,
-  Calendar,
-  Star
+  Calendar
 } from "lucide-react";
 
 interface MentoringHeroProps {
@@ -74,30 +73,20 @@ export function MentoringHero({
                 Mentoria com
                 <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"> Especialistas</span>
               </h1>
-              <p className="text-muted-foreground mt-2 text-lg max-w-xl">
-                Acelere sua transição de carreira com orientação personalizada de profissionais experientes.
+              <p className="text-muted-foreground mt-2 text-base max-w-lg">
+                Orientação personalizada para acelerar sua transição.
               </p>
             </div>
 
             {/* Stats row */}
-            <div className="flex flex-wrap items-center gap-6 pt-2">
-              <div className="flex items-center gap-2 text-sm">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-                <span className="text-muted-foreground">Mentores ativos</span>
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="h-4 w-4 text-primary" />
+                <span>Mentores especializados</span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Calendar className="h-4 w-4 text-primary" />
-                </div>
-                <span className="text-muted-foreground">Sessões 1:1</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Star className="h-4 w-4 text-primary" />
-                </div>
-                <span className="text-muted-foreground">Avaliação 4.9</span>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4 text-primary" />
+                <span>Sessões 1:1</span>
               </div>
             </div>
           </div>

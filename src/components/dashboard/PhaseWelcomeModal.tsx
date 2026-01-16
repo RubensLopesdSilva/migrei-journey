@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, Lightbulb, Search, Target, Settings, Rocket, Star } from "lucide-react";
+import { X, ArrowRight, Lightbulb, Search, Target, Settings, Rocket, Star, Clock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useProgress } from "@/hooks/useProgress";
 import { useAgent } from "@/hooks/useAgent";
@@ -41,36 +41,48 @@ const phaseColors: Record<string, string> = {
   desfrutar: "#F97316",
 };
 
-const phaseMessages: Record<string, { title: string; subtitle: string; description: string }> = {
+// QUICK WINS - O que o usuário ganha HOJE
+const phaseQuickWins: Record<string, { 
+  time: string; 
+  result: string; 
+  firstTask: string;
+  benefits: string[];
+}> = {
   despertar: {
-    title: "Fase Despertar",
-    subtitle: "Sua transição começa aqui.",
-    description: "Você está dando o primeiro passo para transformar sua carreira. Nesta fase, vamos mapear suas dores e motivações para iniciar sua mudança profissional."
+    time: "5 min",
+    result: "Seu primeiro diagnóstico de carreira",
+    firstTask: "Responder o teste de consciência",
+    benefits: ["Clareza sobre suas dores", "Mapeamento de bloqueios", "Declaração de compromisso"]
   },
   descobrir: {
-    title: "Fase Descobrir",
-    subtitle: "Clareza vem antes da decisão.",
-    description: "Aqui você vai se conhecer melhor para evitar escolhas baseadas apenas em medo ou comparação. Não existe resposta certa agora — existe clareza sendo construída."
+    time: "15 min",
+    result: "Mapa visual dos seus talentos",
+    firstTask: "Fazer o diagnóstico de competências",
+    benefits: ["Roda da carreira preenchida", "Radar de habilidades", "Relatório de clareza"]
   },
   decidir: {
-    title: "Fase Decidir",
-    subtitle: "Escolha com consciência, não pressão.",
-    description: "Com base no que descobriu, agora é hora de definir sua rota. Vamos criar metas claras e um plano de ação para os próximos 90 dias."
+    time: "20 min",
+    result: "Sua rota de transição definida",
+    firstTask: "Preencher a matriz de possibilidades",
+    benefits: ["Meta SMART definida", "Plano de 90 dias", "Mapa de lacunas"]
   },
   desenvolver: {
-    title: "Fase Desenvolver",
-    subtitle: "Construindo competências reais.",
-    description: "Prepare-se para o mercado. Nesta fase, você vai otimizar seu LinkedIn, currículo, pitch e desenvolver as competências necessárias."
+    time: "30 min",
+    result: "Currículo e LinkedIn otimizados",
+    firstTask: "Gerar seu currículo com IA",
+    benefits: ["Currículo profissional", "Pitch de apresentação", "Checklist LinkedIn"]
   },
   deslanchar: {
-    title: "Fase Deslanchar",
-    subtitle: "Execute com consistência.",
-    description: "Coloque tudo em prática! Candidate-se a vagas, faça networking ativo e prepare-se para entrevistas. A transição está acontecendo."
+    time: "15 min",
+    result: "Rotina de candidaturas ativa",
+    firstTask: "Configurar seu painel de execução",
+    benefits: ["Diário de oportunidades", "Rotina de networking", "Simulador de entrevistas"]
   },
   desfrutar: {
-    title: "Fase Desfrutar",
-    subtitle: "Você avançou com consciência.",
-    description: "Celebre suas conquistas e consolide os aprendizados. Documente sua jornada e prepare-se para continuar evoluindo."
+    time: "10 min",
+    result: "Celebração e próximo ciclo",
+    firstTask: "Avaliar seus resultados",
+    benefits: ["Linha de conquistas", "Relatório final", "Planejamento do próximo ciclo"]
   },
 };
 
@@ -99,7 +111,7 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
   
   const PhaseIcon = phaseIcons[phaseSlug] || Lightbulb;
   const phaseColor = phaseColors[phaseSlug] || "#F59E0B";
-  const phaseMessage = phaseMessages[phaseSlug] || phaseMessages.despertar;
+  const quickWin = phaseQuickWins[phaseSlug] || phaseQuickWins.despertar;
   const phaseNumber = currentPhaseData?.phase_number || 1;
   
   // Agent avatar
@@ -136,134 +148,145 @@ export function PhaseWelcomeModal({ forceOpen = false }: PhaseWelcomeModalProps)
           >
             <motion.div
               className="w-full max-w-md"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
             >
               <div className="bg-card rounded-3xl border border-border shadow-2xl overflow-hidden">
-              {/* Header with agent avatar */}
-              <div 
-                className="relative h-36 flex items-center justify-center"
-                style={{ 
-                  background: `linear-gradient(135deg, ${phaseColor}20 0%, ${phaseColor}05 100%)`,
-                  borderBottom: `2px solid ${phaseColor}30`
-                }}
-              >
-                {/* Decorative circles */}
+                {/* Header with agent */}
                 <div 
-                  className="absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-20"
-                  style={{ backgroundColor: phaseColor }}
-                />
-                <div 
-                  className="absolute -bottom-5 -left-5 w-20 h-20 rounded-full opacity-10"
-                  style={{ backgroundColor: phaseColor }}
-                />
-
-                {/* Close button */}
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/10 transition-colors"
+                  className="relative px-6 pt-6 pb-4 flex items-center gap-4"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${phaseColor}15 0%, ${phaseColor}05 100%)`,
+                  }}
                 >
-                  <X className="h-5 w-5 text-foreground/70" />
-                </button>
+                  {/* Close button */}
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="absolute top-4 right-4 p-2 rounded-full hover:bg-black/10 transition-colors"
+                  >
+                    <X className="h-5 w-5 text-foreground/70" />
+                  </button>
 
-                {/* Agent avatar or Phase icon */}
-                <motion.div
-                  className="relative z-10 flex flex-col items-center gap-2"
-                  initial={{ scale: 0, rotate: -20 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
-                >
-                  {agentAvatar ? (
-                    <>
-                      <img 
-                        src={agentAvatar} 
-                        alt={currentAgent?.name}
-                        className="h-16 w-16 rounded-full object-cover ring-4 ring-white/20"
-                        style={{ boxShadow: `0 10px 40px -10px ${phaseColor}80` }}
-                      />
-                      <span className="text-xs font-medium text-foreground/80">
-                        {currentAgent?.name} • Seu Coach
-                      </span>
-                    </>
-                  ) : (
-                    <div
-                      className="h-20 w-20 rounded-2xl flex items-center justify-center"
+                  {/* Agent avatar */}
+                  {agentAvatar && (
+                    <motion.img 
+                      src={agentAvatar} 
+                      alt={currentAgent?.name}
+                      className="h-14 w-14 rounded-full object-cover ring-4 ring-white/30 flex-shrink-0"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.1, type: "spring" }}
+                    />
+                  )}
+                  
+                  <div className="flex-1">
+                    <motion.p 
+                      className="text-sm text-muted-foreground"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.15 }}
+                    >
+                      {currentAgent?.name || "Seu coach"} diz:
+                    </motion.p>
+                    <motion.h2 
+                      className="text-lg font-bold text-foreground"
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      Você está pronto para começar! 🎉
+                    </motion.h2>
+                  </div>
+                </div>
+
+                {/* Quick Win Promise */}
+                <div className="px-6 py-4 border-b border-border/50">
+                  <motion.div
+                    className="flex items-center gap-3 p-4 rounded-xl bg-primary/5 border border-primary/10"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.25 }}
+                  >
+                    <div 
+                      className="h-12 w-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: phaseColor }}
+                    >
+                      <PhaseIcon className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">
+                        Em <strong>{quickWin.time}</strong> você terá:
+                      </p>
+                      <p className="text-sm text-primary font-semibold">
+                        {quickWin.result}
+                      </p>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* What you'll do */}
+                <div className="px-6 py-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                  >
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold mb-3">
+                      Fase {phaseNumber} • O que você vai conquistar
+                    </p>
+                    
+                    <div className="space-y-2">
+                      {quickWin.benefits.map((benefit, index) => (
+                        <motion.div 
+                          key={index}
+                          className="flex items-center gap-2 text-sm text-foreground/80"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.35 + index * 0.05 }}
+                        >
+                          <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
+                          <span>{benefit}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* CTA */}
+                <div className="px-6 pb-6">
+                  <motion.div
+                    className="flex flex-col gap-3"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full"
                       style={{ 
                         backgroundColor: phaseColor,
-                        boxShadow: `0 10px 40px -10px ${phaseColor}80`
+                        color: 'white'
                       }}
                     >
-                      <PhaseIcon className="h-10 w-10 text-white" strokeWidth={2} />
-                    </div>
-                  )}
-                </motion.div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6 text-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <PhaseIcon className="h-4 w-4" style={{ color: phaseColor }} />
-                    <span 
-                      className="text-xs font-semibold uppercase tracking-wide"
-                      style={{ color: phaseColor }}
+                      <Link to={phaseLink} onClick={() => setIsOpen(false)}>
+                        <Clock className="mr-2 h-4 w-4" />
+                        {quickWin.firstTask}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      className="w-full text-muted-foreground"
+                      onClick={() => setIsOpen(false)}
                     >
-                      Fase {phaseNumber}
-                    </span>
-                  </div>
-                  
-                  <h2 className="text-2xl font-bold text-foreground mb-1">
-                    {phaseMessage.title}
-                  </h2>
-                  
-                  <p 
-                    className="text-sm font-medium mb-4"
-                    style={{ color: phaseColor }}
-                  >
-                    {phaseMessage.subtitle}
-                  </p>
-
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                    {phaseMessage.description}
-                  </p>
-                </motion.div>
-
-                {/* Actions */}
-                <motion.div
-                  className="flex flex-col gap-3"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
-                  <Button
-                    asChild
-                    className="w-full"
-                    style={{ 
-                      backgroundColor: phaseColor,
-                      color: 'white'
-                    }}
-                  >
-                    <Link to={phaseLink} onClick={() => setIsOpen(false)}>
-                      Avançar para a fase
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  
-                  <Button
-                    variant="ghost"
-                    className="w-full text-muted-foreground"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Continuar no dashboard
-                  </Button>
-                </motion.div>
-              </div>
+                      Explorar o dashboard primeiro
+                    </Button>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
           </motion.div>

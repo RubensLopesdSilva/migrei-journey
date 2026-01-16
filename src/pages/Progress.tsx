@@ -5,7 +5,7 @@ import { PageContent } from "@/components/ui/page-transition";
 import { useProgress } from "@/hooks/useProgress";
 import { ProgressHeader } from "@/components/progress/ProgressHeader";
 import { CurrentPhaseCard } from "@/components/progress/CurrentPhaseCard";
-import { InteractiveRodaMigrei } from "@/components/progress/InteractiveRodaMigrei";
+import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { PhaseDetailCard } from "@/components/progress/PhaseDetailCard";
 import { BadgesGallery } from "@/components/progress/BadgesGallery";
 import { MissionsCard } from "@/components/progress/MissionsCard";
@@ -15,8 +15,7 @@ import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { PhaseWithProgress } from "@/types/progress";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 export default function Progress() {
   const {
@@ -133,29 +132,29 @@ export default function Progress() {
           <div className="space-y-6">
             {/* Main Grid - Same pattern as Networking (7/5 or 8/4) */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-              {/* Main Content - Roda Migrei */}
+              {/* Main Content - Roda Migrei - Same visual as Dashboard */}
               <div className="lg:col-span-7 xl:col-span-8 space-y-6">
-                {/* Journey Card */}
                 <motion.div 
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
+                  className="relative w-full flex justify-center items-center"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
                 >
-                  <Card>
-                    <CardContent className="p-5 md:p-6">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
-                          <TrendingUp className="h-4 w-4 text-primary" />
-                        </div>
-                        <h3 className="font-bold text-base">Sua Jornada</h3>
-                      </div>
-                      <InteractiveRodaMigrei
-                        phases={phasesWithProgress}
-                        currentPhaseId={userProgress?.current_phase_id || null}
-                        onPhaseClick={handlePhaseClick}
-                      />
-                    </CardContent>
-                  </Card>
+                  {/* Clean container with subtle elevation */}
+                  <div className="relative p-4 sm:p-6 lg:p-8 w-full">
+                    {/* Subtle background */}
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-br from-card to-card/60 rounded-3xl border border-border/40"
+                      style={{
+                        boxShadow: 'var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.05)'
+                      }}
+                    />
+                    
+                    {/* The Circle - main element */}
+                    <div className="relative z-10 flex justify-center">
+                      <MigreiCircle />
+                    </div>
+                  </div>
                 </motion.div>
 
                 {/* Phases Grid - Desktop only in main */}

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { 
   Crown, 
   Flame, 
@@ -13,7 +14,7 @@ import {
   Trophy,
   Lock
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge as BadgeUI } from "@/components/ui/badge";
 import { Badge, UserBadge } from "@/types/progress";
 import { cn } from "@/lib/utils";
@@ -79,106 +80,109 @@ const categoryLabels: Record<string, string> = {
   const categoryOrder = ['master', 'phase', 'streak', 'milestone', 'general'];
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-primary" />
-            Conquistas
-          </CardTitle>
-          <BadgeUI variant="secondary">
-            {earnedBadges.length} / {allBadges.length}
-          </BadgeUI>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {categoryOrder.map(category => {
-          const badges = groupedBadges[category];
-          if (!badges || badges.length === 0) return null;
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Card>
+        <CardContent className="p-5">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Trophy className="h-4 w-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-base">Conquistas</h3>
+            </div>
+            <BadgeUI variant="secondary" className="tabular-nums">
+              {earnedBadges.length} / {allBadges.length}
+            </BadgeUI>
+          </div>
 
-          return (
-            <div key={category}>
-              <h4 className="text-sm font-medium text-muted-foreground mb-3">
-                {categoryLabels[category] || category}
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {badges.map(badge => {
-                  const isEarned = earnedBadgeIds.has(badge.id);
-                  const earnedData = earnedBadges.find(ub => ub.badge_id === badge.id);
-                  const Icon = iconMap[badge.icon_name] || Award;
-                  const colors = rarityColors[badge.rarity];
+          {/* Categories */}
+          <div className="space-y-5">
+            {categoryOrder.map(category => {
+              const badges = groupedBadges[category];
+              if (!badges || badges.length === 0) return null;
 
-                  return (
-                    <div
-                      key={badge.id}
-                      className={cn(
-                        "relative p-4 rounded-xl border-2 transition-all duration-300",
-                        isEarned 
-                          ? `${colors.bg} ${colors.border}` 
-                          : "bg-muted/30 border-dashed border-muted-foreground/20",
-                        !isEarned && "grayscale opacity-50"
-                      )}
-                    >
-                      {/* Locked overlay */}
-                      {!isEarned && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-background/50 rounded-xl">
-                          <Lock className="h-6 w-6 text-muted-foreground" />
-                        </div>
-                      )}
+              return (
+                <div key={category}>
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">
+                    {categoryLabels[category] || category}
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                    {badges.map(badge => {
+                      const isEarned = earnedBadgeIds.has(badge.id);
+                      const earnedData = earnedBadges.find(ub => ub.badge_id === badge.id);
+                      const Icon = iconMap[badge.icon_name] || Award;
+                      const colors = rarityColors[badge.rarity];
 
-                      <div className="flex flex-col items-center text-center gap-2">
-                        <div 
+                      return (
+                        <div
+                          key={badge.id}
                           className={cn(
-                            "h-12 w-12 rounded-full flex items-center justify-center",
-                            isEarned ? colors.bg : "bg-muted"
+                            "relative p-3 rounded-lg border-2 transition-all duration-300",
+                            isEarned 
+                              ? `${colors.bg} ${colors.border}` 
+                              : "bg-muted/30 border-dashed border-muted-foreground/20",
+                            !isEarned && "grayscale opacity-50"
                           )}
                         >
-                          <Icon 
-                            className={cn(
-                              "h-6 w-6",
-                              isEarned ? colors.text : "text-muted-foreground"
-                            )} 
-                          />
+                          {/* Locked overlay */}
+                          {!isEarned && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-background/50 rounded-lg">
+                              <Lock className="h-5 w-5 text-muted-foreground" />
+                            </div>
+                          )}
+
+                          <div className="flex flex-col items-center text-center gap-1.5">
+                            <div 
+                              className={cn(
+                                "h-10 w-10 rounded-full flex items-center justify-center",
+                                isEarned ? colors.bg : "bg-muted"
+                              )}
+                            >
+                              <Icon 
+                                className={cn(
+                                  "h-5 w-5",
+                                  isEarned ? colors.text : "text-muted-foreground"
+                                )} 
+                              />
+                            </div>
+                            <div>
+                              <p className={cn(
+                                "font-medium text-xs",
+                                isEarned ? colors.text : "text-muted-foreground"
+                              )}>
+                                {badge.name}
+                              </p>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <BadgeUI 
+                                variant="outline" 
+                                className={cn(
+                                  "text-[9px] px-1 py-0",
+                                  isEarned && colors.text
+                                )}
+                              >
+                                {rarityLabels[badge.rarity]}
+                              </BadgeUI>
+                              <span className="text-[9px] text-primary font-medium">
+                                +{badge.xp_reward}
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <p className={cn(
-                            "font-medium text-sm",
-                            isEarned ? colors.text : "text-muted-foreground"
-                          )}>
-                            {badge.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                            {badge.description}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <BadgeUI 
-                            variant="outline" 
-                            className={cn(
-                              "text-[10px]",
-                              isEarned && colors.text
-                            )}
-                          >
-                            {rarityLabels[badge.rarity]}
-                          </BadgeUI>
-                          <span className="text-[10px] text-primary font-medium">
-                            +{badge.xp_reward} XP
-                          </span>
-                        </div>
-                        {isEarned && earnedData && (
-                          <p className="text-[10px] text-muted-foreground">
-                            {format(new Date(earnedData.earned_at), "d 'de' MMM, yyyy", { locale: ptBR })}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </CardContent>
-    </Card>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

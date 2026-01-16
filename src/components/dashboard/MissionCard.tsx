@@ -63,20 +63,6 @@ function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
             : 'hover:bg-muted/50'
         )}
       >
-        <div
-          className={cn(
-            "h-5 w-5 rounded-full border-2 flex-shrink-0 transition-all flex items-center justify-center",
-            isCompleted 
-              ? "bg-primary border-primary" 
-              : "border-muted-foreground/40"
-          )}
-          aria-label={isCompleted ? "Missão concluída" : "Missão pendente"}
-        >
-          {isCompleted && (
-            <Check className="h-3 w-3 text-primary-foreground" />
-          )}
-        </div>
-        
         <div className="flex-1 min-w-0">
           <p className={cn(
             "text-sm font-medium truncate",
@@ -94,10 +80,12 @@ function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
         </div>
         
         <span className={cn(
-          "text-xs font-medium flex-shrink-0",
-          isCompleted ? 'text-primary' : 'text-muted-foreground'
+          "text-xs font-medium flex-shrink-0 px-2 py-1 rounded-full",
+          isCompleted 
+            ? 'bg-primary/10 text-primary' 
+            : 'bg-muted text-muted-foreground'
         )}>
-          +{activity.xp_reward} XP
+          {isCompleted ? '✓' : '+'}{activity.xp_reward} XP
         </span>
       </Link>
     </motion.div>

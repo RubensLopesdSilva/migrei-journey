@@ -70,16 +70,13 @@ function MissionItem({ activity, isCompleted, phaseLink }: MissionItemProps) {
             : 'text-foreground'
         )}>
           {activity.title}
+          <span className={cn(
+            "ml-2 text-xs font-medium",
+            isCompleted ? 'text-primary' : 'text-muted-foreground'
+          )}>
+            {isCompleted ? '✓' : '+'}{activity.xp_reward} XP
+          </span>
         </p>
-        
-        <span className={cn(
-          "text-xs font-medium flex-shrink-0 px-2 py-1 rounded-full",
-          isCompleted 
-            ? 'bg-primary/10 text-primary' 
-            : 'bg-muted text-muted-foreground'
-        )}>
-          {isCompleted ? '✓' : '+'}{activity.xp_reward} XP
-        </span>
       </Link>
     </motion.div>
   );

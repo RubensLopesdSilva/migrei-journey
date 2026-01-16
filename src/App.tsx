@@ -21,7 +21,7 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDashboard from "./pages/AdminDashboard";
 import Progress from "./pages/Progress";
-import Community from "./pages/Community";
+import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
 import Fase2Descobrir from "./pages/Fase2Descobrir";
 import Fase3Decidir from "./pages/Fase3Decidir";
@@ -59,7 +59,7 @@ const App = () => (
                     <Route path="/admin/usuarios" element={<AdminUsers />} />
                     <Route path="/admin/configuracoes" element={<AdminSettings />} />
                     <Route path="/progresso" element={<Progress />} />
-                    <Route path="/comunidade" element={<Community />} />
+                    <Route path="/comunidade" element={<PositioningAcademy />} />
                     <Route path="/fase" element={<Fase1Despertar />} />
                     <Route path="/fase/despertar" element={<Fase1Despertar />} />
                     <Route path="/fase/descobrir" element={<Fase2Descobrir />} />

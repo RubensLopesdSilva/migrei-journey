@@ -68,70 +68,104 @@ const useFirstVisit = (phaseNumber: number) => {
   return isFirstVisit;
 };
 
-interface ClarityCardProps {
-  title: string;
-  icon: React.ReactNode;
-  items: string[];
+type ClaritySection = 'learnings' | 'benefits' | 'deliverables';
+
+interface CompactClarityBarProps {
+  learnings: string[];
+  benefits: string[];
+  deliverables: string[];
   phaseColor: string;
-  isDeliverable?: boolean;
   defaultOpen: boolean;
 }
 
-function ClarityCard({ title, icon, items, phaseColor, isDeliverable, defaultOpen }: ClarityCardProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+function CompactClarityBar({ learnings, benefits, deliverables, phaseColor, defaultOpen }: CompactClarityBarProps) {
+  const [activeSection, setActiveSection] = useState<ClaritySection | null>(defaultOpen ? 'learnings' : null);
+
+  const sections = [
+    { 
+      key: 'learnings' as ClaritySection, 
+      title: 'Aprendizados', 
+      icon: BookOpen, 
+      items: learnings 
+    },
+    { 
+      key: 'benefits' as ClaritySection, 
+      title: 'Valor gerado', 
+      icon: Target, 
+      items: benefits 
+    },
+    { 
+      key: 'deliverables' as ClaritySection, 
+      title: 'Entregas', 
+      icon: CheckCircle2, 
+      items: deliverables,
+      isDeliverable: true 
+    },
+  ];
+
+  const toggleSection = (key: ClaritySection) => {
+    setActiveSection(activeSection === key ? null : key);
+  };
 
   return (
-    <Card 
-      className={cn(
-        "h-full border-l-4 hover:shadow-md transition-all cursor-pointer",
-        isDeliverable && "bg-gradient-to-br from-background to-muted/30"
-      )} 
-      style={{ borderLeftColor: phaseColor }}
-      onClick={() => setIsOpen(!isOpen)}
-    >
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div 
-              className="h-8 w-8 rounded-lg flex items-center justify-center shrink-0"
-              style={{ backgroundColor: `${phaseColor}20` }}
-            >
-              {icon}
-            </div>
-            <h3 className="font-semibold text-sm">{title}</h3>
-          </div>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
+    <div className="bg-muted/30 rounded-xl border overflow-hidden">
+      {/* Compact Toggle Bar */}
+      <div className="flex divide-x divide-border">
+        {sections.map(({ key, title, icon: Icon }) => (
+          <button
+            key={key}
+            onClick={() => toggleSection(key)}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-medium transition-all",
+              "hover:bg-muted/50",
+              activeSection === key 
+                ? "bg-background shadow-sm" 
+                : "text-muted-foreground"
+            )}
+            style={{
+              color: activeSection === key ? phaseColor : undefined
+            }}
           >
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <Icon className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline">{title}</span>
+            <ChevronDown 
+              className={cn(
+                "h-3 w-3 transition-transform",
+                activeSection === key && "rotate-180"
+              )} 
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* Expandable Content */}
+      <AnimatePresence>
+        {activeSection && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="p-4 bg-background border-t">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                {sections.find(s => s.key === activeSection)?.items.map((item, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    {activeSection === 'deliverables' ? (
+                      <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-green-500" />
+                    ) : (
+                      <ArrowRight className="h-4 w-4 shrink-0 mt-0.5" style={{ color: phaseColor }} />
+                    )}
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
-        </div>
-        
-        <AnimatePresence>
-          {isOpen && (
-            <motion.ul 
-              className="space-y-1.5 mt-3"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {items.map((item, index) => (
-                <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  {isDeliverable ? (
-                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-green-500" />
-                  ) : (
-                    <ArrowRight className="h-4 w-4 shrink-0 mt-0.5" style={{ color: phaseColor }} />
-                  )}
-                  <span>{item}</span>
-                </li>
-              ))}
-            </motion.ul>
-          )}
-        </AnimatePresence>
-      </CardContent>
-    </Card>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -202,39 +236,16 @@ export function PhaseIntroBlock({ data, className }: PhaseIntroBlockProps) {
         />
       </motion.div>
 
-      {/* 3 Blocos de Clareza - Colapsáveis */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <motion.div variants={itemVariants}>
-          <ClarityCard
-            title="Você vai aprender"
-            icon={<BookOpen className="h-4 w-4" style={{ color: phaseColor }} />}
-            items={learnings}
-            phaseColor={phaseColor}
-            defaultOpen={isFirstVisit}
-          />
-        </motion.div>
-
-        <motion.div variants={itemVariants}>
-          <ClarityCard
-            title="Valor gerado"
-            icon={<Target className="h-4 w-4" style={{ color: phaseColor }} />}
-            items={benefits}
-            phaseColor={phaseColor}
-            defaultOpen={isFirstVisit}
-          />
-        </motion.div>
-
-        <motion.div variants={itemVariants}>
-          <ClarityCard
-            title="Entregas"
-            icon={<CheckCircle2 className="h-4 w-4" style={{ color: phaseColor }} />}
-            items={deliverables}
-            phaseColor={phaseColor}
-            isDeliverable
-            defaultOpen={isFirstVisit}
-          />
-        </motion.div>
-      </div>
+      {/* Barra compacta de clareza */}
+      <motion.div variants={itemVariants}>
+        <CompactClarityBar
+          learnings={learnings}
+          benefits={benefits}
+          deliverables={deliverables}
+          phaseColor={phaseColor}
+          defaultOpen={isFirstVisit}
+        />
+      </motion.div>
 
     </motion.div>
   );

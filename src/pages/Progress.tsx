@@ -11,18 +11,12 @@ import { BadgesGallery } from "@/components/progress/BadgesGallery";
 import { MissionsCard } from "@/components/progress/MissionsCard";
 import { ProgressAnalytics } from "@/components/progress/ProgressAnalytics";
 import { PhasesGrid } from "@/components/progress/PhasesGrid";
-import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { PhaseWithProgress } from "@/types/progress";
 import { Button } from "@/components/ui/button";
-import { 
-  TrendingUp, 
-  Trophy, 
-  Target, 
-  BarChart3,
-  ChevronLeft
-} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { TrendingUp, ChevronLeft } from "lucide-react";
 
 export default function Progress() {
   const {
@@ -101,7 +95,7 @@ export default function Progress() {
           className="mb-4"
         />
 
-        {/* Progress Header - Hero style like Networking */}
+        {/* Hero Header - Same pattern as Networking */}
         <ProgressHeader
           totalXp={summary.totalXp}
           level={summary.currentLevel}
@@ -136,98 +130,92 @@ export default function Progress() {
             />
           </motion.div>
         ) : (
-          <AnimatedTabs defaultValue="overview" className="space-y-6">
-            <AnimatedTabsList className="grid w-full max-w-md grid-cols-4">
-              <AnimatedTabsTrigger value="overview" className="gap-1.5 text-xs sm:text-sm">
-                <TrendingUp className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">Geral</span>
-              </AnimatedTabsTrigger>
-              <AnimatedTabsTrigger value="badges" className="gap-1.5 text-xs sm:text-sm">
-                <Trophy className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">Conquistas</span>
-              </AnimatedTabsTrigger>
-              <AnimatedTabsTrigger value="missions" className="gap-1.5 text-xs sm:text-sm">
-                <Target className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">Missões</span>
-              </AnimatedTabsTrigger>
-              <AnimatedTabsTrigger value="analytics" className="gap-1.5 text-xs sm:text-sm">
-                <BarChart3 className="h-4 w-4" aria-hidden="true" />
-                <span className="hidden sm:inline">Análise</span>
-              </AnimatedTabsTrigger>
-            </AnimatedTabsList>
+          <div className="space-y-6">
+            {/* Main Grid - Same pattern as Networking (7/5 or 8/4) */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Main Content - Roda Migrei */}
+              <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+                {/* Journey Card */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card>
+                    <CardContent className="p-5 md:p-6">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <TrendingUp className="h-4 w-4 text-primary" />
+                        </div>
+                        <h3 className="font-bold text-base">Sua Jornada</h3>
+                      </div>
+                      <InteractiveRodaMigrei
+                        phases={phasesWithProgress}
+                        currentPhaseId={userProgress?.current_phase_id || null}
+                        onPhaseClick={handlePhaseClick}
+                      />
+                    </CardContent>
+                  </Card>
+                </motion.div>
 
-            <AnimatedTabsContent value="overview" className="space-y-6">
-              {/* Main Grid - Same pattern as Networking */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* Main Content - Roda Migrei */}
-                <div className="lg:col-span-7 xl:col-span-8">
-                  <motion.div 
-                    className="bg-card rounded-xl border border-border p-4 md:p-6"
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <h3 className="font-bold text-base mb-4 text-center">
-                      Sua Jornada
-                    </h3>
-                    <InteractiveRodaMigrei
-                      phases={phasesWithProgress}
-                      currentPhaseId={userProgress?.current_phase_id || null}
-                      onPhaseClick={handlePhaseClick}
-                    />
-                  </motion.div>
-                </div>
-
-                {/* Sidebar */}
-                <div className="lg:col-span-5 xl:col-span-4 space-y-6 order-first lg:order-last">
-                  {/* Current Phase Card */}
-                  {summary.currentPhase && currentPhaseWithProgress && (
-                    <CurrentPhaseCard
-                      phase={summary.currentPhase}
-                      progressPercentage={currentPhaseWithProgress.userProgress?.progress_percentage || 0}
-                      onContinue={() => handlePhaseClick(currentPhaseWithProgress)}
-                    />
-                  )}
-
-                  {/* Missions */}
-                  <MissionsCard
-                    missions={missions}
-                    userMissions={userMissions}
+                {/* Phases Grid - Desktop only in main */}
+                <div className="hidden lg:block">
+                  <PhasesGrid
+                    phases={phasesWithProgress}
                     currentPhaseId={userProgress?.current_phase_id || null}
+                    onPhaseClick={handlePhaseClick}
                   />
                 </div>
               </div>
 
-              {/* Phases Grid */}
-              <PhasesGrid
-                phases={phasesWithProgress}
-                currentPhaseId={userProgress?.current_phase_id || null}
-                onPhaseClick={handlePhaseClick}
-              />
-            </AnimatedTabsContent>
+              {/* Sidebar */}
+              <div className="lg:col-span-5 xl:col-span-4 space-y-6">
+                {/* Current Phase Card */}
+                {summary.currentPhase && currentPhaseWithProgress && (
+                  <CurrentPhaseCard
+                    phase={summary.currentPhase}
+                    progressPercentage={currentPhaseWithProgress.userProgress?.progress_percentage || 0}
+                    onContinue={() => handlePhaseClick(currentPhaseWithProgress)}
+                  />
+                )}
 
-            <AnimatedTabsContent value="badges">
-              <BadgesGallery
-                allBadges={badges}
-                earnedBadges={userBadges}
-              />
-            </AnimatedTabsContent>
+                {/* Missions */}
+                <MissionsCard
+                  missions={missions}
+                  userMissions={userMissions}
+                  currentPhaseId={userProgress?.current_phase_id || null}
+                />
 
-            <AnimatedTabsContent value="missions">
-              <MissionsCard
-                missions={missions}
-                userMissions={userMissions}
-                currentPhaseId={userProgress?.current_phase_id || null}
-              />
-            </AnimatedTabsContent>
+                {/* Phases Grid - Mobile/Tablet */}
+                <div className="lg:hidden">
+                  <PhasesGrid
+                    phases={phasesWithProgress}
+                    currentPhaseId={userProgress?.current_phase_id || null}
+                    onPhaseClick={handlePhaseClick}
+                  />
+                </div>
+              </div>
+            </div>
 
-            <AnimatedTabsContent value="analytics">
-              <ProgressAnalytics
-                phases={phasesWithProgress}
-                userProgress={userProgress}
-              />
-            </AnimatedTabsContent>
-          </AnimatedTabs>
+            {/* Secondary Grid - Badges and Analytics */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              {/* Badges */}
+              <div className="lg:col-span-7 xl:col-span-8">
+                <BadgesGallery
+                  allBadges={badges}
+                  earnedBadges={userBadges}
+                />
+              </div>
+
+              {/* Analytics */}
+              <div className="lg:col-span-5 xl:col-span-4">
+                <ProgressAnalytics
+                  phases={phasesWithProgress}
+                  userProgress={userProgress}
+                />
+              </div>
+            </div>
+          </div>
         )}
       </PageContent>
     </PageLayout>

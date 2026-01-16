@@ -13,28 +13,204 @@ import {
   ExternalLink,
   Sparkles,
   AlertTriangle,
+  Zap,
+  Users,
+  Bot,
+  Headphones,
+  FileText,
+  ArrowRight,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 
-const planConfig: Record<string, { color: string; icon: typeof Crown; gradient: string }> = {
+const planConfig: Record<string, { color: string; icon: typeof Crown; gradient: string; bgGradient: string }> = {
   free: {
     color: "bg-muted text-muted-foreground",
-    icon: Sparkles,
+    icon: Zap,
     gradient: "from-muted to-muted",
+    bgGradient: "from-muted/50 to-muted/30",
   },
   essential: {
     color: "bg-blue-500/10 text-blue-600",
     icon: Sparkles,
     gradient: "from-blue-500 to-blue-600",
+    bgGradient: "from-blue-500/10 to-blue-600/5",
   },
   premium: {
     color: "bg-amber-500/10 text-amber-600",
     icon: Crown,
     gradient: "from-amber-500 to-orange-500",
+    bgGradient: "from-amber-500/10 to-orange-500/5",
   },
 };
+
+const phaseNames = [
+  "Despertar",
+  "Descobrir", 
+  "Decidir",
+  "Desenvolver",
+  "Deslanchar",
+  "Desfrutar",
+];
+
+interface PlanCardProps {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: { label: string; included: boolean; highlight?: boolean }[];
+  phasesAccess: number;
+  mentoringLabel?: string;
+  isCurrentPlan: boolean;
+  isPopular?: boolean;
+  variant: "free" | "essential" | "premium";
+  onUpgrade?: () => void;
+  loading?: boolean;
+}
+
+function PlanCard({
+  name,
+  price,
+  period,
+  description,
+  features,
+  phasesAccess,
+  mentoringLabel,
+  isCurrentPlan,
+  isPopular,
+  variant,
+  onUpgrade,
+  loading,
+}: PlanCardProps) {
+  const config = planConfig[variant];
+  const Icon = config.icon;
+
+  return (
+    <div
+      className={`relative rounded-xl border-2 p-6 transition-all ${
+        isCurrentPlan
+          ? "border-primary bg-primary/5 shadow-lg"
+          : isPopular
+          ? "border-amber-500/50 hover:border-amber-500"
+          : "border-border/50 hover:border-border"
+      }`}
+    >
+      {isPopular && !isCurrentPlan && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+            <Crown className="h-3 w-3" />
+            Recomendado
+          </span>
+        </div>
+      )}
+
+      {isCurrentPlan && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-full">
+            <Check className="h-3 w-3" />
+            Seu plano atual
+          </span>
+        </div>
+      )}
+
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`p-2 rounded-lg bg-gradient-to-br ${config.bgGradient}`}>
+          <Icon className={`h-5 w-5 ${variant === "free" ? "text-muted-foreground" : variant === "essential" ? "text-blue-600" : "text-amber-600"}`} />
+        </div>
+        <div>
+          <h3 className="font-semibold text-foreground">{name}</h3>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+      </div>
+
+      <div className="flex items-baseline gap-1 mb-4">
+        <span className="text-3xl font-bold text-foreground">{price}</span>
+        {period && <span className="text-muted-foreground text-sm">{period}</span>}
+      </div>
+
+      {/* Phase Access Indicator */}
+      <div className="mb-4 p-3 rounded-lg bg-muted/50">
+        <p className="text-xs font-medium text-muted-foreground mb-2">Acesso às Fases</p>
+        <div className="flex gap-1">
+          {phaseNames.map((phase, idx) => (
+            <div
+              key={idx}
+              className={`flex-1 h-2 rounded-full ${
+                idx < phasesAccess
+                  ? variant === "premium"
+                    ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                    : variant === "essential"
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600"
+                    : "bg-primary"
+                  : "bg-border"
+              }`}
+              title={phase}
+            />
+          ))}
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          {phasesAccess === 6 ? "Todas as 6 fases" : `Fases 1 e 2 de 6`}
+        </p>
+      </div>
+
+      {/* Mentoring Badge */}
+      {mentoringLabel && (
+        <div className="mb-4 p-3 rounded-lg border border-amber-500/30 bg-amber-500/5 flex items-center gap-2">
+          <Calendar className="h-4 w-4 text-amber-600" />
+          <span className="text-sm font-medium text-amber-600">{mentoringLabel}</span>
+        </div>
+      )}
+
+      {/* Features List */}
+      <ul className="space-y-2 mb-6">
+        {features.map((feature, idx) => (
+          <li key={idx} className="flex items-center gap-2">
+            {feature.included ? (
+              <Check className={`h-4 w-4 flex-shrink-0 ${feature.highlight ? "text-primary" : "text-green-500"}`} />
+            ) : (
+              <X className="h-4 w-4 text-muted-foreground/50 flex-shrink-0" />
+            )}
+            <span className={`text-sm ${feature.included ? "text-foreground" : "text-muted-foreground/50"}`}>
+              {feature.label}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* CTA */}
+      {!isCurrentPlan && onUpgrade && (
+        <Button
+          onClick={onUpgrade}
+          disabled={loading}
+          className={`w-full gap-2 ${
+            variant === "premium"
+              ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
+              : variant === "essential"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white"
+              : ""
+          }`}
+          variant={variant === "free" ? "outline" : "default"}
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              Fazer upgrade
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </Button>
+      )}
+
+      {isCurrentPlan && (
+        <div className="text-center text-sm text-muted-foreground">
+          Você está neste plano
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function SubscriptionCard() {
   const {
@@ -49,6 +225,7 @@ export function SubscriptionCard() {
     features,
     openCustomerPortal,
     createCheckout,
+    getMaxPhaseAccess,
   } = useSubscription();
   const { toast } = useToast();
   const [loadingPortal, setLoadingPortal] = useState(false);
@@ -56,6 +233,7 @@ export function SubscriptionCard() {
 
   const config = planConfig[planSlug] || planConfig.free;
   const PlanIcon = config.icon;
+  const maxPhaseAccess = getMaxPhaseAccess();
 
   const handleManageSubscription = async () => {
     setLoadingPortal(true);
@@ -105,43 +283,85 @@ export function SubscriptionCard() {
 
   const mentoringLimit = Number(features.mentoring_sessions_limit) || 0;
   const hasAI = features.ai_assistant === true;
-  const hasPrioritySupport = features.priority_support === true;
-  const hasExclusiveContent = features.exclusive_content === true;
 
   return (
     <div className="space-y-6">
-      {/* Current Plan Card */}
-      <div className="card-elevated p-6">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h2 className="text-lg font-semibold text-foreground mb-1">
-              Sua Assinatura
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Gerencie seu plano e pagamentos
-            </p>
+      {/* Current Plan Header */}
+      <div className={`card-elevated p-6 bg-gradient-to-br ${config.bgGradient}`}>
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className={`p-3 rounded-xl bg-gradient-to-br ${config.gradient}`}>
+              <PlanIcon className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground">{planName}</h2>
+              <p className="text-sm text-muted-foreground">
+                {planSlug === "free" 
+                  ? "Acesso às fases 1 e 2" 
+                  : planSlug === "essential"
+                  ? "Acesso completo ao Ciclo Migrei"
+                  : "Experiência completa com mentoria"}
+              </p>
+            </div>
           </div>
-          <Badge className={`${config.color} gap-1`}>
-            <PlanIcon className="h-3 w-3" />
-            {planName}
-          </Badge>
+          {isSubscribed && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleManageSubscription}
+              disabled={loadingPortal}
+              className="gap-2"
+            >
+              {loadingPortal ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <CreditCard className="h-4 w-4" />
+              )}
+              Gerenciar
+              <ExternalLink className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
+        {/* Phase Progress */}
+        <div className="bg-background/80 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium">Fases Desbloqueadas</span>
+            <span className="text-sm text-muted-foreground">{maxPhaseAccess} de 6</span>
+          </div>
+          <div className="flex gap-1.5">
+            {phaseNames.map((phase, idx) => (
+              <div key={idx} className="flex-1 flex flex-col items-center gap-1">
+                <div
+                  className={`w-full h-3 rounded-full transition-all ${
+                    idx < maxPhaseAccess
+                      ? `bg-gradient-to-r ${config.gradient}`
+                      : "bg-muted"
+                  }`}
+                />
+                <span className={`text-[10px] ${idx < maxPhaseAccess ? "text-foreground" : "text-muted-foreground"}`}>
+                  {idx + 1}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Status Alerts */}
         {status === "past_due" && (
-          <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-3">
+          <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-3">
             <AlertTriangle className="h-5 w-5 text-destructive" />
             <div>
               <p className="text-sm font-medium text-destructive">Pagamento pendente</p>
               <p className="text-xs text-destructive/80">
-                Atualize seu método de pagamento para continuar usando os recursos premium.
+                Atualize seu método de pagamento para continuar usando os recursos.
               </p>
             </div>
           </div>
         )}
 
         {cancelAtPeriodEnd && subscriptionEnd && (
-          <div className="mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-3">
+          <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg flex items-center gap-3">
             <AlertTriangle className="h-5 w-5 text-amber-600" />
             <div>
               <p className="text-sm font-medium text-amber-600">Cancelamento programado</p>
@@ -154,7 +374,7 @@ export function SubscriptionCard() {
         )}
 
         {status === "trialing" && trialEnd && (
-          <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center gap-3">
+          <div className="mt-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center gap-3">
             <Sparkles className="h-5 w-5 text-blue-600" />
             <div>
               <p className="text-sm font-medium text-blue-600">Período de teste</p>
@@ -166,41 +386,8 @@ export function SubscriptionCard() {
           </div>
         )}
 
-        {/* Plan Features */}
-        <div className="grid gap-3 mb-6">
-          <div className="flex items-center justify-between py-2 border-b border-border/50">
-            <span className="text-sm text-muted-foreground">Sessões de mentoria/mês</span>
-            <span className="font-medium">{mentoringLimit === 0 ? "Nenhuma" : mentoringLimit}</span>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-border/50">
-            <span className="text-sm text-muted-foreground">Assistente IA</span>
-            {hasAI ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <X className="h-4 w-4 text-muted-foreground" />
-            )}
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-border/50">
-            <span className="text-sm text-muted-foreground">Suporte prioritário</span>
-            {hasPrioritySupport ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <X className="h-4 w-4 text-muted-foreground" />
-            )}
-          </div>
-          <div className="flex items-center justify-between py-2">
-            <span className="text-sm text-muted-foreground">Conteúdo exclusivo</span>
-            {hasExclusiveContent ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <X className="h-4 w-4 text-muted-foreground" />
-            )}
-          </div>
-        </div>
-
-        {/* Subscription End Date */}
         {isSubscribed && subscriptionEnd && !cancelAtPeriodEnd && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+          <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>
               Próxima renovação:{" "}
@@ -208,146 +395,110 @@ export function SubscriptionCard() {
             </span>
           </div>
         )}
+      </div>
 
-        {/* Actions */}
-        <div className="flex flex-wrap gap-3">
-          {isSubscribed && (
-            <Button
-              variant="outline"
-              onClick={handleManageSubscription}
-              disabled={loadingPortal}
-              className="gap-2"
-            >
-              {loadingPortal ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <CreditCard className="h-4 w-4" />
-              )}
-              Gerenciar Assinatura
-              <ExternalLink className="h-3 w-3" />
-            </Button>
-          )}
+      {/* Plan Comparison */}
+      <div>
+        <h3 className="text-lg font-semibold text-foreground mb-4">
+          {planSlug === "premium" ? "Seu plano inclui" : "Compare os planos"}
+        </h3>
+        
+        <div className="grid md:grid-cols-3 gap-4">
+          <PlanCard
+            name="Gratuito"
+            price="R$ 0"
+            period=""
+            description="Para começar sua jornada"
+            phasesAccess={2}
+            features={[
+              { label: "Fases 1 e 2 do Ciclo Migrei", included: true },
+              { label: "Acesso à comunidade", included: true },
+              { label: "Meu progresso", included: true },
+              { label: "Assistente IA (Mentor IA)", included: false },
+              { label: "Mentoria mensal", included: false },
+            ]}
+            isCurrentPlan={planSlug === "free"}
+            variant="free"
+          />
 
-          {planSlug === "free" && (
-            <Button
-              onClick={() => handleUpgrade("essential")}
-              disabled={loadingCheckout === "essential"}
-              className="btn-primary-gradient gap-2"
-            >
-              {loadingCheckout === "essential" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
-              Assinar Plano Essencial
-            </Button>
-          )}
+          <PlanCard
+            name="Essencial"
+            price="R$ 49"
+            period="/mês"
+            description="Acesso completo ao ciclo"
+            phasesAccess={6}
+            features={[
+              { label: "Todas as 6 fases do Ciclo", included: true, highlight: true },
+              { label: "Acesso à comunidade", included: true },
+              { label: "Meu progresso", included: true },
+              { label: "Assistente IA (Mentor IA)", included: true, highlight: true },
+              { label: "Mentoria mensal", included: false },
+            ]}
+            isCurrentPlan={planSlug === "essential"}
+            variant="essential"
+            onUpgrade={planSlug === "free" ? () => handleUpgrade("essential") : undefined}
+            loading={loadingCheckout === "essential"}
+          />
 
-          {planSlug !== "premium" && planSlug !== "free" && (
-            <Button
-              onClick={() => handleUpgrade("premium")}
-              disabled={loadingCheckout === "premium"}
-              className="bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 gap-2"
-            >
-              {loadingCheckout === "premium" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Crown className="h-4 w-4" />
-              )}
-              Upgrade para Premium
-            </Button>
-          )}
+          <PlanCard
+            name="Premium"
+            price="R$ 149"
+            period="/mês"
+            description="Experiência completa"
+            phasesAccess={6}
+            mentoringLabel="1 mentoria por mês"
+            features={[
+              { label: "Tudo do Essencial", included: true },
+              { label: "Prioridade no suporte", included: true },
+              { label: "Conteúdos exclusivos", included: true },
+              { label: "Sessão 1:1 com especialista", included: true, highlight: true },
+            ]}
+            isCurrentPlan={planSlug === "premium"}
+            isPopular={planSlug !== "premium"}
+            variant="premium"
+            onUpgrade={planSlug !== "premium" ? () => handleUpgrade("premium") : undefined}
+            loading={loadingCheckout === "premium"}
+          />
         </div>
       </div>
 
-      {/* Upgrade Cards (for free users) */}
-      {planSlug === "free" && (
-        <div className="grid md:grid-cols-2 gap-4">
-          {/* Essential Plan */}
-          <div className="card-elevated p-6 border-2 border-blue-500/20 hover:border-blue-500/40 transition-colors">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 rounded-lg bg-blue-500/10">
-                <Sparkles className="h-5 w-5 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Essencial</h3>
-                <p className="text-sm text-muted-foreground">R$ 49/mês</p>
-              </div>
+      {/* Quick Features Summary for Current Plan */}
+      <div className="card-elevated p-6">
+        <h3 className="text-lg font-semibold text-foreground mb-4">Recursos do seu plano</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-muted/50">
+            <div className={`p-2 rounded-full mb-2 ${maxPhaseAccess === 6 ? "bg-green-500/10" : "bg-muted"}`}>
+              <Zap className={`h-5 w-5 ${maxPhaseAccess === 6 ? "text-green-500" : "text-muted-foreground"}`} />
             </div>
-            <ul className="space-y-2 mb-4 text-sm">
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                2 sessões de mentoria/mês
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                Assistente IA
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                Acesso à comunidade
-              </li>
-            </ul>
-            <Button
-              onClick={() => handleUpgrade("essential")}
-              disabled={loadingCheckout === "essential"}
-              variant="outline"
-              className="w-full border-blue-500/50 text-blue-600 hover:bg-blue-500/10"
-            >
-              {loadingCheckout === "essential" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Começar agora"
-              )}
-            </Button>
+            <span className="text-2xl font-bold">{maxPhaseAccess}</span>
+            <span className="text-xs text-muted-foreground">Fases</span>
           </div>
-
-          {/* Premium Plan */}
-          <div className="card-elevated p-6 border-2 border-amber-500/30 hover:border-amber-500/50 transition-colors relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-gradient-to-l from-amber-500 to-orange-500 text-white text-xs px-3 py-1 rounded-bl-lg font-medium">
-              Mais Popular
+          
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-muted/50">
+            <div className={`p-2 rounded-full mb-2 ${hasAI ? "bg-green-500/10" : "bg-muted"}`}>
+              <Bot className={`h-5 w-5 ${hasAI ? "text-green-500" : "text-muted-foreground"}`} />
             </div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 rounded-lg bg-amber-500/10">
-                <Crown className="h-5 w-5 text-amber-600" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Premium</h3>
-                <p className="text-sm text-muted-foreground">R$ 99/mês</p>
-              </div>
+            <span className="text-2xl font-bold">{hasAI ? "✓" : "–"}</span>
+            <span className="text-xs text-muted-foreground">Mentor IA</span>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-muted/50">
+            <div className={`p-2 rounded-full mb-2 ${mentoringLimit > 0 ? "bg-green-500/10" : "bg-muted"}`}>
+              <Users className={`h-5 w-5 ${mentoringLimit > 0 ? "text-green-500" : "text-muted-foreground"}`} />
             </div>
-            <ul className="space-y-2 mb-4 text-sm">
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                4 sessões de mentoria/mês
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                Assistente IA
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                Suporte prioritário
-              </li>
-              <li className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                Conteúdo exclusivo
-              </li>
-            </ul>
-            <Button
-              onClick={() => handleUpgrade("premium")}
-              disabled={loadingCheckout === "premium"}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600"
-            >
-              {loadingCheckout === "premium" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Assinar Premium"
-              )}
-            </Button>
+            <span className="text-2xl font-bold">{mentoringLimit || "–"}</span>
+            <span className="text-xs text-muted-foreground">Mentoria/mês</span>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-4 rounded-lg bg-muted/50">
+            <div className="p-2 rounded-full mb-2 bg-green-500/10">
+              <Users className="h-5 w-5 text-green-500" />
+            </div>
+            <span className="text-2xl font-bold">✓</span>
+            <span className="text-xs text-muted-foreground">Comunidade</span>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

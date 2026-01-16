@@ -39,11 +39,11 @@ const PositioningAcademy = () => {
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-foreground">
-                Academia de Networking
+                Networking Estratégico
               </h1>
               <p className="text-sm text-muted-foreground flex items-center gap-1.5">
                 <Target className="h-3.5 w-3.5" />
-                Treine aqui, aplique no LinkedIn e eventos
+                Conecte-se com quem já está onde você quer chegar
               </p>
             </div>
           </div>

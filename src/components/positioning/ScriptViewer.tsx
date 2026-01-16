@@ -26,8 +26,8 @@ interface Script {
 const allScripts: Record<PillarType, Script[]> = {
   digital: [
     {
-      title: 'Mensagem de Conexão',
-      description: 'Template para enviar convites personalizados no LinkedIn',
+      title: 'Pedido de conexão',
+      description: 'Seja aceito mesmo por quem não te conhece',
       icon: <UserPlus className="h-4 w-4" />,
       template: `Olá [Nome],
 
@@ -37,98 +37,98 @@ Estou em transição para [sua área] e adoraria me conectar para acompanhar seu
 
 Abraço!`,
       tips: [
-        'Mencione algo específico do perfil da pessoa',
-        'Seja breve - máximo 300 caracteres',
-        'Não peça emprego na primeira mensagem',
-        'Mostre interesse genuíno'
+        'Mencione algo específico do perfil — isso mostra que você pesquisou',
+        'Seja breve: máximo 300 caracteres (limite do LinkedIn)',
+        'Nunca peça emprego na primeira mensagem — gere conexão primeiro',
+        'Mostre interesse genuíno pela pessoa, não só pela vaga'
       ],
       example: 'Olá Maria, vi que você lidera o time de Produto na XYZ e achei incrível o case do lançamento do app. Estou migrando para PM e adoraria me conectar!'
     },
     {
-      title: 'Comentário Estratégico',
-      description: 'Como comentar posts para ser notado por recrutadores',
+      title: 'Comentário que gera conversa',
+      description: 'Apareça no radar de recrutadores e líderes da área',
       icon: <MessageSquare className="h-4 w-4" />,
-      template: `[Concordar ou complementar a ideia principal]
+      template: `[Concorde ou complemente a ideia principal do post]
 
 Na minha experiência com [contexto], percebi que [insight relacionado].
 
-[Pergunta que gera conversa]`,
+[Faça uma pergunta que convide resposta]`,
       tips: [
-        'Comente nas primeiras 2 horas do post',
-        'Adicione valor, não apenas "ótimo post"',
-        'Faça uma pergunta para gerar resposta',
-        'Comente em posts de pessoas influentes da área'
+        'Comente nas primeiras 2 horas — o algoritmo prioriza interações recentes',
+        'Adicione valor real, não apenas "ótimo post" ou emojis',
+        'Termine com uma pergunta para aumentar a chance de resposta',
+        'Foque em posts de pessoas influentes da área que você quer entrar'
       ],
       example: 'Concordo totalmente! Na minha experiência implementando OKRs, o maior desafio foi justamente o alinhamento entre times. Você usa alguma ferramenta específica para facilitar isso?'
     },
     {
-      title: 'InMail que Funciona',
-      description: 'Abordagem para pessoas fora da sua rede',
+      title: 'Mensagem para desconhecidos',
+      description: 'Como abordar pessoas fora da sua rede sem parecer spam',
       icon: <Send className="h-4 w-4" />,
-      template: `Assunto: [Algo específico sobre a pessoa/empresa]
+      template: `Assunto: [Algo específico sobre a pessoa ou empresa]
 
 Olá [Nome],
 
-Cheguei até você através de [como encontrou] e fiquei impressionado com [algo específico].
+Cheguei até você através de [como encontrou] e fiquei impressionado(a) com [algo específico].
 
-Estou explorando oportunidades em [área] e acredito que uma breve conversa de 15 min poderia me ajudar a entender melhor [aspecto específico].
+Estou explorando oportunidades em [área] e acredito que 15 minutos de conversa com você me ajudaria muito a entender melhor [aspecto específico].
 
 Teria disponibilidade para um papo rápido na próxima semana?
 
-Obrigado!`,
+Agradeço desde já!`,
       tips: [
-        'Use um assunto que gere curiosidade',
-        'Mostre que pesquisou sobre a pessoa',
-        'Seja específico no que quer',
-        'Peça pouco tempo (15-20 min)'
+        'O assunto precisa gerar curiosidade — evite "Oportunidade" ou "Networking"',
+        'Mostre que você pesquisou sobre a pessoa antes de escrever',
+        'Seja específico sobre o que você quer aprender',
+        'Peça pouco tempo (15-20 min) — aumenta a chance de sim'
       ],
       example: ''
     }
   ],
   presencial: [
     {
-      title: 'Elevator Pitch',
-      description: 'Apresente-se em 30 segundos de forma memorável',
+      title: 'Apresentação pessoal',
+      description: 'Seja memorável em 30 segundos de conversa',
       icon: <Mic className="h-4 w-4" />,
-      template: `Olá, sou [nome], [cargo/área atual ou de transição].
+      template: `Olá, sou [nome], [cargo/área atual ou em transição].
 
-Nos últimos [tempo] venho trabalhando com [experiência relevante] e agora estou focado em [objetivo].
+Nos últimos [tempo] venho trabalhando com [experiência relevante] e agora estou focado(a) em [objetivo].
 
 Meu diferencial é [valor único que você oferece].
 
 E você, com o que trabalha?`,
       tips: [
-        'Pratique até ficar natural',
-        'Adapte para cada contexto',
-        'Termine com uma pergunta',
-        'Sorria e mantenha contato visual'
+        'Pratique em voz alta até parecer natural, não decorado',
+        'Adapte o tom para cada contexto (mais formal ou casual)',
+        'Sempre termine com uma pergunta — isso transforma monólogo em conversa',
+        'Sorria e mantenha contato visual — a energia importa tanto quanto as palavras'
       ],
       example: 'Oi, sou a Ana, Product Manager em transição da área de marketing. Tenho 5 anos liderando lançamentos de produto e agora quero aplicar isso em tech. Meu diferencial é entender profundamente o cliente. E você?'
     },
     {
-      title: 'Troca de Contatos',
-      description: 'Como pedir LinkedIn sem parecer invasivo',
+      title: 'Troca de contatos',
+      description: 'Saia do evento com conexões reais, não só cartões',
       icon: <Users className="h-4 w-4" />,
-      template: `"Foi ótimo conversar sobre [tema]. Podemos nos conectar no LinkedIn para continuar essa conversa?"
+      template: `"Foi ótimo conversar sobre [tema]. Vamos nos conectar no LinkedIn para continuar essa conversa?"
 
 ou
 
 "Adorei conhecer seu trabalho em [área]. Posso te mandar uma mensagem depois para [motivo específico]?"`,
       tips: [
-        'Mencione o que conversaram',
-        'Dê um motivo para o contato futuro',
-        'Pegue o celular e conecte na hora',
-        'Mande mensagem em até 24h'
+        'Mencione algo específico que vocês conversaram — mostra que você prestou atenção',
+        'Dê um motivo claro para o contato futuro',
+        'Pegue o celular e conecte na hora — esperar diminui as chances',
+        'Mande uma mensagem em até 24h enquanto a lembrança está fresca'
       ],
       example: ''
     },
     {
-      title: 'Follow-up Pós-Evento',
-      description: 'Mensagem para manter o contato aquecido',
+      title: 'Mensagem pós-evento',
+      description: 'Transforme um contato em relacionamento de verdade',
       icon: <Calendar className="h-4 w-4" />,
       template: `Olá [Nome]!
 
-Foi um prazer te conhecer no [evento] ontem. Nossa conversa sobre [tema] foi muito valiosa.
+Foi um prazer te conhecer no [evento] ontem. Nossa conversa sobre [tema] foi muito valiosa para mim.
 
 Como prometido, segue [link/material/contato mencionado].
 
@@ -136,82 +136,81 @@ Fico à disposição para continuarmos o papo!
 
 Abraço`,
       tips: [
-        'Envie em até 24 horas',
-        'Mencione algo específico da conversa',
-        'Entregue algo de valor se possível',
-        'Não peça nada na primeira mensagem'
+        'Envie em até 24 horas — depois disso a conexão esfria',
+        'Mencione algo específico da conversa para mostrar que lembra',
+        'Se puder, entregue algo de valor (artigo, contato, insight)',
+        'Não peça nada na primeira mensagem — construa o relacionamento primeiro'
       ],
       example: ''
     }
   ],
   onetoone: [
     {
-      title: 'Pedir um Coffee Chat',
-      description: 'Como convidar alguém para uma conversa sem parecer oportunista',
+      title: 'Convite para um café',
+      description: 'Peça tempo de alguém ocupado sem parecer oportunista',
       icon: <Coffee className="h-4 w-4" />,
       template: `Olá [Nome],
 
 Tenho acompanhado seu trabalho em [área] e admiro muito sua trajetória, especialmente [algo específico].
 
-Estou em um momento de [transição/exploração] e acredito que 15-20 min de conversa com você poderia me dar uma perspectiva valiosa sobre [tema específico].
+Estou em um momento de [transição/exploração] e acredito que 15-20 minutos de conversa com você me daria uma perspectiva valiosa sobre [tema específico].
 
-Teria disponibilidade nas próximas semanas? Posso me adaptar ao seu horário.
+Teria disponibilidade nas próximas semanas? Posso me adaptar completamente ao seu horário.
 
-Agradeço desde já!`,
+Agradeço muito desde já!`,
       tips: [
-        'Seja específico sobre o que quer aprender',
-        'Peça pouco tempo (15-20 min)',
-        'Ofereça flexibilidade',
-        'Mostre que pesquisou sobre a pessoa'
+        'Seja específico sobre o que você quer aprender — ninguém gosta de pedidos vagos',
+        'Peça pouco tempo (15-20 min) — é mais fácil dizer sim',
+        'Ofereça total flexibilidade de horário — você é quem está pedindo',
+        'Mostre que pesquisou sobre a pessoa antes de pedir'
       ],
       example: ''
     },
     {
-      title: 'Conduzir a Conversa',
-      description: 'Perguntas para fazer e como ouvir ativamente',
+      title: 'Roteiro da conversa',
+      description: 'Saiba exatamente o que perguntar e como conduzir o papo',
       icon: <MessageSquare className="h-4 w-4" />,
-      template: `Roteiro sugerido:
+      template: `Roteiro sugerido para 20 minutos:
 
 1. AGRADECER (2 min)
-"Muito obrigado por tirar esse tempo..."
+"Muito obrigado(a) por tirar esse tempo para conversar comigo..."
 
-2. CONTEXTO (3 min)
-"Deixa eu contar rapidamente minha situação..."
+2. DAR CONTEXTO (3 min)
+"Deixa eu te contar rapidamente onde estou e o que busco..."
 
-3. PERGUNTAS (10-15 min)
-- "Como foi sua transição para [área]?"
-- "O que você gostaria de saber antes de entrar?"
-- "Quais habilidades são mais valorizadas?"
-- "Conhece alguém que eu deveria conversar?"
+3. FAZER PERGUNTAS (10-15 min)
+- "Como foi sua trajetória até chegar em [área]?"
+- "O que você gostaria de ter sabido antes de entrar?"
+- "Quais habilidades são mais valorizadas hoje?"
+- "Conhece alguém que eu deveria conversar também?"
 
-4. ENCERRAR (2 min)
-"Foi muito valioso. Posso te dar um retorno sobre como usei seus conselhos?"`,
+4. ENCERRAR COM VALOR (2 min)
+"Foi muito valioso para mim. Posso te mandar uma mensagem contando como usei seus conselhos?"`,
       tips: [
-        'Prepare 3-5 perguntas antes',
-        'Ouça mais do que fala',
-        'Anote os insights',
-        'Peça indicações de outras pessoas'
+        'Prepare 3-5 perguntas antes — improviso pode parecer despreparo',
+        'Ouça mais do que fala — a pessoa veio para ajudar, não para ouvir',
+        'Anote os insights durante a conversa — mostra respeito pelo tempo',
+        'Sempre peça indicações de outras pessoas para continuar o networking'
       ],
       example: ''
     },
     {
-      title: 'Pedir Indicação',
-      description: 'Como pedir uma referência de forma elegante',
+      title: 'Pedido de indicação',
+      description: 'Peça uma referência sem gerar constrangimento',
       icon: <UserPlus className="h-4 w-4" />,
-      template: `"Vi que a [empresa] está com uma vaga de [cargo]. Você conhece alguém lá que eu poderia conversar para entender melhor a cultura?"
+      template: `Para conhecer alguém da empresa:
+"Vi que a [empresa] está com uma vaga de [cargo]. Você conhece alguém lá que eu pudesse conversar para entender melhor a cultura?"
 
-ou
-
+Para ampliar sua rede:
 "Estou muito interessado em [área/empresa]. Se você conhecer alguém que eu pudesse trocar uma ideia, ficaria muito grato por uma apresentação."
 
-ou (após já ter relacionamento)
-
+Para pedir recomendação direta (só após ter relacionamento):
 "Estou aplicando para [vaga]. Você se sentiria confortável em me recomendar ou me apresentar ao time?"`,
       tips: [
-        'Só peça depois de construir relacionamento',
-        'Facilite: mande seu currículo/LinkedIn',
-        'Dê uma saída fácil ("se você se sentir confortável...")',
-        'Agradeça mesmo se a pessoa não puder ajudar'
+        'Só peça indicação depois de construir algum relacionamento — nunca no primeiro contato',
+        'Facilite o trabalho: envie seu currículo e LinkedIn junto do pedido',
+        'Sempre dê uma saída fácil: "se você se sentir confortável..."',
+        'Agradeça mesmo se a pessoa não puder ajudar — isso mantém a porta aberta'
       ],
       example: ''
     }
@@ -220,22 +219,22 @@ ou (após já ter relacionamento)
 
 const pillarConfig = {
   digital: {
-    title: 'Digital',
-    subtitle: 'LinkedIn, Comunidades Online',
+    title: 'Networking Digital',
+    subtitle: 'LinkedIn, grupos e comunidades online',
     icon: <Smartphone className="h-5 w-5" />,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10'
   },
   presencial: {
-    title: 'Presencial',
-    subtitle: 'Eventos, Meetups, Workshops',
+    title: 'Networking Presencial',
+    subtitle: 'Eventos, meetups e workshops',
     icon: <Mic className="h-5 w-5" />,
     color: 'text-amber-500',
     bgColor: 'bg-amber-500/10'
   },
   onetoone: {
-    title: '1:1',
-    subtitle: 'Coffee Chats, Indicações',
+    title: 'Conversas 1:1',
+    subtitle: 'Coffee chats e pedidos de indicação',
     icon: <Coffee className="h-5 w-5" />,
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10'
@@ -354,7 +353,7 @@ export function ScriptViewer({ open, onOpenChange, pillarId, scriptIndex }: Scri
           <div className="space-y-2">
             <h4 className="font-medium text-sm flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-amber-500" />
-              Dicas
+              O que faz funcionar
             </h4>
             <ul className="space-y-1.5">
               {currentScript.tips.map((tip, index) => (
@@ -371,7 +370,7 @@ export function ScriptViewer({ open, onOpenChange, pillarId, scriptIndex }: Scri
           {/* Example */}
           {currentScript.example && (
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Exemplo real</h4>
+              <h4 className="font-medium text-sm">Veja na prática</h4>
               <Card className="border-green-500/30 bg-green-500/5">
                 <CardContent className="p-4">
                   <p className="text-sm italic">{currentScript.example}</p>

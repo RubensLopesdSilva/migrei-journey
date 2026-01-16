@@ -90,9 +90,6 @@ export function MentorsGrid({
             <Users className="h-6 w-6 text-primary" />
             Mentores Disponíveis
           </h2>
-          <p className="text-muted-foreground mt-1">
-            Profissionais experientes prontos para guiar sua transição
-          </p>
         </div>
 
         {/* Search */}

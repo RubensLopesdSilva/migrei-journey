@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { Users, ArrowRight, UserPlus, MessageCircle, MessageSquare, Check, Loader2, Sparkles, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -66,7 +66,7 @@ interface EvidenceFormData {
   description: string;
 }
 
-export function NetworkingCard() {
+export const NetworkingCard = forwardRef<HTMLDivElement, object>(function NetworkingCard(_, ref) {
   const { 
     weeklyProgress, 
     getActionsWithGoalInfo, 
@@ -174,6 +174,7 @@ export function NetworkingCard() {
   return (
     <>
       <motion.div 
+        ref={ref}
         className="bg-card rounded-2xl border border-border overflow-hidden h-full flex flex-col"
         data-tour="networking-card"
         initial={{ opacity: 0, y: 20 }}
@@ -394,4 +395,6 @@ export function NetworkingCard() {
       </Dialog>
     </>
   );
-}
+});
+
+NetworkingCard.displayName = "NetworkingCard";

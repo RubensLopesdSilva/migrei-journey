@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { PartyPopper, MessageCircle, Sparkles, Heart, Star } from 'lucide-react';
+import { PartyPopper, Sparkles, Heart, Star, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { SymbolicCelebration as SymbolicCelebrationType } from '@/types/enjoy';
+import { cn } from '@/lib/utils';
 
 interface Props {
   celebration: SymbolicCelebrationType | null;
@@ -13,166 +13,141 @@ interface Props {
 }
 
 const AVATAR_MESSAGES = [
-  "Você provou que a mudança é possível quando há coragem e determinação!",
-  "Sua jornada é inspiradora. Você é a prova viva de que nunca é tarde para recomeçar.",
-  "Parabéns! Você não apenas sonhou com a mudança, você a construiu passo a passo.",
-  "Sua transformação profissional é um exemplo de resiliência e autoconhecimento.",
-  "Você chegou até aqui porque acreditou em si mesmo. Continue sempre assim!",
+  "Você provou que a mudança é possível quando há coragem!",
+  "Sua jornada é inspiradora. Você recomeçou!",
+  "Você não apenas sonhou, você construiu passo a passo.",
+  "Sua transformação é um exemplo de resiliência.",
+  "Você chegou até aqui porque acreditou em si!",
 ];
 
 export const SymbolicCelebration = ({ celebration, onCreate }: Props) => {
   const [celebrationMessage, setCelebrationMessage] = useState('');
   const [selectedAvatarMessage, setSelectedAvatarMessage] = useState(AVATAR_MESSAGES[0]);
-  const [showConfetti, setShowConfetti] = useState(false);
 
   const triggerConfetti = () => {
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-    setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-    }, 250);
-    setTimeout(() => {
-      confetti({
-        particleCount: 50,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-    }, 400);
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    setTimeout(() => confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 } }), 250);
+    setTimeout(() => confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 } }), 400);
   };
 
   const handleCelebrate = async () => {
     triggerConfetti();
-    setShowConfetti(true);
     await onCreate(celebrationMessage, selectedAvatarMessage, 1);
-    setTimeout(() => setShowConfetti(false), 3000);
   };
 
+  // Already celebrated
   if (celebration) {
     return (
-      <Card className="border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-primary/5 overflow-hidden relative">
-        <div className="absolute inset-0 bg-[url('/placeholder.svg')] opacity-5" />
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <PartyPopper className="h-5 w-5 text-amber-500" />
-            Celebração Simbólica
-            <Badge className="ml-2 bg-amber-500">Ciclo {celebration.cycle_number}</Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6 relative">
-          {/* Avatar Message */}
-          <div className="bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg p-6 relative">
-            <div className="absolute -top-3 left-4">
-              <div className="bg-primary rounded-full p-2">
-                <MessageCircle className="h-4 w-4 text-primary-foreground" />
-              </div>
-            </div>
-            <p className="text-lg italic mt-2 text-center">
-              "{celebration.avatar_message}"
-            </p>
-            <p className="text-sm text-muted-foreground text-center mt-2">— Seu Coach Avatar</p>
-          </div>
+      <div className="w-full max-w-lg mx-auto space-y-6">
+        <div className="text-center space-y-2">
+          <h2 className="text-xl md:text-2xl font-semibold">Celebração Completa! 🎉</h2>
+          <p className="text-muted-foreground">Você finalizou sua jornada</p>
+        </div>
 
-          {/* User Celebration Message */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-primary/10 border-2 border-amber-500/30 text-center"
+        >
+          <div className="flex justify-center gap-1 mb-4">
+            <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
+            <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
+            <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
+          </div>
+          
+          <p className="text-lg italic mb-4">"{celebration.avatar_message}"</p>
+          <p className="text-sm text-muted-foreground">— Seu Coach</p>
+
           {celebration.celebration_message && (
-            <div className="space-y-2">
-              <h4 className="font-semibold flex items-center gap-2">
-                <Heart className="h-4 w-4 text-red-500" />
-                Sua Mensagem de Celebração
-              </h4>
-              <div className="bg-muted/30 rounded-lg p-4">
-                <p className="text-sm">{celebration.celebration_message}</p>
+            <div className="mt-6 pt-6 border-t border-amber-500/20">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Heart className="h-4 w-4 text-rose-500" />
+                <span className="text-sm font-medium">Sua mensagem</span>
               </div>
+              <p className="text-sm text-muted-foreground">{celebration.celebration_message}</p>
             </div>
           )}
+        </motion.div>
 
-          {/* Celebration Stats */}
-          <div className="flex items-center justify-center gap-8 py-4">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-amber-500">
-                <Star className="h-6 w-6 fill-amber-500" />
-                <Star className="h-6 w-6 fill-amber-500" />
-                <Star className="h-6 w-6 fill-amber-500" />
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">Jornada Completa</p>
-            </div>
-          </div>
-
-          <Button 
-            onClick={triggerConfetti} 
-            variant="outline" 
-            className="w-full gap-2 border-amber-500/50 text-amber-500 hover:bg-amber-500/10"
-          >
-            <Sparkles className="h-4 w-4" />
-            Celebrar Novamente!
-          </Button>
-        </CardContent>
-      </Card>
+        <Button 
+          onClick={triggerConfetti} 
+          variant="outline" 
+          className="w-full h-12 gap-2 border-amber-500/50 text-amber-600 hover:bg-amber-500/10"
+        >
+          <Sparkles className="h-5 w-5" />
+          Celebrar novamente!
+        </Button>
+      </div>
     );
   }
 
+  // Create celebration
   return (
-    <Card className="border-amber-500/20">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <PartyPopper className="h-5 w-5 text-amber-500" />
-          Celebração Simbólica
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <p className="text-muted-foreground">
-          Chegou a hora de celebrar sua conquista! Você completou um ciclo importante 
-          na sua jornada de transição profissional.
-        </p>
+    <div className="w-full max-w-lg mx-auto space-y-6">
+      <div className="text-center space-y-2">
+        <div className="h-16 w-16 rounded-full bg-amber-500/10 mx-auto flex items-center justify-center mb-2">
+          <PartyPopper className="h-8 w-8 text-amber-500" />
+        </div>
+        <h2 className="text-xl md:text-2xl font-semibold">Hora de Celebrar!</h2>
+        <p className="text-muted-foreground">Você completou sua jornada de transição</p>
+      </div>
 
-        {/* Avatar Message Selection */}
-        <div className="space-y-3">
-          <label className="text-sm font-medium">Mensagem do seu Coach Avatar</label>
-          <div className="space-y-2">
-            {AVATAR_MESSAGES.map((message, index) => (
+      {/* Avatar Message Selection */}
+      <div className="space-y-3">
+        <label className="text-sm font-medium">Escolha a mensagem do seu Coach</label>
+        <div className="space-y-2">
+          {AVATAR_MESSAGES.map((message, index) => {
+            const isSelected = selectedAvatarMessage === message;
+            return (
               <button
                 key={index}
                 onClick={() => setSelectedAvatarMessage(message)}
-                className={`w-full p-3 rounded-lg text-left text-sm transition-colors ${
-                  selectedAvatarMessage === message 
-                    ? 'bg-primary/20 border-2 border-primary' 
-                    : 'bg-muted/30 hover:bg-muted/50 border-2 border-transparent'
-                }`}
+                className={cn(
+                  "w-full p-4 rounded-xl text-left text-sm transition-all border-2",
+                  isSelected 
+                    ? "bg-primary/5 border-primary" 
+                    : "border-border hover:border-primary/50"
+                )}
               >
-                "{message}"
+                <div className="flex items-start gap-3">
+                  <div className={cn(
+                    "h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5",
+                    isSelected ? "border-primary bg-primary" : "border-muted-foreground/30"
+                  )}>
+                    {isSelected && <CheckCircle2 className="h-3 w-3 text-primary-foreground" />}
+                  </div>
+                  <span className={isSelected ? "text-foreground" : "text-muted-foreground"}>
+                    "{message}"
+                  </span>
+                </div>
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* User Message */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Sua Mensagem de Celebração (opcional)</label>
-          <Textarea
-            placeholder="Escreva uma mensagem para si mesmo celebrando essa conquista..."
-            value={celebrationMessage}
-            onChange={(e) => setCelebrationMessage(e.target.value)}
-            rows={3}
-          />
-        </div>
+      {/* User Message */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          Sua mensagem de celebração <span className="text-muted-foreground">(opcional)</span>
+        </label>
+        <Textarea
+          placeholder="Escreva uma mensagem para si mesmo..."
+          value={celebrationMessage}
+          onChange={(e) => setCelebrationMessage(e.target.value)}
+          rows={3}
+          className="resize-none"
+        />
+      </div>
 
-        <Button 
-          onClick={handleCelebrate} 
-          className="w-full gap-2 bg-gradient-to-r from-amber-500 to-primary"
-          size="lg"
-        >
-          <PartyPopper className="h-5 w-5" />
-          Celebrar Minha Conquista!
-        </Button>
-      </CardContent>
-    </Card>
+      <Button 
+        onClick={handleCelebrate} 
+        className="w-full h-12 gap-2 bg-gradient-to-r from-amber-500 to-primary"
+        size="lg"
+      >
+        <PartyPopper className="h-5 w-5" />
+        Celebrar minha conquista!
+      </Button>
+    </div>
   );
 };

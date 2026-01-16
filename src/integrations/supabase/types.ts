@@ -2996,6 +2996,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_streaks: {
+        Row: {
+          created_at: string
+          current_streak: number
+          id: string
+          last_activity_date: string | null
+          longest_streak: number
+          streak_started_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number
+          streak_started_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number
+          streak_started_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_subscriptions: {
         Row: {
           cancel_at_period_end: boolean
@@ -3240,6 +3273,15 @@ export type Database = {
           p_scheduled_at: string
         }
         Returns: boolean
+      }
+      update_user_streak: {
+        Args: { p_user_id: string }
+        Returns: {
+          current_streak: number
+          is_new_record: boolean
+          longest_streak: number
+          streak_broken: boolean
+        }[]
       }
       validate_coupon: {
         Args: { p_code: string; p_plan_id?: string; p_user_id: string }

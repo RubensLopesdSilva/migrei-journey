@@ -1,6 +1,7 @@
-import { Star, Calendar, TrendingUp, MapPin, LucideIcon } from "lucide-react";
+import { Star, Calendar, TrendingUp, MapPin, Flame, LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { StatTooltip } from "@/components/ui/tooltip-enhanced";
+import { useStreak } from "@/hooks/useStreak";
 
 interface QuickStatsBarProps {
   points?: number;
@@ -19,6 +20,7 @@ interface StatItem {
   color: string;
   bgColor: string;
   description: string;
+  isStreak?: boolean;
 }
 
 // Animation variants
@@ -53,7 +55,19 @@ export function QuickStatsBar({
   weeklyProgress = 0,
   currentPhase = { name: "Despertar", number: 1 }
 }: QuickStatsBarProps) {
+  const { streak } = useStreak();
+  
   const stats: StatItem[] = [
+    // Streak first - gamification priority
+    ...(streak && streak.current_streak > 0 ? [{
+      icon: Flame,
+      value: streak.current_streak.toString(),
+      label: streak.current_streak === 1 ? "dia" : "dias",
+      color: streak.current_streak >= 7 ? "hsl(25, 95%, 53%)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47%)" : "hsl(var(--muted-foreground))",
+      bgColor: streak.current_streak >= 7 ? "hsl(25, 95%, 53% / 0.15)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47% / 0.15)" : "hsl(var(--muted) / 0.5)",
+      description: `🔥 Streak: ${streak.current_streak} dias seguidos${streak.longest_streak > streak.current_streak ? ` (recorde: ${streak.longest_streak})` : ""}`,
+      isStreak: true,
+    }] : []),
     {
       icon: Star,
       value: points.toLocaleString(),
@@ -113,15 +127,20 @@ export function QuickStatsBar({
             className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-card border border-border rounded-xl cursor-default"
             style={{ boxShadow: "var(--shadow-xs)" }}
           >
-            <div 
+            <motion.div 
               className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg flex items-center justify-center flex-shrink-0"
               style={{ backgroundColor: stat.bgColor }}
+              animate={stat.isStreak ? {
+                rotate: [-5, 5, -5],
+                scale: [1, 1.05, 1],
+              } : {}}
+              transition={{ repeat: Infinity, duration: 1.5 }}
             >
               <stat.icon 
                 className="h-3 w-3 sm:h-3.5 sm:w-3.5" 
                 style={{ color: stat.color }}
               />
-            </div>
+            </motion.div>
             <div className="flex items-baseline gap-1">
               <span 
                 className="text-sm sm:text-base font-bold tabular-nums"

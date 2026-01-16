@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
-import { Bell, User, Settings, CreditCard, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Settings, CreditCard, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { NotificationBell } from "@/components/ui/notification-bell";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,28 +18,12 @@ export function Header() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<{ full_name: string | null; avatar_url: string | null } | null>(null);
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  const fetchNotifications = useCallback(async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("community_notifications")
-      .select("id")
-      .eq("user_id", user.id)
-      .eq("is_read", false);
-
-    if (!error && data) {
-      setUnreadCount(data.length);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (user) {
       fetchProfile();
-      fetchNotifications();
     }
-  }, [user, fetchNotifications]);
+  }, [user]);
 
   const fetchProfile = async () => {
     if (!user) return;
@@ -54,13 +39,10 @@ export function Header() {
     }
   };
 
+
   const handleSignOut = async () => {
     await signOut();
     navigate("/auth");
-  };
-
-  const handleNotificationsClick = () => {
-    navigate("/comunidade");
   };
 
   const displayName = profile?.full_name || user?.email?.split("@")[0] || "Usuário";
@@ -87,21 +69,7 @@ export function Header() {
         <ThemeToggle />
 
         {/* Notifications */}
-        <button 
-          className="relative h-10 w-10 rounded-full bg-secondary flex items-center justify-center hover:bg-muted transition-colors"
-          aria-label="Notificações"
-          onClick={handleNotificationsClick}
-        >
-          <Bell className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-          {unreadCount > 0 && (
-            <span 
-              className="absolute -top-0.5 -right-0.5 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium"
-              aria-label={`${unreadCount} novas notificações`}
-            >
-              {unreadCount > 9 ? "9+" : unreadCount}
-            </span>
-          )}
-        </button>
+        <NotificationBell />
 
         {/* User Dropdown */}
         <DropdownMenu>

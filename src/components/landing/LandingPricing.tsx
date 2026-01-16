@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Star } from "lucide-react";
+import { Check, Star, Users, Calendar, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const plans = [
@@ -16,6 +16,7 @@ const plans = [
       "Missões iniciais",
       "Acesso à comunidade (leitura)",
     ],
+    mentoring: null,
     cta: "Começar grátis",
     popular: false,
     variant: "outline" as const,
@@ -33,6 +34,11 @@ const plans = [
       "Networking estratégico",
       "Coach IA básico",
     ],
+    mentoring: {
+      sessions: 0,
+      label: "Acesso aos mentores",
+      description: "Agende sessões avulsas",
+    },
     cta: "Assinar Essencial",
     popular: true,
     variant: "default" as const,
@@ -41,15 +47,19 @@ const plans = [
     name: "Premium",
     price: "R$ 149",
     period: "/mês",
-    description: "Experiência completa",
+    description: "Experiência completa com mentoria",
     features: [
       "Tudo do Essencial",
-      "2 mentorias por mês",
       "Coach IA ilimitado",
       "Prioridade no suporte",
       "Conteúdos exclusivos",
       "Relatórios avançados",
     ],
+    mentoring: {
+      sessions: 2,
+      label: "2 mentorias/mês",
+      description: "Sessões 1:1 com especialistas",
+    },
     cta: "Assinar Premium",
     popular: false,
     variant: "outline" as const,
@@ -118,6 +128,41 @@ export const LandingPricing = () => {
                       <span className="text-muted-foreground">{plan.period}</span>
                     )}
                   </div>
+                </div>
+
+                {/* Mentoring Section */}
+                <div className="mb-6 p-4 rounded-lg bg-muted/50 border border-border/50">
+                  <div className="flex items-center gap-2 mb-2">
+                    {plan.mentoring ? (
+                      <>
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span className="font-semibold text-foreground text-sm">
+                          {plan.mentoring.label}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-semibold text-muted-foreground text-sm">
+                          Mentoria não incluída
+                        </span>
+                      </>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {plan.mentoring 
+                      ? plan.mentoring.description 
+                      : "Faça upgrade para acessar mentores especializados"
+                    }
+                  </p>
+                  {plan.mentoring && plan.mentoring.sessions > 0 && (
+                    <div className="mt-2 flex items-center gap-1">
+                      <Users className="h-3.5 w-3.5 text-primary" />
+                      <span className="text-xs text-primary font-medium">
+                        {plan.mentoring.sessions} sessões inclusas/mês
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <ul className="space-y-3 mb-8 flex-grow">

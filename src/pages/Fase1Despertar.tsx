@@ -10,6 +10,7 @@ import { PhaseIntroBlock } from '@/components/phases/PhaseIntroBlock';
 import { PhaseSteps, type PhaseStep } from '@/components/phases/PhaseSteps';
 import { getPhaseIntroData, PHASE_COLORS } from '@/data/phaseIntroData';
 import { useAwakening } from '@/hooks/useAwakening';
+import { usePhase1Activities } from '@/hooks/usePhase1Activities';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { Brain, Target, Frown, Heart, Sparkles } from 'lucide-react';
@@ -28,6 +29,7 @@ const steps: PhaseStep[] = [
 export default function Fase1Despertar() {
   const navigate = useNavigate();
   const { getPhaseProgress, commitment, consciousnessResponses, readinessAssessment, painMap } = useAwakening();
+  const { completeStepActivity } = usePhase1Activities();
   const [activeStep, setActiveStep] = useState<Step>('consciousness');
 
   const progress = getPhaseProgress();
@@ -81,22 +83,29 @@ export default function Fase1Despertar() {
   // Dados do bloco introdutório com clareza UX
   const phaseIntroData = getPhaseIntroData(1, progress.percentage, isPhaseComplete);
 
-  const handleStepComplete = (nextStep: Step) => {
+  const handleStepComplete = async (currentStep: Step, nextStep: Step) => {
+    // Complete the activity for gamification if it's a tracked step
+    if (currentStep === 'readiness' || currentStep === 'painmap' || currentStep === 'commitment') {
+      await completeStepActivity(currentStep);
+    }
     setActiveStep(nextStep);
   };
 
   const renderStepContent = () => {
     switch (activeStep) {
       case 'consciousness':
-        return <ConsciousnessOnboarding onComplete={() => handleStepComplete('readiness')} />;
+        return <ConsciousnessOnboarding onComplete={() => handleStepComplete('consciousness', 'readiness')} />;
       case 'readiness':
-        return <ReadinessTest onComplete={() => handleStepComplete('painmap')} />;
+        return <ReadinessTest onComplete={() => handleStepComplete('readiness', 'painmap')} />;
       case 'painmap':
-        return <PainMapBuilder onComplete={() => handleStepComplete('evaluation')} />;
+        return <PainMapBuilder onComplete={() => handleStepComplete('painmap', 'evaluation')} />;
       case 'evaluation':
-        return <PhaseEvaluation onComplete={() => handleStepComplete('commitment')} />;
+        return <PhaseEvaluation onComplete={() => handleStepComplete('evaluation', 'commitment')} />;
       case 'commitment':
-        return <CommitmentDeclaration onComplete={() => navigate('/fase-2-descobrir')} />;
+        return <CommitmentDeclaration onComplete={async () => {
+          await handleStepComplete('commitment', 'commitment');
+          navigate('/fase-2-descobrir');
+        }} />;
       default:
         return null;
     }

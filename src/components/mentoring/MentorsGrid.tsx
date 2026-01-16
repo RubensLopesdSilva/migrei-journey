@@ -4,7 +4,9 @@ import { MentorCard } from "./MentorCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users, Lock, Sparkles, Search } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Users, Sparkles, Search, Star, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
@@ -44,6 +46,9 @@ export function MentorsGrid({
       },
     },
   };
+
+  // Featured mentors for preview (show first 3)
+  const featuredMentors = mentors.slice(0, 3);
 
   if (loading) {
     return (
@@ -92,7 +97,7 @@ export function MentorsGrid({
           </h2>
         </div>
 
-        {/* Search */}
+        {/* Search - only for paid users */}
         {mentors.length > 0 && !isFreePlan && (
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -106,56 +111,124 @@ export function MentorsGrid({
         )}
       </div>
 
-      {/* Free plan overlay */}
+      {/* Free plan - Elegant preview with featured mentors */}
       {isFreePlan ? (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="relative"
         >
-          {/* Blurred preview */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 blur-sm pointer-events-none select-none">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="h-72">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="h-16 w-16 rounded-full bg-muted" />
-                    <div className="flex-1 space-y-2">
-                      <div className="h-5 w-32 bg-muted rounded" />
-                      <div className="h-4 w-24 bg-muted rounded" />
+          {/* Featured mentors preview */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredMentors.length > 0 ? (
+              featuredMentors.map((mentor, index) => (
+                <motion.div
+                  key={mentor.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="relative group"
+                >
+                  <Card className="h-full overflow-hidden border-primary/10 transition-all duration-300 group-hover:border-primary/30">
+                    <CardContent className="p-6">
+                      {/* Mentor header */}
+                      <div className="flex items-start gap-4 mb-4">
+                        <Avatar className="h-16 w-16 border-2 border-primary/20">
+                          <AvatarImage src={mentor.avatar_url || undefined} alt={mentor.name} />
+                          <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
+                            {mentor.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground truncate">{mentor.name}</h3>
+                          <p className="text-sm text-muted-foreground truncate">{mentor.title}</p>
+                          {mentor.years_experience && (
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {mentor.years_experience} anos de experiência
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Bio preview */}
+                      {mentor.bio && (
+                        <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+                          {mentor.bio}
+                        </p>
+                      )}
+
+                      {/* Expertise tags */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {mentor.expertise.slice(0, 3).map((skill) => (
+                          <Badge key={skill} variant="secondary" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {mentor.expertise.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{mentor.expertise.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    </CardContent>
+
+                    {/* Elegant overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                      <Button 
+                        onClick={onUpgrade}
+                        size="sm"
+                        className="gap-2 btn-primary-gradient shadow-lg"
+                      >
+                        <Sparkles className="h-4 w-4" />
+                        Desbloquear
+                      </Button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </Card>
+                </motion.div>
+              ))
+            ) : (
+              // Placeholder cards if no mentors yet
+              [1, 2, 3].map((i) => (
+                <Card key={i} className="h-64 opacity-60">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="h-16 w-16 rounded-full bg-muted" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-5 w-32 bg-muted rounded" />
+                        <div className="h-4 w-24 bg-muted rounded" />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </div>
 
-          {/* Overlay CTA */}
-          <div className="absolute inset-0 flex items-center justify-center bg-background/60 backdrop-blur-sm rounded-xl">
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-center max-w-md p-8"
+          {/* Bottom CTA section */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-4">
+              <Star className="h-4 w-4 text-primary fill-primary" />
+              <span className="text-sm text-foreground">
+                <span className="font-semibold">+{mentors.length > 3 ? mentors.length - 3 : 5}</span> mentores disponíveis
+              </span>
+            </div>
+            <p className="text-muted-foreground text-sm max-w-md mx-auto mb-4">
+              Desbloqueie acesso a todos os mentores e agende sessões ilimitadas para acelerar sua transição.
+            </p>
+            <Button 
+              onClick={onUpgrade} 
+              size="lg"
+              className="gap-2 btn-primary-gradient shadow-lg"
             >
-              <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <Lock className="h-10 w-10 text-primary" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3">Acesso Exclusivo</h3>
-              <p className="text-muted-foreground mb-6">
-                Faça upgrade para acessar mentorias individuais com profissionais 
-                que já passaram pela transição de carreira.
-              </p>
-              <Button 
-                onClick={onUpgrade} 
-                size="lg"
-                className="gap-2 btn-primary-gradient shadow-lg"
-              >
-                <Sparkles className="h-5 w-5" />
-                Desbloquear Mentorias
-              </Button>
-            </motion.div>
-          </div>
+              Desbloquear Mentoria Premium
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </motion.div>
         </motion.div>
       ) : mentors.length === 0 ? (
         <motion.div

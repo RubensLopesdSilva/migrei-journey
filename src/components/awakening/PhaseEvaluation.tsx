@@ -370,7 +370,7 @@ export function PhaseEvaluation({ onComplete }: PhaseEvaluationProps) {
                 size="lg"
                 className="w-full h-14 text-lg gap-3"
               >
-                Avançar para Fase 2: Descobrir
+                Firmar meu Compromisso
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </motion.div>

@@ -15,14 +15,14 @@ import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
 import { Brain, Target, Frown, Heart, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-type Step = 'consciousness' | 'readiness' | 'painmap' | 'commitment' | 'evaluation';
+type Step = 'consciousness' | 'readiness' | 'painmap' | 'evaluation' | 'commitment';
 
 const steps: PhaseStep[] = [
   { key: 'consciousness', label: 'Consciência', icon: Brain },
   { key: 'readiness', label: 'Prontidão', icon: Target },
   { key: 'painmap', label: 'Mapa de Dor', icon: Frown },
-  { key: 'commitment', label: 'Compromisso', icon: Heart },
-  { key: 'evaluation', label: 'Avaliação', icon: Sparkles }
+  { key: 'evaluation', label: 'Avaliação', icon: Sparkles },
+  { key: 'commitment', label: 'Compromisso', icon: Heart }
 ];
 
 export default function Fase1Despertar() {
@@ -64,9 +64,10 @@ export default function Fase1Despertar() {
     } else if (painMap.length < 2) {
       setActiveStep('painmap');
     } else if (!commitment) {
-      setActiveStep('commitment');
-    } else {
+      // Show evaluation before commitment
       setActiveStep('evaluation');
+    } else {
+      setActiveStep('commitment');
     }
   }, []);
 
@@ -84,11 +85,11 @@ export default function Fase1Despertar() {
       case 'readiness':
         return <ReadinessTest onComplete={() => handleStepComplete('painmap')} />;
       case 'painmap':
-        return <PainMapBuilder onComplete={() => handleStepComplete('commitment')} />;
-      case 'commitment':
-        return <CommitmentDeclaration onComplete={() => handleStepComplete('evaluation')} />;
+        return <PainMapBuilder onComplete={() => handleStepComplete('evaluation')} />;
       case 'evaluation':
-        return <PhaseEvaluation onComplete={() => navigate('/fase-2-descobrir')} />;
+        return <PhaseEvaluation onComplete={() => handleStepComplete('commitment')} />;
+      case 'commitment':
+        return <CommitmentDeclaration onComplete={() => navigate('/fase-2-descobrir')} />;
       default:
         return null;
     }

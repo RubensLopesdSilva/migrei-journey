@@ -8,7 +8,7 @@ import { MyPitch } from '@/components/positioning/MyPitch';
 import { AchievementsWall } from '@/components/positioning/AchievementsWall';
 import { WeeklyChallenges } from '@/components/positioning/WeeklyChallenges';
 import { ScriptViewer } from '@/components/positioning/ScriptViewer';
-import { Target, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 
 type PillarType = 'digital' | 'presencial' | 'onetoone';
 
@@ -34,7 +34,7 @@ const PositioningAcademy = () => {
           className="mb-4"
         />
 
-        {/* Hero Header - Simplified */}
+        {/* Hero Header */}
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -42,11 +42,10 @@ const PositioningAcademy = () => {
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-foreground">
-                Networking Estratégico
+                Networking
               </h1>
-              <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-                <Target className="h-3.5 w-3.5" />
-                Conecte-se com quem já está onde você quer chegar
+              <p className="text-sm text-muted-foreground">
+                Construa conexões que abrem portas
               </p>
             </div>
           </div>

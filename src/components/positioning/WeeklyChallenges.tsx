@@ -32,7 +32,7 @@ const difficultyFlames = {
 const mockChallenges: Challenge[] = [
   {
     id: '1',
-    title: 'Comente em 3 posts da sua área',
+    title: 'Comente em 3 posts',
     category: 'linkedin',
     difficulty: 'easy',
     xp: 30,
@@ -40,7 +40,7 @@ const mockChallenges: Challenge[] = [
   },
   {
     id: '2',
-    title: 'Envie 2 pedidos de conexão personalizados',
+    title: 'Envie 2 conexões personalizadas',
     category: 'linkedin',
     difficulty: 'medium',
     xp: 50,
@@ -48,7 +48,7 @@ const mockChallenges: Challenge[] = [
   },
   {
     id: '3',
-    title: 'Participe de um evento ou meetup',
+    title: 'Participe de um evento',
     category: 'evento',
     difficulty: 'medium',
     xp: 75,
@@ -56,7 +56,7 @@ const mockChallenges: Challenge[] = [
   },
   {
     id: '4',
-    title: 'Convide alguém para um café virtual',
+    title: 'Convide alguém para café',
     category: 'coffee',
     difficulty: 'hard',
     xp: 100,
@@ -100,7 +100,7 @@ export function WeeklyChallenges({
             <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
               <Flame className="h-4 w-4 text-orange-500" />
             </div>
-            <CardTitle className="text-base">Desafios da semana</CardTitle>
+            <CardTitle className="text-base">Desafios</CardTitle>
           </div>
           <Badge variant="secondary" className="gap-1">
             <Zap className="h-3 w-3" />
@@ -113,13 +113,13 @@ export function WeeklyChallenges({
         {/* Progress */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-muted-foreground">Seu progresso esta semana</span>
+            <span className="text-muted-foreground">Progresso</span>
             <div className="flex items-center gap-2">
-              <span className="font-medium">{completedCount} de {localChallenges.length}</span>
+              <span className="font-medium">{completedCount}/{localChallenges.length}</span>
               {allCompleted && (
                 <Badge className="bg-green-500 h-5 gap-1">
                   <Award className="h-3 w-3" />
-                  Semana completa!
+                  Completo!
                 </Badge>
               )}
             </div>

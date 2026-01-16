@@ -1,25 +1,28 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { PageContent } from "@/components/ui/page-transition";
 import { useProgress } from "@/hooks/useProgress";
 import { ProgressHeader } from "@/components/progress/ProgressHeader";
+import { CurrentPhaseCard } from "@/components/progress/CurrentPhaseCard";
 import { InteractiveRodaMigrei } from "@/components/progress/InteractiveRodaMigrei";
 import { PhaseDetailCard } from "@/components/progress/PhaseDetailCard";
 import { BadgesGallery } from "@/components/progress/BadgesGallery";
 import { MissionsCard } from "@/components/progress/MissionsCard";
 import { ProgressAnalytics } from "@/components/progress/ProgressAnalytics";
+import { PhasesGrid } from "@/components/progress/PhasesGrid";
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { PageSkeleton } from "@/components/layout/PageSkeleton";
 import { PhaseWithProgress } from "@/types/progress";
+import { Button } from "@/components/ui/button";
 import { 
-  LayoutDashboard, 
+  TrendingUp, 
   Trophy, 
   Target, 
   BarChart3,
   ChevronLeft
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function Progress() {
   const {
@@ -80,202 +83,152 @@ export default function Progress() {
     }
   };
 
+  const currentPhaseWithProgress = phasesWithProgress.find(
+    p => p.id === summary.currentPhase?.id
+  );
+
   return (
     <PageLayout>
       <PageContent>
-        <div className="space-y-6">
-          {/* Breadcrumb */}
-          <PageBreadcrumb
-            items={[
-              ...(selectedPhase 
-                ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
-                : [{ label: "Progresso", current: true }]
-              )
-            ]}
-            className="mb-4"
-          />
+        {/* Breadcrumb */}
+        <PageBreadcrumb
+          items={[
+            ...(selectedPhase 
+              ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
+              : [{ label: "Progresso", current: true }]
+            )
+          ]}
+          className="mb-4"
+        />
 
-          {/* Progress Header */}
-          <ProgressHeader
-            totalXp={summary.totalXp}
-            level={summary.currentLevel}
-            levelName={summary.levelName}
-            streak={summary.streak}
-            overallProgress={summary.overallProgress}
-          />
+        {/* Progress Header - Hero style like Networking */}
+        <ProgressHeader
+          totalXp={summary.totalXp}
+          level={summary.currentLevel}
+          levelName={summary.levelName}
+          streak={summary.streak}
+          overallProgress={summary.overallProgress}
+        />
 
-          {/* Main Content */}
-          {selectedPhase ? (
-            <div className="space-y-6">
-              <Button 
-                variant="ghost" 
-                onClick={() => setSelectedPhase(null)}
-                className="gap-2"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                Voltar
-              </Button>
-              
-              <PhaseDetailCard
-                phase={selectedPhase}
-                completedActivities={completedActivities}
-                onStartPhase={handleStartPhase}
-                onCompleteActivity={handleCompleteActivity}
-              />
-            </div>
-          ) : (
-            <AnimatedTabs defaultValue="overview" className="space-y-6">
-              <AnimatedTabsList className="grid w-full max-w-2xl grid-cols-4">
-                <AnimatedTabsTrigger value="overview" className="gap-2">
-                  <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
-                  Geral
-                </AnimatedTabsTrigger>
-                <AnimatedTabsTrigger value="badges" className="gap-2">
-                  <Trophy className="h-4 w-4" aria-hidden="true" />
-                  Conquistas
-                </AnimatedTabsTrigger>
-                <AnimatedTabsTrigger value="missions" className="gap-2">
-                  <Target className="h-4 w-4" aria-hidden="true" />
-                  Missões
-                </AnimatedTabsTrigger>
-                <AnimatedTabsTrigger value="analytics" className="gap-2">
-                  <BarChart3 className="h-4 w-4" aria-hidden="true" />
-                  Análise
-                </AnimatedTabsTrigger>
-              </AnimatedTabsList>
+        {/* Main Content */}
+        {selectedPhase ? (
+          <motion.div 
+            className="space-y-6"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => setSelectedPhase(null)}
+              className="gap-1.5"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Voltar
+            </Button>
+            
+            <PhaseDetailCard
+              phase={selectedPhase}
+              completedActivities={completedActivities}
+              onStartPhase={handleStartPhase}
+              onCompleteActivity={handleCompleteActivity}
+            />
+          </motion.div>
+        ) : (
+          <AnimatedTabs defaultValue="overview" className="space-y-6">
+            <AnimatedTabsList className="grid w-full max-w-md grid-cols-4">
+              <AnimatedTabsTrigger value="overview" className="gap-1.5 text-xs sm:text-sm">
+                <TrendingUp className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Geral</span>
+              </AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="badges" className="gap-1.5 text-xs sm:text-sm">
+                <Trophy className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Conquistas</span>
+              </AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="missions" className="gap-1.5 text-xs sm:text-sm">
+                <Target className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Missões</span>
+              </AnimatedTabsTrigger>
+              <AnimatedTabsTrigger value="analytics" className="gap-1.5 text-xs sm:text-sm">
+                <BarChart3 className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Análise</span>
+              </AnimatedTabsTrigger>
+            </AnimatedTabsList>
 
-              <AnimatedTabsContent value="overview" className="space-y-8">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-                  {/* Roda Migrei */}
-                  <div className="lg:col-span-7">
-                    <div className="bg-card rounded-2xl border border-border p-4 md:p-8">
-                      <h3 className="text-lg font-semibold mb-6 text-center">
-                        Sua Jornada
-                      </h3>
-                      <InteractiveRodaMigrei
-                        phases={phasesWithProgress}
-                        currentPhaseId={userProgress?.current_phase_id || null}
-                        onPhaseClick={handlePhaseClick}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Right side cards */}
-                  <div className="lg:col-span-5 space-y-6 order-first lg:order-last">
-                    {/* Current Phase Quick View */}
-                    {summary.currentPhase && (
-                      <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl border border-primary/20 p-6">
-                        <h4 className="text-sm text-muted-foreground mb-2">Agora</h4>
-                        <div className="flex items-center gap-3 mb-4">
-                          <div 
-                            className="h-12 w-12 rounded-xl flex items-center justify-center text-white font-bold"
-                            style={{ backgroundColor: summary.currentPhase.color || '#3B82F6' }}
-                          >
-                            {summary.currentPhase.phase_number}
-                          </div>
-                          <div>
-                            <p className="font-semibold text-lg">{summary.currentPhase.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {summary.currentPhase.level_name}
-                            </p>
-                          </div>
-                        </div>
-                        <Button 
-                          className="w-full"
-                          onClick={() => {
-                            const currentPhaseWithProgress = phasesWithProgress.find(
-                              p => p.id === summary.currentPhase?.id
-                            );
-                            if (currentPhaseWithProgress) {
-                              handlePhaseClick(currentPhaseWithProgress);
-                            }
-                          }}
-                        >
-                          Continuar
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Quick Missions */}
-                    <MissionsCard
-                      missions={missions}
-                      userMissions={userMissions}
+            <AnimatedTabsContent value="overview" className="space-y-6">
+              {/* Main Grid - Same pattern as Networking */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Main Content - Roda Migrei */}
+                <div className="lg:col-span-7 xl:col-span-8">
+                  <motion.div 
+                    className="bg-card rounded-xl border border-border p-4 md:p-6"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h3 className="font-bold text-base mb-4 text-center">
+                      Sua Jornada
+                    </h3>
+                    <InteractiveRodaMigrei
+                      phases={phasesWithProgress}
                       currentPhaseId={userProgress?.current_phase_id || null}
+                      onPhaseClick={handlePhaseClick}
                     />
-                  </div>
+                  </motion.div>
                 </div>
 
-                {/* Phase Cards Grid */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Fases</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {phasesWithProgress.map(phase => {
-                      const isLocked = phase.userProgress?.status === 'locked';
-                      const isCompleted = phase.userProgress?.status === 'completed';
-                      const isCurrent = phase.id === userProgress?.current_phase_id;
-                      
-                      return (
-                        <button
-                          key={phase.id}
-                          onClick={() => !isLocked && handlePhaseClick(phase)}
-                          disabled={isLocked}
-                          className={`p-4 rounded-xl border text-left transition-all ${
-                            isLocked 
-                              ? 'opacity-50 cursor-not-allowed bg-muted/30' 
-                              : isCurrent
-                                ? 'border-primary/50 bg-primary/5 hover:bg-primary/10'
-                                : isCompleted
-                                  ? 'border-green-200 bg-green-500/5 hover:bg-green-500/10'
-                                  : 'hover:bg-muted/50'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 mb-2">
-                            <div 
-                              className="h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold text-sm"
-                              style={{ 
-                                backgroundColor: isLocked ? '#6B7280' : phase.color || '#3B82F6' 
-                              }}
-                            >
-                              {phase.phase_number}
-                            </div>
-                            <div>
-                              <p className="font-medium">{phase.name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {phase.userProgress?.progress_percentage || 0}% completo
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                {/* Sidebar */}
+                <div className="lg:col-span-5 xl:col-span-4 space-y-6 order-first lg:order-last">
+                  {/* Current Phase Card */}
+                  {summary.currentPhase && currentPhaseWithProgress && (
+                    <CurrentPhaseCard
+                      phase={summary.currentPhase}
+                      progressPercentage={currentPhaseWithProgress.userProgress?.progress_percentage || 0}
+                      onContinue={() => handlePhaseClick(currentPhaseWithProgress)}
+                    />
+                  )}
+
+                  {/* Missions */}
+                  <MissionsCard
+                    missions={missions}
+                    userMissions={userMissions}
+                    currentPhaseId={userProgress?.current_phase_id || null}
+                  />
                 </div>
-              </AnimatedTabsContent>
+              </div>
 
-              <AnimatedTabsContent value="badges">
-                <BadgesGallery
-                  allBadges={badges}
-                  earnedBadges={userBadges}
-                />
-              </AnimatedTabsContent>
+              {/* Phases Grid */}
+              <PhasesGrid
+                phases={phasesWithProgress}
+                currentPhaseId={userProgress?.current_phase_id || null}
+                onPhaseClick={handlePhaseClick}
+              />
+            </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="missions">
-                <MissionsCard
-                  missions={missions}
-                  userMissions={userMissions}
-                  currentPhaseId={userProgress?.current_phase_id || null}
-                />
-              </AnimatedTabsContent>
+            <AnimatedTabsContent value="badges">
+              <BadgesGallery
+                allBadges={badges}
+                earnedBadges={userBadges}
+              />
+            </AnimatedTabsContent>
 
-              <AnimatedTabsContent value="analytics">
-                <ProgressAnalytics
-                  phases={phasesWithProgress}
-                  userProgress={userProgress}
-                />
-              </AnimatedTabsContent>
-            </AnimatedTabs>
-          )}
-        </div>
+            <AnimatedTabsContent value="missions">
+              <MissionsCard
+                missions={missions}
+                userMissions={userMissions}
+                currentPhaseId={userProgress?.current_phase_id || null}
+              />
+            </AnimatedTabsContent>
+
+            <AnimatedTabsContent value="analytics">
+              <ProgressAnalytics
+                phases={phasesWithProgress}
+                userProgress={userProgress}
+              />
+            </AnimatedTabsContent>
+          </AnimatedTabs>
+        )}
       </PageContent>
     </PageLayout>
   );

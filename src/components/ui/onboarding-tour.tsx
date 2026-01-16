@@ -162,13 +162,15 @@ export function OnboardingTour({
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100]"
-      >
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <motion.div
+          key="onboarding-tour"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100]"
+        >
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/60" />
 
@@ -286,7 +288,8 @@ export function OnboardingTour({
             </div>
           </div>
         </motion.div>
-      </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

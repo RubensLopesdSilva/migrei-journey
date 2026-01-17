@@ -391,7 +391,7 @@ const features = [{
   title: "Mentoria Especializada",
   subtitle: "Você não está sozinho nessa",
   description: "Receba orientação personalizada de mentores experientes que já realizaram transições de carreira bem-sucedidas. Sessões individuais para acelerar seus resultados.",
-  highlights: ["Mentores especializados disponíveis", "Comunidade ativa e acolhedora", "Eventos e encontros exclusivos"],
+  highlights: ["Mentores especializados disponíveis", "Agende no seu tempo a mentoria", "Eventos e encontros exclusivos"],
   illustration: <CommunityMockup />,
   gradient: "from-emerald-500/10 via-transparent to-teal-500/10",
   accentColor: "text-emerald-500"

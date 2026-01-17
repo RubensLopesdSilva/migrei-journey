@@ -118,15 +118,15 @@ export const HeroMigreiWheel = () => {
     return () => clearInterval(interval);
   }, [hoveredPhase]);
 
-  // Dimensões responsivas
-  const size = 380;
+  // Dimensões responsivas - maiores para preencher área
+  const size = 480;
   const center = size / 2;
-  const outerRadius = 175;
-  const innerRadius = 65;
+  const outerRadius = 220;
+  const innerRadius = 80;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = 5;
-  const cornerRadius = 10;
+  const cornerRadius = 12;
 
   // Criar caminho do segmento arredondado
   const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {

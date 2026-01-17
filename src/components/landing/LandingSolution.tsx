@@ -82,7 +82,7 @@ export const LandingSolution = () => {
             Como a <img src={logoMigrei} alt="Migrei" className="h-14 md:h-18 lg:h-20 inline-block" /> te ajuda
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Um método estruturado que te leva da <span className="text-foreground font-medium">confusão</span> à <span className="text-primary font-medium">clareza</span> em 3 etapas.
+            Da <span className="text-foreground font-medium">confusão</span> à <span className="text-primary font-medium">clareza</span> em 3 etapas simples.
           </p>
         </motion.div>
 

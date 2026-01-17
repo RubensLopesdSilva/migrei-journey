@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Clock, Target, Sparkles } from "lucide-react";
+import { ArrowRight, Play, Target } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
 
@@ -43,43 +43,43 @@ export const LandingHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
-            {/* Badge - Social proof mais específico */}
+            {/* Badge - Resultado comprovado */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-8"
+              className="inline-flex items-center gap-2 bg-green-500/10 text-green-700 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-green-500/20"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
-              +2.000 profissionais já fizeram sua transição
+              +2.000 pessoas já mudaram de carreira com o Migrei
             </motion.div>
 
-            {/* Headline - Resultado tangível em 30 segundos */}
+            {/* Headline - Resultado claro */}
             <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Descubra sua nova carreira{" "}
-              <span className="text-primary">em 90 dias.</span>
+              Mude de carreira{" "}
+              <span className="text-primary">com clareza e direção.</span>
             </motion.h1>
 
-            {/* Subheadline - Benefício concreto + como funciona */}
+            {/* Subheadline - Transformação clara */}
             <motion.p
               className="text-lg md:text-xl text-muted-foreground max-w-xl mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Saia da paralisia de não saber o próximo passo. 
-              O Migrei te guia do autoconhecimento à ação com um <strong>plano personalizado</strong> e <strong>IA que te acompanha 24/7</strong>.
+              Descubra qual carreira faz sentido para você, crie um plano de ação personalizado e tenha{" "}
+              <strong>acompanhamento de IA</strong> em cada passo da sua transição.
             </motion.p>
 
-            {/* Quick Win Promise - O que ganha em 5 minutos */}
+            {/* Resultados concretos */}
             <motion.div
               className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8"
               initial={{ opacity: 0, y: 20 }}
@@ -87,16 +87,16 @@ export const LandingHero = () => {
               transition={{ duration: 0.5, delay: 0.25 }}
             >
               <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
-                <Clock className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium"><strong>5 min</strong> para seu 1º diagnóstico</span>
+                <Target className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">Clareza sobre <strong>qual carreira</strong> seguir</span>
               </div>
               <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
-                <Sparkles className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium"><strong>IA</strong> que te acompanha 24/7</span>
+                <ArrowRight className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">Plano de ação <strong>passo a passo</strong></span>
               </div>
             </motion.div>
 
-            {/* CTAs - Mais específicos */}
+            {/* CTAs */}
             <motion.div
               className="flex flex-col sm:flex-row items-center lg:items-start gap-4"
               initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ export const LandingHero = () => {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg group"
                 onClick={() => navigate("/auth")}
               >
-                Fazer meu diagnóstico grátis
+                Começar minha transição
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
@@ -118,11 +118,11 @@ export const LandingHero = () => {
                 onClick={() => scrollToSection("como-funciona")}
               >
                 <Play className="mr-2 h-5 w-5" />
-                Ver o método em 2 min
+                Como funciona
               </Button>
             </motion.div>
 
-            {/* Trust badges - Mais relevantes */}
+            {/* Trust badges focados em resultado */}
             <motion.div
               className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-muted-foreground"
               initial={{ opacity: 0 }}
@@ -133,19 +133,19 @@ export const LandingHero = () => {
                 <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm">Resultado em 5 minutos</span>
+                <span className="text-sm">Diagnóstico gratuito em 5 min</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm">Método validado por +2.000 pessoas</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 <span className="text-sm">Sem cartão de crédito</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span className="text-sm">Plano grátis para sempre</span>
               </div>
             </motion.div>
           </div>

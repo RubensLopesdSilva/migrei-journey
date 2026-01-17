@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings } from "lucide-react";
+import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import lumiAvatar from "@/assets/agents/lumi.png";
 
@@ -197,6 +197,112 @@ const Plan90Mockup = () => {
   );
 };
 
+// Mockup: Networking Prático
+const NetworkingMockup = () => {
+  const todayActions = [
+    { type: 'comment', target: 'Post sobre liderança', completed: true },
+    { type: 'connect', target: 'Maria Santos - RH', completed: true },
+    { type: 'message', target: 'Carlos - Mentor', completed: false },
+  ];
+
+  const suggestedActions = [
+    { type: 'comment', description: 'Comente em um post do seu setor' },
+    { type: 'connect', description: 'Conecte-se com alguém da área' },
+  ];
+
+  const getActionIcon = (type: string) => {
+    switch (type) {
+      case 'comment': return <MessageCircle className="h-3 w-3" />;
+      case 'connect': return <Users className="h-3 w-3" />;
+      case 'message': return <ArrowRight className="h-3 w-3" />;
+      default: return null;
+    }
+  };
+
+  const getActionColor = (type: string) => {
+    switch (type) {
+      case 'comment': return 'bg-blue-500/10 text-blue-500';
+      case 'connect': return 'bg-green-500/10 text-green-500';
+      case 'message': return 'bg-purple-500/10 text-purple-500';
+      default: return 'bg-muted';
+    }
+  };
+
+  const completedCount = todayActions.filter(a => a.completed).length;
+  const progressPercent = (completedCount / todayActions.length) * 100;
+
+  return (
+    <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30 rounded-xl p-5 h-56 flex flex-col justify-between relative overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Users className="h-3.5 w-3.5 text-primary" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-foreground">Rotina de Networking</p>
+            <p className="text-[10px] text-muted-foreground">10 min/dia</p>
+          </div>
+        </div>
+        <div className="bg-primary/10 text-primary text-[10px] font-semibold px-2 py-0.5 rounded-full">
+          +15 XP
+        </div>
+      </div>
+
+      {/* Today's Progress */}
+      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-2.5 mt-2">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[10px] font-medium text-foreground">Progresso de Hoje</span>
+          <span className="text-[9px] text-muted-foreground">{completedCount}/{todayActions.length} ações</span>
+        </div>
+        <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-primary to-violet-500 rounded-full transition-all"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Today's Actions */}
+      <div className="space-y-1.5 mt-2">
+        {todayActions.map((action, index) => (
+          <div 
+            key={index}
+            className={`flex items-center gap-2 p-2 rounded-lg transition-all ${
+              action.completed ? 'bg-green-500/10' : 'bg-white/80 dark:bg-slate-800/80'
+            }`}
+          >
+            <div className={`h-4 w-4 rounded-full flex items-center justify-center ${
+              action.completed ? 'bg-green-500 text-white' : 'border-2 border-muted-foreground/30'
+            }`}>
+              {action.completed && <Check className="h-2.5 w-2.5" />}
+            </div>
+            <div className={`h-5 w-5 rounded flex items-center justify-center ${getActionColor(action.type)}`}>
+              {getActionIcon(action.type)}
+            </div>
+            <span className={`text-[10px] flex-1 truncate ${action.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+              {action.target}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Suggested Action */}
+      <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-lg p-2 mt-1.5 border border-dashed border-primary/30">
+        <div className="flex items-center gap-2">
+          <div className="h-5 w-5 rounded bg-amber-500/10 flex items-center justify-center">
+            <Star className="h-3 w-3 text-amber-500" />
+          </div>
+          <span className="text-[9px] text-muted-foreground flex-1">Sugestão: {suggestedActions[0].description}</span>
+          <div className="h-4 w-4 rounded bg-primary/10 flex items-center justify-center">
+            <Plus className="h-2.5 w-2.5 text-primary" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Mockup: Comunidade & Mentoria
 const CommunityMockup = () => {
   const mentors = [
@@ -285,6 +391,12 @@ const features = [
     title: "Plano de 90 Dias",
     description: "Metas SMART e cronograma personalizado para sua transição com acompanhamento passo a passo.",
     illustration: <Plan90Mockup />,
+  },
+  {
+    icon: Users,
+    title: "Networking Prático",
+    description: "Rotina diária de 10 minutos para construir conexões estratégicas que abrem portas na sua carreira.",
+    illustration: <NetworkingMockup />,
   },
   {
     icon: Users,

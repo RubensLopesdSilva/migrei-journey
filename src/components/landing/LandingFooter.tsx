@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 
-export const LandingFooter = () => {
+export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
 
   return (
-    <footer className="bg-slate-900 text-white py-16">
+    <footer ref={ref} className="bg-slate-900 text-white py-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand + Newsletter */}
@@ -86,4 +86,6 @@ export const LandingFooter = () => {
       </div>
     </footer>
   );
-};
+});
+
+LandingFooter.displayName = "LandingFooter";

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
 
@@ -16,7 +16,7 @@ export const LandingHero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background gradient - matching Figma style */}
+      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3" />
       <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-primary/10 to-transparent" />
       
@@ -24,31 +24,41 @@ export const LandingHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <div className="text-left order-2 lg:order-1">
-            {/* Headline with underline accent */}
-            <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6"
+            {/* Pain Point Hook */}
+            <motion.p
+              className="text-sm md:text-base text-primary font-medium mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
             >
-              Estamos aqui para{" "}
-              <span className="relative inline-block">
-                guiar sua transição
-                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none">
-                  <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round"/>
-                </svg>
-              </span>{" "}
-              <span className="text-primary">de carreira</span>
-            </motion.h1>
+              Para quem sabe que precisa mudar, mas não sabe por onde começar
+            </motion.p>
 
-            {/* Subheadline */}
-            <motion.p
-              className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8"
+            {/* Headline - Benefit focused */}
+            <motion.h1
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Saia da dúvida e entre em ação com o <strong className="text-foreground">Ciclo Migrei</strong> — um método estruturado com as ferramentas certas para sua jornada profissional.
+              Saia da paralisia e tenha{" "}
+              <span className="relative inline-block">
+                clareza
+                <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
+                  <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round"/>
+                </svg>
+              </span>{" "}
+              <span className="text-primary">sobre seu próximo passo</span>
+            </motion.h1>
+
+            {/* Subheadline - What + How */}
+            <motion.p
+              className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              O <strong className="text-foreground">Ciclo Migrei</strong> é uma metodologia em 6 fases que te guia da confusão à ação — com ferramentas práticas, IA e uma comunidade de apoio.
             </motion.p>
 
             {/* CTAs */}
@@ -56,7 +66,7 @@ export const LandingHero = () => {
               className="flex flex-col sm:flex-row items-start gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Button
                 size="lg"
@@ -68,16 +78,23 @@ export const LandingHero = () => {
               </Button>
               <Button
                 size="lg"
-                variant="ghost"
-                className="px-6 py-6 text-lg group"
+                variant="outline"
+                className="px-6 py-6 text-lg rounded-full"
                 onClick={() => scrollToSection("como-funciona")}
               >
-                <div className="w-10 h-10 rounded-full border-2 border-muted-foreground/30 flex items-center justify-center mr-3 group-hover:border-primary transition-colors">
-                  <Play className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors ml-0.5" />
-                </div>
-                Como funciona
+                Ver como funciona
               </Button>
             </motion.div>
+
+            {/* Trust indicator */}
+            <motion.p
+              className="text-sm text-muted-foreground mt-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              ✓ Gratuito para começar &nbsp;·&nbsp; ✓ Sem cartão de crédito
+            </motion.p>
           </div>
 
           {/* Right: Migrei Wheel */}

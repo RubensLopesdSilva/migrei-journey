@@ -45,7 +45,7 @@ export const LandingSolution = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3 flex-wrap">
-            Como o <img src={logoMigrei} alt="Migrei" className="h-10 md:h-12 lg:h-14 inline-block" /> te ajuda
+            Como o <img src={logoMigrei} alt="Migrei" className="h-12 md:h-16 lg:h-20 inline-block" /> te ajuda
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Um método estruturado que te leva da confusão à clareza em 3 etapas simples.

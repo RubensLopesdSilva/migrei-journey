@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,9 +8,9 @@ import { useNavigate } from "react-router-dom";
 const plans = [
   {
     name: "Gratuito",
-    price: "R$ 0",
+    price: "0",
     period: "",
-    description: "Para começar sua jornada",
+    description: "Comece a explorar sua transição",
     features: [
       "Fases 1 e 2 do Ciclo Migrei",
       "Acesso à comunidade",
@@ -18,13 +19,13 @@ const plans = [
     mentoring: null,
     cta: "Começar grátis",
     popular: false,
-    variant: "outline" as const,
+    highlighted: false,
   },
   {
     name: "Essencial",
-    price: "R$ 49",
+    price: "49",
     period: "/mês",
-    description: "Para quem quer ir além",
+    description: "Experimente todo o poder da plataforma",
     features: [
       "Todas as 6 fases do Ciclo Migrei",
       "Acesso à comunidade",
@@ -34,15 +35,16 @@ const plans = [
     mentoring: null,
     cta: "Assinar Essencial",
     popular: true,
-    variant: "default" as const,
+    highlighted: true,
+    savings: "Economize R$100/ano",
   },
   {
     name: "Premium",
-    price: "R$ 149",
+    price: "149",
     period: "/mês",
     description: "Experiência completa com mentoria",
     features: [
-      "Tudo do Essencial",
+      "Tudo do plano Essencial",
       "Prioridade no suporte",
       "Conteúdos exclusivos",
     ],
@@ -53,32 +55,57 @@ const plans = [
     },
     cta: "Assinar Premium",
     popular: false,
-    variant: "outline" as const,
+    highlighted: false,
   },
 ];
 
 export const LandingPricing = () => {
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("yearly");
   const navigate = useNavigate();
 
   return (
-    <section id="planos" className="py-20 md:py-32">
+    <section id="planos" className="py-20 md:py-32 bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4">
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Escolha seu plano
+            Escolha o plano ideal para você
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Comece grátis e evolua conforme sua jornada.
+          <p className="text-lg text-muted-foreground mb-8">
+            Escolha o plano que funciona melhor para você. Entre em contato se precisar de ajuda.
           </p>
+
+          {/* Billing Toggle */}
+          <div className="inline-flex items-center bg-muted rounded-full p-1">
+            <button
+              onClick={() => setBillingPeriod("monthly")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                billingPeriod === "monthly"
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Mensal
+            </button>
+            <button
+              onClick={() => setBillingPeriod("yearly")}
+              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                billingPeriod === "yearly"
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Anual
+            </button>
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
           {plans.map((plan, index) => (
             <motion.div
               key={index}
@@ -88,89 +115,82 @@ export const LandingPricing = () => {
               transition={{ duration: 0.5, delay: index * 0.15 }}
               className="relative"
             >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-sm font-medium px-4 py-1 rounded-full">
-                    <Star className="h-3.5 w-3.5 fill-current" />
-                    Mais popular
-                  </span>
-                </div>
-              )}
-              
               <Card 
-                className={`p-8 h-full flex flex-col ${
-                  plan.popular 
-                    ? "border-primary bg-card shadow-lg scale-105" 
-                    : "border-border/50 bg-card"
+                className={`p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
+                  plan.highlighted 
+                    ? "bg-primary text-primary-foreground border-primary shadow-xl scale-105 z-10" 
+                    : "bg-card border-border/50 hover:border-primary/30"
                 }`}
               >
+                {/* Plan Name */}
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold text-foreground mb-2">
+                  <h3 className={`text-xl font-bold mb-2 ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground'}`}>
                     {plan.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className={`text-sm mb-4 ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
                     {plan.description}
                   </p>
+                  
+                  {/* Price */}
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-bold text-foreground">
-                      {plan.price}
+                    <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>R$</span>
+                    <span className={`text-5xl font-bold ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground'}`}>
+                      {billingPeriod === "yearly" && plan.price !== "0" 
+                        ? Math.round(parseInt(plan.price) * 0.8) 
+                        : plan.price}
                     </span>
                     {plan.period && (
-                      <span className="text-muted-foreground">{plan.period}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Mentoring Section */}
-                <div className="mb-6 p-4 rounded-lg bg-muted/50 border border-border/50">
-                  <div className="flex items-center gap-2 mb-2">
-                    {plan.mentoring ? (
-                      <>
-                        <Calendar className="h-4 w-4 text-primary" />
-                        <span className="font-semibold text-foreground text-sm">
-                          {plan.mentoring.label}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-semibold text-muted-foreground text-sm">
-                          Mentoria não incluída
-                        </span>
-                      </>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {plan.mentoring 
-                      ? plan.mentoring.description 
-                      : "Faça upgrade para acessar mentores especializados"
-                    }
-                  </p>
-                  {plan.mentoring && plan.mentoring.sessions > 0 && (
-                    <div className="mt-2 flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-xs text-primary font-medium">
-                        {plan.mentoring.sessions} sessões inclusas/mês
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
+                        {plan.period}
                       </span>
-                    </div>
+                    )}
+                  </div>
+
+                  {/* Savings Badge */}
+                  {plan.savings && billingPeriod === "yearly" && (
+                    <span className="inline-block mt-3 px-3 py-1 bg-primary-foreground/20 text-primary-foreground text-xs font-medium rounded-full">
+                      {plan.savings}
+                    </span>
                   )}
                 </div>
 
-                <ul className="space-y-3 mb-8 flex-grow">
+                {/* Features */}
+                <ul className="space-y-3 mb-6 flex-grow">
+                  {/* Mentoring Feature */}
+                  {plan.mentoring && (
+                    <li className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                        plan.highlighted ? 'bg-primary-foreground/20' : 'bg-primary/10'
+                      }`}>
+                        <Check className={`h-3 w-3 ${plan.highlighted ? 'text-primary-foreground' : 'text-primary'}`} />
+                      </div>
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground/80'}`}>
+                        {plan.mentoring.label}
+                      </span>
+                    </li>
+                  )}
+                  
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center gap-3">
-                      <Check className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground/80 text-sm">{feature}</span>
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                        plan.highlighted ? 'bg-primary-foreground/20' : 'bg-primary/10'
+                      }`}>
+                        <Check className={`h-3 w-3 ${plan.highlighted ? 'text-primary-foreground' : 'text-primary'}`} />
+                      </div>
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground/80'}`}>
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
 
+                {/* CTA Button */}
                 <Button
-                  variant={plan.variant}
-                  className={`w-full ${
-                    plan.popular 
-                      ? "bg-primary hover:bg-primary/90" 
-                      : ""
+                  variant={plan.highlighted ? "secondary" : "outline"}
+                  className={`w-full rounded-xl ${
+                    plan.highlighted 
+                      ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" 
+                      : "border-primary/30 text-primary hover:bg-primary/10"
                   }`}
                   onClick={() => navigate("/auth")}
                 >

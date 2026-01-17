@@ -80,14 +80,14 @@ export const LandingHero = () => {
             </motion.div>
           </div>
 
-          {/* Right: Migrei Wheel - posicionado na extrema direita */}
+          {/* Right: Migrei Wheel */}
           <motion.div 
-            className="flex justify-end order-1 lg:order-2 absolute right-0 top-1/2 -translate-y-1/2 lg:relative lg:top-auto lg:translate-y-0"
+            className="flex justify-center lg:justify-end order-1 lg:order-2 relative lg:-mr-16 xl:-mr-24"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="relative scale-75 sm:scale-90 lg:scale-100 xl:scale-110 translate-x-[15%] lg:translate-x-[25%] xl:translate-x-[30%]">
+            <div className="relative scale-90 lg:scale-100 xl:scale-105">
               <HeroMigreiWheel />
             </div>
           </motion.div>

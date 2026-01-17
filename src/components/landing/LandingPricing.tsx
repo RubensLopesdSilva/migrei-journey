@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ScrollToNextButton } from "./ScrollToNextButton";
 
 const plans = [
   {
@@ -164,6 +165,8 @@ export const LandingPricing = () => {
             </motion.div>
           ))}
         </div>
+
+        <ScrollToNextButton targetId="faq" />
       </div>
     </section>
   );

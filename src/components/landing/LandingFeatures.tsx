@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
+import { ScrollToNextButton } from "./ScrollToNextButton";
 
 // Phase data for the wheel
 const phases = [{
@@ -552,7 +553,7 @@ Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
       {features.map((feature, index) => <FeatureSection key={index} feature={feature} index={index} isReversed={index % 2 === 1} />)}
       
       {/* Final CTA */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
+      <div id="funcionalidades" className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
         <div className="container mx-auto px-4">
           <motion.div className="text-center" initial={{
           opacity: 0,
@@ -576,6 +577,8 @@ Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>
+
+          <ScrollToNextButton targetId="ciclo-migrei" />
         </div>
       </div>
     </section>;

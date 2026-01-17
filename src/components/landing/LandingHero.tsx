@@ -64,8 +64,8 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Mude de carreira{" "}
-              <span className="text-primary">com clareza e direção.</span>
+              Sua transição de carreira{" "}
+              <span className="text-primary">guiada.</span>
             </motion.h1>
 
             {/* Subheadline - Plataforma digital */}

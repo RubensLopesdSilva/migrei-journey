@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
 const stats = [
-  { value: "+2.000", label: "profissionais em transição" },
-  { value: "4.9", label: "avaliação média", suffix: "/ 5" },
-  { value: "92%", label: "recomendam o Migrei" },
+  { value: "42%", label: "dos profissionais pretendem mudar de carreira" },
+  { value: "51%", label: "dos brasileiros consideram uma transição de profissão" },
+  { value: "56%", label: "dos profissionais estão abertos a uma nova carreira no próximo ano" },
 ];
 
 export const LandingSocialProof = () => {
@@ -39,14 +39,11 @@ export const LandingSocialProof = () => {
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
             >
               <div className="flex items-baseline justify-center gap-1">
-                <span className="text-3xl md:text-4xl font-bold text-primary">
+                <span className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary">
                   {stat.value}
                 </span>
-                {stat.suffix && (
-                  <span className="text-lg text-muted-foreground">{stat.suffix}</span>
-                )}
               </div>
-              <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
+              <p className="text-sm md:text-base text-muted-foreground mt-2 max-w-[200px]">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>

@@ -192,7 +192,7 @@ export const LandingPricing = () => {
                       ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" 
                       : "border-primary/30 text-primary hover:bg-primary/10"
                   }`}
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/auth?tab=signup")}
                 >
                   {plan.cta}
                 </Button>

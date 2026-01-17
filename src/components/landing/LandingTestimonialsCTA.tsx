@@ -118,7 +118,7 @@ export const LandingTestimonialsCTA = () => {
 
                 <Button
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 group"
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/auth?tab=signup")}
                 >
                   Começar minha transição
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -127,7 +127,7 @@ export const LandingTestimonialsCTA = () => {
                 <p className="text-center text-sm text-slate-500">
                   ou{" "}
                   <button
-                    onClick={() => navigate("/auth")}
+                    onClick={() => navigate("/auth?tab=login")}
                     className="text-primary hover:underline"
                   >
                     Fazer login

@@ -75,7 +75,7 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              O <strong><em>Ciclo Migrei</em></strong> é uma solução digital que te orienta em uma jornada de mudança de carreira — com diagnóstico e plano personalizado.
+              O <strong><em>Ciclo Migrei</em></strong> é uma solução digital que te orienta em sua jornada de mudança de carreira.
             </motion.p>
 
             {/* Resultados concretos */}

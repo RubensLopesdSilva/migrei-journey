@@ -464,17 +464,27 @@ const FeatureSection = ({
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
           >
             <div className="relative">
-              {/* Decorative elements */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl blur-xl" />
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
-              <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+              {/* Decorative elements - only for non-cycle features */}
+              {index !== 0 && (
+                <>
+                  <div className="absolute -inset-4 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl blur-xl" />
+                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+                  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+                </>
+              )}
               
-              {/* Mockup container */}
-              <div className="relative bg-card rounded-2xl shadow-2xl border border-border/50 p-6 transform hover:scale-[1.02] transition-transform duration-500">
-                <div className="transform scale-110 origin-center">
+              {/* Mockup container - skip for cycle (index 0) */}
+              {index === 0 ? (
+                <div className="relative">
                   {feature.illustration}
                 </div>
-              </div>
+              ) : (
+                <div className="relative bg-card rounded-2xl shadow-2xl border border-border/50 p-6 transform hover:scale-[1.02] transition-transform duration-500">
+                  <div className="transform scale-110 origin-center">
+                    {feature.illustration}
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>

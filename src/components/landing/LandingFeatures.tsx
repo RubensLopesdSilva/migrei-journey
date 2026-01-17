@@ -472,7 +472,7 @@ const FeatureSection = ({
             <Button
               variant="outline"
               className="rounded-full group border-primary/30 hover:border-primary hover:bg-primary/5"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/auth?tab=signup")}
             >
               Explorar recurso
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -577,7 +577,7 @@ export const LandingFeatures = () => {
             <Button
               size="lg"
               className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full group shadow-lg shadow-primary/25"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/auth?tab=signup")}
             >
               Começar agora — é grátis
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

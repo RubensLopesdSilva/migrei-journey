@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,18 @@ export default function Auth() {
 
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+
+  // Read tab from URL params on mount
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "signup") {
+      setIsLogin(false);
+    } else if (tab === "login") {
+      setIsLogin(true);
+    }
+  }, [searchParams]);
 
   const [isNewUser, setIsNewUser] = useState(false);
 

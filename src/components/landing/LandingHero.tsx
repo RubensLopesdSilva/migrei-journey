@@ -61,7 +61,7 @@ export const LandingHero = () => {
               <Button
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full group shadow-lg shadow-primary/20"
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/auth?tab=signup")}
               >
                 Começar grátis
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />

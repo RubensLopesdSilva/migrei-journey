@@ -72,12 +72,12 @@ export const LandingHeader = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" onClick={() => navigate("/auth")}>
+            <Button variant="ghost" onClick={() => navigate("/auth?tab=login")}>
               Entrar
             </Button>
             <Button 
               className="bg-primary hover:bg-primary/90"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/auth?tab=signup")}
             >
               Começar grátis
             </Button>
@@ -129,10 +129,10 @@ export const LandingHeader = () => {
                 FAQ
               </button>
               <div className="flex flex-col gap-2 mt-4">
-                <Button variant="outline" onClick={() => navigate("/auth")}>
+                <Button variant="outline" onClick={() => navigate("/auth?tab=login")}>
                   Entrar
                 </Button>
-                <Button onClick={() => navigate("/auth")}>
+                <Button onClick={() => navigate("/auth?tab=signup")}>
                   Começar grátis
                 </Button>
               </div>

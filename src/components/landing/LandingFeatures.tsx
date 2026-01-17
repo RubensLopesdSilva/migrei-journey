@@ -45,44 +45,69 @@ const phases = [
   },
 ];
 
-// Mockup: Interactive Roda Migrei with hover tooltips
+// Mockup: Interactive Roda Migrei with hover tooltips and animations
 const CycleMockup = () => {
   const [hoveredPhase, setHoveredPhase] = useState<number | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl p-8 min-h-[320px] flex items-center justify-center relative overflow-visible">
-      {/* Main wheel container */}
-      <div className="relative w-64 h-64 md:w-72 md:h-72">
+    <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 rounded-xl p-8 min-h-[320px] flex items-center justify-center relative overflow-visible">
+      {/* Main wheel container with entrance animation */}
+      <motion.div 
+        className="relative w-64 h-64 md:w-72 md:h-72"
+        initial={{ scale: 0.8, opacity: 0, rotate: -30 }}
+        whileInView={{ scale: 1, opacity: 1, rotate: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         {/* Elliptical shadow under the wheel */}
-        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-48 h-8 bg-black/10 dark:bg-black/20 rounded-[100%] blur-lg" />
+        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-52 h-10 bg-black/15 dark:bg-black/25 rounded-[100%] blur-xl" />
+        
+        {/* Outer glow effect */}
+        <motion.div 
+          className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-transparent to-primary/20 blur-2xl"
+          animate={{ 
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+        />
         
         {/* SVG Wheel */}
-        <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
+        <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl relative z-10">
           <defs>
             {phases.map((phase, i) => (
               <linearGradient key={`grad-${i}`} id={`segment-gradient-feature-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor={phase.color} stopOpacity="1" />
-                <stop offset="100%" stopColor={phase.color} stopOpacity="0.85" />
+                <stop offset="100%" stopColor={phase.color} stopOpacity="0.9" />
               </linearGradient>
             ))}
-            <filter id="wheel-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.15"/>
+            <filter id="wheel-shadow-main" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="6" stdDeviation="8" floodOpacity="0.2"/>
             </filter>
           </defs>
           
           {/* White outer ring */}
-          <circle cx="100" cy="100" r="98" fill="white" filter="url(#wheel-shadow)" className="dark:fill-slate-700" />
+          <circle 
+            cx="100" cy="100" r="98" 
+            fill="white" 
+            filter="url(#wheel-shadow-main)" 
+            className="dark:fill-slate-700" 
+          />
           
           {phases.map((phase, index) => {
             const numSegments = 6;
             const segmentAngle = 360 / numSegments;
-            const gapAngle = 5;
+            const gapAngle = 6;
             const startAngle = index * segmentAngle - 90 + gapAngle / 2;
             const endAngle = (index + 1) * segmentAngle - 90 - gapAngle / 2;
             
             const outerRadius = 92;
-            const innerRadius = 42;
+            const innerRadius = 40;
             
             const startRad = (startAngle * Math.PI) / 180;
             const endRad = (endAngle * Math.PI) / 180;
@@ -98,7 +123,7 @@ const CycleMockup = () => {
             
             const midAngle = (startAngle + endAngle) / 2;
             const midRad = (midAngle * Math.PI) / 180;
-            const iconRadius = (outerRadius + innerRadius) / 2;
+            const iconRadius = (outerRadius + innerRadius) / 2 + 2;
             const iconX = 100 + iconRadius * Math.cos(midRad);
             const iconY = 100 + iconRadius * Math.sin(midRad);
             
@@ -106,11 +131,10 @@ const CycleMockup = () => {
             const isHovered = hoveredPhase === index;
             
             return (
-              <g 
+              <motion.g 
                 key={index}
                 onMouseEnter={(e) => {
                   setHoveredPhase(index);
-                  const rect = e.currentTarget.getBoundingClientRect();
                   setTooltipPosition({ 
                     x: iconX > 100 ? 1 : -1, 
                     y: iconY > 100 ? 1 : -1 
@@ -118,68 +142,91 @@ const CycleMockup = () => {
                 }}
                 onMouseLeave={() => setHoveredPhase(null)}
                 className="cursor-pointer"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.08 }}
+                style={{ transformOrigin: `${iconX}px ${iconY}px` }}
               >
                 <path
                   d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`}
                   fill={`url(#segment-gradient-feature-${index})`}
                   className="transition-all duration-300"
                   style={{
-                    transform: isHovered ? `scale(1.05)` : 'scale(1)',
-                    transformOrigin: `${iconX}px ${iconY}px`,
-                    filter: isHovered ? 'brightness(1.1)' : 'none'
+                    filter: isHovered ? 'brightness(1.15) drop-shadow(0 4px 8px rgba(0,0,0,0.2))' : 'none'
                   }}
                 />
+                {/* Icon background circle */}
                 <circle
                   cx={iconX}
                   cy={iconY}
-                  r="14"
-                  fill="rgba(255,255,255,0.35)"
+                  r="15"
+                  fill="rgba(255,255,255,0.3)"
                   className="transition-all duration-300"
-                  style={{ opacity: isHovered ? 0.5 : 0.35 }}
                 />
+                {/* Icon */}
                 <foreignObject
-                  x={iconX - 10}
-                  y={iconY - 10}
-                  width="20"
-                  height="20"
+                  x={iconX - 11}
+                  y={iconY - 11}
+                  width="22"
+                  height="22"
                 >
                   <div className="flex items-center justify-center w-full h-full">
-                    <Icon className="w-5 h-5 text-white drop-shadow-sm" strokeWidth={2} />
+                    <Icon 
+                      className="w-5 h-5 text-white drop-shadow-md transition-transform duration-300" 
+                      strokeWidth={2}
+                      style={{ transform: isHovered ? 'scale(1.2)' : 'scale(1)' }}
+                    />
                   </div>
                 </foreignObject>
-              </g>
+              </motion.g>
             );
           })}
         </svg>
         
-        {/* Center circle with user icon */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-white dark:bg-slate-800 shadow-xl border-4 border-white dark:border-slate-700 flex items-center justify-center overflow-hidden">
-          <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
-            <User className="w-8 h-8 md:w-10 md:h-10 text-primary/60" strokeWidth={1.5} />
-          </div>
-        </div>
-      </div>
+        {/* Center circle with Lumi avatar */}
+        <motion.div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-[88px] md:h-[88px] rounded-full bg-white dark:bg-slate-800 shadow-xl border-4 border-white dark:border-slate-600 flex items-center justify-center overflow-hidden z-20"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.6, type: "spring", stiffness: 200 }}
+        >
+          <motion.img 
+            src={lumiAvatar} 
+            alt="Lumi Avatar" 
+            className="w-full h-full object-cover"
+            animate={{ 
+              scale: [1, 1.05, 1]
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+          />
+        </motion.div>
+      </motion.div>
       
       {/* Tooltip */}
       <AnimatePresence>
         {hoveredPhase !== null && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            exit={{ opacity: 0, y: 10, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className={`absolute z-20 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-border/50 p-4 max-w-[200px] ${
-              tooltipPosition.x > 0 ? 'right-4' : 'left-4'
+            className={`absolute z-30 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-border/50 p-4 max-w-[220px] ${
+              tooltipPosition.x > 0 ? 'right-4 md:right-8' : 'left-4 md:left-8'
             } ${
-              tooltipPosition.y > 0 ? 'bottom-4' : 'top-4'
+              tooltipPosition.y > 0 ? 'bottom-4 md:bottom-8' : 'top-4 md:top-8'
             }`}
           >
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2.5 mb-2">
               <div 
-                className="w-3 h-3 rounded-full"
+                className="w-3.5 h-3.5 rounded-full shadow-sm"
                 style={{ backgroundColor: phases[hoveredPhase].color }}
               />
-              <span className="font-semibold text-foreground">{phases[hoveredPhase].name}</span>
+              <span className="font-bold text-foreground">{phases[hoveredPhase].name}</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {phases[hoveredPhase].description}

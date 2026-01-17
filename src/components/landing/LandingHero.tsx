@@ -48,14 +48,14 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Tenha clareza na{" "}
+              Tenha{" "}
               <span className="relative inline-block text-primary">
-                transição
+                clareza
                 <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
                   <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
                 </svg>
               </span>{" "}
-              de carreira
+              na transição de carreira
             </motion.h1>
 
             {/* Subheadline - What + How */}

@@ -81,22 +81,22 @@ export const LandingHero = () => {
 
             {/* Quick Win Promise - O que ganha em 5 minutos */}
             <motion.div
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-8 text-sm"
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.25 }}
             >
-              <div className="flex items-center gap-2 bg-accent/10 text-accent-foreground px-3 py-1.5 rounded-full">
-                <Clock className="h-4 w-4 text-primary" />
-                <span><strong>5 min</strong> para seu 1º diagnóstico</span>
+              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
+                <Clock className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium"><strong>5 min</strong> para seu 1º diagnóstico</span>
               </div>
-              <div className="flex items-center gap-2 bg-accent/10 text-accent-foreground px-3 py-1.5 rounded-full">
-                <Target className="h-4 w-4 text-primary" />
-                <span><strong>Plano</strong> de ação personalizado</span>
+              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
+                <Target className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium"><strong>Plano</strong> de ação personalizado</span>
               </div>
-              <div className="flex items-center gap-2 bg-accent/10 text-accent-foreground px-3 py-1.5 rounded-full">
-                <Sparkles className="h-4 w-4 text-primary" />
-                <span><strong>IA</strong> que te conhece</span>
+              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium"><strong>IA</strong> que te conhece</span>
               </div>
             </motion.div>
 

@@ -31,7 +31,6 @@ import Fase4Desenvolver from "./pages/Fase4Desenvolver";
 import Fase5Deslanchar from "./pages/Fase5Deslanchar";
 import Fase6Desfrutar from "./pages/Fase6Desfrutar";
 import Landing from "./pages/Landing";
-import Community from "./pages/Community";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -64,8 +63,7 @@ const App = () => (
                       <Route path="/admin/configuracoes" element={<AdminSettings />} />
                       <Route path="/admin/metricas" element={<AdminMetrics />} />
                       <Route path="/progresso" element={<Progress />} />
-                      <Route path="/comunidade" element={<Community />} />
-                      <Route path="/networking" element={<PositioningAcademy />} />
+                      <Route path="/comunidade" element={<PositioningAcademy />} />
                       <Route path="/fase" element={<Fase1Despertar />} />
                       <Route path="/fase/despertar" element={<Fase1Despertar />} />
                       <Route path="/fase/descobrir" element={<Fase2Descobrir />} />

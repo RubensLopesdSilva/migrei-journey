@@ -113,9 +113,13 @@ export const LandingCycle = () => {
             O Ciclo Migrei
           </h2>
           
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto mb-4">
             Uma jornada estruturada em <span className="font-semibold text-foreground">6 fases</span> que 
             transforma incerteza em clareza e ação.
+          </p>
+          
+          <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
+            Desenvolvido para profissionais em transição, o método guia você do <span className="text-foreground">autoconhecimento</span> à <span className="text-foreground">conquista de resultados reais</span>, com suporte contínuo em cada etapa.
           </p>
         </motion.div>
 

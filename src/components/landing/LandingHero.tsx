@@ -150,7 +150,7 @@ export const LandingHero = () => {
     }}>
         <div className="container mx-auto px-6 text-center">
           
-          <motion.button onClick={() => scrollToSection("resultados")} className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-muted-foreground/20 bg-background/50 backdrop-blur-sm hover:bg-muted/50 transition-colors" animate={{
+          <motion.button onClick={() => scrollToSection("como-funciona")} className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-muted-foreground/20 bg-background/50 backdrop-blur-sm hover:bg-muted/50 transition-colors" animate={{
           y: [0, 6, 0]
         }} transition={{
           duration: 2,

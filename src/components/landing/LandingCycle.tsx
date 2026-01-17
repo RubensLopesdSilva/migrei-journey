@@ -58,7 +58,7 @@ const phases = [
 
 const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; index: number; align?: "left" | "right" }) => (
   <motion.div
-    className={`flex items-center gap-4 ${align === "left" ? "flex-row-reverse text-right" : ""}`}
+    className={`flex items-center gap-4 ${align === "left" ? "flex-row-reverse text-right" : "flex-row text-left"}`}
     initial={{ opacity: 0, x: align === "left" ? -20 : 20 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true }}
@@ -78,9 +78,6 @@ const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; 
 );
 
 export const LandingCycle = () => {
-  const leftPhases = phases.slice(0, 3);
-  const rightPhases = phases.slice(3, 6);
-
   return (
     <section id="ciclo-migrei" className="py-16 md:py-24 bg-muted/30">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
@@ -113,11 +110,12 @@ export const LandingCycle = () => {
           </p>
         </motion.div>
 
-        {/* Desktop Layout - Phases on sides */}
+        {/* Desktop Layout - Phases on sides aligned with wheel positions */}
         <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] gap-8 xl:gap-12 items-center">
-          {/* Left Phases (1-3) */}
-          <div className="space-y-6">
-            {leftPhases.map((phase, index) => (
+          {/* Left Side - Phases that appear on the LEFT of the wheel (4, 5, 6) */}
+          {/* But shown in reverse order to match vertical position on wheel */}
+          <div className="space-y-8">
+            {[phases[5], phases[4], phases[3]].map((phase, index) => (
               <PhaseCard key={phase.number} phase={phase} index={index} align="left" />
             ))}
           </div>
@@ -133,10 +131,10 @@ export const LandingCycle = () => {
             <HeroMigreiWheel />
           </motion.div>
 
-          {/* Right Phases */}
-          <div className="space-y-6">
-            {rightPhases.map((phase, index) => (
-              <PhaseCard key={phase.number} phase={phase} index={index + 3} align="left" />
+          {/* Right Side - Phases that appear on the RIGHT of the wheel (1, 2, 3) */}
+          <div className="space-y-8">
+            {[phases[0], phases[1], phases[2]].map((phase, index) => (
+              <PhaseCard key={phase.number} phase={phase} index={index + 3} align="right" />
             ))}
           </div>
         </div>

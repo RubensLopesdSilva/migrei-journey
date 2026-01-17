@@ -34,8 +34,8 @@ export const LandingSolution = () => {
       }} viewport={{
         once: true
       }}>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3 flex-wrap">Como a
-te ajuda<img src={logoMigrei} alt="Migrei" className="h-16 md:h-20 lg:h-24 inline-block" /> te ajuda
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3 flex-wrap">
+            Como a <img src={logoMigrei} alt="Migrei" className="h-16 md:h-20 lg:h-24 inline-block" /> te ajuda
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Um método estruturado que te leva da confusão à clareza em 3 etapas.</p>
         </motion.div>

@@ -1,142 +1,107 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowRight, Play, Quote } from "lucide-react";
+import { ArrowRight, Quote } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const testimonials = [
   {
     quote: "Estava perdida depois de 15 anos na mesma empresa. O Migrei me ajudou a descobrir que minha experiência tinha valor em áreas que eu nem imaginava.",
     name: "Marina Santos",
-    role: "De RH Corporativo para Consultora de Carreira",
+    role: "De RH Corporativo → Consultora de Carreira",
     avatar: "M",
+    color: "bg-violet-500",
   },
   {
     quote: "Achava que precisava de uma faculdade nova. Na verdade, precisava de clareza. Em 3 meses já estava trabalhando na área que escolhi.",
     name: "Rafael Lima",
-    role: "De Engenheiro para Product Manager",
+    role: "De Engenheiro → Product Manager",
     avatar: "R",
+    color: "bg-blue-500",
   },
   {
     quote: "A comunidade fez toda diferença. Saber que outras pessoas passavam pelo mesmo me deu coragem para seguir em frente.",
     name: "Carla Mendes",
-    role: "De Advogada para UX Designer",
+    role: "De Advogada → UX Designer",
     avatar: "C",
-  },
-  {
-    quote: "O plano de 90 dias foi um divisor de águas. Finalmente consegui organizar meus próximos passos de forma clara.",
-    name: "João Pedro",
-    role: "De Analista para Tech Lead",
-    avatar: "J",
+    color: "bg-emerald-500",
   },
 ];
 
 export const LandingTestimonialsCTA = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
 
   return (
-    <section className="py-20 md:py-32 bg-slate-900 text-white overflow-hidden">
+    <section className="py-20 md:py-28 bg-gradient-to-b from-muted/30 to-background">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Testimonials */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              O que dizem sobre o Migrei
-            </h2>
-            <p className="text-slate-400 mb-8">
-              Tudo o que você precisa para fazer sua transição de carreira acontecer — do autoconhecimento à ação.
-            </p>
+        {/* Testimonials */}
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Histórias de quem já migrou
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            Profissionais reais que transformaram suas carreiras
+          </p>
+        </motion.div>
 
-            {/* Quote */}
-            <div className="relative mb-8">
-              <Quote className="h-12 w-12 text-primary/30 mb-4" />
-              <p className="text-lg text-slate-300 italic mb-6">
-                "{testimonials[0].quote}"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {testimonials.map((testimonial, index) => (
+            <motion.div
+              key={index}
+              className="bg-card rounded-2xl p-6 border border-border/50 hover:border-primary/30 transition-colors"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Quote className="h-8 w-8 text-primary/30 mb-4" />
+              <p className="text-foreground mb-6 leading-relaxed">
+                "{testimonial.quote}"
               </p>
-              <p className="text-white font-medium">_ {testimonials[0].name}</p>
-            </div>
-
-            {/* Avatar stack */}
-            <div className="flex items-center gap-4">
-              <div className="flex -space-x-3">
-                {testimonials.map((t, i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-primary/20 border-2 border-slate-900 flex items-center justify-center text-primary font-semibold text-sm"
-                  >
-                    {t.avatar}
-                  </div>
-                ))}
-              </div>
-              <button className="w-10 h-10 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center hover:bg-slate-700 transition-colors">
-                <Play className="h-4 w-4 text-white ml-0.5" />
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Right: CTA Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-700">
-              {/* Icon */}
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-primary/20 flex items-center justify-center">
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-white font-bold">M</span>
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full ${testimonial.color} flex items-center justify-center text-white font-semibold`}>
+                  {testimonial.avatar}
                 </div>
-              </div>
-
-              <h3 className="text-2xl font-bold text-center mb-2">
-                Comece sua jornada
-              </h3>
-              <p className="text-slate-400 text-center text-sm mb-6">
-                Crie sua conta grátis e descubra seu próximo passo
-              </p>
-
-              {/* Form */}
-              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-slate-400 mb-2">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="bg-slate-700/50 border-slate-600 text-white placeholder:text-slate-500 rounded-xl"
-                  />
+                  <p className="font-semibold text-foreground">{testimonial.name}</p>
+                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                 </div>
-
-                <Button
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl py-6 group"
-                  onClick={() => navigate("/auth?tab=signup")}
-                >
-                  Começar minha transição
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-
-                <p className="text-center text-sm text-slate-500">
-                  ou{" "}
-                  <button
-                    onClick={() => navigate("/auth?tab=login")}
-                    className="text-primary hover:underline"
-                  >
-                    Fazer login
-                  </button>
-                </p>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Final CTA */}
+        <motion.div
+          className="text-center bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-3xl p-10 md:p-16 border border-primary/20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h3 className="text-2xl md:text-4xl font-bold text-foreground mb-4">
+            Pronto para começar sua transição?
+          </h3>
+          <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto">
+            Junte-se a milhares de profissionais que estão construindo carreiras mais alinhadas com seus valores.
+          </p>
+          
+          <Button
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-6 text-lg rounded-full group shadow-lg shadow-primary/25"
+            onClick={() => navigate("/auth?tab=signup")}
+          >
+            Começar agora — é grátis
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+          
+          <p className="text-sm text-muted-foreground mt-4">
+            Sem cartão de crédito · Cancele quando quiser
+          </p>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Compass, ClipboardList, Rocket, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { Compass, ClipboardList, Rocket, CheckCircle2, ArrowRight, Sparkles, Target, Bot, Users, GraduationCap } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useState } from "react";
 import { ScrollToNextButton } from "./ScrollToNextButton";
+import type { LucideIcon } from "lucide-react";
 
 const steps = [
   {
@@ -40,11 +41,11 @@ const steps = [
   }
 ];
 
-const benefits = [
-  { text: "Método em 6 fases", icon: "🎯", description: "Jornada estruturada e progressiva" },
-  { text: "IA personalizada", icon: "🤖", description: "Assistente que entende seu momento" },
-  { text: "Networking prático", icon: "🤝", description: "Conexões que abrem portas" },
-  { text: "Mentores disponíveis", icon: "👨‍🏫", description: "Orientação de quem já passou por isso" }
+const benefits: { text: string; Icon: LucideIcon; description: string; color: string; bgColor: string }[] = [
+  { text: "Método em 6 fases", Icon: Target, description: "Jornada estruturada e progressiva", color: "text-rose-500", bgColor: "bg-rose-500/10" },
+  { text: "IA personalizada", Icon: Bot, description: "Assistente que entende seu momento", color: "text-violet-500", bgColor: "bg-violet-500/10" },
+  { text: "Networking prático", Icon: Users, description: "Conexões que abrem portas", color: "text-amber-500", bgColor: "bg-amber-500/10" },
+  { text: "Mentores disponíveis", Icon: GraduationCap, description: "Orientação de quem já passou por isso", color: "text-emerald-500", bgColor: "bg-emerald-500/10" }
 ];
 
 export const LandingSolution = () => {
@@ -245,11 +246,11 @@ export const LandingSolution = () => {
                       {/* Icon with animated background */}
                       <div className="relative mb-4">
                         <motion.div 
-                          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                          className={`w-14 h-14 rounded-2xl ${benefit.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
                           whileHover={{ rotate: [0, -5, 5, 0] }}
                           transition={{ duration: 0.5 }}
                         >
-                          <span className="text-3xl">{benefit.icon}</span>
+                          <benefit.Icon className={`w-7 h-7 ${benefit.color}`} />
                         </motion.div>
                         {/* Check badge */}
                         <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-lg">

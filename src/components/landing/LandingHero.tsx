@@ -72,7 +72,7 @@ export const LandingHero = () => {
             duration: 0.5,
             delay: 0.2
           }}>
-              O Ciclo Migrei guia sua transição de carreira em 6 fases claras.
+              O Ciclo Migrei te guia em 6 fases simples.
             </motion.p>
 
             {/* CTAs */}

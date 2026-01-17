@@ -38,7 +38,7 @@ export const LandingTestimonialsCTA = () => {
 
   return (
     <section className="py-20 md:py-32 bg-slate-900 text-white overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Testimonials */}
           <motion.div

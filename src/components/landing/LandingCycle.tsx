@@ -59,7 +59,7 @@ export const LandingCycle = () => {
 
   return (
     <section className="py-20 md:py-32 bg-muted/30">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}

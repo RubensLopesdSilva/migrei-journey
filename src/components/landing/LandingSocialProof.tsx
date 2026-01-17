@@ -9,7 +9,7 @@ const stats = [
 export const LandingSocialProof = () => {
   return (
     <section className="py-16 border-y border-border/50 bg-muted/30">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <motion.h2
           className="text-2xl md:text-3xl font-bold text-center text-foreground mb-12"
           initial={{ opacity: 0, y: 20 }}

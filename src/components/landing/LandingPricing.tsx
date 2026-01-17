@@ -65,7 +65,7 @@ export const LandingPricing = () => {
 
   return (
     <section id="planos" className="py-20 md:py-32 bg-gradient-to-b from-background to-muted/30">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}

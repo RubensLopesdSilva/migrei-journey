@@ -12,7 +12,7 @@ const benefits = [
 export const LandingBenefits = () => {
   return (
     <section id="beneficios" className="py-20 md:py-32 overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Content */}
           <motion.div

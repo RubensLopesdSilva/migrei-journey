@@ -57,7 +57,7 @@ const phases = [
 
 const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; index: number; align?: "left" | "right" }) => (
   <motion.div
-    className={`flex items-center gap-4 ${align === "right" ? "flex-row-reverse text-right" : ""}`}
+    className={`flex items-center gap-4 ${align === "left" ? "flex-row-reverse text-right" : ""}`}
     initial={{ opacity: 0, x: align === "left" ? -20 : 20 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true }}
@@ -114,10 +114,10 @@ export const LandingCycle = () => {
 
         {/* Desktop Layout - Phases on sides */}
         <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] gap-8 xl:gap-12 items-center">
-          {/* Left Phases */}
+          {/* Left Phases (1-3) */}
           <div className="space-y-6">
             {leftPhases.map((phase, index) => (
-              <PhaseCard key={phase.number} phase={phase} index={index} align="right" />
+              <PhaseCard key={phase.number} phase={phase} index={index} align="left" />
             ))}
           </div>
 

@@ -20,7 +20,7 @@ const steps = [
   {
     icon: ClipboardList,
     title: "Monte seu plano",
-    description: "Transforme decisões em um plano de 90 dias realista e executável.",
+    description: "Transforme decisões em um plano de 90 dias realista, organizado e executável.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
     hoverBgColor: "group-hover:bg-blue-500/20",

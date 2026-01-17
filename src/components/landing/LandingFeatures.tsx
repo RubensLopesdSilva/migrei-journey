@@ -1,57 +1,88 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus } from "lucide-react";
+import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import lumiAvatar from "@/assets/agents/lumi.png";
 
-// Mockup: Interactive Roda Migrei - Style matching reference image exactly
+// Phase data for the wheel
+const phases = [
+  { 
+    name: "Despertar", 
+    description: "Reconheça a necessidade de mudança e abrace o início da jornada.",
+    color: "#F59E0B", 
+    icon: Trophy 
+  },
+  { 
+    name: "Descobrir", 
+    description: "Explore suas habilidades, valores e o que te motiva de verdade.",
+    color: "#10B981", 
+    icon: Search 
+  },
+  { 
+    name: "Decidir", 
+    description: "Escolha um caminho com base em clareza, não em pressão.",
+    color: "#3B82F6", 
+    icon: Target 
+  },
+  { 
+    name: "Desenvolver", 
+    description: "Construa as competências necessárias para sua nova carreira.",
+    color: "#8B5CF6", 
+    icon: Settings 
+  },
+  { 
+    name: "Deslanchar", 
+    description: "Entre em ação e conquiste suas primeiras oportunidades.",
+    color: "#EC4899", 
+    icon: Rocket 
+  },
+  { 
+    name: "Desfrutar", 
+    description: "Celebre suas conquistas e prepare-se para o próximo ciclo.",
+    color: "#EF4444", 
+    icon: Star 
+  },
+];
+
+// Mockup: Interactive Roda Migrei with hover tooltips
 const CycleMockup = () => {
-  // Colors matching the reference wheel exactly (clockwise from top-right)
-  const segments = [
-    { color: "#F59E0B", icon: Lightbulb }, // Despertar - Amber
-    { color: "#10B981", icon: Search }, // Descobrir - Emerald
-    { color: "#3B82F6", icon: Target }, // Decidir - Blue
-    { color: "#8B5CF6", icon: Wrench }, // Desenvolver - Violet
-    { color: "#EC4899", icon: Rocket }, // Deslanchar - Pink
-    { color: "#EF4444", icon: Trophy }, // Desfrutar - Red
-  ];
+  const [hoveredPhase, setHoveredPhase] = useState<number | null>(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
   return (
-    <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl p-4 h-56 flex items-center justify-center relative overflow-hidden">
-      {/* Elliptical shadow under the wheel */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-36 h-6 bg-black/15 dark:bg-black/30 rounded-[100%] blur-md" />
-      
+    <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl p-8 min-h-[320px] flex items-center justify-center relative overflow-visible">
       {/* Main wheel container */}
-      <div className="relative w-48 h-48">
-        {/* SVG Wheel with white outer ring */}
-        <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-xl">
+      <div className="relative w-64 h-64 md:w-72 md:h-72">
+        {/* Elliptical shadow under the wheel */}
+        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-48 h-8 bg-black/10 dark:bg-black/20 rounded-[100%] blur-lg" />
+        
+        {/* SVG Wheel */}
+        <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-2xl">
           <defs>
-            {/* Define gradients for each segment */}
-            {segments.map((seg, i) => (
-              <linearGradient key={`grad-${i}`} id={`segment-gradient-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={seg.color} stopOpacity="1" />
-                <stop offset="100%" stopColor={seg.color} stopOpacity="0.9" />
+            {phases.map((phase, i) => (
+              <linearGradient key={`grad-${i}`} id={`segment-gradient-feature-${i}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor={phase.color} stopOpacity="1" />
+                <stop offset="100%" stopColor={phase.color} stopOpacity="0.85" />
               </linearGradient>
             ))}
-            {/* White ring filter */}
-            <filter id="ring-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.15"/>
+            <filter id="wheel-shadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.15"/>
             </filter>
           </defs>
           
-          {/* White outer ring background */}
-          <circle cx="100" cy="100" r="97" fill="white" filter="url(#ring-shadow)" className="dark:fill-slate-700" />
+          {/* White outer ring */}
+          <circle cx="100" cy="100" r="98" fill="white" filter="url(#wheel-shadow)" className="dark:fill-slate-700" />
           
-          {segments.map((segment, index) => {
+          {phases.map((phase, index) => {
             const numSegments = 6;
             const segmentAngle = 360 / numSegments;
-            const gapAngle = 4; // Gap between segments
+            const gapAngle = 5;
             const startAngle = index * segmentAngle - 90 + gapAngle / 2;
             const endAngle = (index + 1) * segmentAngle - 90 - gapAngle / 2;
             
             const outerRadius = 92;
-            const innerRadius = 44;
+            const innerRadius = 42;
             
             const startRad = (startAngle * Math.PI) / 180;
             const endRad = (endAngle * Math.PI) / 180;
@@ -65,39 +96,55 @@ const CycleMockup = () => {
             const x4 = 100 + innerRadius * Math.cos(startRad);
             const y4 = 100 + innerRadius * Math.sin(startRad);
             
-            // Icon position (middle of segment)
             const midAngle = (startAngle + endAngle) / 2;
             const midRad = (midAngle * Math.PI) / 180;
             const iconRadius = (outerRadius + innerRadius) / 2;
             const iconX = 100 + iconRadius * Math.cos(midRad);
             const iconY = 100 + iconRadius * Math.sin(midRad);
             
-            const Icon = segment.icon;
+            const Icon = phase.icon;
+            const isHovered = hoveredPhase === index;
             
             return (
-              <g key={index}>
-                {/* Segment path */}
+              <g 
+                key={index}
+                onMouseEnter={(e) => {
+                  setHoveredPhase(index);
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setTooltipPosition({ 
+                    x: iconX > 100 ? 1 : -1, 
+                    y: iconY > 100 ? 1 : -1 
+                  });
+                }}
+                onMouseLeave={() => setHoveredPhase(null)}
+                className="cursor-pointer"
+              >
                 <path
                   d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`}
-                  fill={`url(#segment-gradient-${index})`}
-                  className="transition-all duration-300 hover:opacity-90"
+                  fill={`url(#segment-gradient-feature-${index})`}
+                  className="transition-all duration-300"
+                  style={{
+                    transform: isHovered ? `scale(1.05)` : 'scale(1)',
+                    transformOrigin: `${iconX}px ${iconY}px`,
+                    filter: isHovered ? 'brightness(1.1)' : 'none'
+                  }}
                 />
-                {/* Semi-transparent circle behind icon */}
                 <circle
                   cx={iconX}
                   cy={iconY}
-                  r="12"
-                  fill="rgba(255,255,255,0.3)"
+                  r="14"
+                  fill="rgba(255,255,255,0.35)"
+                  className="transition-all duration-300"
+                  style={{ opacity: isHovered ? 0.5 : 0.35 }}
                 />
-                {/* Icon */}
                 <foreignObject
-                  x={iconX - 8}
-                  y={iconY - 8}
-                  width="16"
-                  height="16"
+                  x={iconX - 10}
+                  y={iconY - 10}
+                  width="20"
+                  height="20"
                 >
                   <div className="flex items-center justify-center w-full h-full">
-                    <Icon className="w-4 h-4 text-white" strokeWidth={2.5} />
+                    <Icon className="w-5 h-5 text-white drop-shadow-sm" strokeWidth={2} />
                   </div>
                 </foreignObject>
               </g>
@@ -105,15 +152,41 @@ const CycleMockup = () => {
           })}
         </svg>
         
-        {/* Center avatar circle with actual image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-white dark:bg-slate-800 shadow-lg border-4 border-white dark:border-slate-700 flex items-center justify-center overflow-hidden">
-          <img 
-            src={lumiAvatar} 
-            alt="Avatar" 
-            className="w-full h-full object-cover"
-          />
+        {/* Center circle with user icon */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-white dark:bg-slate-800 shadow-xl border-4 border-white dark:border-slate-700 flex items-center justify-center overflow-hidden">
+          <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+            <User className="w-8 h-8 md:w-10 md:h-10 text-primary/60" strokeWidth={1.5} />
+          </div>
         </div>
       </div>
+      
+      {/* Tooltip */}
+      <AnimatePresence>
+        {hoveredPhase !== null && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className={`absolute z-20 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-border/50 p-4 max-w-[200px] ${
+              tooltipPosition.x > 0 ? 'right-4' : 'left-4'
+            } ${
+              tooltipPosition.y > 0 ? 'bottom-4' : 'top-4'
+            }`}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <div 
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: phases[hoveredPhase].color }}
+              />
+              <span className="font-semibold text-foreground">{phases[hoveredPhase].name}</span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {phases[hoveredPhase].description}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

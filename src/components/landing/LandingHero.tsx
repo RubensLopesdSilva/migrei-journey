@@ -96,12 +96,12 @@ export const LandingHero = () => {
 
           {/* Right: Migrei Wheel */}
           <motion.div 
-            className="flex justify-center lg:justify-end order-1 lg:order-2 relative lg:-mr-16 xl:-mr-24"
+            className="flex justify-center lg:justify-center order-1 lg:order-2"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="relative scale-90 lg:scale-100 xl:scale-105">
+            <div className="relative scale-75 md:scale-80 lg:scale-90 xl:scale-100">
               <HeroMigreiWheel />
             </div>
           </motion.div>

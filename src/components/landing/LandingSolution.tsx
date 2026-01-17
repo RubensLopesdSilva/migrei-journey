@@ -79,7 +79,7 @@ export const LandingSolution = () => {
           </motion.div>
 
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 flex items-center justify-center gap-3 flex-wrap">
-            Como a <img src={logoMigrei} alt="Migrei" className="h-14 md:h-18 lg:h-20 inline-block" /> te ajuda
+            Como a <img src={logoMigrei} alt="Migrei" className="h-16 md:h-20 lg:h-24 inline-block" /> te ajuda
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Da <span className="text-foreground font-medium">confusão</span> à <span className="text-primary font-medium">clareza</span> em 3 etapas simples.

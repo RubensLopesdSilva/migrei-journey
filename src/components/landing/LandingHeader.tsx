@@ -51,10 +51,16 @@ export const LandingHeader = () => {
               Como funciona
             </button>
             <button
-              onClick={() => scrollToSection("beneficios")}
+              onClick={() => scrollToSection("ciclo-migrei")}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              Benefícios
+              Método
+            </button>
+            <button
+              onClick={() => scrollToSection("recursos")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Recursos
             </button>
             <button
               onClick={() => scrollToSection("planos")}
@@ -111,10 +117,16 @@ export const LandingHeader = () => {
                 Como funciona
               </button>
               <button
-                onClick={() => scrollToSection("beneficios")}
+                onClick={() => scrollToSection("ciclo-migrei")}
                 className="text-left text-muted-foreground hover:text-foreground"
               >
-                Benefícios
+                Método
+              </button>
+              <button
+                onClick={() => scrollToSection("recursos")}
+                className="text-left text-muted-foreground hover:text-foreground"
+              >
+                Recursos
               </button>
               <button
                 onClick={() => scrollToSection("planos")}

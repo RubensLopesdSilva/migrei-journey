@@ -388,7 +388,7 @@ const features = [{
   accentColor: "text-violet-500"
 }, {
   icon: Users,
-  title: "Comunidade & Mentoria",
+  title: "Mentoria Especializada",
   subtitle: "Você não está sozinho nessa",
   description: "Conecte-se com milhares de profissionais em transição e receba orientação de mentores que já trilharam esse caminho. Troque experiências, celebre vitórias juntos.",
   highlights: ["Mentores especializados disponíveis", "Comunidade ativa e acolhedora", "Eventos e encontros exclusivos"],

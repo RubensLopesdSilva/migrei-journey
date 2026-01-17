@@ -54,264 +54,288 @@ const CycleMockup = () => {
   );
 };
 
-// Mockup: Plano de 90 Dias
+// Mockup: Plano de 90 Dias - Realistic design
 const Plan90Mockup = () => {
   const months = [
-    { name: "Mês 1", theme: "Fundação", progress: 85, tasks: 4, completed: 3 },
-    { name: "Mês 2", theme: "Construção", progress: 40, tasks: 4, completed: 2 },
-    { name: "Mês 3", theme: "Lançamento", progress: 0, tasks: 4, completed: 0 },
+    { name: "Mês 1", theme: "Fundação", progress: 85, tasks: 4, completed: 3, active: true },
+    { name: "Mês 2", theme: "Construção", progress: 40, tasks: 4, completed: 2, active: false },
+    { name: "Mês 3", theme: "Lançamento", progress: 0, tasks: 4, completed: 0, locked: true },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 rounded-xl p-5 h-56 flex flex-col justify-between relative overflow-hidden">
+    <motion.div 
+      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Target className="h-3.5 w-3.5 text-primary" />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+            <Target className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="text-xs font-semibold text-foreground">Plano de Transição</p>
-            <p className="text-[10px] text-muted-foreground">42 dias restantes</p>
+            <p className="text-sm font-semibold text-foreground">Plano de Transição</p>
+            <p className="text-xs text-muted-foreground">42 dias restantes</p>
           </div>
         </div>
-        <div className="bg-primary/10 text-primary text-[10px] font-semibold px-2 py-0.5 rounded-full">
+        <div className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
           Semana 6
         </div>
       </div>
 
       {/* Monthly progress cards */}
-      <div className="flex gap-2 mt-3">
-        {months.map((month, index) => (
-          <div 
-            key={month.name}
-            className={`flex-1 bg-white dark:bg-slate-800 rounded-lg p-2.5 border transition-all ${
-              index === 0 
-                ? "border-primary/30 shadow-sm" 
-                : index === 1 
-                  ? "border-blue-200 dark:border-blue-800/50"
-                  : "border-slate-200 dark:border-slate-700 opacity-60"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-semibold text-foreground">{month.name}</span>
-              {index === 0 && <Check className="h-3 w-3 text-green-500" />}
-              {index === 2 && <Lock className="h-3 w-3 text-muted-foreground" />}
-            </div>
-            <p className="text-[9px] text-muted-foreground mb-2">{month.theme}</p>
-            
-            {/* Progress bar */}
-            <div className="h-1 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-primary rounded-full transition-all"
-                style={{ width: `${month.progress}%` }}
-              />
-            </div>
-            
-            <div className="flex items-center justify-between mt-1.5">
-              <span className="text-[8px] text-muted-foreground">{month.completed}/{month.tasks} tarefas</span>
-              <span className="text-[8px] font-medium text-primary">{month.progress}%</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Current task */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-2.5 border border-primary/20 mt-2">
-        <div className="flex items-center gap-2">
-          <div className="h-5 w-5 rounded-md bg-primary/10 flex items-center justify-center">
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-medium text-foreground truncate">Finalizar análise de competências</p>
-            <p className="text-[8px] text-muted-foreground">Prazo: Hoje • +50 XP</p>
-          </div>
-          <ArrowRight className="h-3 w-3 text-primary" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Mockup: Networking Prático
-const NetworkingMockup = () => {
-  const todayActions = [
-    { type: 'comment', target: 'Post sobre liderança', completed: true },
-    { type: 'connect', target: 'Maria Santos - RH', completed: true },
-    { type: 'message', target: 'Carlos - Mentor', completed: false },
-  ];
-
-  const suggestedActions = [
-    { type: 'comment', description: 'Comente em um post do seu setor' },
-    { type: 'connect', description: 'Conecte-se com alguém da área' },
-  ];
-
-  const getActionIcon = (type: string) => {
-    switch (type) {
-      case 'comment': return <MessageCircle className="h-3 w-3" />;
-      case 'connect': return <Users className="h-3 w-3" />;
-      case 'message': return <ArrowRight className="h-3 w-3" />;
-      default: return null;
-    }
-  };
-
-  const getActionColor = (type: string) => {
-    switch (type) {
-      case 'comment': return 'bg-blue-500/10 text-blue-500';
-      case 'connect': return 'bg-green-500/10 text-green-500';
-      case 'message': return 'bg-purple-500/10 text-purple-500';
-      default: return 'bg-muted';
-    }
-  };
-
-  const completedCount = todayActions.filter(a => a.completed).length;
-  const progressPercent = (completedCount / todayActions.length) * 100;
-
-  return (
-    <div className="bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30 rounded-xl p-5 h-56 flex flex-col justify-between relative overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Users className="h-3.5 w-3.5 text-primary" />
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-foreground">Rotina de Networking</p>
-            <p className="text-[10px] text-muted-foreground">10 min/dia</p>
-          </div>
-        </div>
-        <div className="bg-primary/10 text-primary text-[10px] font-semibold px-2 py-0.5 rounded-full">
-          +15 XP
-        </div>
-      </div>
-
-      {/* Today's Progress */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-2.5 mt-2">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[10px] font-medium text-foreground">Progresso de Hoje</span>
-          <span className="text-[9px] text-muted-foreground">{completedCount}/{todayActions.length} ações</span>
-        </div>
-        <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-primary to-violet-500 rounded-full transition-all"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Today's Actions */}
-      <div className="space-y-1.5 mt-2">
-        {todayActions.map((action, index) => (
-          <div 
-            key={index}
-            className={`flex items-center gap-2 p-2 rounded-lg transition-all ${
-              action.completed ? 'bg-green-500/10' : 'bg-white/80 dark:bg-slate-800/80'
-            }`}
-          >
-            <div className={`h-4 w-4 rounded-full flex items-center justify-center ${
-              action.completed ? 'bg-green-500 text-white' : 'border-2 border-muted-foreground/30'
-            }`}>
-              {action.completed && <Check className="h-2.5 w-2.5" />}
-            </div>
-            <div className={`h-5 w-5 rounded flex items-center justify-center ${getActionColor(action.type)}`}>
-              {getActionIcon(action.type)}
-            </div>
-            <span className={`text-[10px] flex-1 truncate ${action.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-              {action.target}
-            </span>
-          </div>
-        ))}
-      </div>
-
-      {/* Suggested Action */}
-      <div className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-lg p-2 mt-1.5 border border-dashed border-primary/30">
-        <div className="flex items-center gap-2">
-          <div className="h-5 w-5 rounded bg-amber-500/10 flex items-center justify-center">
-            <Star className="h-3 w-3 text-amber-500" />
-          </div>
-          <span className="text-[9px] text-muted-foreground flex-1">Sugestão: {suggestedActions[0].description}</span>
-          <div className="h-4 w-4 rounded bg-primary/10 flex items-center justify-center">
-            <Plus className="h-2.5 w-2.5 text-primary" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Mockup: Comunidade & Mentoria
-const CommunityMockup = () => {
-  const mentors = [
-    { name: "Ana Paula", title: "Ex-Head de RH", avatar: "🧑‍💼", rating: 5 },
-    { name: "Carlos", title: "Career Coach", avatar: "👨‍💻", rating: 5 },
-  ];
-
-  return (
-    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 rounded-xl p-5 h-56 flex flex-col justify-between relative overflow-hidden">
-      {/* Header with community stats */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {/* Avatar stack */}
-          <div className="flex -space-x-2">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-800">👩</div>
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-800">👨</div>
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-800">👩‍💻</div>
-          </div>
-          <div>
-            <p className="text-[10px] font-semibold text-foreground">+2.5k membros</p>
-            <p className="text-[8px] text-muted-foreground">ativos esta semana</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1 bg-green-500/10 text-green-600 dark:text-green-400 text-[9px] font-medium px-2 py-1 rounded-full">
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-          Online agora
-        </div>
-      </div>
-
-      {/* Mentor cards */}
-      <div className="space-y-2 mt-3">
-        <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wide">Mentores disponíveis</p>
-        <div className="grid grid-cols-2 gap-2">
-          {mentors.map((mentor) => (
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 mb-4">
+        <div className="grid grid-cols-3 gap-3">
+          {months.map((month, index) => (
             <div 
-              key={mentor.name}
-              className="bg-white dark:bg-slate-800 rounded-lg p-2.5 border border-slate-200 dark:border-slate-700 hover:border-primary/30 transition-all cursor-pointer group"
+              key={month.name}
+              className={`bg-white dark:bg-slate-800 rounded-lg p-3 border-2 transition-all ${
+                month.active 
+                  ? "border-primary/40 shadow-sm" 
+                  : month.locked
+                    ? "border-slate-100 dark:border-slate-700 opacity-50"
+                    : "border-slate-200 dark:border-slate-700"
+              }`}
             >
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-sm">
-                  {mentor.avatar}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-foreground truncate">{mentor.name}</p>
-                  <p className="text-[8px] text-muted-foreground truncate">{mentor.title}</p>
-                </div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-foreground">{month.name}</span>
+                {month.active && <Check className="h-4 w-4 text-green-500" />}
+                {month.locked && <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
               </div>
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex items-center gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-2 w-2 fill-amber-400 text-amber-400" />
-                  ))}
-                </div>
-                <Calendar className="h-3 w-3 text-primary group-hover:scale-110 transition-transform" />
+              <p className="text-[11px] text-muted-foreground mb-3">{month.theme}</p>
+              
+              {/* Progress bar */}
+              <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden mb-2">
+                <motion.div 
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${month.progress}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: index * 0.2 }}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground">{month.completed}/{month.tasks} tarefas</span>
+                <span className="text-[10px] font-semibold text-primary">{month.progress}%</span>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Community activity */}
-      <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-lg p-2.5 border border-slate-200 dark:border-slate-700 mt-2">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="h-4 w-4 text-primary" />
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] text-foreground truncate">
-              <span className="font-medium">Fernanda</span> compartilhou uma vitória na Fase 3
-            </p>
+      {/* Current task */}
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
           </div>
-          <span className="text-[8px] text-muted-foreground">2min</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground">Finalizar análise de competências</p>
+            <p className="text-xs text-muted-foreground">Prazo: Hoje • +50 XP</p>
+          </div>
+          <ArrowRight className="h-4 w-4 text-primary" />
         </div>
       </div>
-    </div>
+    </motion.div>
+  );
+};
+
+// Mockup: Networking Prático - Realistic design
+const NetworkingMockup = () => {
+  const todayActions = [
+    { type: 'comment', target: 'Post sobre liderança', completed: true, platform: 'LinkedIn' },
+    { type: 'connect', target: 'Maria Santos - RH', completed: true, platform: 'LinkedIn' },
+    { type: 'message', target: 'Carlos - Mentor', completed: false, platform: 'WhatsApp' },
+  ];
+
+  const weeklyStats = { connections: 12, messages: 8, posts: 3 };
+  const completedCount = todayActions.filter(a => a.completed).length;
+
+  return (
+    <motion.div 
+      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-violet-500/10 flex items-center justify-center">
+            <Users className="h-5 w-5 text-violet-500" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">Rotina de Networking</p>
+            <p className="text-xs text-muted-foreground">10 min/dia • 5 dias seguidos 🔥</p>
+          </div>
+        </div>
+        <div className="bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
+          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+          Ativo
+        </div>
+      </div>
+
+      {/* Weekly Stats */}
+      <div className="grid grid-cols-3 gap-3 mb-5">
+        <div className="bg-blue-50 dark:bg-blue-950/30 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{weeklyStats.connections}</p>
+          <p className="text-[10px] text-muted-foreground">Conexões</p>
+        </div>
+        <div className="bg-purple-50 dark:bg-purple-950/30 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{weeklyStats.messages}</p>
+          <p className="text-[10px] text-muted-foreground">Mensagens</p>
+        </div>
+        <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{weeklyStats.posts}</p>
+          <p className="text-[10px] text-muted-foreground">Interações</p>
+        </div>
+      </div>
+
+      {/* Today's Actions */}
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-semibold text-foreground">Ações de Hoje</span>
+          <span className="text-xs text-muted-foreground">{completedCount}/{todayActions.length}</span>
+        </div>
+        
+        <div className="space-y-2">
+          {todayActions.map((action, index) => (
+            <motion.div 
+              key={index}
+              className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                action.completed ? 'bg-green-50 dark:bg-green-950/20' : 'bg-white dark:bg-slate-800'
+              }`}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              <div className={`h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+                action.completed ? 'bg-green-500 text-white' : 'border-2 border-slate-300 dark:border-slate-600'
+              }`}>
+                {action.completed && <Check className="h-3 w-3" />}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={`text-xs font-medium ${action.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                  {action.target}
+                </p>
+                <p className="text-[10px] text-muted-foreground">{action.platform}</p>
+              </div>
+              {!action.completed && (
+                <ArrowRight className="h-4 w-4 text-primary" />
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// Mockup: Comunidade & Mentoria - Realistic design
+const CommunityMockup = () => {
+  const mentors = [
+    { name: "Ana Paula", title: "Ex-Head de RH", specialty: "Transição de carreira", rating: 5, sessions: 48 },
+    { name: "Carlos M.", title: "Career Coach", specialty: "Tech & Startups", rating: 5, sessions: 32 },
+  ];
+
+  const nextSession = {
+    mentor: "Ana Paula",
+    date: "Qui, 18 Jan",
+    time: "14:00",
+    topic: "Preparação para entrevista"
+  };
+
+  return (
+    <motion.div 
+      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+            <MessageCircle className="h-5 w-5 text-emerald-500" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground">Mentoria & Comunidade</p>
+            <p className="text-xs text-muted-foreground">+2.5k membros ativos</p>
+          </div>
+        </div>
+        <div className="flex -space-x-2">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">👩</div>
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">👨</div>
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">+</div>
+        </div>
+      </div>
+
+      {/* Next Session Card */}
+      <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl p-4 mb-4 border border-primary/20">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-semibold text-primary uppercase tracking-wide">Próxima Sessão</span>
+          <div className="flex items-center gap-1 text-xs text-primary">
+            <Calendar className="h-3.5 w-3.5" />
+            {nextSession.date}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-lg shadow-sm">
+            👩‍💼
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-foreground">{nextSession.mentor}</p>
+            <p className="text-xs text-muted-foreground">{nextSession.topic}</p>
+          </div>
+          <div className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-lg">
+            {nextSession.time}
+          </div>
+        </div>
+      </div>
+
+      {/* Mentors Available */}
+      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
+        <p className="text-xs font-semibold text-foreground mb-3">Mentores Disponíveis</p>
+        <div className="space-y-3">
+          {mentors.map((mentor, index) => (
+            <motion.div 
+              key={mentor.name}
+              className="bg-white dark:bg-slate-800 rounded-lg p-3 border border-slate-200 dark:border-slate-700 flex items-center gap-3"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-lg">
+                {index === 0 ? '👩‍💼' : '👨‍💻'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-xs font-semibold text-foreground">{mentor.name}</p>
+                  <div className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-[10px] text-muted-foreground">{mentor.title} • {mentor.sessions} sessões</p>
+              </div>
+              <Button variant="outline" size="sm" className="h-7 text-[10px] px-2 rounded-lg">
+                <Calendar className="h-3 w-3 mr-1" />
+                Agendar
+              </Button>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
   );
 };
 

@@ -27,7 +27,7 @@ const ratings = [
 export const LandingSolution = () => {
   return (
     <section id="como-funciona" className="py-20 md:py-28 bg-background">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Column: Title + Ratings */}
           <motion.div

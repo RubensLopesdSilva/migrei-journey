@@ -37,7 +37,7 @@ export const LandingHeader = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <img src={logoMigrei} alt="Migrei" className="h-10 md:h-14" />

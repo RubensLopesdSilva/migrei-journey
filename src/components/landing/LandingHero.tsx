@@ -20,7 +20,7 @@ export const LandingHero = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3" />
       <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-primary/10 to-transparent" />
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <div className="text-left order-2 lg:order-1">

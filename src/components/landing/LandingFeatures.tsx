@@ -415,7 +415,7 @@ const FeatureSection = ({
       {/* Background gradient */}
       <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-50`} />
       
-      <div className="container mx-auto px-4 relative">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 relative">
         <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${isReversed ? 'lg:grid-flow-dense' : ''}`}>
           {/* Content */}
           <motion.div

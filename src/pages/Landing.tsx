@@ -1,5 +1,4 @@
 import { LandingHero } from "@/components/landing/LandingHero";
-import { LandingSocialProof } from "@/components/landing/LandingSocialProof";
 import { LandingSolution } from "@/components/landing/LandingSolution";
 import { LandingFeatures } from "@/components/landing/LandingFeatures";
 
@@ -17,7 +16,6 @@ const Landing = () => {
       
       <main>
         <LandingHero />
-        <LandingSocialProof />
         <LandingSolution />
         <LandingFeatures />
         <LandingCycle />

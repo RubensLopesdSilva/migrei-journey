@@ -1,8 +1,5 @@
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Compass, ClipboardList, Rocket, Star, ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Compass, ClipboardList, Rocket, Star } from "lucide-react";
 
 const features = [
   {
@@ -23,78 +20,74 @@ const features = [
 ];
 
 const ratings = [
-  { value: "4.9", platform: "G2 Reviews" },
-  { value: "4.8", platform: "Trustpilot" },
+  { value: "4.9", label: "/ 5 rating", platform: "G2 Reviews", stars: 5 },
+  { value: "4.8", label: "/ 5 rating", platform: "Trustpilot", stars: 5 },
 ];
 
 export const LandingSolution = () => {
-  const navigate = useNavigate();
-
   return (
-    <section id="como-funciona" className="py-20 md:py-32">
+    <section id="como-funciona" className="py-20 md:py-28 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left Column: Title + Ratings */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Como apoiamos profissionais em todo o Brasil
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 max-w-lg">
-                O Migrei se tornou referência em transição de carreira, oferecendo um método estruturado que combina autoconhecimento, estratégia e ação.
-              </p>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
+              Como apoiamos profissionais em todo o Brasil
+            </h2>
+            <p className="text-lg text-muted-foreground mb-10 max-w-md leading-relaxed">
+              O Migrei se tornou referência em transição de carreira, oferecendo um método estruturado que combina autoconhecimento, estratégia e ação.
+            </p>
 
             {/* Ratings */}
-            <motion.div
-              className="flex gap-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
+            <div className="flex gap-10">
               {ratings.map((rating, index) => (
-                <div key={index}>
-                  <div className="flex items-center gap-1 mb-1">
-                    {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                >
+                  <div className="flex items-center gap-0.5 mb-2">
+                    {[...Array(rating.stars)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`h-4 w-4 ${i < Math.floor(parseFloat(rating.value)) ? 'text-yellow-500 fill-yellow-500' : 'text-muted-foreground/30'}`}
+                        className="h-5 w-5 text-amber-400 fill-amber-400"
                       />
                     ))}
                   </div>
-                  <p className="text-sm">
-                    <span className="font-semibold text-foreground">{rating.value}</span>
-                    <span className="text-muted-foreground"> / 5 rating</span>
+                  <p className="text-base">
+                    <span className="font-bold text-foreground text-lg">{rating.value}</span>
+                    <span className="text-muted-foreground ml-1">{rating.label}</span>
                   </p>
-                  <p className="text-xs text-muted-foreground">{rating.platform}</p>
-                </div>
+                  <p className="text-sm text-muted-foreground font-medium">{rating.platform}</p>
+                </motion.div>
               ))}
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
           {/* Right Column: Features */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                className="flex items-start gap-4"
-                initial={{ opacity: 0, x: 20 }}
+                className="flex items-start gap-5"
+                initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: 0.1 + index * 0.15 }}
               >
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <feature.icon className="h-6 w-6 text-primary" />
+                <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-sm">
+                  <feature.icon className="h-7 w-7 text-primary" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
-                  <p className="text-muted-foreground text-sm">{feature.description}</p>
+                <div className="pt-1">
+                  <h3 className="font-bold text-foreground text-lg mb-2">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
                 </div>
               </motion.div>
             ))}

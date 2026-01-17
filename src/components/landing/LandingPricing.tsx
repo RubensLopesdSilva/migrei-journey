@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Star, Users, Calendar, Lock } from "lucide-react";
+import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const plans = [
@@ -36,7 +35,6 @@ const plans = [
     cta: "Assinar Essencial",
     popular: true,
     highlighted: true,
-    savings: "Economize R$100/ano",
   },
   {
     name: "Premium",
@@ -60,7 +58,6 @@ const plans = [
 ];
 
 export const LandingPricing = () => {
-  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("yearly");
   const navigate = useNavigate();
 
   return (
@@ -76,33 +73,9 @@ export const LandingPricing = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
             Escolha o plano ideal para você
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-muted-foreground">
             Escolha o plano que funciona melhor para você. Entre em contato se precisar de ajuda.
           </p>
-
-          {/* Billing Toggle */}
-          <div className="inline-flex items-center bg-muted rounded-full p-1">
-            <button
-              onClick={() => setBillingPeriod("monthly")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                billingPeriod === "monthly"
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Mensal
-            </button>
-            <button
-              onClick={() => setBillingPeriod("yearly")}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                billingPeriod === "yearly"
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              Anual
-            </button>
-          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
@@ -135,9 +108,7 @@ export const LandingPricing = () => {
                   <div className="flex items-baseline justify-center gap-1">
                     <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>R$</span>
                     <span className={`text-5xl font-bold ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground'}`}>
-                      {billingPeriod === "yearly" && plan.price !== "0" 
-                        ? Math.round(parseInt(plan.price) * 0.8) 
-                        : plan.price}
+                      {plan.price}
                     </span>
                     {plan.period && (
                       <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
@@ -145,13 +116,6 @@ export const LandingPricing = () => {
                       </span>
                     )}
                   </div>
-
-                  {/* Savings Badge */}
-                  {plan.savings && billingPeriod === "yearly" && (
-                    <span className="inline-block mt-3 px-3 py-1 bg-primary-foreground/20 text-primary-foreground text-xs font-medium rounded-full">
-                      {plan.savings}
-                    </span>
-                  )}
                 </div>
 
                 {/* Features */}

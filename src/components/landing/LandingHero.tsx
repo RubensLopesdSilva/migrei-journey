@@ -65,7 +65,7 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              O Ciclo Migrei é uma metodologia em 6 fases que te guia do "não sei o que fazer" até sua nova carreira.
+              O Ciclo Migrei guia sua transição de carreira em 6 fases claras
             </motion.p>
 
             {/* CTAs */}

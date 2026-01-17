@@ -37,7 +37,7 @@ export const LandingHero = () => {
             >
               <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               <span className="text-sm font-medium text-primary">
-                Metodologia validada por +2.000 profissionais
+                51% dos profissionais consideram fazer transição de carreira
               </span>
             </motion.div>
 

@@ -119,11 +119,11 @@ export const LandingCycle = () => {
           </p>
         </motion.div>
 
-        {/* Desktop Layout - Phases 1-3 left, 4-6 right for natural reading order */}
+        {/* Desktop Layout - Phases aligned visually with wheel positions */}
         <div className="hidden lg:grid lg:grid-cols-[1fr_auto_1fr] gap-8 xl:gap-12 items-center">
-          {/* Left Side - Phases 1, 2, 3 */}
+          {/* Left Side - Phases on left of wheel (6, 5, 4 top to bottom) */}
           <div className="space-y-8">
-            {[phases[0], phases[1], phases[2]].map((phase, index) => (
+            {[phases[5], phases[4], phases[3]].map((phase, index) => (
               <PhaseCard key={phase.number} phase={phase} index={index} align="left" />
             ))}
           </div>
@@ -139,9 +139,9 @@ export const LandingCycle = () => {
             <HeroMigreiWheel />
           </motion.div>
 
-          {/* Right Side - Phases 4, 5, 6 */}
+          {/* Right Side - Phases on right of wheel (1, 2, 3 top to bottom) */}
           <div className="space-y-8">
-            {[phases[3], phases[4], phases[5]].map((phase, index) => (
+            {[phases[0], phases[1], phases[2]].map((phase, index) => (
               <PhaseCard key={phase.number} phase={phase} index={index + 3} align="right" />
             ))}
           </div>

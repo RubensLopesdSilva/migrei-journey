@@ -75,7 +75,7 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              A plataforma digital que te guia na migração para uma nova carreira — com diagnóstico e plano personalizado.
+              O Migrei é uma solução digital que te orienta em uma jornada de mudança de carreira — com diagnóstico e plano personalizado.
             </motion.p>
 
             {/* Resultados concretos */}

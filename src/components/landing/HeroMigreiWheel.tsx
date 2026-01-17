@@ -392,32 +392,32 @@ export const HeroMigreiWheel = () => {
           </foreignObject>
         </motion.svg>
 
-        {/* Tooltip elegante no hover */}
+        {/* Tooltip elegante - posicionado à direita inferior */}
         <AnimatePresence>
           {currentActivePhase && (
             <motion.div 
-              className="absolute left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-5 py-3 shadow-xl z-20 min-w-[240px]"
-              style={{ bottom: '-24px' }}
+              className="absolute bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-4 py-2.5 shadow-xl z-20 w-[200px]"
+              style={{ bottom: '20px', right: '-60px' }}
               key={currentActivePhase}
-              initial={{ opacity: 0, y: -8, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.95 }}
+              initial={{ opacity: 0, x: -8, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -8, scale: 0.95 }}
               transition={{ duration: 0.2 }}
             >
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2">
                 <motion.div 
-                  className="w-2.5 h-2.5 rounded-full"
+                  className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ 
                     backgroundColor: phases.find(p => p.id === currentActivePhase)?.bgColor 
                   }}
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
-                <span className="font-semibold text-foreground text-sm">
+                <span className="font-semibold text-foreground text-xs">
                   {phases.find(p => p.id === currentActivePhase)?.name}
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+              <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
                 {phases.find(p => p.id === currentActivePhase)?.description}
               </p>
             </motion.div>

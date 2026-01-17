@@ -506,7 +506,7 @@ const FeatureSection = ({
               {/* Mockup container - skip for cycle (index 0) */}
               {index === 0 ? <div className="relative">
                   {feature.illustration}
-                </div> : <div className="relative bg-card rounded-2xl shadow-2xl border border-border/50 p-6 transform hover:scale-[1.02] transition-transform duration-500">
+                </div> : <div className="relative rounded-2xl p-6 transform hover:scale-[1.02] transition-transform duration-500">
                   <div className="transform scale-110 origin-center">
                     {feature.illustration}
                   </div>

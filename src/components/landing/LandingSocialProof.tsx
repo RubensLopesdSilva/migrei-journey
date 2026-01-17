@@ -5,20 +5,23 @@ const stats = [
   { 
     value: "2.500+", 
     label: "profissionais já usaram o Migrei",
-    icon: Users,
-    gradient: "from-phase-1 to-phase-2",
+    Icon: Users,
+    bgColor: "bg-primary",
+    textColor: "text-primary",
   },
   { 
     value: "87%", 
     label: "relatam mais clareza em 30 dias",
-    icon: Target,
-    gradient: "from-phase-3 to-phase-4",
+    Icon: Target,
+    bgColor: "bg-accent",
+    textColor: "text-accent",
   },
   { 
     value: "3x", 
     label: "mais rápido que fazer sozinho",
-    icon: TrendingUp,
-    gradient: "from-phase-5 to-phase-6",
+    Icon: TrendingUp,
+    bgColor: "bg-emerald-500",
+    textColor: "text-emerald-500",
   },
 ];
 
@@ -73,15 +76,15 @@ export const LandingSocialProof = () => {
               {/* Card */}
               <div className="relative p-8 rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 group-hover:-translate-y-1">
                 {/* Gradient overlay on hover */}
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${stat.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                <div className={`absolute inset-0 rounded-2xl ${stat.bgColor}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                 
                 {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${stat.gradient} flex items-center justify-center mb-6 shadow-lg`}>
-                  <stat.icon className="h-7 w-7 text-white" />
+                <div className={`w-14 h-14 rounded-xl ${stat.bgColor} flex items-center justify-center mb-6 shadow-lg`}>
+                  <stat.Icon className="h-7 w-7 text-white" />
                 </div>
                 
                 {/* Value */}
-                <div className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-3`}>
+                <div className={`text-4xl md:text-5xl font-bold ${stat.textColor} mb-3`}>
                   {stat.value}
                 </div>
                 
@@ -91,7 +94,7 @@ export const LandingSocialProof = () => {
                 </p>
 
                 {/* Decorative corner */}
-                <div className={`absolute top-4 right-4 w-2 h-2 rounded-full bg-gradient-to-br ${stat.gradient} opacity-50`} />
+                <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${stat.bgColor} opacity-50`} />
               </div>
             </motion.div>
           ))}

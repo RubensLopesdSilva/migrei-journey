@@ -303,11 +303,11 @@ export function useTour(storageKey: string = "migrei-tour-completed") {
     const completed = localStorage.getItem(storageKey);
     setHasCompleted(completed === "true");
     
-    // Auto-open for new users after a short delay
-    if (!completed) {
-      const timer = setTimeout(() => setIsOpen(true), 1000);
-      return () => clearTimeout(timer);
-    }
+    // Auto-open for new users after a short delay - DISABLED
+    // if (!completed) {
+    //   const timer = setTimeout(() => setIsOpen(true), 1000);
+    //   return () => clearTimeout(timer);
+    // }
   }, [storageKey]);
 
   const startTour = () => setIsOpen(true);

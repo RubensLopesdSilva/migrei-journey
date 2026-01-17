@@ -67,10 +67,10 @@ export function DashboardTour({ onTourComplete }: DashboardTourProps) {
     onTourComplete?.();
   };
 
-  // Auto-start on first visit
-  if (!hasCompleted && !isOpen) {
-    setTimeout(() => startTour(), 800);
-  }
+  // Auto-start on first visit - DISABLED
+  // if (!hasCompleted && !isOpen) {
+  //   setTimeout(() => startTour(), 800);
+  // }
 
   // TOUR SIMPLIFICADO: 5 passos focados em BENEFÍCIOS
   const dashboardTourSteps: TourStep[] = [

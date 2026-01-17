@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Compass, ClipboardList, Rocket, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useState } from "react";
+import { ScrollToNextButton } from "./ScrollToNextButton";
 
 const steps = [
   {
@@ -231,6 +232,8 @@ export const LandingSolution = () => {
             </div>
           </div>
         </motion.div>
+
+        <ScrollToNextButton targetId="funcionalidades" />
       </div>
     </section>
   );

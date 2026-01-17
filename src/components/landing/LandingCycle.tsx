@@ -9,6 +9,7 @@ import {
   Trophy,
   Sparkles
 } from "lucide-react";
+import { ScrollToNextButton } from "./ScrollToNextButton";
 
 const phases = [
   {
@@ -81,7 +82,7 @@ export const LandingCycle = () => {
   const rightPhases = phases.slice(3, 6);
 
   return (
-    <section className="py-16 md:py-24 bg-muted/30">
+    <section id="ciclo-migrei" className="py-16 md:py-24 bg-muted/30">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
         {/* Header */}
         <motion.div
@@ -208,6 +209,8 @@ export const LandingCycle = () => {
             ))}
           </div>
         </div>
+
+        <ScrollToNextButton targetId="planos" />
       </div>
     </section>
   );

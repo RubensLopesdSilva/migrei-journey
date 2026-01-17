@@ -64,7 +64,7 @@ const Plan90Mockup = () => {
 
   return (
     <motion.div 
-      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -157,7 +157,7 @@ const NetworkingMockup = () => {
 
   return (
     <motion.div 
-      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -253,7 +253,7 @@ const CommunityMockup = () => {
 
   return (
     <motion.div 
-      className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-700/50 p-6 w-full max-w-md mx-auto"
+      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}

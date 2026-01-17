@@ -390,7 +390,7 @@ const features = [{
   icon: Users,
   title: "Mentoria Especializada",
   subtitle: "Você não está sozinho nessa",
-  description: "Conecte-se com milhares de profissionais em transição e receba orientação de mentores que já trilharam esse caminho. Troque experiências, celebre vitórias juntos.",
+  description: "Receba orientação personalizada de mentores experientes que já realizaram transições de carreira bem-sucedidas. Sessões individuais para acelerar seus resultados.",
   highlights: ["Mentores especializados disponíveis", "Comunidade ativa e acolhedora", "Eventos e encontros exclusivos"],
   illustration: <CommunityMockup />,
   gradient: "from-emerald-500/10 via-transparent to-teal-500/10",

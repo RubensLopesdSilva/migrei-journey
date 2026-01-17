@@ -114,8 +114,7 @@ export const LandingCycle = () => {
           </h2>
           
           <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Uma jornada estruturada em <span className="font-semibold text-foreground">6 fases</span> que 
-            transforma incerteza em clareza e ação.
+            <span className="font-semibold text-foreground">6 fases</span> para transformar incerteza em clareza e ação.
           </p>
         </motion.div>
 

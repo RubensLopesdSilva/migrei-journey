@@ -29,7 +29,7 @@ const steps = [
 const benefits = [
   "Método em 6 fases",
   "IA personalizada",
-  "Comunidade ativa",
+  "Networking prático",
   "Mentores disponíveis",
 ];
 

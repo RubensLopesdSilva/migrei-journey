@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const stats = [
   { value: "42%", label: "dos profissionais pretendem mudar de carreira.", source: "CNN Brasil" },
   { value: "51%", label: "dos brasileiros consideram uma transição de profissão.", source: "SEGS" },
-  { value: "56%", label: "dos profissionais estão abertos a uma nova carreira no próximo ano.", source: "Robert Half" },
+  { value: "56%", label: "estão abertos a mudar de carreira.", source: "Robert Half" },
 ];
 
 export const LandingSocialProof = () => {

@@ -43,14 +43,14 @@ export const LandingHero = () => {
             duration: 0.5,
             delay: 0.1
           }}>
-              Saia da paralisia e tenha{" "}
+              Tenha{" "}
               <span className="relative inline-block">
                 clareza
                 <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
                   <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
                 </svg>
               </span>{" "}
-              <span className="text-primary">na transição de carreira.</span>
+              <span className="text-primary">na transição de carreira</span>
             </motion.h1>
 
             {/* Subheadline - What + How */}

@@ -1,12 +1,12 @@
-import { motion } from "framer-motion";
 import { LandingHero } from "@/components/landing/LandingHero";
+import { LandingSocialProof } from "@/components/landing/LandingSocialProof";
 import { LandingSolution } from "@/components/landing/LandingSolution";
-import { LandingCycle } from "@/components/landing/LandingCycle";
+import { LandingFeatures } from "@/components/landing/LandingFeatures";
 import { LandingBenefits } from "@/components/landing/LandingBenefits";
-import { LandingTestimonials } from "@/components/landing/LandingTestimonials";
+import { LandingCycle } from "@/components/landing/LandingCycle";
 import { LandingPricing } from "@/components/landing/LandingPricing";
 import { LandingFAQ } from "@/components/landing/LandingFAQ";
-import { LandingCTA } from "@/components/landing/LandingCTA";
+import { LandingTestimonialsCTA } from "@/components/landing/LandingTestimonialsCTA";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
@@ -17,13 +17,14 @@ const Landing = () => {
       
       <main>
         <LandingHero />
+        <LandingSocialProof />
         <LandingSolution />
+        <LandingFeatures />
         <LandingCycle />
         <LandingBenefits />
-        <LandingTestimonials />
         <LandingPricing />
         <LandingFAQ />
-        <LandingCTA />
+        <LandingTestimonialsCTA />
       </main>
       
       <LandingFooter />

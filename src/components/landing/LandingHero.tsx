@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Target } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
 
@@ -16,121 +16,80 @@ export const LandingHero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+      {/* Background gradient - matching Figma style */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/3" />
+      <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-primary/10 to-transparent" />
       
-      {/* Animated circles */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-        />
-      </div>
-
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
-            {/* Badge - Estatística */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 bg-green-500/10 text-green-700 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-8 border border-green-500/20"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-              </span>
-              42% dos profissionais desejam mudar de carreira
-            </motion.div>
-
-            {/* Headline - Resultado claro */}
+          <div className="text-left order-2 lg:order-1">
+            {/* Headline with underline accent */}
             <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              transition={{ duration: 0.5 }}
             >
-              Sua transição de carreira{" "}
-              <span className="text-primary">guiada.</span>
+              Estamos aqui para{" "}
+              <span className="relative inline-block">
+                guiar sua transição
+                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 8" fill="none">
+                  <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round"/>
+                </svg>
+              </span>{" "}
+              <span className="text-primary">de carreira</span>
             </motion.h1>
 
-            {/* Subheadline - Plataforma digital */}
+            {/* Subheadline */}
             <motion.p
-              className="text-lg md:text-xl text-muted-foreground max-w-xl mb-6"
+              className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              Saia da dúvida e entre em ação com o <strong className="text-foreground">Ciclo Migrei</strong> — um método estruturado com as ferramentas certas para sua jornada profissional.
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              className="flex flex-col sm:flex-row items-start gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              O <strong><em>Ciclo Migrei</em></strong> é uma solução digital que te orienta em sua jornada de mudança de carreira.
-            </motion.p>
-
-            {/* Resultados concretos */}
-            <motion.div
-              className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25 }}
-            >
-              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
-                <Target className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">Clareza sobre <strong>qual carreira</strong> seguir</span>
-              </div>
-              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
-                <ArrowRight className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">Plano de ação <strong>passo a passo</strong></span>
-              </div>
-            </motion.div>
-
-            {/* CTAs */}
-            <motion.div
-              className="flex flex-col sm:flex-row items-center lg:items-start gap-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg group"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full group shadow-lg shadow-primary/20"
                 onClick={() => navigate("/auth")}
               >
-                Começar minha transição
+                Começar grátis
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
                 size="lg"
-                variant="outline"
-                className="px-8 py-6 text-lg"
+                variant="ghost"
+                className="px-6 py-6 text-lg group"
                 onClick={() => scrollToSection("como-funciona")}
               >
-                <Play className="mr-2 h-5 w-5" />
+                <div className="w-10 h-10 rounded-full border-2 border-muted-foreground/30 flex items-center justify-center mr-3 group-hover:border-primary transition-colors">
+                  <Play className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors ml-0.5" />
+                </div>
                 Como funciona
               </Button>
             </motion.div>
-
           </div>
 
           {/* Right: Migrei Wheel */}
           <motion.div 
-            className="flex justify-center lg:justify-center order-1 lg:order-2 relative w-full h-full min-h-[400px] lg:min-h-[500px]"
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="flex justify-center lg:justify-end order-1 lg:order-2 relative"
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <HeroMigreiWheel />
+            <div className="relative">
+              <HeroMigreiWheel />
+            </div>
           </motion.div>
         </div>
       </div>

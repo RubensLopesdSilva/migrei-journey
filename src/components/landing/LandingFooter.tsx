@@ -11,7 +11,7 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
   return (
     <footer ref={ref} className="bg-slate-900 text-white py-16">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Brand + Newsletter */}
           <div>
             <div className="bg-slate-800/50 rounded-xl p-4 inline-block mb-4">
@@ -35,18 +35,6 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-
-          {/* Navigation Links */}
-          <div>
-            <h4 className="font-semibold text-white mb-4">Navegação</h4>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><a href="#como-funciona" className="hover:text-white transition-colors">Como funciona</a></li>
-              <li><a href="#ciclo-migrei" className="hover:text-white transition-colors">Método</a></li>
-              <li><a href="#recursos" className="hover:text-white transition-colors">Recursos</a></li>
-              <li><a href="#planos" className="hover:text-white transition-colors">Planos</a></li>
-              <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
-            </ul>
           </div>
 
           {/* Contact */}

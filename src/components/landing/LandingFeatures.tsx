@@ -552,34 +552,9 @@ Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
       {/* Sequential Feature Sections */}
       {features.map((feature, index) => <FeatureSection key={index} feature={feature} index={index} isReversed={index % 2 === 1} />)}
       
-      {/* Final CTA */}
-      <div id="funcionalidades" className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
-        <div className="container mx-auto px-4">
-          <motion.div className="text-center" initial={{
-          opacity: 0,
-          y: 30
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6
-        }}>
-            <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-              Pronto para começar sua transformação?
-            </h3>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Junte-se a milhares de profissionais que já estão construindo carreiras mais alinhadas com seus valores.
-            </p>
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full group shadow-lg shadow-primary/25" onClick={() => navigate("/auth?tab=signup")}>
-              Começar agora — é grátis
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
-
-          <ScrollToNextButton targetId="ciclo-migrei" />
-        </div>
+      {/* Scroll to next section */}
+      <div id="funcionalidades" className="pb-8 bg-muted/30">
+        <ScrollToNextButton targetId="ciclo-migrei" />
       </div>
     </section>;
 };

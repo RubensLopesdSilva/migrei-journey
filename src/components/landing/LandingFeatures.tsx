@@ -383,102 +383,236 @@ const features = [
   {
     icon: Brain,
     title: "Ciclo de Transição",
-    description: "Acompanhe sua jornada através das 6 fases do Ciclo Migrei com visualização clara do seu progresso.",
+    subtitle: "Visualize sua jornada completa",
+    description: "Acompanhe sua evolução através das 6 fases do Ciclo Migrei. Cada fase foi desenhada para te guiar do despertar até a conquista do seu novo momento profissional.",
+    highlights: [
+      "6 fases estruturadas com objetivos claros",
+      "Progresso visual que te mantém motivado",
+      "Atividades práticas em cada etapa"
+    ],
     illustration: <CycleMockup />,
+    gradient: "from-amber-500/10 via-transparent to-emerald-500/10",
+    accentColor: "text-amber-500",
   },
   {
     icon: Target,
     title: "Plano de 90 Dias",
-    description: "Metas SMART e cronograma personalizado para sua transição com acompanhamento passo a passo.",
+    subtitle: "Sua transição com prazo e foco",
+    description: "Metas SMART e cronograma personalizado dividido em 3 meses. Cada semana você sabe exatamente o que fazer para avançar na sua transição de carreira.",
+    highlights: [
+      "Cronograma semanal personalizado",
+      "Metas mensuráveis e alcançáveis",
+      "Acompanhamento de progresso em tempo real"
+    ],
     illustration: <Plan90Mockup />,
+    gradient: "from-blue-500/10 via-transparent to-indigo-500/10",
+    accentColor: "text-blue-500",
   },
   {
     icon: Users,
     title: "Networking Prático",
-    description: "Rotina diária de 10 minutos para construir conexões estratégicas que abrem portas na sua carreira.",
+    subtitle: "Conexões que abrem portas",
+    description: "Rotina diária de 10 minutos que transforma sua rede de contatos. Ações simples e consistentes que constroem relacionamentos profissionais genuínos.",
+    highlights: [
+      "Rotina diária de apenas 10 minutos",
+      "Sugestões inteligentes de ações",
+      "Acompanhamento de conexões feitas"
+    ],
     illustration: <NetworkingMockup />,
+    gradient: "from-violet-500/10 via-transparent to-purple-500/10",
+    accentColor: "text-violet-500",
   },
   {
     icon: Users,
     title: "Comunidade & Mentoria",
-    description: "Conecte-se com profissionais em transição e receba orientação de mentores especializados.",
+    subtitle: "Você não está sozinho nessa",
+    description: "Conecte-se com milhares de profissionais em transição e receba orientação de mentores que já trilharam esse caminho. Troque experiências, celebre vitórias juntos.",
+    highlights: [
+      "Mentores especializados disponíveis",
+      "Comunidade ativa e acolhedora",
+      "Eventos e encontros exclusivos"
+    ],
     illustration: <CommunityMockup />,
+    gradient: "from-emerald-500/10 via-transparent to-teal-500/10",
+    accentColor: "text-emerald-500",
   },
 ];
+
+// Feature Section Component for sequential layout
+const FeatureSection = ({ 
+  feature, 
+  index, 
+  isReversed 
+}: { 
+  feature: typeof features[0]; 
+  index: number; 
+  isReversed: boolean;
+}) => {
+  const navigate = useNavigate();
+  
+  return (
+    <div className={`relative py-16 md:py-24 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
+      {/* Background gradient */}
+      <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-50`} />
+      
+      <div className="container mx-auto px-4 relative">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${isReversed ? 'lg:grid-flow-dense' : ''}`}>
+          {/* Content */}
+          <motion.div
+            className={isReversed ? 'lg:col-start-2' : ''}
+            initial={{ opacity: 0, x: isReversed ? 40 : -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            {/* Step indicator */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shadow-lg`}>
+                <feature.icon className="h-6 w-6 text-primary" />
+              </div>
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent max-w-20" />
+              <span className="text-sm font-medium text-muted-foreground">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </div>
+            
+            {/* Title & Subtitle */}
+            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              {feature.title}
+            </h3>
+            <p className={`text-lg font-medium ${feature.accentColor} mb-4`}>
+              {feature.subtitle}
+            </p>
+            
+            {/* Description */}
+            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+              {feature.description}
+            </p>
+            
+            {/* Highlights */}
+            <ul className="space-y-3 mb-8">
+              {feature.highlights.map((highlight, i) => (
+                <motion.li
+                  key={i}
+                  className="flex items-center gap-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                >
+                  <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3.5 w-3.5 text-primary" />
+                  </div>
+                  <span className="text-foreground">{highlight}</span>
+                </motion.li>
+              ))}
+            </ul>
+            
+            {/* CTA */}
+            <Button
+              variant="outline"
+              className="rounded-full group border-primary/30 hover:border-primary hover:bg-primary/5"
+              onClick={() => navigate("/auth")}
+            >
+              Explorar recurso
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </motion.div>
+          
+          {/* Illustration */}
+          <motion.div
+            className={isReversed ? 'lg:col-start-1 lg:row-start-1' : ''}
+            initial={{ opacity: 0, x: isReversed ? -40 : 40, scale: 0.95 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+          >
+            <div className="relative">
+              {/* Decorative elements */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl blur-xl" />
+              <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
+              <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
+              
+              {/* Mockup container */}
+              <div className="relative bg-card rounded-2xl shadow-2xl border border-border/50 p-6 transform hover:scale-[1.02] transition-transform duration-500">
+                <div className="transform scale-110 origin-center">
+                  {feature.illustration}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const LandingFeatures = () => {
   const navigate = useNavigate();
 
   return (
-    <section id="recursos" className="py-20 md:py-32 bg-muted/20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-16">
+    <section id="recursos" className="relative overflow-hidden">
+      {/* Section Header */}
+      <div className="py-16 md:py-24 bg-muted/20">
+        <div className="container mx-auto px-4">
           <motion.div
-            className="max-w-xl"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              Recursos para sua jornada
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+              <Lightbulb className="h-4 w-4" />
+              Recursos exclusivos
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Tudo que você precisa para sua{" "}
+              <span className="text-primary">transição de carreira</span>
             </h2>
-            <p className="text-muted-foreground">
-              Ferramentas práticas que te ajudam a sair da dúvida e entrar em ação com clareza e confiança.
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Ferramentas práticas, metodologia testada e uma comunidade que te apoia. 
+              Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.
             </p>
           </motion.div>
-          
+        </div>
+      </div>
+      
+      {/* Sequential Feature Sections */}
+      {features.map((feature, index) => (
+        <FeatureSection
+          key={index}
+          feature={feature}
+          index={index}
+          isReversed={index % 2 === 1}
+        />
+      ))}
+      
+      {/* Final CTA */}
+      <div className="py-16 md:py-24 bg-gradient-to-b from-muted/30 to-background">
+        <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.6 }}
           >
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+              Pronto para começar sua transformação?
+            </h3>
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+              Junte-se a milhares de profissionais que já estão construindo carreiras mais alinhadas com seus valores.
+            </p>
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full group"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full group shadow-lg shadow-primary/25"
               onClick={() => navigate("/auth")}
             >
-              Começar agora
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              Começar agora — é grátis
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-            >
-              <Card className="p-0 overflow-hidden bg-card border-border/50 hover:shadow-xl hover:border-primary/20 transition-all duration-300 h-full group">
-                {/* Illustration */}
-                <div className="p-4">
-                  {feature.illustration}
-                </div>
-                
-                {/* Content */}
-                <div className="p-6 pt-2">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-bold text-foreground">
-                      {feature.title}
-                    </h3>
-                  </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>

@@ -64,7 +64,7 @@ const Plan90Mockup = () => {
 
   return (
     <motion.div 
-      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-primary/5 to-transparent"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -87,17 +87,17 @@ const Plan90Mockup = () => {
       </div>
 
       {/* Monthly progress cards */}
-      <div className="bg-white/30 dark:bg-slate-800/30 rounded-xl p-4 mb-4">
+      <div className="bg-primary/5 rounded-xl p-4 mb-4">
         <div className="grid grid-cols-3 gap-3">
           {months.map((month, index) => (
             <div 
               key={month.name}
-              className={`bg-white/50 dark:bg-slate-800/50 rounded-lg p-3 border-2 transition-all ${
+              className={`bg-primary/5 rounded-lg p-3 border-2 transition-all ${
                 month.active 
                   ? "border-primary/40 shadow-sm" 
                   : month.locked
-                    ? "border-white/20 dark:border-slate-700/50 opacity-50"
-                    : "border-white/30 dark:border-slate-700/50"
+                    ? "border-muted/20 opacity-50"
+                    : "border-muted/10"
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -128,7 +128,7 @@ const Plan90Mockup = () => {
       </div>
 
       {/* Current task */}
-      <div className="bg-white/30 dark:bg-slate-800/30 rounded-xl p-4">
+      <div className="bg-primary/5 rounded-xl p-4">
         <div className="flex items-center gap-3">
           <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
             <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
@@ -157,7 +157,7 @@ const NetworkingMockup = () => {
 
   return (
     <motion.div 
-      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-violet-500/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-violet-500/5 to-transparent"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -197,7 +197,7 @@ const NetworkingMockup = () => {
       </div>
 
       {/* Today's Actions */}
-      <div className="bg-white/30 dark:bg-slate-800/30 rounded-xl p-4">
+      <div className="bg-violet-500/5 rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
           <span className="text-xs font-semibold text-foreground">Ações de Hoje</span>
           <span className="text-xs text-muted-foreground">{completedCount}/{todayActions.length}</span>
@@ -208,7 +208,7 @@ const NetworkingMockup = () => {
             <motion.div 
               key={index}
               className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                action.completed ? 'bg-green-500/10 dark:bg-green-500/20' : 'bg-white/40 dark:bg-slate-800/40'
+                action.completed ? 'bg-green-500/10' : 'bg-violet-500/5'
               }`}
               initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -253,7 +253,7 @@ const CommunityMockup = () => {
 
   return (
     <motion.div 
-      className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/40 dark:border-slate-700/30 p-6 w-full max-w-md mx-auto"
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-emerald-500/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-emerald-500/5 to-transparent"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -287,7 +287,7 @@ const CommunityMockup = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/50 dark:bg-slate-800/50 flex items-center justify-center text-lg shadow-sm">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
             👩‍💼
           </div>
           <div className="flex-1">
@@ -301,13 +301,13 @@ const CommunityMockup = () => {
       </div>
 
       {/* Mentors Available */}
-      <div className="bg-white/30 dark:bg-slate-800/30 rounded-xl p-4">
+      <div className="bg-emerald-500/5 rounded-xl p-4">
         <p className="text-xs font-semibold text-foreground mb-3">Mentores Disponíveis</p>
         <div className="space-y-3">
           {mentors.map((mentor, index) => (
             <motion.div 
               key={mentor.name}
-              className="bg-white/40 dark:bg-slate-800/40 rounded-lg p-3 border border-white/30 dark:border-slate-700/30 flex items-center gap-3"
+              className="bg-emerald-500/5 rounded-lg p-3 border border-emerald-500/10 flex items-center gap-3"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

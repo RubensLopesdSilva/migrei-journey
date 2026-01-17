@@ -91,12 +91,8 @@ export const LandingHero = () => {
                 <span className="text-sm font-medium"><strong>5 min</strong> para seu 1º diagnóstico</span>
               </div>
               <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
-                <Target className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium"><strong>Plano</strong> de ação personalizado</span>
-              </div>
-              <div className="flex items-center gap-2 bg-primary/10 text-foreground px-4 py-2 rounded-full border border-primary/20">
                 <Sparkles className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium"><strong>IA</strong> que te conhece</span>
+                <span className="text-sm font-medium"><strong>IA</strong> que te acompanha 24/7</span>
               </div>
             </motion.div>
 

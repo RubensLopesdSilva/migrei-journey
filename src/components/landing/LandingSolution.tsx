@@ -27,10 +27,10 @@ const steps = [
 ];
 
 const benefits = [
-  "Metodologia validada em 6 fases",
-  "IA que personaliza sua jornada",
-  "Comunidade de profissionais em transição",
-  "Mentores especializados disponíveis",
+  "Método em 6 fases",
+  "IA personalizada",
+  "Comunidade ativa",
+  "Mentores disponíveis",
 ];
 
 export const LandingSolution = () => {

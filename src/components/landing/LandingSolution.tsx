@@ -41,10 +41,10 @@ const steps = [
 ];
 
 const benefits = [
-  { text: "Método em 6 fases", icon: "🎯" },
-  { text: "IA personalizada", icon: "🤖" },
-  { text: "Networking prático", icon: "🤝" },
-  { text: "Mentores disponíveis", icon: "👨‍🏫" }
+  { text: "Método em 6 fases", icon: "🎯", description: "Jornada estruturada e progressiva" },
+  { text: "IA personalizada", icon: "🤖", description: "Assistente que entende seu momento" },
+  { text: "Networking prático", icon: "🤝", description: "Conexões que abrem portas" },
+  { text: "Mentores disponíveis", icon: "👨‍🏫", description: "Orientação de quem já passou por isso" }
 ];
 
 export const LandingSolution = () => {
@@ -196,36 +196,75 @@ export const LandingSolution = () => {
 
         {/* Benefits list with enhanced styling */}
         <motion.div 
-          className="relative bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-3xl p-8 md:p-12 border border-primary/10 overflow-hidden"
+          className="relative rounded-3xl overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
         >
+          {/* Glass background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5 backdrop-blur-xl" />
+          <div className="absolute inset-0 border border-primary/10 rounded-3xl" />
+          
           {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-accent/10 rounded-full blur-2xl" />
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-accent/10 rounded-full blur-3xl" />
 
-          <div className="relative z-10">
-            <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-8">
-              O que você recebe
-            </h3>
+          <div className="relative z-10 p-8 md:p-12">
+            {/* Section header */}
+            <div className="text-center mb-10">
+              <motion.div 
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Incluído na plataforma</span>
+              </motion.div>
+              <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                O que você recebe
+              </h3>
+            </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {benefits.map((benefit, index) => (
                 <motion.div 
                   key={index} 
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg group cursor-pointer"
+                  className="group relative"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  whileHover={{ scale: 1.03, y: -2 }}
                 >
-                  <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{benefit.icon}</span>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    <span className="text-foreground font-medium">{benefit.text}</span>
+                  <div className="relative p-6 rounded-2xl bg-card/80 backdrop-blur-sm border border-border/50 hover:border-primary/40 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 h-full">
+                    {/* Gradient overlay on hover */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    <div className="relative z-10">
+                      {/* Icon with animated background */}
+                      <div className="relative mb-4">
+                        <motion.div 
+                          className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+                          whileHover={{ rotate: [0, -5, 5, 0] }}
+                          transition={{ duration: 0.5 }}
+                        >
+                          <span className="text-3xl">{benefit.icon}</span>
+                        </motion.div>
+                        {/* Check badge */}
+                        <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                          <CheckCircle2 className="h-3 w-3 text-primary-foreground" />
+                        </div>
+                      </div>
+                      
+                      {/* Text content */}
+                      <h4 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                        {benefit.text}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {benefit.description}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               ))}

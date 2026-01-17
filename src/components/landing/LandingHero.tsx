@@ -75,7 +75,7 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              A plataforma digital que te guia do "não sei o que quero" até uma nova carreira — com diagnóstico, plano personalizado e IA ao seu lado.
+              A plataforma digital que te guia do "não sei o que quero" até uma nova carreira — com diagnóstico e plano personalizado.
             </motion.p>
 
             {/* Resultados concretos */}

@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { LandingHero } from "@/components/landing/LandingHero";
-import { LandingProblem } from "@/components/landing/LandingProblem";
 import { LandingSolution } from "@/components/landing/LandingSolution";
 import { LandingCycle } from "@/components/landing/LandingCycle";
 import { LandingBenefits } from "@/components/landing/LandingBenefits";
@@ -18,7 +17,6 @@ const Landing = () => {
       
       <main>
         <LandingHero />
-        <LandingProblem />
         <LandingSolution />
         <LandingCycle />
         <LandingBenefits />

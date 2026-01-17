@@ -494,7 +494,7 @@ export default function Auth() {
       </div>
 
       {/* Right Side - Roda Migrei */}
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary/10 to-accent/10 items-center justify-center p-12">
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-muted/50 via-background to-muted/30 items-center justify-center p-12">
         <AuthMigreiWheel />
       </div>
     </div>

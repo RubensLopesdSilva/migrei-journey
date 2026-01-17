@@ -68,15 +68,14 @@ export const LandingHero = () => {
               <span className="text-primary">com clareza e direção.</span>
             </motion.h1>
 
-            {/* Subheadline - Transformação clara */}
+            {/* Subheadline - Plataforma digital */}
             <motion.p
               className="text-lg md:text-xl text-muted-foreground max-w-xl mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Descubra qual carreira faz sentido para você, crie um plano de ação personalizado e tenha{" "}
-              <strong>acompanhamento de IA</strong> em cada passo da sua transição.
+              A plataforma digital que te guia do "não sei o que quero" até uma nova carreira — com diagnóstico, plano personalizado e IA ao seu lado.
             </motion.p>
 
             {/* Resultados concretos */}

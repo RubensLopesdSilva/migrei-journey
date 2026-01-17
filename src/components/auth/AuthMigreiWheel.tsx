@@ -206,15 +206,19 @@ export function AuthMigreiWheel() {
     >
       {/* Circle Container */}
       <div className="relative">
-        {/* Fundo circular branco/cinza claro */}
+        {/* Fundo com blur sutil */}
         <div 
-          className="absolute rounded-full bg-card/80"
+          className="absolute inset-0 -m-8 rounded-full bg-gradient-to-br from-muted/30 to-muted/10 blur-xl"
+          style={{ transform: 'scale(0.85)' }}
+        />
+        
+        {/* Sombra de elevação */}
+        <div 
+          className="absolute inset-0 rounded-full"
           style={{ 
-            width: size + 40,
-            height: size + 40,
-            top: -20,
-            left: -20,
-            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.1), 0 10px 30px -10px rgba(0, 0, 0, 0.08)'
+            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.1)',
+            transform: 'translateY(8px) scale(0.95)',
+            borderRadius: '50%'
           }}
         />
 

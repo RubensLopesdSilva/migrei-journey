@@ -81,7 +81,7 @@ const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; 
     </div>
     <div>
       <h4 className="font-bold text-foreground">{phase.name}</h4>
-      <p className="text-sm text-muted-foreground">{phase.description}</p>
+      <p className="text-base text-muted-foreground">{phase.description}</p>
     </div>
   </motion.div>
 );

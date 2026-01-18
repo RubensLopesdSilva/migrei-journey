@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
@@ -146,108 +147,145 @@ const Plan90Mockup = () => {
     </motion.div>;
 };
 
-// Mockup: Networking Prático - Realistic design
+// Mockup: Networking Prático - Design similar to actual page
 const NetworkingMockup = () => {
-  const todayActions = [{
-    type: 'comment',
-    target: 'Post sobre liderança',
-    completed: true,
-    platform: 'LinkedIn'
-  }, {
-    type: 'connect',
-    target: 'Maria Santos - RH',
-    completed: true,
-    platform: 'LinkedIn'
-  }, {
-    type: 'message',
-    target: 'Carlos - Mentor',
-    completed: false,
-    platform: 'WhatsApp'
-  }];
-  const weeklyStats = {
-    connections: 12,
-    messages: 8,
-    posts: 3
-  };
-  const completedCount = todayActions.filter(a => a.completed).length;
-  return <motion.div className="backdrop-blur-xl rounded-2xl shadow-lg border border-violet-500/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-violet-500/5 to-transparent" initial={{
-    opacity: 0,
-    y: 20
-  }} whileInView={{
-    opacity: 1,
-    y: 0
-  }} viewport={{
-    once: true
-  }} transition={{
-    duration: 0.5
-  }}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-violet-500/10 flex items-center justify-center">
-            <Users className="h-5 w-5 text-violet-500" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-foreground">Rotina de Networking</p>
-            <p className="text-xs text-muted-foreground">10 min/dia • 5 dias seguidos 🔥</p>
-          </div>
-        </div>
-        <div className="bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-semibold px-3 py-1.5 rounded-full flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          Ativo
-        </div>
-      </div>
+  const scripts = [
+    { icon: '📱', title: 'Networking Digital', desc: 'LinkedIn, grupos e comunidades', count: 3 },
+    { icon: '🎤', title: 'Networking Presencial', desc: 'Eventos, meetups e workshops', count: 3 },
+    { icon: '☕', title: 'Conversas 1:1', desc: 'Coffee chats e indicações', count: 3 }
+  ];
 
-      {/* Weekly Stats */}
-      <div className="grid grid-cols-3 gap-3 mb-5">
-        <div className="bg-blue-500/10 dark:bg-blue-500/20 rounded-xl p-3 text-center">
-          <p className="text-lg font-bold text-blue-600 dark:text-blue-400">{weeklyStats.connections}</p>
-          <p className="text-[10px] text-muted-foreground">Conexões</p>
-        </div>
-        <div className="bg-purple-500/10 dark:bg-purple-500/20 rounded-xl p-3 text-center">
-          <p className="text-lg font-bold text-purple-600 dark:text-purple-400">{weeklyStats.messages}</p>
-          <p className="text-[10px] text-muted-foreground">Mensagens</p>
-        </div>
-        <div className="bg-amber-500/10 dark:bg-amber-500/20 rounded-xl p-3 text-center">
-          <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{weeklyStats.posts}</p>
-          <p className="text-[10px] text-muted-foreground">Interações</p>
-        </div>
-      </div>
+  const challenges = [
+    { title: 'Comente em 3 posts', xp: 30, flames: 1 },
+    { title: 'Envie 2 conexões personalizadas', xp: 50, flames: 2 }
+  ];
 
-      {/* Today's Actions */}
-      <div className="bg-violet-500/5 rounded-xl p-4">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold text-foreground">Ações de Hoje</span>
-          <span className="text-xs text-muted-foreground">{completedCount}/{todayActions.length}</span>
+  return (
+    <motion.div 
+      className="w-full max-w-lg mx-auto space-y-4"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Mission Card */}
+      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 bg-gradient-to-br from-primary/5 to-transparent">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <Target className="h-5 w-5 text-primary" />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Missão da Semana</span>
+              <Badge variant="secondary" className="text-[9px] px-1.5 py-0">📱 Digital</Badge>
+            </div>
+            <h4 className="text-sm font-semibold text-foreground">Inicie 3 conversas</h4>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Converse com profissionais da sua área-alvo.</p>
+          </div>
+          <div className="text-right shrink-0">
+            <div className="flex items-center gap-1 text-xs font-semibold text-primary">
+              <Sparkles className="h-3 w-3" />
+              150 XP
+            </div>
+            <p className="text-[9px] text-muted-foreground">⏱ 5 dias</p>
+          </div>
         </div>
         
-        <div className="space-y-2">
-          {todayActions.map((action, index) => <motion.div key={index} className={`flex items-center gap-3 p-3 rounded-lg transition-all ${action.completed ? 'bg-green-500/10' : 'bg-violet-500/5'}`} initial={{
-          opacity: 0,
-          x: -10
-        }} whileInView={{
-          opacity: 1,
-          x: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.3,
-          delay: index * 0.1
-        }}>
-              <div className={`h-5 w-5 rounded-full flex items-center justify-center flex-shrink-0 ${action.completed ? 'bg-green-500 text-white' : 'border-2 border-slate-300 dark:border-slate-600'}`}>
-                {action.completed && <Check className="h-3 w-3" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className={`text-xs font-medium ${action.completed ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                  {action.target}
-                </p>
-                <p className="text-[10px] text-muted-foreground">{action.platform}</p>
-              </div>
-              {!action.completed && <ArrowRight className="h-4 w-4 text-primary" />}
-            </motion.div>)}
+        {/* Progress */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-[10px]">
+            <span className="text-muted-foreground">Progresso</span>
+            <span className="font-medium text-foreground">1 / 3</span>
+          </div>
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
+            <div className="h-full w-1/3 bg-primary rounded-full" />
+          </div>
         </div>
       </div>
-    </motion.div>;
+
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-2 gap-3">
+        {/* Scripts Section */}
+        <div className="bg-card rounded-xl border p-3 space-y-2.5">
+          <div>
+            <h5 className="text-xs font-semibold text-foreground">Scripts prontos</h5>
+            <p className="text-[9px] text-muted-foreground">Copie, adapte e use</p>
+          </div>
+          
+          {scripts.map((script, index) => (
+            <motion.div
+              key={script.title}
+              className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: index * 0.05 }}
+            >
+              <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center text-sm">
+                {script.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-medium text-foreground truncate">{script.title}</p>
+                <p className="text-[8px] text-muted-foreground truncate">{script.desc}</p>
+              </div>
+              <Badge variant="outline" className="text-[8px] px-1.5 py-0 shrink-0">
+                {script.count} scripts
+              </Badge>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Challenges Section */}
+        <div className="bg-card rounded-xl border p-3 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">🔥</span>
+              <h5 className="text-xs font-semibold text-foreground">Desafios</h5>
+            </div>
+            <div className="flex items-center gap-1 text-[9px] text-primary font-medium">
+              <Sparkles className="h-2.5 w-2.5" />
+              75/255
+            </div>
+          </div>
+          
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-[9px]">
+              <span className="text-muted-foreground">Progresso</span>
+              <span className="font-medium text-foreground">1/4</span>
+            </div>
+            <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+              <div className="h-full w-1/4 bg-primary rounded-full" />
+            </div>
+          </div>
+
+          {challenges.map((challenge, index) => (
+            <motion.div
+              key={challenge.title}
+              className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+              initial={{ opacity: 0, x: 10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: index * 0.05 }}
+            >
+              <div className="h-6 w-6 rounded-lg bg-primary/10 flex items-center justify-center text-[10px]">
+                📋
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1">
+                  {[...Array(challenge.flames)].map((_, i) => (
+                    <span key={i} className="text-[8px]">🔥</span>
+                  ))}
+                  <span className="text-[9px] font-medium text-primary">+{challenge.xp}</span>
+                </div>
+                <p className="text-[9px] text-foreground truncate">{challenge.title}</p>
+              </div>
+              <ArrowRight className="h-3 w-3 text-muted-foreground" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
 };
 
 // Mockup: Comunidade & Mentoria - Design similar to actual mentoring page

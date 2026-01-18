@@ -3,6 +3,7 @@ import { Compass, ClipboardList, Rocket, CheckCircle2, ArrowRight, Sparkles, Tar
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useState } from "react";
 import { ScrollToNextButton } from "./ScrollToNextButton";
+import { Button } from "@/components/ui/button";
 import type { LucideIcon } from "lucide-react";
 
 const steps = [
@@ -270,6 +271,26 @@ export const LandingSolution = () => {
                 </motion.div>
               ))}
             </div>
+
+            {/* Simple CTA */}
+            <motion.div
+              className="flex justify-center mt-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+            >
+              <Button
+                size="lg"
+                className="rounded-full px-8"
+                onClick={() => {
+                  const element = document.getElementById("planos");
+                  element?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                Quero começar agora
+              </Button>
+            </motion.div>
           </div>
         </motion.div>
 

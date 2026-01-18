@@ -253,17 +253,17 @@ const NetworkingMockup = () => {
 // Mockup: Comunidade & Mentoria - Design similar to actual mentoring page
 const CommunityMockup = () => {
   const mentors = [{
-    name: "Rubens Lopes",
-    initials: "RL",
-    title: "Executivo de TI | CIO",
-    yearsExperience: 14,
-    expertise: ["Orçamento", "Liderança", "Gestão de Equipe"]
+    name: "Ana Paula Silva",
+    initials: "AP",
+    title: "Ex-Head de RH | Coach",
+    yearsExperience: 12,
+    expertise: ["Carreira", "Liderança", "Entrevistas"]
   }, {
-    name: "Alessandra M.",
-    initials: "AM",
-    title: "Analista de Marketing",
-    yearsExperience: 8,
-    expertise: ["SEO", "Marketing", "Redação"]
+    name: "Carlos Mendes",
+    initials: "CM",
+    title: "Gerente de Projetos",
+    yearsExperience: 10,
+    expertise: ["Gestão", "Agile", "Tecnologia"]
   }];
 
   return (

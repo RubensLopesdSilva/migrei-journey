@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User } from "lucide-react";
+import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
 import { ScrollToNextButton } from "./ScrollToNextButton";
@@ -250,115 +250,159 @@ const NetworkingMockup = () => {
     </motion.div>;
 };
 
-// Mockup: Comunidade & Mentoria - Realistic design
+// Mockup: Comunidade & Mentoria - Design similar to actual mentoring page
 const CommunityMockup = () => {
   const mentors = [{
-    name: "Ana Paula",
-    title: "Ex-Head de RH",
-    specialty: "Transição de carreira",
-    rating: 5,
-    sessions: 48
+    name: "Rubens Lopes",
+    initials: "RL",
+    title: "Executivo de TI | CIO",
+    yearsExperience: 14,
+    expertise: ["Orçamento", "Liderança", "Gestão de Equipe"]
   }, {
-    name: "Carlos M.",
-    title: "Career Coach",
-    specialty: "Tech & Startups",
-    rating: 5,
-    sessions: 32
+    name: "Alessandra M.",
+    initials: "AM",
+    title: "Analista de Marketing",
+    yearsExperience: 8,
+    expertise: ["SEO", "Marketing", "Redação"]
   }];
-  const nextSession = {
-    mentor: "Ana Paula",
-    date: "Qui, 18 Jan",
-    time: "14:00",
-    topic: "Preparação para entrevista"
-  };
-  return <motion.div className="backdrop-blur-xl rounded-2xl shadow-lg border border-emerald-500/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-emerald-500/5 to-transparent" initial={{
-    opacity: 0,
-    y: 20
-  }} whileInView={{
-    opacity: 1,
-    y: 0
-  }} viewport={{
-    once: true
-  }} transition={{
-    duration: 0.5
-  }}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-            <MessageCircle className="h-5 w-5 text-emerald-500" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-foreground">Mentoria & Comunidade</p>
-            <p className="text-xs text-muted-foreground">+2.5k membros ativos</p>
-          </div>
-        </div>
-        <div className="flex -space-x-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">👩</div>
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-cyan-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">👨</div>
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-[10px] border-2 border-white dark:border-slate-900">+</div>
-        </div>
-      </div>
 
-      {/* Next Session Card */}
-      <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl p-4 mb-4 border border-primary/20">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold text-primary uppercase tracking-wide">Próxima Sessão</span>
-          <div className="flex items-center gap-1 text-xs text-primary">
-            <Calendar className="h-3.5 w-3.5" />
-            {nextSession.date}
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-            👩‍💼
-          </div>
+  return (
+    <motion.div 
+      className="w-full max-w-lg mx-auto space-y-6"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Hero Card */}
+      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
+        <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <p className="text-sm font-medium text-foreground">{nextSession.mentor}</p>
-            <p className="text-xs text-muted-foreground">{nextSession.topic}</p>
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
+              <Sparkles className="h-3 w-3" />
+              Essencial
+            </span>
+            <h3 className="text-xl font-bold text-primary mb-2">
+              Mentoria com Especialistas
+            </h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              Acelere sua transição com orientação de quem já passou por isso.
+            </p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Target className="h-3 w-3 text-primary/70" />
+                Orientação personalizada
+              </span>
+              <span className="flex items-center gap-1">
+                <TrendingUp className="h-3 w-3 text-primary/70" />
+                Acelere sua transição
+              </span>
+            </div>
           </div>
-          <div className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-lg">
-            {nextSession.time}
+          
+          {/* Premium Card */}
+          <div className="hidden sm:block bg-card rounded-xl p-3 border shadow-sm min-w-[140px]">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Users className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-foreground">Orientação direcionada</p>
+                <p className="text-[8px] text-muted-foreground">De quem fez transição</p>
+              </div>
+            </div>
+            <div className="space-y-1 text-[9px] text-muted-foreground mb-2">
+              <div className="flex items-center gap-1">
+                <CheckCircle className="h-2.5 w-2.5 text-primary" />
+                1 sessão por mês
+              </div>
+              <div className="flex items-center gap-1">
+                <CheckCircle className="h-2.5 w-2.5 text-primary" />
+                Acesso a mentores
+              </div>
+            </div>
+            <Button size="sm" className="w-full h-6 text-[9px] btn-primary-gradient">
+              <Sparkles className="h-2.5 w-2.5 mr-1" />
+              Desbloquear
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Mentors Available */}
-      <div className="bg-emerald-500/5 rounded-xl p-4">
-        <p className="text-xs font-semibold text-foreground mb-3">Mentores Disponíveis</p>
-        <div className="space-y-3">
-          {mentors.map((mentor, index) => <motion.div key={mentor.name} className="bg-emerald-500/5 rounded-lg p-3 border border-emerald-500/10 flex items-center gap-3" initial={{
-          opacity: 0,
-          y: 10
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.3,
-          delay: index * 0.1
-        }}>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-lg">
-                {index === 0 ? '👩‍💼' : '👨‍💻'}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="text-xs font-semibold text-foreground">{mentor.name}</p>
-                  <div className="flex items-center gap-0.5">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />)}
+      {/* Mentors Available Section */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4 text-foreground" />
+            <h4 className="text-sm font-semibold text-foreground">Mentores Disponíveis</h4>
+          </div>
+          <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-2.5 py-1.5 text-[10px] text-muted-foreground">
+            <Search className="h-3 w-3" />
+            Buscar mentor...
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {mentors.map((mentor, index) => (
+            <motion.div
+              key={mentor.name}
+              className="bg-card rounded-xl p-4 border shadow-sm hover:shadow-md transition-shadow"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+            >
+              {/* Mentor Header */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="relative shrink-0">
+                  <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ring-2 ring-background shadow-md">
+                    <span className="text-sm font-semibold text-primary">{mentor.initials}</span>
                   </div>
+                  <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
                 </div>
-                <p className="text-[10px] text-muted-foreground">{mentor.title} • {mentor.sessions} sessões</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-semibold text-foreground truncate">{mentor.name}</p>
+                    <Linkedin className="h-3.5 w-3.5 text-muted-foreground" />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground truncate">{mentor.title}</p>
+                </div>
               </div>
-              <Button variant="outline" size="sm" className="h-7 text-[10px] px-2 rounded-lg">
-                <Calendar className="h-3 w-3 mr-1" />
-                Agendar
+
+              {/* Experience */}
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground mb-2.5">
+                <Briefcase className="h-3 w-3 text-primary/70" />
+                <span>{mentor.yearsExperience}+ anos de experiência</span>
+              </div>
+
+              {/* Expertise Tags */}
+              <div className="flex flex-wrap gap-1 mb-3">
+                {mentor.expertise.map((skill) => (
+                  <span 
+                    key={skill}
+                    className="text-[9px] px-2 py-0.5 rounded-md bg-muted/80 text-muted-foreground"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+
+              {/* Action Button */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full h-7 text-[10px]"
+                disabled
+              >
+                <Lock className="h-3 w-3 mr-1" />
+                Limite de sessões atingido
               </Button>
-            </motion.div>)}
+            </motion.div>
+          ))}
         </div>
       </div>
-    </motion.div>;
+    </motion.div>
+  );
 };
 const features = [{
   icon: Brain,

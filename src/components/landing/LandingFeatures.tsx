@@ -360,22 +360,22 @@ const NetworkingMockup = () => {
 // Mockup: Comunidade & Mentoria - Design similar to actual mentoring page
 const CommunityMockup = () => {
   const mentors = [{
-    name: "Ana Paula Silva",
+    name: "Ana Paula",
     initials: "AP",
-    title: "Ex-Head de RH | Coach",
+    title: "Ex-Head de RH",
     yearsExperience: 12,
-    expertise: ["Carreira", "Liderança", "Entrevistas"]
+    expertise: ["Carreira", "Liderança"]
   }, {
-    name: "Carlos Mendes",
+    name: "Carlos M.",
     initials: "CM",
     title: "Gerente de Projetos",
     yearsExperience: 10,
-    expertise: ["Gestão", "Agile", "Tecnologia"]
+    expertise: ["Gestão", "Agile"]
   }];
 
   return (
     <motion.div 
-      className="w-full max-w-sm mx-auto space-y-4 h-[420px] flex flex-col"
+      className="w-full max-w-sm mx-auto space-y-3"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -383,53 +383,53 @@ const CommunityMockup = () => {
     >
       {/* Hero Card */}
       <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-4 bg-gradient-to-br from-primary/5 to-transparent">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
-              <Sparkles className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full mb-2">
+              <Sparkles className="h-2.5 w-2.5" />
               Essencial
             </span>
-            <h3 className="text-xl font-bold text-primary mb-2">
+            <h3 className="text-lg font-bold text-primary mb-1">
               Mentoria com Especialistas
             </h3>
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-[10px] text-muted-foreground mb-2">
               Acelere sua transição com orientação de quem já passou por isso.
             </p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-muted-foreground">
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-[9px] text-muted-foreground">
               <span className="flex items-center gap-1">
-                <Target className="h-3 w-3 text-primary/70" />
+                <Target className="h-2.5 w-2.5 text-primary/70" />
                 Orientação personalizada
               </span>
               <span className="flex items-center gap-1">
-                <TrendingUp className="h-3 w-3 text-primary/70" />
+                <TrendingUp className="h-2.5 w-2.5 text-primary/70" />
                 Acelere sua transição
               </span>
             </div>
           </div>
           
           {/* Premium Card */}
-          <div className="hidden sm:block bg-card rounded-xl p-3 border shadow-sm min-w-[140px]">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Users className="h-4 w-4 text-primary" />
+          <div className="bg-card rounded-lg p-2.5 border shadow-sm min-w-[120px]">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="h-6 w-6 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Users className="h-3 w-3 text-primary" />
               </div>
               <div>
-                <p className="text-[10px] font-semibold text-foreground">Orientação direcionada</p>
-                <p className="text-[8px] text-muted-foreground">De quem fez transição</p>
+                <p className="text-[9px] font-semibold text-foreground">Orientação direcionada</p>
+                <p className="text-[7px] text-muted-foreground">De quem fez transição</p>
               </div>
             </div>
-            <div className="space-y-1 text-[9px] text-muted-foreground mb-2">
+            <div className="space-y-0.5 text-[8px] text-muted-foreground mb-1.5">
               <div className="flex items-center gap-1">
-                <CheckCircle className="h-2.5 w-2.5 text-primary" />
+                <CheckCircle className="h-2 w-2 text-primary" />
                 1 sessão por mês
               </div>
               <div className="flex items-center gap-1">
-                <CheckCircle className="h-2.5 w-2.5 text-primary" />
+                <CheckCircle className="h-2 w-2 text-primary" />
                 Acesso a mentores
               </div>
             </div>
-            <Button size="sm" className="w-full h-6 text-[9px] btn-primary-gradient">
-              <Sparkles className="h-2.5 w-2.5 mr-1" />
+            <Button size="sm" className="w-full h-5 text-[8px] btn-primary-gradient">
+              <Sparkles className="h-2 w-2 mr-1" />
               Desbloquear
             </Button>
           </div>
@@ -437,15 +437,15 @@ const CommunityMockup = () => {
       </div>
 
       {/* Mentors Available Section */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Users className="h-4 w-4 text-foreground" />
-            <h4 className="text-sm font-semibold text-foreground">Mentores Disponíveis</h4>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-1.5">
+            <Users className="h-3.5 w-3.5 text-foreground" />
+            <h4 className="text-xs font-semibold text-foreground">Mentores Disponíveis</h4>
           </div>
-          <div className="flex items-center gap-2 bg-muted/50 rounded-lg px-2.5 py-1.5 text-[10px] text-muted-foreground">
-            <Search className="h-3 w-3" />
-            Buscar mentor...
+          <div className="flex items-center gap-1.5 bg-muted/50 rounded-lg px-2 py-1 text-[9px] text-muted-foreground">
+            <Search className="h-2.5 w-2.5" />
+            Buscar...
           </div>
         </div>
 
@@ -453,41 +453,41 @@ const CommunityMockup = () => {
           {mentors.map((mentor, index) => (
             <motion.div
               key={mentor.name}
-              className="bg-card rounded-xl p-4 border shadow-sm hover:shadow-md transition-shadow"
+              className="bg-card rounded-lg p-3 border shadow-sm"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
               {/* Mentor Header */}
-              <div className="flex items-center gap-3 mb-3">
+              <div className="flex items-center gap-2 mb-2">
                 <div className="relative shrink-0">
-                  <div className="h-11 w-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ring-2 ring-background shadow-md">
-                    <span className="text-sm font-semibold text-primary">{mentor.initials}</span>
+                  <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ring-2 ring-background shadow-sm">
+                    <span className="text-xs font-semibold text-primary">{mentor.initials}</span>
                   </div>
-                  <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-background" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-sm font-semibold text-foreground truncate">{mentor.name}</p>
-                    <Linkedin className="h-3.5 w-3.5 text-muted-foreground" />
+                  <div className="flex items-center gap-1">
+                    <p className="text-xs font-semibold text-foreground truncate">{mentor.name}</p>
+                    <Linkedin className="h-3 w-3 text-muted-foreground shrink-0" />
                   </div>
-                  <p className="text-[10px] text-muted-foreground truncate">{mentor.title}</p>
+                  <p className="text-[9px] text-muted-foreground truncate">{mentor.title}</p>
                 </div>
               </div>
 
               {/* Experience */}
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground mb-2.5">
-                <Briefcase className="h-3 w-3 text-primary/70" />
-                <span>{mentor.yearsExperience}+ anos de experiência</span>
+              <div className="flex items-center gap-1 text-[9px] text-muted-foreground mb-2">
+                <Briefcase className="h-2.5 w-2.5 text-primary/70" />
+                <span>{mentor.yearsExperience}+ anos</span>
               </div>
 
               {/* Expertise Tags */}
-              <div className="flex flex-wrap gap-1 mb-3">
+              <div className="flex flex-wrap gap-1 mb-2">
                 {mentor.expertise.map((skill) => (
                   <span 
                     key={skill}
-                    className="text-[9px] px-2 py-0.5 rounded-md bg-muted/80 text-muted-foreground"
+                    className="text-[8px] px-1.5 py-0.5 rounded bg-muted/80 text-muted-foreground"
                   >
                     {skill}
                   </span>
@@ -498,11 +498,10 @@ const CommunityMockup = () => {
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="w-full h-7 text-[10px]"
-                disabled
+                className="w-full h-6 text-[9px]"
               >
-                <Lock className="h-3 w-3 mr-1" />
-                Limite de sessões atingido
+                <Calendar className="h-2.5 w-2.5 mr-1" />
+                Agendar
               </Button>
             </motion.div>
           ))}

@@ -42,7 +42,7 @@ const phases = [{
 
 // Mockup: Interactive Roda Migrei - using HeroMigreiWheel component
 const CycleMockup = () => {
-  return <div className="flex items-center justify-center min-h-[400px] relative">
+  return <div className="flex items-center justify-center h-[420px] relative">
       <HeroMigreiWheel />
     </div>;
 };
@@ -87,7 +87,7 @@ const Plan90Mockup = () => {
 
   return (
     <motion.div
-      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 w-full max-w-md mx-auto bg-gradient-to-br from-primary/5 to-transparent"
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 w-full max-w-sm mx-auto bg-gradient-to-br from-primary/5 to-transparent h-[420px] flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -122,7 +122,7 @@ const Plan90Mockup = () => {
       </div>
 
       {/* Months */}
-      <div className="space-y-2">
+      <div className="space-y-2 flex-1 overflow-hidden">
         {months.map((month, index) => (
           <motion.div
             key={month.number}
@@ -231,14 +231,14 @@ const NetworkingMockup = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-lg mx-auto space-y-4"
+      className="w-full max-w-sm mx-auto space-y-3 h-[420px] flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
       {/* Mission Card */}
-      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 bg-gradient-to-br from-primary/5 to-transparent">
+      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-4 bg-gradient-to-br from-primary/5 to-transparent">
         <div className="flex items-start gap-3 mb-4">
           <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
             <Target className="h-5 w-5 text-primary" />
@@ -273,7 +273,7 @@ const NetworkingMockup = () => {
       </div>
 
       {/* Two Column Layout */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2 flex-1 min-h-0">
         {/* Scripts Section */}
         <div className="bg-card rounded-xl border p-3 space-y-2.5">
           <div>
@@ -375,14 +375,14 @@ const CommunityMockup = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-lg mx-auto space-y-6"
+      className="w-full max-w-sm mx-auto space-y-4 h-[420px] flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
       {/* Hero Card */}
-      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
+      <div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-4 bg-gradient-to-br from-primary/5 to-transparent">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
             <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full mb-3">
@@ -437,7 +437,7 @@ const CommunityMockup = () => {
       </div>
 
       {/* Mentors Available Section */}
-      <div>
+      <div className="flex-1 min-h-0 overflow-hidden">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-foreground" />
@@ -449,7 +449,7 @@ const CommunityMockup = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           {mentors.map((mentor, index) => (
             <motion.div
               key={mentor.name}

@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase } from "lucide-react";
+import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase, ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
 import { ScrollToNextButton } from "./ScrollToNextButton";
@@ -47,104 +47,173 @@ const CycleMockup = () => {
     </div>;
 };
 
-// Mockup: Plano de 90 Dias - Realistic design
+// Mockup: Plano de 90 Dias - Matching actual Plan90Days component
 const Plan90Mockup = () => {
-  const months = [{
-    name: "Mês 1",
-    theme: "Fundação",
-    progress: 85,
-    tasks: 4,
-    completed: 3,
-    active: true
-  }, {
-    name: "Mês 2",
-    theme: "Construção",
-    progress: 40,
-    tasks: 4,
-    completed: 2,
-    active: false
-  }, {
-    name: "Mês 3",
-    theme: "Lançamento",
-    progress: 0,
-    tasks: 4,
-    completed: 0,
-    locked: true
-  }];
-  return <motion.div className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-6 w-full max-w-md mx-auto bg-gradient-to-br from-primary/5 to-transparent" initial={{
-    opacity: 0,
-    y: 20
-  }} whileInView={{
-    opacity: 1,
-    y: 0
-  }} viewport={{
-    once: true
-  }} transition={{
-    duration: 0.5
-  }}>
+  const months = [
+    {
+      number: 1,
+      name: "Mês 1: Fundação",
+      description: "Estruturar bases e primeiros passos",
+      progress: 100,
+      tasks: 4,
+      completed: 4,
+      expanded: false
+    },
+    {
+      number: 2,
+      name: "Mês 2: Construção",
+      description: "Desenvolver habilidades e networking",
+      progress: 75,
+      tasks: 4,
+      completed: 3,
+      expanded: true,
+      weeklyTasks: [
+        { week: 1, tasks: [{ title: "Atualizar LinkedIn", done: true }, { title: "Mapear empresas-alvo", done: true }] },
+        { week: 2, tasks: [{ title: "Preparar pitch pessoal", done: true }, { title: "Contatar 5 pessoas", done: false }] },
+      ]
+    },
+    {
+      number: 3,
+      name: "Mês 3: Lançamento",
+      description: "Aplicar ativamente e colher resultados",
+      progress: 0,
+      tasks: 4,
+      completed: 0,
+      expanded: false
+    }
+  ];
+
+  const overallProgress = 58;
+
+  return (
+    <motion.div
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 w-full max-w-md mx-auto bg-gradient-to-br from-primary/5 to-transparent"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Target className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-foreground">Plano de Transição</p>
-            <p className="text-xs text-muted-foreground">42 dias restantes</p>
-          </div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+          <Calendar className="h-4 w-4 text-primary" />
         </div>
-        <div className="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1.5 rounded-full">
-          Semana 6
+        <div>
+          <p className="text-sm font-semibold text-foreground">Plano Migrei de 90 Dias</p>
+          <p className="text-xs text-muted-foreground">Divida sua meta em 3 meses estratégicos</p>
         </div>
       </div>
 
-      {/* Monthly progress cards */}
-      <div className="bg-primary/5 rounded-xl p-4 mb-4">
-        <div className="grid grid-cols-3 gap-3">
-          {months.map((month, index) => <div key={month.name} className={`bg-primary/5 rounded-lg p-3 border-2 transition-all ${month.active ? "border-primary/40 shadow-sm" : month.locked ? "border-muted/20 opacity-50" : "border-muted/10"}`}>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-foreground">{month.name}</span>
-                {month.active && <Check className="h-4 w-4 text-green-500" />}
-                {month.locked && <Lock className="h-3.5 w-3.5 text-muted-foreground" />}
-              </div>
-              <p className="text-[11px] text-muted-foreground mb-3">{month.theme}</p>
-              
-              {/* Progress bar */}
-              <div className="h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden mb-2">
-                <motion.div className="h-full bg-primary rounded-full" initial={{
-              width: 0
-            }} whileInView={{
-              width: `${month.progress}%`
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.8,
-              delay: index * 0.2
-            }} />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground">{month.completed}/{month.tasks} tarefas</span>
-                <span className="text-[10px] font-semibold text-primary">{month.progress}%</span>
-              </div>
-            </div>)}
+      {/* Overall Progress */}
+      <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 mb-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs font-medium text-foreground">Progresso Geral</span>
+          <span className="text-sm font-bold text-primary">{overallProgress}%</span>
+        </div>
+        <div className="h-2 bg-muted/30 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-primary rounded-full"
+            initial={{ width: 0 }}
+            whileInView={{ width: `${overallProgress}%` }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          />
         </div>
       </div>
 
-      {/* Current task */}
-      <div className="bg-primary/5 rounded-xl p-4">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground">Finalizar análise de competências</p>
-            <p className="text-xs text-muted-foreground">Prazo: Hoje • +50 XP</p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-primary" />
-        </div>
+      {/* Months */}
+      <div className="space-y-2">
+        {months.map((month, index) => (
+          <motion.div
+            key={month.number}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className={`rounded-lg border ${month.expanded ? 'ring-1 ring-primary border-primary/30' : 'border-muted/20'} overflow-hidden`}
+          >
+            {/* Month Header */}
+            <div className="p-3 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                  month.progress === 100
+                    ? 'bg-green-500 text-white'
+                    : 'bg-primary/10 text-primary'
+                }`}>
+                  {month.progress === 100 ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    month.number
+                  )}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-foreground">{month.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{month.description}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="text-right">
+                  <p className="text-[10px] font-medium text-foreground">{month.progress}%</p>
+                  <p className="text-[9px] text-muted-foreground">{month.completed}/{month.tasks}</p>
+                </div>
+                {month.expanded ? (
+                  <ChevronUp className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                )}
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="px-3 pb-2">
+              <div className="h-1 bg-muted/20 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: `${month.progress}%` }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.15 }}
+                />
+              </div>
+            </div>
+
+            {/* Expanded Content - Weekly Tasks */}
+            {month.expanded && month.weeklyTasks && (
+              <div className="px-3 pb-3 space-y-2">
+                {month.weeklyTasks.map((week) => (
+                  <div key={week.week} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-[9px] px-1.5 py-0">
+                        Semana {week.week}
+                      </Badge>
+                      <span className="text-[9px] text-muted-foreground">
+                        {week.tasks.filter(t => t.done).length}/{week.tasks.length} concluídas
+                      </span>
+                    </div>
+                    <div className="space-y-0.5 pl-1">
+                      {week.tasks.map((task, i) => (
+                        <div
+                          key={i}
+                          className={`flex items-center gap-1.5 text-[10px] ${task.done ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                        >
+                          <div className={`w-3 h-3 rounded border flex items-center justify-center ${
+                            task.done ? 'bg-primary border-primary' : 'border-muted-foreground/30'
+                          }`}>
+                            {task.done && <Check className="w-2 h-2 text-primary-foreground" />}
+                          </div>
+                          {task.title}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        ))}
       </div>
-    </motion.div>;
+    </motion.div>
+  );
 };
 
 // Mockup: Networking Prático - Design similar to actual page

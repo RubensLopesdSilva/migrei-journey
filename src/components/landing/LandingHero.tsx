@@ -90,7 +90,7 @@ export const LandingHero = () => {
                 Começar grátis
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="px-6 py-6 text-lg rounded-full" onClick={() => scrollToSection("como-funciona")}>
+              <Button size="lg" variant="outline" className="px-6 py-6 text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
                 Ver como funciona
               </Button>
             </motion.div>

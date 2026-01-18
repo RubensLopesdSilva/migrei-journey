@@ -10,6 +10,7 @@ import {
   Sparkles
 } from "lucide-react";
 import { ScrollToNextButton } from "./ScrollToNextButton";
+import { Button } from "@/components/ui/button";
 
 const phases = [
   {
@@ -221,6 +222,26 @@ export const LandingCycle = () => {
             ))}
           </div>
         </div>
+
+        {/* Simple CTA */}
+        <motion.div
+          className="flex justify-center mt-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+        >
+          <Button
+            size="lg"
+            className="rounded-full px-8"
+            onClick={() => {
+              const element = document.getElementById("planos");
+              element?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            Comece sua transição agora
+          </Button>
+        </motion.div>
 
         <ScrollToNextButton targetId="planos" />
       </div>

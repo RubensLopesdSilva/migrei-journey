@@ -4,10 +4,21 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { startOfWeek, endOfWeek, format } from 'date-fns';
 
+export type NetworkingActionType = 
+  | 'connect'      // Enviar convites de conexão
+  | 'comment'      // Comentar em posts
+  | 'message'      // Enviar mensagens diretas
+  | 'coffee'       // Pedir coffee chat
+  | 'share'        // Compartilhar conteúdo próprio
+  | 'followup'     // Fazer follow-up com contatos
+  | 'referral'     // Pedir indicação
+  | 'thank'        // Agradecer/reconhecer contatos
+  | 'event';       // Participar de eventos
+
 export interface NetworkingAction {
   id: string;
   user_id: string;
-  action_type: 'connect' | 'comment' | 'message';
+  action_type: NetworkingActionType;
   target_name: string | null;
   target_profile_url: string | null;
   action_description: string | null;
@@ -21,11 +32,12 @@ export interface NetworkingAction {
 
 interface NetworkingGoal {
   id: string;
-  action_type: 'connect' | 'comment' | 'message';
+  action_type: NetworkingActionType;
   title: string;
   description: string;
   target_count: number;
   xp_reward: number;
+  week?: number; // Qual semana do mês (1-4) - se não definido, vale para todas
 }
 
 interface UserProgressMinimal {
@@ -34,49 +46,313 @@ interface UserProgressMinimal {
   total_xp: number;
 }
 
-// Default weekly networking goals per phase
+// Metas de networking por fase - sistema progressivo
+// Cada fase tem ações específicas que evoluem ao longo do mês
+const getPhaseGoals = (phaseNumber: number): NetworkingGoal[] => {
+  const phaseGoalsMap: Record<number, NetworkingGoal[]> = {
+    // FASE 1: DESPERTAR - Foco em exploração e inspiração
+    1: [
+      {
+        id: 'connect-1',
+        action_type: 'connect',
+        title: 'Enviar 3 convites',
+        description: 'Conecte com pessoas que inspiram sua mudança',
+        target_count: 3,
+        xp_reward: 15
+      },
+      {
+        id: 'comment-1',
+        action_type: 'comment',
+        title: 'Comentar 2 posts',
+        description: 'Comente em conteúdos sobre transição de carreira',
+        target_count: 2,
+        xp_reward: 10
+      },
+      {
+        id: 'share-1',
+        action_type: 'share',
+        title: 'Compartilhar 1 reflexão',
+        description: 'Publique sobre sua decisão de mudar',
+        target_count: 1,
+        xp_reward: 15
+      },
+      {
+        id: 'event-1',
+        action_type: 'event',
+        title: 'Participar de 1 evento',
+        description: 'Entre em um webinar ou live sobre carreira',
+        target_count: 1,
+        xp_reward: 20
+      }
+    ],
+    
+    // FASE 2: DESCOBRIR - Foco em explorar possibilidades
+    2: [
+      {
+        id: 'connect-2',
+        action_type: 'connect',
+        title: 'Enviar 4 convites',
+        description: 'Conecte para explorar possibilidades de carreira',
+        target_count: 4,
+        xp_reward: 20
+      },
+      {
+        id: 'comment-2',
+        action_type: 'comment',
+        title: 'Comentar 3 posts',
+        description: 'Aprenda com quem vive a realidade que você busca',
+        target_count: 3,
+        xp_reward: 15
+      },
+      {
+        id: 'message-2',
+        action_type: 'message',
+        title: 'Enviar 2 mensagens',
+        description: 'Pergunte sobre rotina e desafios da área',
+        target_count: 2,
+        xp_reward: 15
+      },
+      {
+        id: 'coffee-2',
+        action_type: 'coffee',
+        title: 'Pedir 1 coffee chat',
+        description: 'Convide alguém para uma conversa de 15 min',
+        target_count: 1,
+        xp_reward: 25
+      },
+      {
+        id: 'event-2',
+        action_type: 'event',
+        title: 'Participar de 1 evento',
+        description: 'Explore eventos da área que te interessa',
+        target_count: 1,
+        xp_reward: 20
+      }
+    ],
+    
+    // FASE 3: DECIDIR - Foco em validação
+    3: [
+      {
+        id: 'connect-3',
+        action_type: 'connect',
+        title: 'Enviar 4 convites',
+        description: 'Valide sua decisão com quem trilhou caminhos similares',
+        target_count: 4,
+        xp_reward: 20
+      },
+      {
+        id: 'comment-3',
+        action_type: 'comment',
+        title: 'Comentar 3 posts',
+        description: 'Interaja para confirmar seu direcionamento',
+        target_count: 3,
+        xp_reward: 15
+      },
+      {
+        id: 'message-3',
+        action_type: 'message',
+        title: 'Enviar 2 mensagens',
+        description: 'Valide suas hipóteses com profissionais da área',
+        target_count: 2,
+        xp_reward: 15
+      },
+      {
+        id: 'coffee-3',
+        action_type: 'coffee',
+        title: 'Pedir 2 coffee chats',
+        description: 'Aprofunde conversas para validar sua escolha',
+        target_count: 2,
+        xp_reward: 30
+      },
+      {
+        id: 'thank-3',
+        action_type: 'thank',
+        title: 'Agradecer 2 contatos',
+        description: 'Reconheça quem te ajudou na decisão',
+        target_count: 2,
+        xp_reward: 10
+      }
+    ],
+    
+    // FASE 4: DESENVOLVER - Foco em aprendizado e visibilidade
+    4: [
+      {
+        id: 'connect-4',
+        action_type: 'connect',
+        title: 'Enviar 5 convites',
+        description: 'Conecte com referências da sua nova área',
+        target_count: 5,
+        xp_reward: 25
+      },
+      {
+        id: 'comment-4',
+        action_type: 'comment',
+        title: 'Comentar 4 posts',
+        description: 'Mostre seu aprendizado através dos comentários',
+        target_count: 4,
+        xp_reward: 20
+      },
+      {
+        id: 'share-4',
+        action_type: 'share',
+        title: 'Compartilhar 2 aprendizados',
+        description: 'Publique sobre o que está aprendendo',
+        target_count: 2,
+        xp_reward: 25
+      },
+      {
+        id: 'message-4',
+        action_type: 'message',
+        title: 'Enviar 2 mensagens',
+        description: 'Peça feedback sobre seu desenvolvimento',
+        target_count: 2,
+        xp_reward: 15
+      },
+      {
+        id: 'event-4',
+        action_type: 'event',
+        title: 'Participar de 1 evento',
+        description: 'Faça networking em eventos da sua área',
+        target_count: 1,
+        xp_reward: 20
+      },
+      {
+        id: 'followup-4',
+        action_type: 'followup',
+        title: 'Fazer 2 follow-ups',
+        description: 'Retome contato com conexões estratégicas',
+        target_count: 2,
+        xp_reward: 15
+      }
+    ],
+    
+    // FASE 5: DESLANCHAR - Foco máximo em oportunidades
+    5: [
+      {
+        id: 'connect-5',
+        action_type: 'connect',
+        title: 'Enviar 6 convites',
+        description: 'Amplie sua rede para acessar oportunidades',
+        target_count: 6,
+        xp_reward: 30
+      },
+      {
+        id: 'comment-5',
+        action_type: 'comment',
+        title: 'Comentar 5 posts',
+        description: 'Aumente visibilidade com engajamento consistente',
+        target_count: 5,
+        xp_reward: 25
+      },
+      {
+        id: 'message-5',
+        action_type: 'message',
+        title: 'Enviar 3 mensagens',
+        description: 'Apresente-se para potenciais empregadores',
+        target_count: 3,
+        xp_reward: 20
+      },
+      {
+        id: 'referral-5',
+        action_type: 'referral',
+        title: 'Pedir 2 indicações',
+        description: 'Solicite referências de conexões de confiança',
+        target_count: 2,
+        xp_reward: 30
+      },
+      {
+        id: 'coffee-5',
+        action_type: 'coffee',
+        title: 'Pedir 2 coffee chats',
+        description: 'Converse com decisores e influenciadores',
+        target_count: 2,
+        xp_reward: 30
+      },
+      {
+        id: 'share-5',
+        action_type: 'share',
+        title: 'Compartilhar 2 conteúdos',
+        description: 'Mostre sua expertise e disponibilidade',
+        target_count: 2,
+        xp_reward: 25
+      },
+      {
+        id: 'followup-5',
+        action_type: 'followup',
+        title: 'Fazer 3 follow-ups',
+        description: 'Mantenha processos aquecidos',
+        target_count: 3,
+        xp_reward: 20
+      },
+      {
+        id: 'event-5',
+        action_type: 'event',
+        title: 'Participar de 2 eventos',
+        description: 'Maximize presença em eventos de networking',
+        target_count: 2,
+        xp_reward: 30
+      }
+    ],
+    
+    // FASE 6: DESFRUTAR - Foco em retribuição e manutenção
+    6: [
+      {
+        id: 'connect-6',
+        action_type: 'connect',
+        title: 'Enviar 3 convites',
+        description: 'Cultive sua rede com valor genuíno',
+        target_count: 3,
+        xp_reward: 15
+      },
+      {
+        id: 'comment-6',
+        action_type: 'comment',
+        title: 'Comentar 3 posts',
+        description: 'Compartilhe aprendizados da sua jornada',
+        target_count: 3,
+        xp_reward: 15
+      },
+      {
+        id: 'share-6',
+        action_type: 'share',
+        title: 'Compartilhar 2 conquistas',
+        description: 'Inspire outros com sua história',
+        target_count: 2,
+        xp_reward: 25
+      },
+      {
+        id: 'thank-6',
+        action_type: 'thank',
+        title: 'Agradecer 3 pessoas',
+        description: 'Reconheça quem fez parte da sua transição',
+        target_count: 3,
+        xp_reward: 20
+      },
+      {
+        id: 'message-6',
+        action_type: 'message',
+        title: 'Oferecer ajuda a 2 pessoas',
+        description: 'Retribua orientando quem está começando',
+        target_count: 2,
+        xp_reward: 20
+      },
+      {
+        id: 'referral-6',
+        action_type: 'referral',
+        title: 'Indicar 1 pessoa',
+        description: 'Ajude alguém da comunidade com uma indicação',
+        target_count: 1,
+        xp_reward: 25
+      }
+    ]
+  };
+
+  return phaseGoalsMap[phaseNumber] || phaseGoalsMap[1];
+};
+
+// Wrapper para manter compatibilidade
 const getWeeklyGoals = (phaseNumber: number): NetworkingGoal[] => {
-  const baseGoals: NetworkingGoal[] = [
-    {
-      id: 'connect-goal',
-      action_type: 'connect',
-      title: 'Enviar 3 convites',
-      description: 'Conecte-se com pessoas que já estão onde você quer chegar',
-      target_count: 3,
-      xp_reward: 15
-    },
-    {
-      id: 'comment-goal',
-      action_type: 'comment',
-      title: 'Comentar 2 posts',
-      description: 'Faça perguntas sobre rotina, desafios e caminhos possíveis',
-      target_count: 2,
-      xp_reward: 10
-    }
-  ];
-
-  // Customize goals based on phase
-  if (phaseNumber === 1) {
-    baseGoals[0].description = 'Conecte com pessoas que inspiram sua mudança';
-    baseGoals[1].description = 'Comente em conteúdos sobre transição de carreira';
-  } else if (phaseNumber === 2) {
-    baseGoals[0].description = 'Conecte para explorar possibilidades de carreira';
-    baseGoals[1].description = 'Aprenda com quem vive a realidade que você busca';
-  } else if (phaseNumber === 3) {
-    baseGoals[0].description = 'Valide sua decisão com quem trilhou caminhos similares';
-    baseGoals[1].description = 'Interaja para confirmar seu direcionamento';
-  } else if (phaseNumber === 4) {
-    baseGoals[0].description = 'Conecte com referências da sua nova área';
-    baseGoals[1].description = 'Mostre seu aprendizado através dos comentários';
-  } else if (phaseNumber === 5) {
-    baseGoals[0].description = 'Amplie sua rede para acessar oportunidades';
-    baseGoals[1].description = 'Aumente visibilidade com engajamento consistente';
-  } else if (phaseNumber === 6) {
-    baseGoals[0].description = 'Cultive sua rede com valor genuíno';
-    baseGoals[1].description = 'Compartilhe aprendizados da sua jornada';
-  }
-
-  return baseGoals;
+  return getPhaseGoals(phaseNumber);
 };
 
 export function useNetworking() {
@@ -158,7 +434,7 @@ export function useNetworking() {
   }, [userProgressData?.current_phase_number]);
 
   // Calculate progress for each goal type
-  const getGoalProgress = useCallback((actionType: 'connect' | 'comment' | 'message') => {
+  const getGoalProgress = useCallback((actionType: NetworkingActionType) => {
     return actions.filter(a => a.action_type === actionType && a.completed).length;
   }, [actions]);
 
@@ -192,7 +468,7 @@ export function useNetworking() {
 
   // Complete an action with evidence validation
   const completeAction = async (
-    actionType: 'connect' | 'comment' | 'message',
+    actionType: NetworkingActionType,
     evidence: { targetName?: string; profileUrl?: string; description?: string }
   ) => {
     if (!user) return { success: false, error: 'Usuário não autenticado' };

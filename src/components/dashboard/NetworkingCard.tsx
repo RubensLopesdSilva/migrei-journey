@@ -1,11 +1,11 @@
 import { useState, forwardRef } from "react";
-import { Users, ArrowRight, UserPlus, MessageCircle, MessageSquare, Check, Loader2, Sparkles, Lightbulb } from "lucide-react";
+import { Users, ArrowRight, UserPlus, MessageCircle, MessageSquare, Check, Loader2, Sparkles, Lightbulb, Coffee, Share2, RefreshCw, UserCheck, Heart, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { focusRingClasses } from "@/components/ui/focus-ring";
 import { cn } from "@/lib/utils";
 import { AnimatedProgress } from "@/components/ui/animated-container";
-import { useNetworking } from "@/hooks/useNetworking";
+import { useNetworking, type NetworkingActionType } from "@/hooks/useNetworking";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -28,17 +28,23 @@ const itemVariants = {
   visible: { opacity: 1, x: 0 }
 };
 
-const getActionIcon = (type: 'connect' | 'comment' | 'message') => {
+const getActionIcon = (type: NetworkingActionType) => {
   switch (type) {
     case 'connect': return UserPlus;
     case 'comment': return MessageCircle;
     case 'message': return MessageSquare;
+    case 'coffee': return Coffee;
+    case 'share': return Share2;
+    case 'followup': return RefreshCw;
+    case 'referral': return UserCheck;
+    case 'thank': return Heart;
+    case 'event': return Calendar;
     default: return Users;
   }
 };
 
 // Strategic context for each action type - explains WHY this matters
-const actionStrategicContext: Record<string, { 
+const actionStrategicContext: Record<NetworkingActionType, { 
   why: string; 
   tip: string;
   example: string;
@@ -57,6 +63,36 @@ const actionStrategicContext: Record<string, {
     why: "Mensagens diretas criam relacionamentos reais",
     tip: "Seja específico sobre o que quer aprender, não peça emprego",
     example: "Ex: 'Posso te fazer 2 perguntas sobre sua transição para [área]?'"
+  },
+  coffee: {
+    why: "Conversas 1:1 aceleram sua transição mais do que qualquer curso",
+    tip: "Peça 15-20 min, tenha perguntas preparadas, ofereça algo em troca",
+    example: "Ex: 'Adoraria ouvir sobre sua jornada. Posso te pagar um café virtual de 15 min?'"
+  },
+  share: {
+    why: "Compartilhar posiciona você como alguém em evolução ativa",
+    tip: "Conte sobre aprendizados, não só conquistas - vulnerabilidade conecta",
+    example: "Ex: 'Essa semana aprendi que [insight]. Alguém mais passou por isso?'"
+  },
+  followup: {
+    why: "90% das oportunidades vêm de follow-ups - a maioria desiste cedo demais",
+    tip: "Agradeça, compartilhe progresso, peça próximo passo",
+    example: "Ex: 'Oi [nome], apliquei o que você sugeriu e [resultado]. Obrigado!'"
+  },
+  referral: {
+    why: "Indicações têm 10x mais chances de virar entrevista",
+    tip: "Facilite: envie seu currículo formatado e pontos-chave",
+    example: "Ex: 'Você conhece alguém em [empresa/área]? Posso enviar meu perfil para facilitar?'"
+  },
+  thank: {
+    why: "Gratidão fortalece laços e abre portas para futuras ajudas",
+    tip: "Seja específico sobre o impacto que a pessoa teve",
+    example: "Ex: 'Sua dica sobre [assunto] me ajudou a [resultado]. Muito obrigado!'"
+  },
+  event: {
+    why: "Eventos são atalhos para conhecer várias pessoas relevantes de uma vez",
+    tip: "Chegue cedo, faça 3 conexões significativas, siga no LinkedIn no mesmo dia",
+    example: "Ex: Participei do [evento], conectei com [pessoa] e aprendi sobre [tema]."
   }
 };
 
@@ -77,7 +113,7 @@ export const NetworkingCard = forwardRef<HTMLDivElement, object>(function Networ
   const { toast } = useToast();
   
   const [selectedAction, setSelectedAction] = useState<{
-    actionType: 'connect' | 'comment' | 'message';
+    actionType: NetworkingActionType;
     title: string;
     description: string;
   } | null>(null);

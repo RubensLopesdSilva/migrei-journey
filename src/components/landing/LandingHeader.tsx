@@ -40,7 +40,14 @@ export const LandingHeader = () => {
       <div className="container mx-auto px-6 md:px-12 lg:px-16 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <img src={logoMigrei} alt="Migrei" className="h-12 md:h-16" />
+          <img 
+            src={logoMigrei} 
+            alt="Migrei - Plataforma de Transição de Carreira" 
+            className="h-12 md:h-16"
+            loading="eager"
+            width="128"
+            height="64"
+          />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">

@@ -1,0 +1,44 @@
+{
+  "name": "Migrei - Transição de Carreira",
+  "short_name": "Migrei",
+  "description": "Plataforma de transição de carreira com método estruturado em 6 fases",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0b",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["business", "education", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Acessar seu painel principal",
+      "url": "/",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Progresso",
+      "short_name": "Progresso",
+      "description": "Ver seu progresso na jornada",
+      "url": "/progresso",
+      "icons": [{ "src": "/favicon.png", "sizes": "96x96" }]
+    }
+  ]
+}

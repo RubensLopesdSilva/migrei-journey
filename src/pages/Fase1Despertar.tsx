@@ -13,6 +13,7 @@ import { useAwakening } from '@/hooks/useAwakening';
 import { usePhase1Activities } from '@/hooks/usePhase1Activities';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { SEOHead, SEOBreadcrumbs } from '@/components/seo';
 import { Brain, Target, Frown, Heart, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -112,15 +113,29 @@ export default function Fase1Despertar() {
   };
 
   return (
-    <PageLayout>
-      <PageContent className="space-y-6">
-        {/* Breadcrumb */}
-        <PageBreadcrumb
-          items={[
-            { label: "Jornada", href: "/progresso" },
-            { label: "Fase 1: Despertar", current: true }
-          ]}
-        />
+    <>
+      <SEOHead
+        title="Fase 1: Despertar - Consciência para Mudança de Carreira | Migrei"
+        description="Inicie sua transição de carreira tomando consciência da necessidade de mudança. Avalie sua prontidão, mapeie suas dores e declare seu compromisso."
+        canonical="https://migrei.com/fase/despertar"
+        noIndex={true}
+      />
+      <SEOBreadcrumbs
+        items={[
+          { name: "Início", url: "/" },
+          { name: "Jornada", url: "/progresso" },
+          { name: "Fase 1: Despertar", url: "/fase/despertar" }
+        ]}
+      />
+      <PageLayout>
+        <PageContent className="space-y-6">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              { label: "Jornada", href: "/progresso" },
+              { label: "Fase 1: Despertar", current: true }
+            ]}
+          />
 
         {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
         <PhaseIntroBlock data={phaseIntroData} />
@@ -148,5 +163,6 @@ export default function Fase1Despertar() {
         />
       </PageContent>
     </PageLayout>
+    </>
   );
 }

@@ -1,0 +1,37 @@
+import { Helmet } from "react-helmet-async";
+
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+interface SEOBreadcrumbsProps {
+  items: BreadcrumbItem[];
+}
+
+/**
+ * SEO Breadcrumbs component that adds JSON-LD structured data
+ * for better search engine understanding of page hierarchy
+ */
+export const SEOBreadcrumbs = ({ items }: SEOBreadcrumbsProps) => {
+  const baseUrl = "https://migrei.com";
+  
+  const breadcrumbList = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "name": item.name,
+      "item": `${baseUrl}${item.url}`
+    }))
+  };
+
+  return (
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbList)}
+      </script>
+    </Helmet>
+  );
+};

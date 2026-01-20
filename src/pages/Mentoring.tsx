@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
+import { SEOHead, SEOBreadcrumbs } from "@/components/seo";
 import { motion } from "framer-motion";
 import { 
   Calendar, 
@@ -93,15 +94,22 @@ export default function Mentoring() {
   }
 
   return (
-    <PageLayout>
-      <PageContent>
-        <div className="space-y-8">
-          {/* Breadcrumb */}
-          <PageBreadcrumb
-            items={[
-              { label: "Mentoria", current: true }
-            ]}
-          />
+    <>
+      <SEOHead
+        title="Mentoria com Especialistas em Carreira | Migrei"
+        description="Agende sessões de mentoria com especialistas em transição de carreira. Orientação personalizada para sua jornada profissional."
+        canonical="https://migrei.com/mentoria"
+        noIndex={true}
+      />
+      <PageLayout>
+        <PageContent>
+          <div className="space-y-8">
+            {/* Breadcrumb */}
+            <PageBreadcrumb
+              items={[
+                { label: "Mentoria", current: true }
+              ]}
+            />
 
           {/* Hero Section */}
           <MentoringHero
@@ -315,5 +323,6 @@ export default function Mentoring() {
         />
       </PageContent>
     </PageLayout>
+    </>
   );
 }

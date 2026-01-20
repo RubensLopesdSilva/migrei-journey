@@ -16,6 +16,7 @@ import { SymbolicCelebration } from '@/components/enjoy/SymbolicCelebration';
 import { CycleReentry } from '@/components/enjoy/CycleReentry';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { PhaseAccessGate } from '@/components/subscription/PhaseAccessGate';
+import { SEOHead, SEOBreadcrumbs } from '@/components/seo';
 
 type Step = 'evaluation' | 'achievements' | 'report' | 'celebration' | 'reentry';
 
@@ -120,45 +121,60 @@ const Fase6Desfrutar = () => {
   };
 
   return (
-    <PhaseAccessGate phaseNumber={6} phaseName="Fase 6: Desfrutar">
-      <PageLayout>
-        <PageContent>
-          <div className="container mx-auto max-w-6xl space-y-6">
-            {/* Breadcrumb */}
-            <PageBreadcrumb
-              items={[
-                { label: "Jornada", href: "/progresso" },
-                { label: "Fase 6: Desfrutar", current: true }
-              ]}
-            />
+    <>
+      <SEOHead
+        title="Fase 6: Desfrutar - Celebre suas Conquistas | Migrei"
+        description="Celebre sua transição de carreira, consolide sua nova identidade profissional e prepare-se para novos ciclos de evolução."
+        canonical="https://migrei.com/fase/desfrutar"
+        noIndex={true}
+      />
+      <SEOBreadcrumbs
+        items={[
+          { name: "Início", url: "/" },
+          { name: "Jornada", url: "/progresso" },
+          { name: "Fase 6: Desfrutar", url: "/fase/desfrutar" }
+        ]}
+      />
+      <PhaseAccessGate phaseNumber={6} phaseName="Fase 6: Desfrutar">
+        <PageLayout>
+          <PageContent>
+            <div className="container mx-auto max-w-6xl space-y-6">
+              {/* Breadcrumb */}
+              <PageBreadcrumb
+                items={[
+                  { label: "Jornada", href: "/progresso" },
+                  { label: "Fase 6: Desfrutar", current: true }
+                ]}
+              />
 
-            {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
-            <PhaseIntroBlock data={phaseIntroData} />
+              {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+              <PhaseIntroBlock data={phaseIntroData} />
 
-            {/* Phase Steps Navigation */}
-            <PhaseSteps
-              steps={steps}
-              activeStep={activeStep}
-              onStepChange={(step) => setActiveStep(step as Step)}
-              completedSteps={completedSteps}
-              phaseColor={PHASE_COLORS[6]}
-            />
+              {/* Phase Steps Navigation */}
+              <PhaseSteps
+                steps={steps}
+                activeStep={activeStep}
+                onStepChange={(step) => setActiveStep(step as Step)}
+                completedSteps={completedSteps}
+                phaseColor={PHASE_COLORS[6]}
+              />
 
-            {/* Step Content */}
-            <div className="mt-6">
-              {renderStepContent()}
+              {/* Step Content */}
+              <div className="mt-6">
+                {renderStepContent()}
+              </div>
+
+              {/* Floating Coach Button */}
+              <FloatingCoachButton
+                phase="desfrutar"
+                context={`Usuário está na aba: ${activeStep}. Fase de celebração e consolidação da transição.`}
+                greeting="Parabéns! 🎉 Você chegou à fase final! Estou aqui para te ajudar a celebrar suas conquistas, gerar seu relatório final e, se desejar, iniciar um novo ciclo de evolução. Como posso ajudar?"
+              />
             </div>
-
-            {/* Floating Coach Button */}
-            <FloatingCoachButton
-              phase="desfrutar"
-              context={`Usuário está na aba: ${activeStep}. Fase de celebração e consolidação da transição.`}
-              greeting="Parabéns! 🎉 Você chegou à fase final! Estou aqui para te ajudar a celebrar suas conquistas, gerar seu relatório final e, se desejar, iniciar um novo ciclo de evolução. Como posso ajudar?"
-            />
-          </div>
-        </PageContent>
-      </PageLayout>
-    </PhaseAccessGate>
+          </PageContent>
+        </PageLayout>
+      </PhaseAccessGate>
+    </>
   );
 };
 

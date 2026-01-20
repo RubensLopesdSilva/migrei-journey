@@ -15,7 +15,14 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
           {/* Brand + Newsletter */}
           <div>
             <div className="bg-slate-800/50 rounded-xl p-4 inline-block mb-4">
-              <img src={logoMigrei} alt="Migrei" className="h-8 brightness-0 invert" />
+              <img 
+                src={logoMigrei} 
+                alt="Migrei - Logo" 
+                className="h-8 brightness-0 invert"
+                loading="lazy"
+                width="64"
+                height="32"
+              />
             </div>
             <p className="text-slate-400 text-sm mb-6">
               Comece agora e experimente nossa plataforma

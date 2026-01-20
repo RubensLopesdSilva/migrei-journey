@@ -45,7 +45,7 @@ export const LandingFAQ = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Dúvidas frequentes
+            Dúvidas frequentes sobre transição de carreira
           </h2>
         </motion.div>
 

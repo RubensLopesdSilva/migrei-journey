@@ -114,7 +114,7 @@ export const LandingCycle = () => {
             A sua{" "}
             <span className="relative inline-block text-primary">
               transição
-              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none">
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
                 <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>{" "}

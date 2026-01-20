@@ -31,6 +31,7 @@ import Fase4Desenvolver from "./pages/Fase4Desenvolver";
 import Fase5Deslanchar from "./pages/Fase5Deslanchar";
 import Fase6Desfrutar from "./pages/Fase6Desfrutar";
 import Landing from "./pages/Landing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,6 +72,7 @@ const App = () => (
                       <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
                       <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
                       <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
+                      <Route path="/privacidade" element={<PrivacyPolicy />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>

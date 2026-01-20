@@ -14,6 +14,7 @@ import { SkillsRadar } from '@/components/discovery/SkillsRadar';
 import { ProfessionRecommendations } from '@/components/discovery/ProfessionRecommendations';
 import { ClarityReport } from '@/components/discovery/ClarityReport';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
+import { SEOHead, SEOBreadcrumbs } from '@/components/seo';
 import { useDiscovery } from '@/hooks/useDiscovery';
 import { 
   Brain, 
@@ -82,40 +83,55 @@ export default function Fase2Descobrir() {
   }
 
   return (
-    <PageLayout>
-      <PageContent className="space-y-6">
-        {/* Breadcrumb */}
-        <PageBreadcrumb
-          items={[
-            { label: "Jornada", href: "/progresso" },
-            { label: "Fase 2: Descobrir", current: true }
-          ]}
-        />
+    <>
+      <SEOHead
+        title="Fase 2: Descobrir - Autoconhecimento Profissional | Migrei"
+        description="Descubra seus talentos, valores e competências através de diagnósticos, roda de carreira e relatório de clareza profissional."
+        canonical="https://migrei.com/fase/descobrir"
+        noIndex={true}
+      />
+      <SEOBreadcrumbs
+        items={[
+          { name: "Início", url: "/" },
+          { name: "Jornada", url: "/progresso" },
+          { name: "Fase 2: Descobrir", url: "/fase/descobrir" }
+        ]}
+      />
+      <PageLayout>
+        <PageContent className="space-y-6">
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              { label: "Jornada", href: "/progresso" },
+              { label: "Fase 2: Descobrir", current: true }
+            ]}
+          />
 
-        {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
-        <PhaseIntroBlock data={phaseIntroData} />
+          {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+          <PhaseIntroBlock data={phaseIntroData} />
 
-        {/* Phase Steps Navigation */}
-        <PhaseSteps
-          steps={steps}
-          activeStep={activeStep}
-          onStepChange={(step) => setActiveStep(step as Step)}
-          completedSteps={progress.completed}
-          phaseColor={PHASE_COLORS[2]}
-        />
+          {/* Phase Steps Navigation */}
+          <PhaseSteps
+            steps={steps}
+            activeStep={activeStep}
+            onStepChange={(step) => setActiveStep(step as Step)}
+            completedSteps={progress.completed}
+            phaseColor={PHASE_COLORS[2]}
+          />
 
-        {/* Step Content */}
-        <div className="mt-6">
-          {renderStepContent()}
-        </div>
+          {/* Step Content */}
+          <div className="mt-6">
+            {renderStepContent()}
+          </div>
 
-        {/* Floating Coach Button */}
-        <FloatingCoachButton
-          phase="descobrir" 
-          context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
-          greeting="Olá! 👋 Estou aqui na fase de Descobrir! Esta é a fase do autoconhecimento profundo. Vamos juntos explorar seus talentos, motivadores e construir seu perfil profissional?"
-        />
-      </PageContent>
-    </PageLayout>
+          {/* Floating Coach Button */}
+          <FloatingCoachButton
+            phase="descobrir" 
+            context={`Usuário está na etapa: ${activeStep}. ${getCoachContext()}`}
+            greeting="Olá! 👋 Estou aqui na fase de Descobrir! Esta é a fase do autoconhecimento profundo. Vamos juntos explorar seus talentos, motivadores e construir seu perfil profissional?"
+          />
+        </PageContent>
+      </PageLayout>
+    </>
   );
 }

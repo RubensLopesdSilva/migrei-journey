@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { PageContent } from '@/components/ui/page-transition';
 import { PageBreadcrumb } from '@/components/ui/page-breadcrumb';
+import { SEOHead, SEOBreadcrumbs } from '@/components/seo';
 import { WeeklyMission } from '@/components/positioning/WeeklyMission';
 import { NetworkingPillars } from '@/components/positioning/NetworkingPillars';
 import { MyPitch } from '@/components/positioning/MyPitch';
@@ -27,12 +28,19 @@ const PositioningAcademy = () => {
   };
 
   return (
-    <PageLayout>
-      <PageContent>
-        <PageBreadcrumb
-          items={[{ label: "Networking", current: true }]}
-          className="mb-4"
-        />
+    <>
+      <SEOHead
+        title="Networking para Transição de Carreira | Migrei"
+        description="Construa conexões estratégicas com scripts prontos, desafios semanais e pilares de networking para impulsionar sua transição."
+        canonical="https://migrei.com/comunidade"
+        noIndex={true}
+      />
+      <PageLayout>
+        <PageContent>
+          <PageBreadcrumb
+            items={[{ label: "Networking", current: true }]}
+            className="mb-4"
+          />
 
         {/* Hero Header */}
         <div className="mb-6">
@@ -91,6 +99,7 @@ const PositioningAcademy = () => {
         />
       </PageContent>
     </PageLayout>
+    </>
   );
 };
 

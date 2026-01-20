@@ -13,6 +13,7 @@ import { GapsMap } from '@/components/decision/GapsMap';
 import { DecisionCheckpoint } from '@/components/decision/DecisionCheckpoint';
 import { FloatingCoachButton } from '@/components/coach/FloatingCoachButton';
 import { PhaseAccessGate } from '@/components/subscription/PhaseAccessGate';
+import { SEOHead, SEOBreadcrumbs } from '@/components/seo';
 import { useDecision } from '@/hooks/useDecision';
 import { Target, BarChart3, Goal, Calendar, Map, CheckCircle2 } from 'lucide-react';
 
@@ -50,42 +51,57 @@ export default function Fase3Decidir() {
   };
 
   return (
-    <PhaseAccessGate phaseNumber={3} phaseName="Fase 3: Decidir">
-      <PageLayout>
-        <PageContent className="space-y-6">
-          {/* Breadcrumb */}
-          <PageBreadcrumb
-            items={[
-              { label: "Jornada", href: "/progresso" },
-              { label: "Fase 3: Decidir", current: true }
-            ]}
-          />
+    <>
+      <SEOHead
+        title="Fase 3: Decidir - Defina seu Caminho Profissional | Migrei"
+        description="Defina seu novo caminho profissional com matriz de possibilidades, metas SMART e plano de 90 dias. Tome decisões com clareza."
+        canonical="https://migrei.com/fase/decidir"
+        noIndex={true}
+      />
+      <SEOBreadcrumbs
+        items={[
+          { name: "Início", url: "/" },
+          { name: "Jornada", url: "/progresso" },
+          { name: "Fase 3: Decidir", url: "/fase/decidir" }
+        ]}
+      />
+      <PhaseAccessGate phaseNumber={3} phaseName="Fase 3: Decidir">
+        <PageLayout>
+          <PageContent className="space-y-6">
+            {/* Breadcrumb */}
+            <PageBreadcrumb
+              items={[
+                { label: "Jornada", href: "/progresso" },
+                { label: "Fase 3: Decidir", current: true }
+              ]}
+            />
 
-          {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
-          <PhaseIntroBlock data={phaseIntroData} />
+            {/* Blocos de Clareza UX - O que vai aprender, Para que serve, O que terá pronto */}
+            <PhaseIntroBlock data={phaseIntroData} />
 
-          {/* Phase Steps Navigation */}
-          <PhaseSteps
-            steps={steps}
-            activeStep={activeStep}
-            onStepChange={(step) => setActiveStep(step as Step)}
-            completedSteps={progress.completed}
-            phaseColor={PHASE_COLORS[3]}
-          />
+            {/* Phase Steps Navigation */}
+            <PhaseSteps
+              steps={steps}
+              activeStep={activeStep}
+              onStepChange={(step) => setActiveStep(step as Step)}
+              completedSteps={progress.completed}
+              phaseColor={PHASE_COLORS[3]}
+            />
 
-          {/* Step Content */}
-          <div className="mt-6">
-            {renderStepContent()}
-          </div>
+            {/* Step Content */}
+            <div className="mt-6">
+              {renderStepContent()}
+            </div>
 
-          {/* Floating Coach Button */}
-          <FloatingCoachButton 
-            phase="decidir" 
-            context={`Usuário está na etapa: ${activeStep}`}
-            greeting="Olá! 👋 Estou aqui na fase de Decidir! Esta é a hora de definir seu caminho. Vou te ajudar a avaliar possibilidades, definir metas SMART e criar seu plano de ação. Por onde quer começar?"
-          />
-        </PageContent>
-      </PageLayout>
-    </PhaseAccessGate>
+            {/* Floating Coach Button */}
+            <FloatingCoachButton 
+              phase="decidir" 
+              context={`Usuário está na etapa: ${activeStep}`}
+              greeting="Olá! 👋 Estou aqui na fase de Decidir! Esta é a hora de definir seu caminho. Vou te ajudar a avaliar possibilidades, definir metas SMART e criar seu plano de ação. Por onde quer começar?"
+            />
+          </PageContent>
+        </PageLayout>
+      </PhaseAccessGate>
+    </>
   );
 }

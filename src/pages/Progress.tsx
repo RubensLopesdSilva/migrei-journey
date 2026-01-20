@@ -13,6 +13,7 @@ import { ProgressAnalytics } from "@/components/progress/ProgressAnalytics";
 import { PhasesGrid } from "@/components/progress/PhasesGrid";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { PageSkeleton } from "@/components/layout/PageSkeleton";
+import { SEOHead, SEOBreadcrumbs } from "@/components/seo";
 import { PhaseWithProgress } from "@/types/progress";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
@@ -75,18 +76,31 @@ export default function Progress() {
   );
 
   return (
-    <PageLayout>
-      <PageContent>
-        {/* Breadcrumb */}
-        <PageBreadcrumb
-          items={[
-            ...(selectedPhase 
-              ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
-              : [{ label: "Progresso", current: true }]
-            )
-          ]}
-          className="mb-4"
-        />
+    <>
+      <SEOHead
+        title="Meu Progresso na Jornada de Carreira | Migrei"
+        description="Acompanhe seu progresso no Ciclo Migrei, visualize badges conquistadas, missões e análises da sua evolução profissional."
+        canonical="https://migrei.com/progresso"
+        noIndex={true}
+      />
+      <SEOBreadcrumbs
+        items={[
+          { name: "Início", url: "/" },
+          { name: "Progresso", url: "/progresso" }
+        ]}
+      />
+      <PageLayout>
+        <PageContent>
+          {/* Breadcrumb */}
+          <PageBreadcrumb
+            items={[
+              ...(selectedPhase 
+                ? [{ label: "Progresso", href: "/progresso" }, { label: selectedPhase.name, current: true }]
+                : [{ label: "Progresso", current: true }]
+              )
+            ]}
+            className="mb-4"
+          />
 
         {/* Hero Header - Same pattern as Networking */}
         <ProgressHeader
@@ -211,5 +225,6 @@ export default function Progress() {
         )}
       </PageContent>
     </PageLayout>
+    </>
   );
 }

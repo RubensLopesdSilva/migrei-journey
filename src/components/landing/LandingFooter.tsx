@@ -11,9 +11,9 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
   return (
     <footer ref={ref} className="bg-slate-900 text-white py-16">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="mb-12">
           {/* Brand + Newsletter */}
-          <div>
+          <div className="max-w-md">
             <div className="bg-slate-800/50 rounded-xl p-4 inline-block mb-4">
               <img 
                 src={logoMigrei} 
@@ -33,7 +33,7 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
                 placeholder="Digite seu email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl flex-1"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl flex-1 max-w-xs"
               />
               <Button
                 size="icon"
@@ -42,14 +42,6 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold text-white mb-4">Contato</h4>
-            <ul className="space-y-3 text-sm text-slate-400">
-              <li><a href="mailto:contato@migrei.com" className="hover:text-white transition-colors">contato@migrei.com</a></li>
-            </ul>
           </div>
         </div>
 

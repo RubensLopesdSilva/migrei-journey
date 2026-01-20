@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logoMigrei from "@/assets/logo-migrei.png";
 
 export const LandingHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isOnLanding = location.pathname === "/landing" || location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,9 +21,13 @@ export const LandingHeader = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (isOnLanding) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate(`/landing#${id}`);
     }
     setIsMobileMenuOpen(false);
   };

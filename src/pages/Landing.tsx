@@ -1,3 +1,4 @@
+import { SEOHead } from "@/components/seo";
 import { LandingHero } from "@/components/landing/LandingHero";
 import { LandingSolution } from "@/components/landing/LandingSolution";
 import { LandingFeatures } from "@/components/landing/LandingFeatures";
@@ -11,21 +12,29 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <LandingHeader />
+    <>
+      <SEOHead
+        title="Migrei | Transição de Carreira em 6 Fases - Método Comprovado"
+        description="Descubra o Ciclo Migrei: método estruturado em 6 fases para transição de carreira com clareza. Gratuito para começar. 87% relatam mais clareza em 30 dias."
+        canonical="https://migrei.com/landing"
+      />
       
-      <main>
-        <LandingHero />
-        <LandingSolution />
-        <LandingFeatures />
-        <LandingCycle />
+      <div className="min-h-screen bg-background">
+        <LandingHeader />
         
-        <LandingPricing />
-        <LandingFAQ />
-      </main>
-      
-      <LandingFooter />
-    </div>
+        <main role="main" aria-label="Conteúdo principal">
+          <LandingHero />
+          <LandingSolution />
+          <LandingFeatures />
+          <LandingCycle />
+          
+          <LandingPricing />
+          <LandingFAQ />
+        </main>
+        
+        <LandingFooter />
+      </div>
+    </>
   );
 };
 

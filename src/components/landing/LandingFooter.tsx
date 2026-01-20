@@ -60,9 +60,21 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
           </p>
           
           <div className="flex items-center gap-6 text-sm text-slate-500">
-            <a href="#" className="hover:text-white transition-colors">Termos e Condições</a>
-            <span>•</span>
-            <a href="#" className="hover:text-white transition-colors">Política de Privacidade</a>
+            <a 
+              href="/termos" 
+              className="hover:text-white transition-colors"
+              rel="noopener noreferrer"
+            >
+              Termos e Condições
+            </a>
+            <span aria-hidden="true">•</span>
+            <a 
+              href="/privacidade" 
+              className="hover:text-white transition-colors"
+              rel="noopener noreferrer"
+            >
+              Política de Privacidade
+            </a>
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ const faqs = [
 
 export const LandingFAQ = () => {
   return (
-    <section id="faq" className="py-20 md:py-32 bg-muted/30">
+    <section id="faq" className="py-24 md:py-36 bg-muted/30">
       <div className="container mx-auto px-6 md:px-12 lg:px-16">
         <motion.div
           className="text-center mb-16"

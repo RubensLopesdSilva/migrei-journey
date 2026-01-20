@@ -559,7 +559,7 @@ const FeatureSection = ({
   isReversed: boolean;
 }) => {
   const navigate = useNavigate();
-  return <div className={`relative py-16 md:py-24 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
+  return <div className={`relative py-20 md:py-28 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
       {/* Background gradient */}
       <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-50`} />
       
@@ -672,7 +672,7 @@ export const LandingFeatures = () => {
   const navigate = useNavigate();
   return <section id="recursos" className="relative overflow-hidden">
       {/* Section Header */}
-      <div className="py-16 md:py-24 bg-muted/20">
+      <div className="py-20 md:py-28 bg-muted/20">
         <div className="container mx-auto px-4">
           <motion.div className="text-center max-w-3xl mx-auto" initial={{
           opacity: 0,

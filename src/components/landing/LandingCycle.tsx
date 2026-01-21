@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { ScrollToNextButton } from "./ScrollToNextButton";
 import { Button } from "@/components/ui/button";
+import { PHASE_COLORS } from "@/data/phaseIntroData";
 
 const phases = [
   {
@@ -18,42 +19,42 @@ const phases = [
     name: "Despertar",
     icon: Lightbulb,
     description: "Perceba a necessidade de mudança",
-    color: "#F59E0B",
+    color: PHASE_COLORS[1], // Amber
   },
   {
     number: 2,
     name: "Descobrir",
     icon: Search,
     description: "Entenda seus talentos e valores",
-    color: "#10B981",
+    color: PHASE_COLORS[2], // Purple
   },
   {
     number: 3,
     name: "Decidir",
     icon: Target,
     description: "Defina seu caminho com clareza",
-    color: "#3B82F6",
+    color: PHASE_COLORS[3], // Blue
   },
   {
     number: 4,
     name: "Desenvolver",
     icon: Wrench,
     description: "Construa as competências",
-    color: "#8B5CF6",
+    color: PHASE_COLORS[4], // Orange
   },
   {
     number: 5,
     name: "Deslanchar",
     icon: Rocket,
     description: "Conquiste oportunidades reais",
-    color: "#EC4899",
+    color: PHASE_COLORS[5], // Red
   },
   {
     number: 6,
     name: "Desfrutar",
     icon: Trophy,
     description: "Consolide sua nova identidade",
-    color: "#F97316",
+    color: PHASE_COLORS[6], // Emerald
   },
 ];
 

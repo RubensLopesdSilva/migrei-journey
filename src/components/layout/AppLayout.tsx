@@ -7,11 +7,15 @@ interface AppLayoutProps {
 }
 
 // Routes that should NOT show the sidebar (public pages)
-const noSidebarRoutes = ["/", "/auth", "/escolher-agente", "/privacidade", "/termos"];
+const noSidebarRoutes = ["/", "/auth", "/escolher-agente", "/privacidade", "/termos", "/landing"];
 
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
-  const showSidebar = !noSidebarRoutes.includes(location.pathname);
+  
+  // Check if current path matches any noSidebarRoute (including exact match and prefix match for /auth)
+  const showSidebar = !noSidebarRoutes.some(route => 
+    location.pathname === route || location.pathname.startsWith(route + "/")
+  );
 
   if (!showSidebar) {
     return <>{children}</>;

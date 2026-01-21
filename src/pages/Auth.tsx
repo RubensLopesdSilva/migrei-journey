@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Target, Clock } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, Target, Clock, ArrowLeft } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
@@ -198,6 +198,17 @@ export default function Auth() {
       {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
+          {/* Back to site button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-6 -ml-2 text-muted-foreground hover:text-foreground"
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Voltar ao site
+          </Button>
+
           {/* Logo */}
           <div className="flex items-center justify-start mb-8">
             <img 

@@ -219,7 +219,7 @@ const Plan90Mockup = () => {
 // Mockup: Networking Prático - Design similar to actual page
 const NetworkingMockup = () => {
   const scripts = [
-    { icon: '📱', title: 'Networking Digital', desc: 'LinkedIn, grupos e comunidades', count: 3 },
+    { icon: '📱', title: 'Networking Digital', desc: 'LinkedIn, grupos e redes', count: 3 },
     { icon: '🎤', title: 'Networking Presencial', desc: 'Eventos, meetups e workshops', count: 3 },
     { icon: '☕', title: 'Conversas 1:1', desc: 'Coffee chats e indicações', count: 3 }
   ];

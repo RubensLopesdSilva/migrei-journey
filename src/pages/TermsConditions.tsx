@@ -32,7 +32,7 @@ const TermsConditions = () => {
       content: [
         {
           subtitle: "2.1 O que é o Migrei",
-          text: "O Migrei é uma plataforma digital de transição de carreira que oferece: metodologia estruturada em 6 fases (Despertar, Descobrir, Decidir, Desenvolver, Deslanchar, Desfrutar), coach de inteligência artificial para orientação personalizada, comunidade de profissionais em transição, ferramentas de autoconhecimento e planejamento, e acesso a mentores especializados."
+          text: "O Migrei é uma plataforma digital de transição de carreira que oferece: metodologia estruturada em 6 fases (Despertar, Descobrir, Decidir, Desenvolver, Deslanchar, Desfrutar), coach de inteligência artificial para orientação personalizada, networking com profissionais em transição, ferramentas de autoconhecimento e planejamento, e acesso a mentores especializados."
         },
         {
           subtitle: "2.2 Natureza do Serviço",
@@ -68,7 +68,7 @@ const TermsConditions = () => {
       content: [
         {
           subtitle: "4.1 Planos Disponíveis",
-          text: "Oferecemos diferentes planos de assinatura: Plano Gratuito com acesso limitado a recursos básicos, e Planos Premium com acesso completo a todas as funcionalidades, incluindo coach de IA ilimitado, mentorias e comunidade exclusiva."
+          text: "Oferecemos diferentes planos de assinatura: Plano Gratuito com acesso limitado a recursos básicos, e Planos Premium com acesso completo a todas as funcionalidades, incluindo coach de IA ilimitado, mentorias e networking exclusivo."
         },
         {
           subtitle: "4.2 Cobrança",
@@ -97,8 +97,8 @@ const TermsConditions = () => {
           text: "Você concorda em NÃO: compartilhar credenciais de acesso com terceiros, utilizar a plataforma para fins ilegais ou fraudulentos, publicar conteúdo ofensivo, discriminatório ou que viole direitos de terceiros, tentar acessar áreas restritas ou sistemas não autorizados, utilizar bots, scrapers ou automações não autorizadas, revender ou redistribuir conteúdo da plataforma."
         },
         {
-          subtitle: "5.2 Conteúdo da Comunidade",
-          text: "Ao participar da comunidade, você é responsável pelo conteúdo que publica. Reservamo-nos o direito de remover conteúdo que viole estes termos ou nossas diretrizes comunitárias."
+          subtitle: "5.2 Conteúdo do Networking",
+          text: "Ao participar do networking, você é responsável pelo conteúdo que publica. Reservamo-nos o direito de remover conteúdo que viole estes termos ou nossas diretrizes."
         },
         {
           subtitle: "5.3 Interação com IA",

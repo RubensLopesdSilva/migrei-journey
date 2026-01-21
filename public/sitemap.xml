@@ -71,9 +71,9 @@
     <priority>0.8</priority>
   </url>
   
-  <!-- Community -->
+  <!-- Networking -->
   <url>
-    <loc>https://migrei.com/community</loc>
+    <loc>https://migrei.com/networking</loc>
     <lastmod>2025-01-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>

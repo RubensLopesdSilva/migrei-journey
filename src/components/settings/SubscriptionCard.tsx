@@ -412,7 +412,7 @@ export function SubscriptionCard() {
             phasesAccess={2}
             features={[
               { label: "Fases 1 e 2 do Ciclo Migrei", included: true },
-              { label: "Acesso à comunidade", included: true },
+              { label: "Acesso ao Networking", included: true },
               { label: "Meu progresso", included: true },
               { label: "Assistente IA (Mentor IA)", included: false },
               { label: "Mentoria mensal", included: false },
@@ -429,7 +429,7 @@ export function SubscriptionCard() {
             phasesAccess={6}
             features={[
               { label: "Todas as 6 fases do Ciclo", included: true, highlight: true },
-              { label: "Acesso à comunidade", included: true },
+              { label: "Acesso ao Networking", included: true },
               { label: "Meu progresso", included: true },
               { label: "Assistente IA (Mentor IA)", included: true, highlight: true },
               { label: "Mentoria mensal", included: false },
@@ -495,7 +495,7 @@ export function SubscriptionCard() {
               <Users className="h-5 w-5 text-green-500" />
             </div>
             <span className="text-2xl font-bold">✓</span>
-            <span className="text-xs text-muted-foreground">Comunidade</span>
+            <span className="text-xs text-muted-foreground">Networking</span>
           </div>
         </div>
       </div>

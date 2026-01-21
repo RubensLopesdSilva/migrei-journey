@@ -87,7 +87,7 @@ export function useCommunityActions({
       return { error };
     }
 
-    toast({ title: 'Post criado!', description: 'Seu post foi publicado na comunidade.' });
+    toast({ title: 'Post criado!', description: 'Seu post foi publicado no networking.' });
     fetchPosts(targetPhaseId);
     return { error: null };
   }, [user, currentPhaseId, fetchPosts, toast]);

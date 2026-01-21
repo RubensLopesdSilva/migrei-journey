@@ -65,7 +65,7 @@ const App = () => (
                       <Route path="/admin/configuracoes" element={<AdminSettings />} />
                       <Route path="/admin/metricas" element={<AdminMetrics />} />
                       <Route path="/progresso" element={<Progress />} />
-                      <Route path="/comunidade" element={<PositioningAcademy />} />
+                      <Route path="/networking" element={<PositioningAcademy />} />
                       <Route path="/fase" element={<Fase1Despertar />} />
                       <Route path="/fase/despertar" element={<Fase1Despertar />} />
                       <Route path="/fase/descobrir" element={<Fase2Descobrir />} />

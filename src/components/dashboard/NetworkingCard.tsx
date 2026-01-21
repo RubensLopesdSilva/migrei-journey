@@ -234,12 +234,12 @@ export const NetworkingCard = forwardRef<HTMLDivElement, object>(function Networ
             </div>
           </div>
           <Link 
-            to="/comunidade"
+            to="/networking"
             className={cn(
               "text-primary hover:text-primary/80 transition-colors p-2 -m-2 rounded-lg",
               focusRingClasses
             )}
-            aria-label="Ver comunidade"
+            aria-label="Ver Networking"
           >
             <ArrowRight className="h-5 w-5" />
           </Link>

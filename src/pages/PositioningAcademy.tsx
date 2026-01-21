@@ -32,7 +32,7 @@ const PositioningAcademy = () => {
       <SEOHead
         title="Networking para Transição de Carreira | Migrei"
         description="Construa conexões estratégicas com scripts prontos, desafios semanais e pilares de networking para impulsionar sua transição."
-        canonical="https://migrei.com/comunidade"
+        canonical="https://migrei.com/networking"
         noIndex={true}
       />
       <PageLayout>

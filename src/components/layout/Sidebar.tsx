@@ -64,7 +64,7 @@ const mainNavItems: NavItem[] = [
   {
     icon: Users,
     label: "Networking",
-    href: "/comunidade"
+    href: "/networking"
   },
   {
     icon: GraduationCap,
@@ -170,7 +170,7 @@ export function Sidebar() {
             const tourAttr = 
               item.href === "/fase" ? "sidebar-current-phase" :
               item.href === "/progresso" ? "sidebar-progress" :
-              item.href === "/comunidade" ? "sidebar-community" :
+              item.href === "/networking" ? "sidebar-community" :
               item.href === "/mentoria" ? "sidebar-mentoring" :
               undefined;
             

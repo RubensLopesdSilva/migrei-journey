@@ -5,7 +5,7 @@ const benefits = [
   "Clareza sobre qual carreira seguir",
   "Plano de ação de 90 dias personalizado",
   "Mentor IA disponível 24/7",
-  "Comunidade de profissionais em transição",
+  "Networking com profissionais em transição",
   "Acompanhamento do seu progresso",
 ];
 

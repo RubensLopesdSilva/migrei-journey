@@ -13,7 +13,7 @@ const plans = [
     description: "Comece a explorar sua transição",
     features: [
       "Fases 1 e 2 do Ciclo Migrei",
-      "Acesso à comunidade",
+      "Acesso ao Networking",
       "Meu progresso",
     ],
     mentoring: null,
@@ -28,7 +28,7 @@ const plans = [
     description: "Experimente todo o poder da plataforma",
     features: [
       "Todas as 6 fases do Ciclo Migrei",
-      "Acesso à comunidade",
+      "Acesso ao Networking",
       "Meu progresso",
       "Assistente IA (Mentor IA)",
     ],

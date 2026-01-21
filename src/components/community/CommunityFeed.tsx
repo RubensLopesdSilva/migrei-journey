@@ -59,7 +59,7 @@ export function CommunityFeed({
 
       {/* Posts */}
       {loading ? (
-        <LoadingSpinner message="Carregando posts da comunidade..." />
+        <LoadingSpinner message="Carregando posts do networking..." />
       ) : posts.length === 0 ? (
         <EmptyState
           icon={MessageSquare}

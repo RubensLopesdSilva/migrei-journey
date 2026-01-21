@@ -33,7 +33,7 @@ const benefits = [
     icon: Star,
     title: "Reconhecimento",
     description:
-      "Seja reconhecido como especialista na comunidade e construa sua reputação como mentor.",
+      "Seja reconhecido como especialista na plataforma e construa sua reputação como mentor.",
   },
   {
     icon: Clock,
@@ -268,7 +268,7 @@ export default function BecomeMentor() {
                 Pronto para começar sua jornada como mentor?
               </h2>
               <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-                Junte-se à nossa comunidade de mentores e ajude a transformar
+                Junte-se à nossa rede de mentores e ajude a transformar
                 carreiras. Entre em contato conosco para iniciar o processo.
               </p>
               <Button

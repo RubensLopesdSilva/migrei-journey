@@ -276,12 +276,14 @@ export function useProgressActions({
         (phaseCompletedCount / phaseActivities.length) * 100
       );
 
-      // Update phase progress
+      // Update phase progress - don't set completed here, handlePhaseCompletion will do it
       const currentPhaseProgress = phaseProgress.find(p => p.phase_id === phaseId);
+      const isPhaseCompleting = progressPercentage === 100;
+      
       await progressRepository.updatePhaseProgress(user.id, phaseId, {
         progress_percentage: progressPercentage,
         xp_earned: (currentPhaseProgress?.xp_earned || 0) + activity.xp_reward,
-        status: progressPercentage === 100 ? 'completed' : 'in_progress',
+        status: isPhaseCompleting ? 'in_progress' : 'in_progress', // Keep in_progress, handlePhaseCompletion will set completed
       });
 
       // Log event
@@ -304,8 +306,9 @@ export function useProgressActions({
         description: `Atividade "${activity.title}" concluída!`,
       });
 
-      // Check for phase completion
-      if (progressPercentage === 100) {
+      // Check for phase completion - MUST happen before badge checks
+      if (isPhaseCompleting) {
+        console.log('Phase completing, calling handlePhaseCompletion for phase:', phaseId);
         await handlePhaseCompletion(phaseId);
       }
 

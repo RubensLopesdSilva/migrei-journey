@@ -10,7 +10,7 @@ import { CelebrationProvider } from "@/components/ui/celebration-provider";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { SkipToContent } from "@/components/ui/focus-ring";
-import Index from "./pages/Index";
+import Dashboard from "./pages/Index";
 import Auth from "./pages/Auth";
 import AgentSelection from "./pages/AgentSelection";
 import Settings from "./pages/Settings";
@@ -51,8 +51,8 @@ const App = () => (
                 <BrowserRouter>
                   <AppLayout>
                     <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/landing" element={<Landing />} />
+                      <Route path="/" element={<Landing />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/escolher-agente" element={<AgentSelection />} />
                       <Route path="/configuracoes" element={<Settings />} />

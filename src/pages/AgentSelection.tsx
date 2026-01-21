@@ -82,7 +82,7 @@ export default function AgentSelection() {
         title: `🎉 ${selectedAgent?.name} está pronto para te guiar!`,
         description: "Agora vamos começar seu diagnóstico de carreira.",
       });
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       toast({
         title: "Erro ao selecionar mentor",

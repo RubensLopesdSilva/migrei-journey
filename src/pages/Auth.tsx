@@ -44,18 +44,18 @@ export default function Auth() {
   }, [searchParams]);
 
   const [isNewUser, setIsNewUser] = useState(false);
+  const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
 
+  // Handle redirect after user is authenticated
   useEffect(() => {
-    if (user) {
-      if (isNewUser) {
-        // New signup - go directly to agent selection
-        navigate("/escolher-agente");
-      } else {
-        // Login - go to dashboard (Index will check if agent is needed)
-        navigate("/");
-      }
+    if (user && pendingRedirect) {
+      navigate(pendingRedirect);
+      setPendingRedirect(null);
+    } else if (user && !pendingRedirect && !isNewUser) {
+      // User was already logged in or just logged in (not signup)
+      navigate("/dashboard");
     }
-  }, [user, navigate, isNewUser]);
+  }, [user, pendingRedirect, navigate, isNewUser]);
 
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
@@ -63,7 +63,7 @@ export default function Auth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error) {
@@ -169,7 +169,7 @@ export default function Auth() {
           });
         }
       } else {
-        const { error } = await signUp(email, password, fullName);
+        const { data, error } = await signUp(email, password, fullName);
         if (error) {
           toast({
             title: "Erro ao criar conta",
@@ -179,7 +179,9 @@ export default function Auth() {
             variant: "destructive",
           });
         } else {
+          // Set pending redirect for after user state updates
           setIsNewUser(true);
+          setPendingRedirect("/escolher-agente");
           toast({
             title: "🎉 Conta criada com sucesso!",
             description: "Agora você vai escolher seu mentor IA personalizado.",

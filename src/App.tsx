@@ -10,6 +10,7 @@ import { CelebrationProvider } from "@/components/ui/celebration-provider";
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { SkipToContent } from "@/components/ui/focus-ring";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Dashboard from "./pages/Index";
 import Auth from "./pages/Auth";
 import AgentSelection from "./pages/AgentSelection";
@@ -30,6 +31,7 @@ import Fase3Decidir from "./pages/Fase3Decidir";
 import Fase4Desenvolver from "./pages/Fase4Desenvolver";
 import Fase5Deslanchar from "./pages/Fase5Deslanchar";
 import Fase6Desfrutar from "./pages/Fase6Desfrutar";
+import Community from "./pages/Community";
 import Landing from "./pages/Landing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
@@ -51,31 +53,36 @@ const App = () => (
                 <BrowserRouter>
                   <AppLayout>
                     <Routes>
+                      {/* Public routes */}
                       <Route path="/" element={<Landing />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/auth" element={<Auth />} />
-                      <Route path="/escolher-agente" element={<AgentSelection />} />
-                      <Route path="/configuracoes" element={<Settings />} />
-                      <Route path="/mentoria" element={<Mentoring />} />
-                      <Route path="/mentor" element={<MentorDashboard />} />
-                      <Route path="/seja-mentor" element={<BecomeMentor />} />
-                      <Route path="/admin" element={<AdminDashboard />} />
-                      <Route path="/admin/mentores" element={<AdminMentors />} />
-                      <Route path="/admin/usuarios" element={<AdminUsers />} />
-                      <Route path="/admin/configuracoes" element={<AdminSettings />} />
-                      <Route path="/admin/metricas" element={<AdminMetrics />} />
-                      <Route path="/progresso" element={<Progress />} />
-                      <Route path="/networking" element={<PositioningAcademy />} />
-                      <Route path="/fase" element={<Fase1Despertar />} />
-                      <Route path="/fase/despertar" element={<Fase1Despertar />} />
-                      <Route path="/fase/descobrir" element={<Fase2Descobrir />} />
-                      <Route path="/fase/decidir" element={<Fase3Decidir />} />
-                      <Route path="/fase/desenvolver" element={<Fase4Desenvolver />} />
-                      <Route path="/fase/deslanchar" element={<Fase5Deslanchar />} />
-                      <Route path="/fase/desfrutar" element={<Fase6Desfrutar />} />
                       <Route path="/privacidade" element={<PrivacyPolicy />} />
                       <Route path="/termos" element={<TermsConditions />} />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      
+                      {/* Protected routes */}
+                      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                      <Route path="/escolher-agente" element={<ProtectedRoute><AgentSelection /></ProtectedRoute>} />
+                      <Route path="/configuracoes" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                      <Route path="/mentoria" element={<ProtectedRoute><Mentoring /></ProtectedRoute>} />
+                      <Route path="/mentor" element={<ProtectedRoute><MentorDashboard /></ProtectedRoute>} />
+                      <Route path="/seja-mentor" element={<ProtectedRoute><BecomeMentor /></ProtectedRoute>} />
+                      <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                      <Route path="/admin/mentores" element={<ProtectedRoute><AdminMentors /></ProtectedRoute>} />
+                      <Route path="/admin/usuarios" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+                      <Route path="/admin/configuracoes" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+                      <Route path="/admin/metricas" element={<ProtectedRoute><AdminMetrics /></ProtectedRoute>} />
+                      <Route path="/progresso" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+                      <Route path="/networking" element={<ProtectedRoute><PositioningAcademy /></ProtectedRoute>} />
+                      <Route path="/comunidade" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+                      <Route path="/fase" element={<ProtectedRoute><Fase1Despertar /></ProtectedRoute>} />
+                      <Route path="/fase/despertar" element={<ProtectedRoute><Fase1Despertar /></ProtectedRoute>} />
+                      <Route path="/fase/descobrir" element={<ProtectedRoute><Fase2Descobrir /></ProtectedRoute>} />
+                      <Route path="/fase/decidir" element={<ProtectedRoute><Fase3Decidir /></ProtectedRoute>} />
+                      <Route path="/fase/desenvolver" element={<ProtectedRoute><Fase4Desenvolver /></ProtectedRoute>} />
+                      <Route path="/fase/deslanchar" element={<ProtectedRoute><Fase5Deslanchar /></ProtectedRoute>} />
+                      <Route path="/fase/desfrutar" element={<ProtectedRoute><Fase6Desfrutar /></ProtectedRoute>} />
+                      
+                      {/* Catch-all route */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </AppLayout>

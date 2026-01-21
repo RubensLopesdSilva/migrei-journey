@@ -46,7 +46,7 @@ export const LandingHero = () => {
                 <img src={avatar3} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
                 <img src={avatar4} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
               </div>
-              <span className="text-sm font-medium text-primary">
+              <span className="text-sm font-medium text-primary whitespace-nowrap">
                 51% dos profissionais consideram fazer transição de carreira
               </span>
             </motion.div>

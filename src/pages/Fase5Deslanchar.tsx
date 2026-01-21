@@ -100,6 +100,7 @@ export default function Fase5Deslanchar() {
                 onStepChange={(step) => setActiveStep(step as Step)}
                 completedSteps={0}
                 phaseColor={PHASE_COLORS[5]}
+                lockSequential={true}
               />
 
               {/* Step Content */}

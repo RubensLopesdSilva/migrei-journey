@@ -157,6 +157,7 @@ const Fase6Desfrutar = () => {
                 onStepChange={(step) => setActiveStep(step as Step)}
                 completedSteps={completedSteps}
                 phaseColor={PHASE_COLORS[6]}
+                lockSequential={true}
               />
 
               {/* Step Content */}

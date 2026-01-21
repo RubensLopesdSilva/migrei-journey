@@ -17,7 +17,7 @@ export const ScrollToNextButton = ({ targetId }: ScrollToNextButtonProps) => {
 
   return (
     <motion.div
-      className="flex justify-center pt-12 pb-4"
+      className="flex justify-center pt-8"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}

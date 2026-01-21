@@ -6,8 +6,8 @@ interface AppLayoutProps {
   children: ReactNode;
 }
 
-// Routes that should NOT show the sidebar
-const noSidebarRoutes = ["/auth", "/landing", "/escolher-agente", "/privacidade", "/termos"];
+// Routes that should NOT show the sidebar (public pages)
+const noSidebarRoutes = ["/", "/auth", "/escolher-agente", "/privacidade", "/termos"];
 
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();

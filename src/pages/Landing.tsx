@@ -31,7 +31,8 @@ const Landing = () => {
       <SEOHead
         title="Migrei | Transição de Carreira em 6 Fases - Método Comprovado"
         description="Descubra o Ciclo Migrei: método estruturado em 6 fases para transição de carreira com clareza. Gratuito para começar. 87% relatam mais clareza em 30 dias."
-        canonical="https://migrei.com/landing"
+        canonical="https://migrei.com/"
+        noIndex={true}
       />
       
       <div className="min-h-screen bg-background">

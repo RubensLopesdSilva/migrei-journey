@@ -80,15 +80,15 @@ export const LandingSolution = () => {
             <span className="text-sm font-medium text-primary">Simples e eficaz</span>
           </motion.div>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 flex items-center justify-center gap-3 flex-wrap">
-            Como a <img 
-              src={logoMigrei} 
-              alt="Migrei - Método de transição de carreira" 
-              className="h-16 md:h-20 lg:h-24 inline-block"
-              loading="lazy"
-              width="192"
-              height="96"
-            /> te ajuda
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            Como a{" "}
+            <span className="relative inline-block">
+              <span className="font-display text-primary italic">Migrei</span>
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
+                <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+            </span>{" "}
+            te ajuda
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Da <span className="text-foreground font-medium">confusão</span> à <span className="text-primary font-medium">clareza</span> em 3 etapas simples.

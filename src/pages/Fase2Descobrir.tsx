@@ -40,10 +40,56 @@ const steps: PhaseStep[] = [
 
 export default function Fase2Descobrir() {
   const [activeStep, setActiveStep] = useState<Step>('diagnosticos');
-  const { phaseProgress, isLoading } = useDiscovery();
+  const { 
+    phaseProgress, 
+    isLoading,
+    diagnosticResults,
+    careerWheel,
+    diaryEntries,
+    timeline,
+    competencies,
+    recommendations,
+    clarityReport
+  } = useDiscovery();
 
-  const progress = { percentage: phaseProgress, completed: Math.floor(phaseProgress / 14.3) };
-  const isPhaseComplete = progress.percentage === 100;
+  // Calcular steps completados baseado nos dados reais
+  const calculateCompletedSteps = () => {
+    let completed = 0;
+    
+    // Step 1: Diagnósticos (4 diagnósticos completos)
+    const completedDiagnostics = diagnosticResults.filter(d => d.completed_at).length;
+    if (completedDiagnostics >= 4) completed++;
+    else return completed;
+    
+    // Step 2: Roda da Carreira (5+ dimensões avaliadas)
+    if (careerWheel.length >= 5) completed++;
+    else return completed;
+    
+    // Step 3: Diário (5+ dias completos)
+    const completedDays = diaryEntries.filter(d => d.completed_at).length;
+    if (completedDays >= 5) completed++;
+    else return completed;
+    
+    // Step 4: Timeline (3+ eventos)
+    if (timeline.length >= 3) completed++;
+    else return completed;
+    
+    // Step 5: Radar de Competências (8+ competências)
+    if (competencies.length >= 8) completed++;
+    else return completed;
+    
+    // Step 6: Profissões (recomendações geradas)
+    if (recommendations.length > 0) completed++;
+    else return completed;
+    
+    // Step 7: Relatório (relatório gerado)
+    if (clarityReport) completed++;
+    
+    return completed;
+  };
+
+  const completedSteps = calculateCompletedSteps();
+  const isPhaseComplete = phaseProgress === 100;
 
   // Dados do bloco introdutório com clareza UX
   const phaseIntroData = getPhaseIntroData(2, phaseProgress, isPhaseComplete);
@@ -115,7 +161,7 @@ export default function Fase2Descobrir() {
             steps={steps}
             activeStep={activeStep}
             onStepChange={(step) => setActiveStep(step as Step)}
-            completedSteps={progress.completed}
+            completedSteps={completedSteps}
             phaseColor={PHASE_COLORS[2]}
             lockSequential={true}
           />

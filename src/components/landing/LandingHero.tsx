@@ -24,8 +24,8 @@ export const LandingHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <div className="text-left order-2 lg:order-1">
-            {/* Eyebrow with icon */}
-            <motion.div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6" initial={{
+            {/* Eyebrow with avatars */}
+            <motion.div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -34,7 +34,13 @@ export const LandingHero = () => {
           }} transition={{
             duration: 0.4
           }}>
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              {/* Stacked avatars */}
+              <div className="flex -space-x-2">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">M</div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">A</div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">J</div>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">L</div>
+              </div>
               <span className="text-sm font-medium text-primary">
                 51% dos profissionais consideram fazer transição de carreira
               </span>

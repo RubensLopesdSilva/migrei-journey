@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils';
 interface Challenge {
   id: string;
   title: string;
-  category: 'linkedin' | 'evento' | 'coffee' | 'comunidade';
+  category: 'linkedin' | 'evento' | 'coffee' | 'networking';
   difficulty: 'easy' | 'medium' | 'hard';
   xp: number;
   isCompleted: boolean;
@@ -20,7 +20,7 @@ const categoryEmoji = {
   linkedin: '📱',
   evento: '🎤',
   coffee: '☕',
-  comunidade: '👥'
+  networking: '👥'
 };
 
 const difficultyFlames = {

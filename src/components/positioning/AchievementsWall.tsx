@@ -104,7 +104,7 @@ export function AchievementsWall({
             </div>
             <div>
               <CardTitle className="text-base">Conquistas</CardTitle>
-              <p className="text-xs text-muted-foreground">Inspire-se com a comunidade</p>
+              <p className="text-xs text-muted-foreground">Inspire-se com a rede</p>
             </div>
           </div>
           <Button

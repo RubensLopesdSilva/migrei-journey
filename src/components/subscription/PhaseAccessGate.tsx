@@ -82,7 +82,7 @@ const defaultLostOpportunity: {
   lostBenefits: [
     "Ferramentas práticas e guiadas",
     "Acompanhamento do seu progresso",
-    "Suporte da comunidade Migrei"
+    "Networking com a rede Migrei"
   ],
   urgencyMessage: "Quanto mais você espera, mais tempo leva para alcançar seus objetivos"
 };
@@ -197,7 +197,7 @@ export function PhaseAccessGate({ phaseNumber, phaseName, children }: PhaseAcces
               </span>
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="h-3.5 w-3.5 text-green-500" />
-                Comunidade exclusiva
+                Networking exclusivo
               </span>
             </div>
 

@@ -21,8 +21,8 @@ const PrivacyPolicy = () => {
           text: "Durante sua jornada no Ciclo Migrei, coletamos: respostas aos diagnósticos e avaliações, progresso nas 6 fases (Despertar, Descobrir, Decidir, Desenvolver, Deslanchar, Desfrutar), interações com o coach de IA, conquistas e badges obtidos, e histórico de atividades."
         },
         {
-          subtitle: "1.3 Dados de Comunidade",
-          text: "Quando você participa da comunidade, coletamos: publicações, comentários e interações, conexões com outros usuários, participação em eventos e mentorias, e ofertas de ajuda (Give & Ask)."
+          subtitle: "1.3 Dados de Networking",
+          text: "Quando você participa do networking, coletamos: publicações, comentários e interações, conexões com outros usuários, participação em eventos e mentorias, e ofertas de ajuda (Give & Ask)."
         },
         {
           subtitle: "1.4 Dados de Pagamento",
@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
       content: [
         {
           subtitle: "2.1 Personalização da Experiência",
-          text: "Utilizamos seus dados para personalizar recomendações de carreira, adaptar o conteúdo do coach de IA ao seu perfil, sugerir conexões relevantes na comunidade, e gerar relatórios de clareza e progresso personalizados."
+          text: "Utilizamos seus dados para personalizar recomendações de carreira, adaptar o conteúdo do coach de IA ao seu perfil, sugerir conexões relevantes no networking, e gerar relatórios de clareza e progresso personalizados."
         },
         {
           subtitle: "2.2 Melhoria do Serviço",
@@ -93,8 +93,8 @@ const PrivacyPolicy = () => {
           text: "Compartilhamos dados apenas com: Stripe (processamento de pagamentos), provedores de infraestrutura em nuvem (hospedagem segura), e serviços de e-mail transacional."
         },
         {
-          subtitle: "5.2 Comunidade",
-          text: "Informações que você escolhe compartilhar na comunidade (posts, perfil público) são visíveis para outros membros. Você controla o que compartilha através das configurações de privacidade."
+          subtitle: "5.2 Networking",
+          text: "Informações que você escolhe compartilhar no networking (posts, perfil público) são visíveis para outros membros. Você controla o que compartilha através das configurações de privacidade."
         },
         {
           subtitle: "5.3 Mentorias",
@@ -192,7 +192,7 @@ const PrivacyPolicy = () => {
               <p className="text-foreground">
                 O <strong>Migrei</strong> ("nós", "nosso" ou "plataforma") é uma plataforma de transição 
                 de carreira que utiliza metodologia estruturada em 6 fases, inteligência artificial e 
-                comunidade para ajudar profissionais em sua jornada. Esta Política de Privacidade 
+                networking para ajudar profissionais em sua jornada. Esta Política de Privacidade 
                 descreve nossas práticas em relação aos dados pessoais que coletamos através de 
                 nossa plataforma disponível em <strong>migrei.com</strong>.
               </p>

@@ -220,7 +220,7 @@ Para pedir recomendação direta (só após ter relacionamento):
 const pillarConfig = {
   digital: {
     title: 'Networking Digital',
-    subtitle: 'LinkedIn, grupos e comunidades online',
+    subtitle: 'LinkedIn, grupos e redes online',
     icon: <Smartphone className="h-5 w-5" />,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10'

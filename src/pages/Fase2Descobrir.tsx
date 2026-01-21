@@ -53,29 +53,30 @@ export default function Fase2Descobrir() {
   } = useDiscovery();
 
   // Calcular steps completados baseado nos dados reais
+  // Cada step é liberado após completar pelo menos 1 ação no step anterior
   const calculateCompletedSteps = () => {
     let completed = 0;
     
-    // Step 1: Diagnósticos (4 diagnósticos completos)
+    // Step 1: Diagnósticos (pelo menos 1 diagnóstico completo)
     const completedDiagnostics = diagnosticResults.filter(d => d.completed_at).length;
-    if (completedDiagnostics >= 4) completed++;
+    if (completedDiagnostics >= 1) completed++;
     else return completed;
     
-    // Step 2: Roda da Carreira (5+ dimensões avaliadas)
-    if (careerWheel.length >= 5) completed++;
+    // Step 2: Roda da Carreira (pelo menos 1 dimensão avaliada)
+    if (careerWheel.length >= 1) completed++;
     else return completed;
     
-    // Step 3: Diário (5+ dias completos)
+    // Step 3: Diário (pelo menos 1 dia completo)
     const completedDays = diaryEntries.filter(d => d.completed_at).length;
-    if (completedDays >= 5) completed++;
+    if (completedDays >= 1) completed++;
     else return completed;
     
-    // Step 4: Timeline (3+ eventos)
-    if (timeline.length >= 3) completed++;
+    // Step 4: Timeline (pelo menos 1 marco)
+    if (timeline.length >= 1) completed++;
     else return completed;
     
-    // Step 5: Radar de Competências (8+ competências)
-    if (competencies.length >= 8) completed++;
+    // Step 5: Radar de Competências (pelo menos 1 competência)
+    if (competencies.length >= 1) completed++;
     else return completed;
     
     // Step 6: Profissões (recomendações geradas)

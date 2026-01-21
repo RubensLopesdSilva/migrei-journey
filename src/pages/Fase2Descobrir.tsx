@@ -117,6 +117,7 @@ export default function Fase2Descobrir() {
             onStepChange={(step) => setActiveStep(step as Step)}
             completedSteps={progress.completed}
             phaseColor={PHASE_COLORS[2]}
+            lockSequential={true}
           />
 
           {/* Step Content */}

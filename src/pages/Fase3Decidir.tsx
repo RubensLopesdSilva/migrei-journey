@@ -86,6 +86,7 @@ export default function Fase3Decidir() {
               onStepChange={(step) => setActiveStep(step as Step)}
               completedSteps={progress.completed}
               phaseColor={PHASE_COLORS[3]}
+              lockSequential={true}
             />
 
             {/* Step Content */}

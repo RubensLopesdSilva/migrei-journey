@@ -188,6 +188,7 @@ export default function Fase4Desenvolver() {
                 onStepChange={(step) => setActiveStep(step as Step)}
                 completedSteps={completedSteps}
                 phaseColor={PHASE_COLORS[4]}
+                lockSequential={true}
               />
 
               {/* Step Content */}

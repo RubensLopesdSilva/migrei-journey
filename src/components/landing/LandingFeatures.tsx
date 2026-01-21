@@ -703,7 +703,7 @@ Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
       {features.map((feature, index) => <FeatureSection key={index} feature={feature} index={index} isReversed={index % 2 === 1} />)}
       
       {/* Scroll to next section */}
-      <div id="funcionalidades" className="pb-8 bg-muted/30">
+      <div id="funcionalidades" className="pb-4 bg-muted/30">
         <ScrollToNextButton targetId="ciclo-migrei" />
       </div>
     </section>;

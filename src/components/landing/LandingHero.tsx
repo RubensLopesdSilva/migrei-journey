@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
+import avatar1 from "@/assets/avatars/avatar-1.jpg";
+import avatar2 from "@/assets/avatars/avatar-2.jpg";
+import avatar3 from "@/assets/avatars/avatar-3.jpg";
+import avatar4 from "@/assets/avatars/avatar-4.jpg";
+
 export const LandingHero = () => {
   const navigate = useNavigate();
   const scrollToSection = (id: string) => {
@@ -36,10 +41,10 @@ export const LandingHero = () => {
           }}>
               {/* Stacked avatars */}
               <div className="flex -space-x-2">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">M</div>
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">A</div>
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">J</div>
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 border-2 border-background flex items-center justify-center text-[10px] font-semibold text-white">L</div>
+                <img src={avatar1} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar2} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar3} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar4} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
               </div>
               <span className="text-sm font-medium text-primary">
                 51% dos profissionais consideram fazer transição de carreira

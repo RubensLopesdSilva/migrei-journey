@@ -29,26 +29,47 @@ export const LandingHero = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <div className="text-left order-2 lg:order-1">
-            {/* Eyebrow with avatars */}
-            <motion.div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.4
-          }}>
-              {/* Stacked avatars */}
-              <div className="flex -space-x-2">
-                <img src={avatar1} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar2} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar3} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar4} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+            {/* Social proof badge */}
+            <motion.div 
+              className="inline-flex items-center gap-4 px-5 py-3 rounded-2xl bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10 border border-primary/20 mb-6 shadow-lg shadow-primary/5 backdrop-blur-sm"
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 8px 30px -10px hsl(var(--primary) / 0.3)" }}
+            >
+              {/* Stacked avatars with hover effect */}
+              <div className="flex -space-x-3">
+                {[avatar1, avatar2, avatar3, avatar4].map((avatar, index) => (
+                  <motion.img 
+                    key={index}
+                    src={avatar} 
+                    alt="" 
+                    className="w-9 h-9 rounded-full border-2 border-background object-cover ring-2 ring-primary/20 shadow-md"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + index * 0.1, duration: 0.3 }}
+                    whileHover={{ scale: 1.15, zIndex: 10 }}
+                  />
+                ))}
+                <motion.div 
+                  className="w-9 h-9 rounded-full border-2 border-background bg-primary/20 flex items-center justify-center text-xs font-bold text-primary ring-2 ring-primary/20 shadow-md"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.3 }}
+                >
+                  +2k
+                </motion.div>
               </div>
-              <span className="text-sm font-medium text-primary whitespace-nowrap">
-                51% dos profissionais consideram fazer transição de carreira
-              </span>
+              
+              {/* Text with animated highlight */}
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-foreground whitespace-nowrap">
+                  51% dos profissionais
+                </span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  consideram fazer transição de carreira
+                </span>
+              </div>
             </motion.div>
 
             {/* Headline - H1 for SEO */}

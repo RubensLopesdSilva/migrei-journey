@@ -204,7 +204,7 @@ export const HeroMigreiWheel = () => {
   const tooltipAnchor = (() => {
     if (currentActiveIndex < 0) return null;
     // Posiciona o tooltip ligeiramente fora do anel para “seguir” a fase ativa
-    return getIconPosition(currentActiveIndex, outerRadius + 68);
+    return getIconPosition(currentActiveIndex, outerRadius + 42);
   })();
 
   const tooltipSide = tooltipAnchor
@@ -416,8 +416,8 @@ export const HeroMigreiWheel = () => {
                 top: tooltipAnchor.y,
                 transform:
                   tooltipSide === "left"
-                    ? "translate(calc(-100% - 14px), -50%)"
-                    : "translate(14px, -50%)",
+                    ? "translate(calc(-100% - 8px), -50%)"
+                    : "translate(8px, -50%)",
               }}
               key={currentActivePhase}
               initial={{

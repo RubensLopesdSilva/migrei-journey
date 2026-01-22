@@ -18,19 +18,19 @@ export const LandingHero = () => {
       });
     }
   };
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-gradient-to-b from-muted/50 via-background to-background">
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 pb-8 bg-gradient-to-b from-muted/50 via-background to-background">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-64 md:w-96 h-64 md:h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 md:w-96 h-64 md:h-96 bg-accent/5 rounded-full blur-3xl" />
       </div>
       
-      <div className="container mx-auto px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left: Text Content */}
-          <div className="text-left order-2 lg:order-1">
+          <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Eyebrow with avatars */}
-            <motion.div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6" initial={{
+            <motion.div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -41,18 +41,19 @@ export const LandingHero = () => {
           }}>
               {/* Stacked avatars */}
               <div className="flex -space-x-2">
-                <img src={avatar1} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar2} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar3} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar4} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar1} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar2} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar3} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover hidden sm:block" />
+                <img src={avatar4} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover hidden sm:block" />
               </div>
-              <span className="text-sm font-medium text-primary whitespace-nowrap">
-                51% dos profissionais consideram fazer transição de carreira
+              <span className="text-xs sm:text-sm font-medium text-primary">
+                <span className="hidden sm:inline">51% dos profissionais consideram fazer transição de carreira</span>
+                <span className="sm:hidden">51% consideram mudar de carreira</span>
               </span>
             </motion.div>
 
             {/* Headline - H1 for SEO */}
-            <motion.h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight mb-6" initial={{
+            <motion.h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight mb-4 sm:mb-6" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -73,7 +74,7 @@ export const LandingHero = () => {
             </motion.h1>
 
             {/* Subheadline - What + How */}
-            <motion.p className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8 leading-relaxed" initial={{
+            <motion.p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-6 sm:mb-8 leading-relaxed" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -87,7 +88,7 @@ export const LandingHero = () => {
             </motion.p>
 
             {/* CTAs */}
-            <motion.div className="flex flex-col sm:flex-row items-start gap-4" initial={{
+            <motion.div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 sm:gap-4" initial={{
             opacity: 0,
             y: 20
           }} animate={{
@@ -97,17 +98,17 @@ export const LandingHero = () => {
             duration: 0.5,
             delay: 0.3
           }}>
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
+              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
                 Começar grátis
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="px-6 py-6 text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
+              <Button size="lg" variant="outline" className="w-full sm:w-auto px-5 sm:px-6 py-5 sm:py-6 text-base sm:text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
                 Ver como funciona
               </Button>
             </motion.div>
 
             {/* Trust indicators */}
-            <motion.div className="flex flex-wrap items-center gap-4 mt-8 text-sm text-muted-foreground" initial={{
+            <motion.div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground" initial={{
             opacity: 0
           }} animate={{
             opacity: 1
@@ -115,16 +116,16 @@ export const LandingHero = () => {
             delay: 0.5
           }}>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
                 <span>Gratuito para começar</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
@@ -133,8 +134,8 @@ export const LandingHero = () => {
             </motion.div>
           </div>
 
-          {/* Right: Migrei Wheel */}
-          <motion.div className="flex justify-center lg:justify-center order-1 lg:order-2" initial={{
+          {/* Right: Migrei Wheel - Hidden on mobile, shown on md+ */}
+          <motion.div className="hidden md:flex justify-center lg:justify-center order-1 lg:order-2" initial={{
           opacity: 0,
           scale: 0.9
         }} animate={{
@@ -144,7 +145,7 @@ export const LandingHero = () => {
           duration: 0.6,
           delay: 0.3
         }}>
-            <div className="relative scale-75 md:scale-80 lg:scale-90 xl:scale-100">
+            <div className="relative scale-[0.65] md:scale-75 lg:scale-90 xl:scale-100">
               <HeroMigreiWheel />
             </div>
           </motion.div>

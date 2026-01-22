@@ -61,37 +61,37 @@ export const LandingPricing = () => {
   const navigate = useNavigate();
 
   return (
-    <section id="planos" className="py-24 md:py-36 bg-gradient-to-b from-background to-muted/30">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16">
+    <section id="planos" className="py-16 md:py-24 lg:py-36 bg-gradient-to-b from-background to-muted/30">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <motion.div
-          className="text-center mb-12"
+          className="text-center mb-8 md:mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 md:mb-4">
             Escolha o plano ideal para você
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Escolha o plano que funciona melhor para você. Entre em contato se precisar de ajuda.
+          <p className="text-base md:text-lg text-muted-foreground max-w-md mx-auto">
+            Escolha o plano que funciona melhor para você.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto items-stretch">
           {plans.map((plan, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="relative"
             >
               <Card 
-                className={`p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
+                className={`p-5 md:p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
                   plan.highlighted 
-                    ? "bg-primary text-primary-foreground border-primary shadow-xl scale-105 z-10" 
+                    ? "bg-primary text-primary-foreground border-primary shadow-xl md:scale-105 z-10" 
                     : "bg-card border-border/50 hover:border-primary/30"
                 }`}
               >

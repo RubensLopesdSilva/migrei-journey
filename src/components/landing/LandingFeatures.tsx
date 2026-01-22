@@ -557,7 +557,7 @@ const ResourceCard = ({
 }) => {
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-3xl border bg-card shadow-sm"
+      className="group relative h-full overflow-hidden rounded-3xl border bg-card shadow-sm transition-shadow"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -565,17 +565,19 @@ const ResourceCard = ({
       whileHover={{ y: -6 }}
     >
       {/* ambient */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-70" />
-      <div className="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-60" />
+      <div className="pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+      <div className="pointer-events-none absolute inset-0 opacity-0 ring-1 ring-primary/25 transition-opacity duration-300 group-hover:opacity-100" />
 
-      <div className="relative p-6">
+      <div className="relative flex h-full flex-col p-6">
         {/* mockup */}
-        <div className="relative mb-6 rounded-2xl border bg-background/60 p-4 shadow-sm">
+        <div className="relative mb-6 overflow-hidden rounded-2xl border bg-background/60 shadow-sm">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-          <div className="relative origin-center scale-[0.92] md:scale-[0.96]">
-            {resource.illustration}
+          <div className="relative flex h-[320px] items-center justify-center p-4 md:h-[340px]">
+            <div className="origin-center scale-[0.92] md:scale-[0.98]">{resource.illustration}</div>
           </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background/60 to-transparent" />
         </div>
 
         {/* title */}
@@ -602,6 +604,8 @@ const ResourceCard = ({
             ))}
           </ul>
         </div>
+
+        <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-border to-transparent opacity-70" />
       </div>
     </motion.article>
   );
@@ -661,8 +665,10 @@ export const LandingFeatures = () => {
           </motion.div>
         </div>
 
+        <div className="mt-10 h-px w-full bg-gradient-to-r from-transparent via-border to-transparent opacity-70" />
+
         {/* Cards */}
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-3 lg:items-stretch">
           {resources.map((r, idx) => (
             <ResourceCard key={r.title} resource={r} index={idx} />
           ))}

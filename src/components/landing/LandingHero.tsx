@@ -44,7 +44,7 @@ export const LandingHero = () => {
 
           {/* Headline */}
           <motion.h1 
-            className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-6"
+            className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -59,21 +59,21 @@ export const LandingHero = () => {
             na transição de carreira
           </motion.h1>
 
-          {/* Migrei Wheel */}
+          {/* Migrei Wheel - Compact spacing */}
           <motion.div 
-            className="mb-6"
+            className="my-2"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="scale-[0.55] sm:scale-[0.65]">
+            <div className="scale-[0.5] sm:scale-[0.55] origin-center -my-8">
               <HeroMigreiWheel />
             </div>
           </motion.div>
 
           {/* Subheadline */}
           <motion.p 
-            className="text-base sm:text-lg text-muted-foreground max-w-sm mb-6 leading-relaxed"
+            className="text-base sm:text-lg text-muted-foreground max-w-sm mb-5 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}

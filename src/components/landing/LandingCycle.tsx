@@ -144,7 +144,9 @@ export const LandingCycle = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <HeroMigreiWheel />
+            <div className="scale-[0.85]">
+              <HeroMigreiWheel />
+            </div>
           </motion.div>
 
           {/* Right Side - Phases on right of wheel (1, 2, 3 top to bottom) */}
@@ -158,13 +160,15 @@ export const LandingCycle = () => {
         {/* Tablet Layout */}
         <div className="hidden md:block lg:hidden">
           <motion.div
-            className="flex justify-center mb-10"
+            className="flex justify-center mb-8"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <HeroMigreiWheel />
+            <div className="scale-[0.8]">
+              <HeroMigreiWheel />
+            </div>
           </motion.div>
 
           <div className="grid grid-cols-3 gap-4">

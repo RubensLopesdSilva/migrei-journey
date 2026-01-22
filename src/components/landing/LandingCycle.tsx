@@ -90,28 +90,28 @@ const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; 
 
 export const LandingCycle = () => {
   return (
-    <section id="ciclo-migrei" className="py-24 md:py-36 bg-muted/30">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16">
+    <section id="ciclo-migrei" className="py-16 md:py-24 lg:py-36 bg-muted/30">
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Header */}
         <motion.div
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-10 md:mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           <motion.div 
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-3 md:mb-4"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <Sparkles className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
             <span className="text-xs font-medium text-primary uppercase tracking-wide">Metodologia</span>
           </motion.div>
           
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 md:mb-4">
             A sua{" "}
             <span className="relative inline-block text-primary">
               transição
@@ -122,8 +122,8 @@ export const LandingCycle = () => {
             com o Ciclo Migrei
           </h2>
           
-          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-            <span className="font-semibold text-foreground">6 fases</span> para sair da incerteza e conquistar clareza e ação, com passos práticos em cada etapa.
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+            <span className="font-semibold text-foreground">6 fases</span> para sair da incerteza e conquistar clareza e ação.
           </p>
         </motion.div>
 
@@ -192,31 +192,31 @@ export const LandingCycle = () => {
 
         {/* Mobile Layout */}
         <div className="md:hidden">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
             {phases.map((phase, index) => (
               <motion.div
                 key={phase.number}
-                className="p-4 rounded-xl bg-card border border-border/40"
+                className="p-3 sm:p-4 rounded-xl bg-card border border-border/40"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                <div className="flex items-center gap-2.5 mb-2">
+                <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ backgroundColor: `${phase.color}15` }}
                   >
-                    <phase.icon className="h-4 w-4" style={{ color: phase.color }} />
+                    <phase.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color: phase.color }} />
                   </div>
                   <span 
-                    className="font-bold text-sm"
+                    className="font-bold text-xs sm:text-sm truncate"
                     style={{ color: phase.color }}
                   >
                     {phase.name}
                   </span>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+                <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2">
                   {phase.description}
                 </p>
               </motion.div>

@@ -134,18 +134,14 @@ export const LandingHero = () => {
             </motion.div>
           </div>
 
-          {/* Right: Migrei Wheel - Hidden on mobile, shown on md+ */}
-          <motion.div className="hidden md:flex justify-center lg:justify-center order-1 lg:order-2" initial={{
-          opacity: 0,
-          scale: 0.9
-        }} animate={{
-          opacity: 1,
-          scale: 1
-        }} transition={{
-          duration: 0.6,
-          delay: 0.3
-        }}>
-            <div className="relative scale-[0.65] md:scale-75 lg:scale-90 xl:scale-100">
+          {/* Right: Migrei Wheel - Show on all devices */}
+          <motion.div 
+            className="flex justify-center lg:justify-center order-1 lg:order-2" 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="relative scale-[0.55] sm:scale-[0.65] md:scale-75 lg:scale-90 xl:scale-100">
               <HeroMigreiWheel />
             </div>
           </motion.div>

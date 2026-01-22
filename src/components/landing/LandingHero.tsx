@@ -26,40 +26,130 @@ export const LandingHero = () => {
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="flex flex-col items-center gap-6 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+        {/* Mobile Layout - Stacked vertically */}
+        <div className="flex flex-col items-center text-center lg:hidden">
+          {/* Eyebrow badge */}
+          <motion.div 
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4" 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="flex -space-x-2">
+              <img src={avatar1} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
+              <img src={avatar2} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
+            </div>
+            <span className="text-xs font-medium text-primary">51% consideram mudar de carreira</span>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1 
+            className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            Tenha{" "}
+            <span className="relative inline-block text-primary">
+              clareza
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
+                <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+            </span>{" "}
+            na transição de carreira
+          </motion.h1>
+
+          {/* Migrei Wheel */}
+          <motion.div 
+            className="mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="scale-[0.55] sm:scale-[0.65]">
+              <HeroMigreiWheel />
+            </div>
+          </motion.div>
+
+          {/* Subheadline */}
+          <motion.p 
+            className="text-base sm:text-lg text-muted-foreground max-w-sm mb-6 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            O Ciclo Migrei te guia em 6 fases simples.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div 
+            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-5 text-base rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
+              Começar grátis
+              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto px-5 py-5 text-base rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
+              Ver como funciona
+            </Button>
+          </motion.div>
+
+          {/* Trust indicators */}
+          <motion.div 
+            className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <svg className="w-2.5 h-2.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span>Gratuito para começar</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <svg className="w-2.5 h-2.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span>Sem compromisso</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Desktop Layout - Side by side */}
+        <div className="hidden lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
           {/* Text Content */}
-          <div className="text-center lg:text-left order-1 lg:order-1">
+          <div className="text-left">
             {/* Eyebrow with avatars */}
             <motion.div 
-              className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6" 
+              className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6" 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
             >
-              {/* Stacked avatars */}
               <div className="flex -space-x-2">
-                <img src={avatar1} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar2} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover" />
-                <img src={avatar3} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover hidden sm:block" />
-                <img src={avatar4} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover hidden sm:block" />
+                <img src={avatar1} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar2} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar3} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
+                <img src={avatar4} alt="" className="w-7 h-7 rounded-full border-2 border-background object-cover" />
               </div>
-              <span className="text-xs sm:text-sm font-medium text-primary">
-                <span className="hidden sm:inline">51% dos profissionais consideram fazer transição de carreira</span>
-                <span className="sm:hidden">51% consideram mudar de carreira</span>
-              </span>
+              <span className="text-sm font-medium text-primary">51% dos profissionais consideram fazer transição de carreira</span>
             </motion.div>
 
-            {/* Headline - H1 for SEO */}
-            <motion.h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight mb-4 sm:mb-6" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.1
-          }}>
+            {/* Headline */}
+            <motion.h1 
+              className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground leading-tight mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
               Tenha{" "}
               <span className="relative inline-block text-primary">
                 clareza
@@ -70,59 +160,50 @@ export const LandingHero = () => {
               na transição de carreira
             </motion.h1>
 
-            {/* Subheadline - What + How */}
-            <motion.p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-lg mx-auto lg:mx-0 mb-6 sm:mb-8 leading-relaxed" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.2
-          }}>
+            {/* Subheadline */}
+            <motion.p 
+              className="text-lg md:text-xl text-muted-foreground max-w-lg mb-8 leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               O Ciclo Migrei te guia em 6 fases simples.
             </motion.p>
 
             {/* CTAs */}
-            <motion.div className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3 sm:gap-4" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.5,
-            delay: 0.3
-          }}>
-              <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
+            <motion.div 
+              className="flex items-start gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
                 Começar grátis
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto px-5 sm:px-6 py-5 sm:py-6 text-base sm:text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
+              <Button size="lg" variant="outline" className="px-6 py-6 text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
                 Ver como funciona
               </Button>
             </motion.div>
 
             {/* Trust indicators */}
-            <motion.div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground" initial={{
-            opacity: 0
-          }} animate={{
-            opacity: 1
-          }} transition={{
-            delay: 0.5
-          }}>
+            <motion.div 
+              className="flex items-center gap-4 mt-8 text-sm text-muted-foreground"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
                 <span>Gratuito para começar</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
@@ -131,14 +212,14 @@ export const LandingHero = () => {
             </motion.div>
           </div>
 
-          {/* Migrei Wheel - Below text on mobile, beside on desktop */}
+          {/* Migrei Wheel */}
           <motion.div 
-            className="flex justify-center order-2 lg:order-2" 
+            className="flex justify-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="relative scale-[0.6] sm:scale-[0.7] md:scale-75 lg:scale-90 xl:scale-100">
+            <div className="scale-90 xl:scale-100">
               <HeroMigreiWheel />
             </div>
           </motion.div>

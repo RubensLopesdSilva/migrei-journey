@@ -198,6 +198,20 @@ export const HeroMigreiWheel = () => {
   };
 
   const currentActivePhase = hoveredPhase || phases[activePhaseIndex].id;
+  const currentActiveIndex = phases.findIndex((p) => p.id === currentActivePhase);
+  const currentPhase = phases.find((p) => p.id === currentActivePhase);
+
+  const tooltipAnchor = (() => {
+    if (currentActiveIndex < 0) return null;
+    // Posiciona o tooltip ligeiramente fora do anel para “seguir” a fase ativa
+    return getIconPosition(currentActiveIndex, outerRadius + 68);
+  })();
+
+  const tooltipSide = tooltipAnchor
+    ? tooltipAnchor.x < center
+      ? "left"
+      : "right"
+    : "right";
 
   return (
     <motion.div 
@@ -392,33 +406,48 @@ export const HeroMigreiWheel = () => {
           </foreignObject>
         </motion.svg>
 
-        {/* Tooltip elegante - posicionado à direita inferior */}
+        {/* Tooltip elegante - acompanha a fase ativa */}
         <AnimatePresence>
-          {currentActivePhase && (
+          {currentActivePhase && currentPhase && tooltipAnchor && (
             <motion.div 
-              className="absolute bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-4 py-2.5 shadow-xl z-20 w-[200px]"
-              style={{ bottom: '20px', right: '-60px' }}
+              className="absolute bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-4 py-3 shadow-xl z-20 w-[220px]"
+              style={{
+                left: tooltipAnchor.x,
+                top: tooltipAnchor.y,
+                transform:
+                  tooltipSide === "left"
+                    ? "translate(calc(-100% - 14px), -50%)"
+                    : "translate(14px, -50%)",
+              }}
               key={currentActivePhase}
-              initial={{ opacity: 0, x: -8, scale: 0.95 }}
+              initial={{
+                opacity: 0,
+                x: tooltipSide === "left" ? 8 : -8,
+                scale: 0.95,
+              }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -8, scale: 0.95 }}
+              exit={{
+                opacity: 0,
+                x: tooltipSide === "left" ? 8 : -8,
+                scale: 0.95,
+              }}
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center gap-2">
                 <motion.div 
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ 
-                    backgroundColor: phases.find(p => p.id === currentActivePhase)?.bgColor 
+                    backgroundColor: currentPhase.bgColor
                   }}
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 />
-                <span className="font-semibold text-foreground text-xs">
-                  {phases.find(p => p.id === currentActivePhase)?.name}
+                <span className="font-semibold text-foreground text-sm">
+                  {currentPhase.name}
                 </span>
               </div>
-              <p className="text-[10px] text-muted-foreground mt-1 leading-relaxed">
-                {phases.find(p => p.id === currentActivePhase)?.description}
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                {currentPhase.description}
               </p>
             </motion.div>
           )}

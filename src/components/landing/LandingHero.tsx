@@ -61,12 +61,12 @@ export const LandingHero = () => {
 
           {/* Migrei Wheel - Compact spacing */}
           <motion.div 
-            className="my-2"
+            className="-my-12 sm:-my-10"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="scale-[0.5] sm:scale-[0.55] origin-center -my-8">
+            <div className="scale-[0.45] sm:scale-[0.5] origin-center">
               <HeroMigreiWheel />
             </div>
           </motion.div>

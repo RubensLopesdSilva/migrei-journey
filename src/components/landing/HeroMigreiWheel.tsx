@@ -85,7 +85,17 @@ const phases: Phase[] = [
   },
 ];
 
-export const HeroMigreiWheel = () => {
+export const HeroMigreiWheel = ({
+  size: sizeProp,
+  showTooltip = true,
+  maxHoverScale = 1.04,
+  maxPulseScale = 1.02,
+}: {
+  size?: number;
+  showTooltip?: boolean;
+  maxHoverScale?: number;
+  maxPulseScale?: number;
+} = {}) => {
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
   const [isEntered, setIsEntered] = useState(false);
   const [pulseScale, setPulseScale] = useState(1);
@@ -100,7 +110,7 @@ export const HeroMigreiWheel = () => {
   // Pulso vital sutil a cada 6-8 segundos
   useEffect(() => {
     const interval = setInterval(() => {
-      setPulseScale(1.02);
+      setPulseScale(maxPulseScale);
       setTimeout(() => setPulseScale(1), 800);
     }, 7000);
     
@@ -118,15 +128,16 @@ export const HeroMigreiWheel = () => {
     return () => clearInterval(interval);
   }, [hoveredPhase]);
 
-  // Dimensões responsivas - maiores para preencher área
-  const size = 480;
+  // Dimensões
+  const size = sizeProp ?? 480;
   const center = size / 2;
-  const outerRadius = 220;
-  const innerRadius = 80;
+  // Mantém proporção com o tamanho
+  const outerRadius = Math.round(size * 0.4583); // 220/480
+  const innerRadius = Math.round(size * 0.1666); // 80/480
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = 5;
-  const cornerRadius = 12;
+  const cornerRadius = Math.max(10, Math.round(size * 0.025));
 
   // Criar caminho do segmento arredondado
   const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {
@@ -267,7 +278,7 @@ export const HeroMigreiWheel = () => {
             const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
 
             // Calcular transformação
-            const segmentScale = isActive && !isHovered ? pulseScale : isHovered ? 1.04 : 1;
+             const segmentScale = isActive && !isHovered ? pulseScale : isHovered ? maxHoverScale : 1;
 
             return (
               <g key={phase.id}>
@@ -305,7 +316,7 @@ export const HeroMigreiWheel = () => {
                     opacity: isActive ? 1 : 0.7,
                   }}
                   whileHover={{ 
-                    scale: 1.04,
+                    scale: maxHoverScale,
                     opacity: 1,
                     transition: { duration: 0.2 }
                   }}
@@ -394,7 +405,7 @@ export const HeroMigreiWheel = () => {
 
         {/* Tooltip elegante - posicionado à direita inferior */}
         <AnimatePresence>
-          {currentActivePhase && (
+          {showTooltip && currentActivePhase && (
             <motion.div 
               className="absolute bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-4 py-2.5 shadow-xl z-20 w-[200px]"
               style={{ bottom: '20px', right: '-60px' }}

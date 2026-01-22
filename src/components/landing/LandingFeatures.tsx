@@ -40,8 +40,8 @@ const phases = [{
 
 // Mockup: Interactive Roda Migrei - using HeroMigreiWheel component
 const CycleMockup = () => {
-  return <div className="flex items-center justify-center h-[420px] relative">
-      <HeroMigreiWheel />
+  return <div className="relative flex h-full items-center justify-center">
+      <HeroMigreiWheel size={380} showTooltip={false} maxHoverScale={1.015} maxPulseScale={1.01} />
     </div>;
 };
 
@@ -85,7 +85,7 @@ const Plan90Mockup = () => {
 
   return (
     <motion.div
-      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 w-full max-w-sm mx-auto bg-gradient-to-br from-primary/5 to-transparent h-[420px] flex flex-col"
+      className="backdrop-blur-xl rounded-2xl shadow-lg border border-primary/20 p-5 w-full max-w-sm mx-auto bg-gradient-to-br from-primary/5 to-transparent h-full flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -229,7 +229,7 @@ const NetworkingMockup = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-sm mx-auto space-y-3 h-[420px] flex flex-col"
+      className="w-full max-w-sm mx-auto space-y-3 h-full flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -373,7 +373,7 @@ const CommunityMockup = () => {
 
   return (
     <motion.div 
-      className="w-full max-w-sm mx-auto space-y-3"
+      className="w-full max-w-sm mx-auto space-y-3 h-full flex flex-col"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -574,8 +574,8 @@ const ResourceCard = ({
         {/* mockup */}
         <div className="relative mb-6 overflow-hidden rounded-2xl border bg-background/60 shadow-sm">
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-          <div className="relative flex h-[320px] items-center justify-center p-4 md:h-[340px]">
-            <div className="origin-center scale-[0.92] md:scale-[0.98]">{resource.illustration}</div>
+          <div className="relative flex h-[420px] items-center justify-center p-4 md:h-[440px]">
+            <div className="h-full w-full origin-center scale-[0.92] md:scale-[0.96]">{resource.illustration}</div>
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background/60 to-transparent" />
         </div>

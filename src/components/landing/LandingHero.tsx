@@ -26,19 +26,16 @@ export const LandingHero = () => {
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left: Text Content */}
-          <div className="text-center lg:text-left order-2 lg:order-1">
+        <div className="flex flex-col items-center gap-6 lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+          {/* Text Content */}
+          <div className="text-center lg:text-left order-1 lg:order-1">
             {/* Eyebrow with avatars */}
-            <motion.div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6" initial={{
-            opacity: 0,
-            y: 20
-          }} animate={{
-            opacity: 1,
-            y: 0
-          }} transition={{
-            duration: 0.4
-          }}>
+            <motion.div 
+              className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-4 sm:mb-6" 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
               {/* Stacked avatars */}
               <div className="flex -space-x-2">
                 <img src={avatar1} alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-background object-cover" />
@@ -134,14 +131,14 @@ export const LandingHero = () => {
             </motion.div>
           </div>
 
-          {/* Right: Migrei Wheel - Show on all devices */}
+          {/* Migrei Wheel - Below text on mobile, beside on desktop */}
           <motion.div 
-            className="flex justify-center lg:justify-center order-1 lg:order-2" 
+            className="flex justify-center order-2 lg:order-2" 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="relative scale-[0.55] sm:scale-[0.65] md:scale-75 lg:scale-90 xl:scale-100">
+            <div className="relative scale-[0.6] sm:scale-[0.7] md:scale-75 lg:scale-90 xl:scale-100">
               <HeroMigreiWheel />
             </div>
           </motion.div>

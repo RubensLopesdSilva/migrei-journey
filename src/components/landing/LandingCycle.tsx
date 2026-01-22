@@ -191,37 +191,46 @@ export const LandingCycle = () => {
         </div>
 
         {/* Mobile Layout */}
-        <div className="md:hidden">
-          <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-            {phases.map((phase, index) => (
-              <motion.div
-                key={phase.number}
-                className="p-3 sm:p-4 rounded-xl bg-card border border-border/40"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
+        <div className="md:hidden space-y-2">
+          {phases.map((phase, index) => (
+            <motion.div
+              key={phase.number}
+              className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40"
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+            >
+              {/* Phase number */}
+              <div 
+                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+                style={{ backgroundColor: phase.color }}
               >
-                <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
-                  <div
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: `${phase.color}15` }}
-                  >
-                    <phase.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color: phase.color }} />
-                  </div>
-                  <span 
-                    className="font-bold text-xs sm:text-sm truncate"
-                    style={{ color: phase.color }}
-                  >
-                    {phase.name}
-                  </span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                {phase.number}
+              </div>
+              
+              {/* Icon */}
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                style={{ backgroundColor: `${phase.color}15` }}
+              >
+                <phase.icon className="h-4 w-4" style={{ color: phase.color }} />
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <span 
+                  className="font-semibold text-sm block"
+                  style={{ color: phase.color }}
+                >
+                  {phase.name}
+                </span>
+                <p className="text-xs text-muted-foreground leading-snug truncate">
                   {phase.description}
                 </p>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         {/* Simple CTA */}

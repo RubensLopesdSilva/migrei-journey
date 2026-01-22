@@ -190,42 +190,42 @@ export const LandingCycle = () => {
           </div>
         </div>
 
-        {/* Mobile Layout */}
-        <div className="md:hidden space-y-2">
+        {/* Mobile Layout - 2 columns grid */}
+        <div className="md:hidden grid grid-cols-2 gap-3">
           {phases.map((phase, index) => (
             <motion.div
               key={phase.number}
-              className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border/40"
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="relative p-4 rounded-2xl bg-card border border-border/40 shadow-sm"
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              {/* Phase number */}
+              {/* Phase number badge */}
               <div 
-                className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
+                className="absolute -top-2 -left-1 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-md"
                 style={{ backgroundColor: phase.color }}
               >
                 {phase.number}
               </div>
               
-              {/* Icon */}
+              {/* Icon centered */}
               <div
-                className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
                 style={{ backgroundColor: `${phase.color}15` }}
               >
-                <phase.icon className="h-4 w-4" style={{ color: phase.color }} />
+                <phase.icon className="h-6 w-6" style={{ color: phase.color }} />
               </div>
               
-              {/* Content */}
-              <div className="flex-1 min-w-0">
+              {/* Content centered */}
+              <div className="text-center">
                 <span 
-                  className="font-semibold text-sm block"
+                  className="font-bold text-sm block mb-1"
                   style={{ color: phase.color }}
                 >
                   {phase.name}
                 </span>
-                <p className="text-xs text-muted-foreground leading-snug truncate">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   {phase.description}
                 </p>
               </div>

@@ -1,11 +1,9 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Target, Users, ArrowRight, Check, Lock, Calendar, Star, MessageCircle, Lightbulb, Search, Wrench, Rocket, Trophy, Settings, Plus, User, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase, ChevronUp, ChevronDown } from "lucide-react";
+import { Brain, Target, Users, ArrowRight, Check, Calendar, Star, Search, Rocket, Trophy, Settings, Sparkles, TrendingUp, CheckCircle, Linkedin, Briefcase, ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HeroMigreiWheel } from "./HeroMigreiWheel";
-import { ScrollToNextButton } from "./ScrollToNextButton";
 
 // Phase data for the wheel
 const phases = [{
@@ -465,7 +463,7 @@ const CommunityMockup = () => {
                   <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center ring-2 ring-background shadow-sm">
                     <span className="text-xs font-semibold text-primary">{mentor.initials}</span>
                   </div>
-                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 border-2 border-background" />
+                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-primary border-2 border-background" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1">
@@ -510,201 +508,166 @@ const CommunityMockup = () => {
     </motion.div>
   );
 };
-const features = [{
-  icon: Brain,
-  title: "Ciclo de Transição",
-  subtitle: "Visualize sua jornada completa",
-  description: "Acompanhe sua evolução através das 6 fases do Ciclo Migrei. Cada fase foi desenhada para te guiar do despertar até a conquista do seu novo momento profissional.",
-  highlights: ["6 fases estruturadas com objetivos claros", "Progresso visual que te mantém motivado", "Atividades práticas em cada etapa"],
-  illustration: <CycleMockup />,
-  gradient: "from-amber-500/10 via-transparent to-emerald-500/10",
-  accentColor: "text-amber-500"
-}, {
-  icon: Target,
-  title: "Plano de 90 Dias",
-  subtitle: "Sua transição com prazo e foco",
-  description: "Metas SMART e cronograma personalizado dividido em 3 meses. Cada semana você sabe exatamente o que fazer para avançar na sua transição de carreira.",
-  highlights: ["Cronograma semanal personalizado", "Metas mensuráveis e alcançáveis", "Acompanhamento de progresso em tempo real"],
-  illustration: <Plan90Mockup />,
-  gradient: "from-blue-500/10 via-transparent to-indigo-500/10",
-  accentColor: "text-blue-500"
-}, {
-  icon: Users,
-  title: "Networking Prático",
-  subtitle: "Conexões que abrem portas",
-  description: "Rotina diária de 10 minutos que transforma sua rede de contatos. Ações simples e consistentes que constroem relacionamentos profissionais genuínos.",
-  highlights: ["Rotina diária de apenas 10 minutos", "Sugestões inteligentes de ações", "Acompanhamento de conexões feitas"],
-  illustration: <NetworkingMockup />,
-  gradient: "from-violet-500/10 via-transparent to-purple-500/10",
-  accentColor: "text-violet-500"
-}, {
-  icon: Users,
-  title: "Mentoria Especializada",
-  subtitle: "Você não está sozinho nessa",
-  description: "Receba orientação personalizada de mentores experientes que já realizaram transições de carreira bem-sucedidas. Sessões individuais para acelerar seus resultados.",
-  highlights: ["Mentores especializados disponíveis", "Agende no seu tempo a mentoria", "50 minutos de orientação"],
-  illustration: <CommunityMockup />,
-  gradient: "from-emerald-500/10 via-transparent to-teal-500/10",
-  accentColor: "text-emerald-500"
-}];
 
-// Feature Section Component for sequential layout
-const FeatureSection = ({
-  feature,
+const resources = [
+  {
+    icon: Brain,
+    title: "Ciclo Migrei",
+    description:
+      "6 fases para sair da incerteza e conquistar clareza e ação, com passos práticos em cada etapa.",
+    bullets: [
+      "6 fases estruturadas com objetivos claros",
+      "Progresso visual que te mantém motivado",
+      "Atividades práticas em cada etapa",
+    ],
+    illustration: <CycleMockup />,
+  },
+  {
+    icon: Users,
+    title: "Networking",
+    description:
+      "Rotina diária de 10 minutos com sugestões de ações e desafios para criar conexões que abrem portas.",
+    bullets: [
+      "Rotina diária de apenas 10 minutos",
+      "Sugestões inteligentes de ações",
+      "Acompanhamento de conexões feitas",
+    ],
+    illustration: <NetworkingMockup />,
+  },
+  {
+    icon: Users,
+    title: "Mentoria",
+    description:
+      "Sessões individuais com mentores experientes para acelerar decisões e aumentar sua confiança na transição.",
+    bullets: [
+      "Mentores especializados disponíveis",
+      "Agende no seu tempo a mentoria",
+      "50 minutos de orientação",
+    ],
+    illustration: <CommunityMockup />,
+  },
+] as const;
+
+const ResourceCard = ({
+  resource,
   index,
-  isReversed
 }: {
-  feature: typeof features[0];
+  resource: (typeof resources)[number];
   index: number;
-  isReversed: boolean;
 }) => {
-  const navigate = useNavigate();
-  return <div className={`relative py-20 md:py-28 ${index % 2 === 0 ? 'bg-background' : 'bg-muted/30'}`}>
-      {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-r ${feature.gradient} opacity-50`} />
-      
-      <div className="container mx-auto px-6 md:px-12 lg:px-16 relative">
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${isReversed ? 'lg:grid-flow-dense' : ''}`}>
-          {/* Content */}
-          <motion.div className={isReversed ? 'lg:col-start-2' : ''} initial={{
-          opacity: 0,
-          x: isReversed ? 40 : -40
-        }} whileInView={{
-          opacity: 1,
-          x: 0
-        }} viewport={{
-          once: true,
-          margin: "-100px"
-        }} transition={{
-          duration: 0.6,
-          ease: "easeOut"
-        }}>
-            {/* Step indicator */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shadow-lg`}>
-                <feature.icon className="h-6 w-6 text-primary" />
-              </div>
-              <div className="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent max-w-20" />
-              
-            </div>
-            
-            {/* Title & Subtitle */}
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {feature.title}
-            </h3>
-            <p className={`text-lg font-medium ${feature.accentColor} mb-4`}>
-              {feature.subtitle}
-            </p>
-            
-            {/* Description */}
-            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
-              {feature.description}
-            </p>
-            
-            {/* Highlights */}
-            <ul className="space-y-3 mb-8">
-              {feature.highlights.map((highlight, i) => <motion.li key={i} className="flex items-center gap-3" initial={{
-              opacity: 0,
-              x: -20
-            }} whileInView={{
-              opacity: 1,
-              x: 0
-            }} viewport={{
-              once: true
-            }} transition={{
-              duration: 0.4,
-              delay: 0.2 + i * 0.1
-            }}>
-                  <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                  </div>
-                  <span className="text-foreground">{highlight}</span>
-                </motion.li>)}
-            </ul>
-            
-            {/* CTA */}
-            <Button variant="outline" className="rounded-full group border-primary/30 hover:border-primary hover:bg-primary/5" onClick={() => navigate("/auth?tab=signup")}>
-              Explorar recurso
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </motion.div>
-          
-          {/* Illustration */}
-          <motion.div className={isReversed ? 'lg:col-start-1 lg:row-start-1' : ''} initial={{
-          opacity: 0,
-          x: isReversed ? -40 : 40,
-          scale: 0.95
-        }} whileInView={{
-          opacity: 1,
-          x: 0,
-          scale: 1
-        }} viewport={{
-          once: true,
-          margin: "-100px"
-        }} transition={{
-          duration: 0.6,
-          ease: "easeOut",
-          delay: 0.1
-        }}>
-            <div className="relative">
-              {/* Decorative elements - only for non-cycle features */}
-              {index !== 0 && <>
-                  <div className="absolute -inset-4 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl blur-xl" />
-                  <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
-                  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl" />
-                </>}
-              
-              {/* Mockup container - skip for cycle (index 0) */}
-              {index === 0 ? <div className="relative">
-                  {feature.illustration}
-                </div> : <div className="relative rounded-2xl p-6 transform hover:scale-[1.02] transition-transform duration-500">
-                  <div className="transform scale-110 origin-center">
-                    {feature.illustration}
-                  </div>
-                </div>}
-            </div>
-          </motion.div>
+  return (
+    <motion.article
+      className="group relative overflow-hidden rounded-3xl border bg-card shadow-sm"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, delay: index * 0.08 }}
+      whileHover={{ y: -6 }}
+    >
+      {/* ambient */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10 opacity-70" />
+      <div className="pointer-events-none absolute -top-16 -right-16 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
+
+      <div className="relative p-6">
+        {/* mockup */}
+        <div className="relative mb-6 rounded-2xl border bg-background/60 p-4 shadow-sm">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+          <div className="relative origin-center scale-[0.92] md:scale-[0.96]">
+            {resource.illustration}
+          </div>
+        </div>
+
+        {/* title */}
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10">
+            <resource.icon className="h-5 w-5 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-lg font-semibold text-foreground">{resource.title}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{resource.description}</p>
+          </div>
+        </div>
+
+        {/* bullets */}
+        <div className="mt-5 rounded-2xl bg-muted/40 p-4">
+          <ul className="space-y-2">
+            {resource.bullets.map((b) => (
+              <li key={b} className="flex items-start gap-2 text-sm text-foreground">
+                <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10">
+                  <Check className="h-3.5 w-3.5 text-primary" />
+                </span>
+                <span className="leading-snug">{b}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    </div>;
+    </motion.article>
+  );
 };
+
 export const LandingFeatures = () => {
   const navigate = useNavigate();
-  return <section id="recursos" className="relative overflow-hidden">
-      {/* Section Header */}
-      <div className="py-20 md:py-28 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <motion.div className="text-center max-w-3xl mx-auto" initial={{
-          opacity: 0,
-          y: 30
-        }} whileInView={{
-          opacity: 1,
-          y: 0
-        }} viewport={{
-          once: true
-        }} transition={{
-          duration: 0.6
-        }}>
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-              <Lightbulb className="h-4 w-4" />
-              Recursos exclusivos
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Tudo que você precisa para sua{" "}
-              <span className="text-primary">transição de carreira</span>
+  const scrollToPlans = () => {
+    const el = document.getElementById("planos");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    // fallback
+    navigate("/#planos");
+  };
+
+  return (
+    <section id="recursos" className="relative overflow-hidden bg-muted/20 py-20 md:py-28">
+      <div className="container mx-auto px-6 md:px-12 lg:px-16">
+        {/* Header (like print) */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
+          <motion.div
+            className="lg:col-span-5"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-4xl font-bold leading-tight text-foreground md:text-5xl">
+              Recursos que
+              <br />
+              <span className="text-primary">você pode usar</span>
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">Ferramentas práticas, metodologia testada e práticas de networking. 
-Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
+          </motion.div>
+
+          <motion.div
+            className="lg:col-span-7 lg:pl-6"
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+          >
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
+                Oferecemos recursos práticos e exclusivos que vão te ajudar a aumentar sua
+                produtividade e gerenciar sua transição de carreira com facilidade.
+              </p>
+              <Button
+                onClick={scrollToPlans}
+                className="btn-primary-gradient rounded-full shrink-0"
+              >
+                Começar agora
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           </motion.div>
         </div>
+
+        {/* Cards */}
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {resources.map((r, idx) => (
+            <ResourceCard key={r.title} resource={r} index={idx} />
+          ))}
+        </div>
       </div>
-      
-      {/* Sequential Feature Sections */}
-      {features.map((feature, index) => <FeatureSection key={index} feature={feature} index={index} isReversed={index % 2 === 1} />)}
-      
-      {/* Scroll to next section */}
-      <div id="funcionalidades" className="pb-4 bg-muted/30">
-        <ScrollToNextButton targetId="ciclo-migrei" />
-      </div>
-    </section>;
+    </section>
+  );
 };

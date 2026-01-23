@@ -67,6 +67,14 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
             >
               Política de Privacidade
             </a>
+            <span aria-hidden="true">•</span>
+            <a 
+              href="/auth" 
+              className="hover:text-white transition-colors"
+              rel="noopener noreferrer"
+            >
+              Suporte
+            </a>
           </div>
         </div>
       </div>

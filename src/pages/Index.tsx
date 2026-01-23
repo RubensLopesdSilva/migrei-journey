@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
@@ -12,8 +13,12 @@ import { motion } from "framer-motion";
 import { PageContent } from "@/components/ui/page-transition";
 import { useProgress } from "@/hooks/useProgress";
 import { useAgent } from "@/hooks/useAgent";
+import { Button } from "@/components/ui/button";
+import { Headphones } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Index = () => {
+  const navigate = useNavigate();
   const { loading: progressLoading } = useProgress();
   const { loading: agentLoading } = useAgent();
   const [showPhaseModal, setShowPhaseModal] = useState(false);
@@ -122,6 +127,23 @@ const Index = () => {
       
       {/* Phase Welcome Modal - shown after tour completes */}
       <PhaseWelcomeModal forceOpen={showPhaseModal} />
+
+      {/* Floating Support Button */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => navigate("/conta?tab=support")}
+            size="icon"
+            variant="outline"
+            className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg bg-background/95 backdrop-blur-sm border-border/50 hover:bg-primary hover:text-primary-foreground transition-all z-40"
+          >
+            <Headphones className="h-5 w-5" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="left">
+          <p>Precisa de ajuda?</p>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 };

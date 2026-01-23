@@ -117,11 +117,11 @@ export const HeroMigreiWheel = () => {
     return () => clearInterval(interval);
   }, [hoveredPhase]);
 
-  // Dimensões - igual ao Dashboard
-  const size = 480;
+  // Dimensões - maior que o Dashboard
+  const size = 560;
   const center = size / 2;
-  const outerRadius = 220;
-  const innerRadius = 80;
+  const outerRadius = 260;
+  const innerRadius = 95;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = 5;

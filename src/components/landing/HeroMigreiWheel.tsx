@@ -3,9 +3,9 @@ import {
   Lightbulb, 
   Search, 
   Target, 
-  Settings, 
+  Wrench, 
   Rocket, 
-  Star,
+  Trophy,
   User
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,14 +23,15 @@ interface Phase {
   angle: number;
 }
 
-// Helper to create glow color from hex
-const hexToGlow = (hex: string, opacity: number = 0.4): string => {
+// Helper to create glow color from hex - igual ao Dashboard
+const hexToGlow = (hex: string): string => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
   const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  return `rgba(${r}, ${g}, ${b}, 0.4)`;
 };
 
+// Mesmos ícones do Dashboard (MigreiCircle)
 const phases: Phase[] = [
   { 
     id: "despertar", 
@@ -65,7 +66,7 @@ const phases: Phase[] = [
   { 
     id: "desenvolver", 
     name: "Desenvolver", 
-    icon: Settings, 
+    icon: Wrench, 
     bgColor: PHASE_COLORS[4],
     glowColor: hexToGlow(PHASE_COLORS[4]),
     textColor: "#FFFFFF",
@@ -85,7 +86,7 @@ const phases: Phase[] = [
   { 
     id: "desfrutar", 
     name: "Desfrutar", 
-    icon: Star, 
+    icon: Trophy, 
     bgColor: PHASE_COLORS[6],
     glowColor: hexToGlow(PHASE_COLORS[6]),
     textColor: "#FFFFFF",
@@ -97,23 +98,12 @@ const phases: Phase[] = [
 export const HeroMigreiWheel = () => {
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
   const [isEntered, setIsEntered] = useState(false);
-  const [pulseScale, setPulseScale] = useState(1);
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
 
   // Animação de entrada
   useEffect(() => {
     const timer = setTimeout(() => setIsEntered(true), 100);
     return () => clearTimeout(timer);
-  }, []);
-
-  // Pulso vital sutil a cada 6-8 segundos
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPulseScale(1.02);
-      setTimeout(() => setPulseScale(1), 800);
-    }, 7000);
-    
-    return () => clearInterval(interval);
   }, []);
 
   // Auto-rotate phases when not hovering
@@ -127,7 +117,7 @@ export const HeroMigreiWheel = () => {
     return () => clearInterval(interval);
   }, [hoveredPhase]);
 
-  // Dimensões responsivas - maiores para preencher área
+  // Dimensões - igual ao Dashboard
   const size = 480;
   const center = size / 2;
   const outerRadius = 220;
@@ -137,7 +127,7 @@ export const HeroMigreiWheel = () => {
   const gapAngle = 5;
   const cornerRadius = 12;
 
-  // Criar caminho do segmento arredondado
+  // Criar caminho do segmento arredondado - igual ao Dashboard
   const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {
     const startAngle = index * segmentAngle + gapAngle / 2;
     const endAngle = (index + 1) * segmentAngle - gapAngle / 2;
@@ -212,7 +202,6 @@ export const HeroMigreiWheel = () => {
 
   const tooltipAnchor = (() => {
     if (currentActiveIndex < 0) return null;
-    // Posiciona o tooltip ligeiramente fora do anel para “seguir” a fase ativa
     return getIconPosition(currentActiveIndex, outerRadius + 42);
   })();
 
@@ -268,8 +257,8 @@ export const HeroMigreiWheel = () => {
                 id={`landing-gradient-${phase.id}`}
                 x1="0%" y1="0%" x2="100%" y2="100%"
               >
-                <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
-                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
+                <stop offset="0%" stopColor={phase.bgColor} stopOpacity={1} />
+                <stop offset="100%" stopColor={phase.bgColor} stopOpacity={0.85} />
               </linearGradient>
             ))}
             
@@ -283,14 +272,11 @@ export const HeroMigreiWheel = () => {
             </filter>
           </defs>
 
-          {/* Segmentos */}
+          {/* Segmentos - TODOS com opacidade total */}
           {phases.map((phase, index) => {
             const isActive = currentActivePhase === phase.id;
             const isHovered = hoveredPhase === phase.id;
             const iconPos = getIconPosition(index, (outerRadius + innerRadius) / 2);
-
-            // Calcular transformação
-            const segmentScale = isActive && !isHovered ? pulseScale : isHovered ? 1.04 : 1;
 
             return (
               <g key={phase.id}>
@@ -299,7 +285,7 @@ export const HeroMigreiWheel = () => {
                   <motion.path
                     d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
                     fill={phase.glowColor}
-                    initial={{ opacity: 0 }}
+                    initial={{ opacity: 0.3 }}
                     animate={{ 
                       opacity: [0.3, 0.5, 0.3],
                       scale: [1, 1.02, 1]
@@ -313,30 +299,26 @@ export const HeroMigreiWheel = () => {
                   />
                 )}
 
-                {/* Segmento principal */}
+                {/* Segmento principal - SEM animação de opacidade */}
                 <motion.path
                   d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
                   fill={`url(#landing-gradient-${phase.id})`}
-                  className="cursor-pointer transition-all duration-300"
+                  className="cursor-pointer"
                   style={{
                     filter: isActive ? 'url(#landing-glow)' : 'none',
                     transformOrigin: `${center}px ${center}px`,
                   }}
                   initial={{ scale: 1 }}
-                  animate={{ 
-                    scale: segmentScale,
-                  }}
-                  whileHover={{ 
-                    scale: 1.04,
-                    transition: { duration: 0.2 }
-                  }}
+                  animate={{ scale: isActive ? 1.02 : 1 }}
+                  whileHover={{ scale: 1.04 }}
+                  transition={{ duration: 0.2 }}
                   onMouseEnter={() => setHoveredPhase(phase.id)}
                   onMouseLeave={() => setHoveredPhase(null)}
                 />
 
                 {/* Brilho interno para fase ativa */}
                 {isActive && (
-                  <motion.path
+                  <path
                     d={createRoundedSegmentPath(index, outerRadius - 20, innerRadius + 10)}
                     fill="white"
                     opacity={0.08}
@@ -344,28 +326,23 @@ export const HeroMigreiWheel = () => {
                   />
                 )}
 
-                {/* Container do ícone */}
+                {/* Container do ícone - igual ao Dashboard */}
                 <foreignObject
-                  x={iconPos.x - 22}
-                  y={iconPos.y - 22}
-                  width={44}
-                  height={44}
+                  x={iconPos.x - 24}
+                  y={iconPos.y - 24}
+                  width={48}
+                  height={48}
                   className="pointer-events-none"
                 >
-                  <motion.div 
-                    className="flex items-center justify-center h-full w-full rounded-full"
+                  <div 
+                    className={cn(
+                      "flex items-center justify-center h-full w-full rounded-full",
+                      isActive && "ring-2 ring-white/30"
+                    )}
                     style={{ 
                       backgroundColor: 'rgba(255,255,255,0.2)',
                       backdropFilter: 'blur(8px)'
                     }}
-                    animate={isActive ? {
-                      boxShadow: [
-                        '0 0 0 0 rgba(255,255,255,0)',
-                        '0 0 0 6px rgba(255,255,255,0.15)',
-                        '0 0 0 0 rgba(255,255,255,0)'
-                      ]
-                    } : {}}
-                    transition={{ duration: 2.5, repeat: Infinity }}
                   >
                     <phase.icon 
                       className={cn(
@@ -375,14 +352,14 @@ export const HeroMigreiWheel = () => {
                       style={{ color: phase.textColor }}
                       strokeWidth={2.5}
                     />
-                  </motion.div>
+                  </div>
                 </foreignObject>
               </g>
             );
           })}
 
-          {/* Centro - Círculo do usuário */}
-          <motion.circle
+          {/* Centro - Círculo do usuário - igual ao Dashboard */}
+          <circle
             cx={center}
             cy={center}
             r={innerRadius - 10}
@@ -394,21 +371,17 @@ export const HeroMigreiWheel = () => {
 
           {/* Conteúdo central */}
           <foreignObject
-            x={center - 26}
-            y={center - 26}
-            width={52}
-            height={52}
+            x={center - 30}
+            y={center - 30}
+            width={60}
+            height={60}
           >
             <div className="flex items-center justify-center h-full">
-              <motion.div 
-                className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
-                animate={{ 
-                  borderColor: ['hsl(var(--primary) / 0.2)', 'hsl(var(--primary) / 0.35)', 'hsl(var(--primary) / 0.2)']
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              <div 
+                className="h-14 w-14 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border-2 border-primary/20 flex items-center justify-center"
               >
-                <User className="h-5 w-5 text-primary" />
-              </motion.div>
+                <User className="h-6 w-6 text-primary" />
+              </div>
             </div>
           </foreignObject>
         </motion.svg>
@@ -441,13 +414,9 @@ export const HeroMigreiWheel = () => {
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center gap-2">
-                <motion.div 
+                <div 
                   className="w-2 h-2 rounded-full flex-shrink-0"
-                  style={{ 
-                    backgroundColor: currentPhase.bgColor
-                  }}
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  style={{ backgroundColor: currentPhase.bgColor }}
                 />
                 <span className="font-semibold text-foreground text-sm">
                   {currentPhase.name}

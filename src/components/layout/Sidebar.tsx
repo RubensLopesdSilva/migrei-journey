@@ -15,6 +15,7 @@ import {
   ChevronRight,
   CalendarDays,
   LayoutDashboard,
+  Headphones,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate, Link } from "react-router-dom";
@@ -83,6 +84,11 @@ const adminNavItems: NavItem[] = [
     icon: Users,
     label: "Gerenciar Usuários",
     href: "/admin/usuarios"
+  },
+  {
+    icon: Headphones,
+    label: "Suporte",
+    href: "/admin/suporte"
   },
   {
     icon: Settings,

@@ -15,6 +15,7 @@ import {
   ShieldX,
   ArrowRight,
   BarChart3,
+  Headphones,
 } from "lucide-react";
 
 const adminModules = [
@@ -41,6 +42,14 @@ const adminModules = [
     href: "/admin/usuarios",
     color: "text-green-600",
     bgColor: "bg-green-500/10",
+  },
+  {
+    icon: Headphones,
+    title: "Suporte",
+    description: "Gerencie as solicitações de suporte dos usuários",
+    href: "/admin/suporte",
+    color: "text-cyan-600",
+    bgColor: "bg-cyan-500/10",
   },
   {
     icon: Settings,

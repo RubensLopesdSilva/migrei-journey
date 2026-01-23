@@ -23,6 +23,7 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminMetrics from "./pages/AdminMetrics";
+import AdminSupport from "./pages/AdminSupport";
 import Progress from "./pages/Progress";
 import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -35,6 +36,7 @@ import Community from "./pages/Community";
 import Landing from "./pages/Landing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -71,7 +73,9 @@ const App = () => (
                       <Route path="/admin/usuarios" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
                       <Route path="/admin/configuracoes" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
                       <Route path="/admin/metricas" element={<ProtectedRoute><AdminMetrics /></ProtectedRoute>} />
+                      <Route path="/admin/suporte" element={<ProtectedRoute><AdminSupport /></ProtectedRoute>} />
                       <Route path="/progresso" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+                      <Route path="/suporte" element={<ProtectedRoute><Support /></ProtectedRoute>} />
                       <Route path="/networking" element={<ProtectedRoute><PositioningAcademy /></ProtectedRoute>} />
                       <Route path="/comunidade" element={<ProtectedRoute><Community /></ProtectedRoute>} />
                       <Route path="/fase" element={<ProtectedRoute><Fase1Despertar /></ProtectedRoute>} />

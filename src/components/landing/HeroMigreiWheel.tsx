@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { PHASE_COLORS } from "@/data/phaseIntroData";
 
 interface Phase {
   id: string;
@@ -22,13 +23,21 @@ interface Phase {
   angle: number;
 }
 
+// Helper to create glow color from hex
+const hexToGlow = (hex: string, opacity: number = 0.4): string => {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
 const phases: Phase[] = [
   { 
     id: "despertar", 
     name: "Despertar", 
     icon: Lightbulb, 
-    bgColor: "#F59E0B",
-    glowColor: "rgba(245, 158, 11, 0.4)",
+    bgColor: PHASE_COLORS[1],
+    glowColor: hexToGlow(PHASE_COLORS[1]),
     textColor: "#FFFFFF",
     description: "Perceba a necessidade de mudança e dê o primeiro passo.",
     angle: 0,
@@ -37,8 +46,8 @@ const phases: Phase[] = [
     id: "descobrir", 
     name: "Descobrir", 
     icon: Search, 
-    bgColor: "#10B981",
-    glowColor: "rgba(16, 185, 129, 0.4)",
+    bgColor: PHASE_COLORS[2],
+    glowColor: hexToGlow(PHASE_COLORS[2]),
     textColor: "#FFFFFF",
     description: "Entenda quem você é, seus talentos e o que faz sentido agora.",
     angle: 60,
@@ -47,8 +56,8 @@ const phases: Phase[] = [
     id: "decidir", 
     name: "Decidir", 
     icon: Target, 
-    bgColor: "#3B82F6",
-    glowColor: "rgba(59, 130, 246, 0.4)",
+    bgColor: PHASE_COLORS[3],
+    glowColor: hexToGlow(PHASE_COLORS[3]),
     textColor: "#FFFFFF",
     description: "Escolha um caminho com base em clareza, não em pressão.",
     angle: 120,
@@ -57,8 +66,8 @@ const phases: Phase[] = [
     id: "desenvolver", 
     name: "Desenvolver", 
     icon: Settings, 
-    bgColor: "#8B5CF6",
-    glowColor: "rgba(139, 92, 246, 0.4)",
+    bgColor: PHASE_COLORS[4],
+    glowColor: hexToGlow(PHASE_COLORS[4]),
     textColor: "#FFFFFF",
     description: "Construa as competências necessárias para sua nova carreira.",
     angle: 180,
@@ -67,8 +76,8 @@ const phases: Phase[] = [
     id: "deslanchar", 
     name: "Deslanchar", 
     icon: Rocket, 
-    bgColor: "#EC4899",
-    glowColor: "rgba(236, 72, 153, 0.4)",
+    bgColor: PHASE_COLORS[5],
+    glowColor: hexToGlow(PHASE_COLORS[5]),
     textColor: "#FFFFFF",
     description: "Execute com consistência e acompanhe sua evolução.",
     angle: 240,
@@ -77,8 +86,8 @@ const phases: Phase[] = [
     id: "desfrutar", 
     name: "Desfrutar", 
     icon: Star, 
-    bgColor: "#F97316",
-    glowColor: "rgba(249, 115, 22, 0.4)",
+    bgColor: PHASE_COLORS[6],
+    glowColor: hexToGlow(PHASE_COLORS[6]),
     textColor: "#FFFFFF",
     description: "Celebre sua conquista e consolide sua nova identidade.",
     angle: 300,

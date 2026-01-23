@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -46,6 +46,7 @@ interface Profile {
 export default function Settings() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { completeStepActivity, isActivityCompleted } = usePhase1Activities();
@@ -294,7 +295,7 @@ export default function Settings() {
               Configurações
             </h1>
 
-            <AnimatedTabs defaultValue="subscription" className="space-y-6">
+            <AnimatedTabs defaultValue={searchParams.get("tab") || "subscription"} className="space-y-6">
               <AnimatedTabsList className="grid w-full grid-cols-5">
                 <AnimatedTabsTrigger value="subscription" className="gap-2">
                   <CreditCard className="h-4 w-4" aria-hidden="true" />

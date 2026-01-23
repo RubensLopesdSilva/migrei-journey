@@ -10,13 +10,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
-import { User, Lock, Camera, Save, Loader2, CreditCard, Bot } from "lucide-react";
+import { User, Lock, Camera, Save, Loader2, CreditCard, Bot, Headphones } from "lucide-react";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { SubscriptionCard } from "@/components/settings/SubscriptionCard";
 import { AgentSettingsCard } from "@/components/settings/AgentSettingsCard";
 import { usePhase1Activities } from "@/hooks/usePhase1Activities";
+import { SupportTicketForm } from "@/components/support/SupportTicketForm";
+import { UserTicketsList } from "@/components/support/UserTicketsList";
 
 const profileSchema = z.object({
   full_name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
@@ -293,7 +295,7 @@ export default function Settings() {
             </h1>
 
             <AnimatedTabs defaultValue="subscription" className="space-y-6">
-              <AnimatedTabsList className="grid w-full grid-cols-4">
+              <AnimatedTabsList className="grid w-full grid-cols-5">
                 <AnimatedTabsTrigger value="subscription" className="gap-2">
                   <CreditCard className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Assinatura</span>
@@ -309,6 +311,10 @@ export default function Settings() {
                 <AnimatedTabsTrigger value="security" className="gap-2">
                   <Lock className="h-4 w-4" aria-hidden="true" />
                   <span className="hidden sm:inline">Segurança</span>
+                </AnimatedTabsTrigger>
+                <AnimatedTabsTrigger value="support" className="gap-2">
+                  <Headphones className="h-4 w-4" aria-hidden="true" />
+                  <span className="hidden sm:inline">Suporte</span>
                 </AnimatedTabsTrigger>
               </AnimatedTabsList>
 
@@ -479,6 +485,25 @@ export default function Settings() {
                     )}
                     Alterar senha
                   </Button>
+                </div>
+              </AnimatedTabsContent>
+
+              {/* Support Tab */}
+              <AnimatedTabsContent value="support" className="space-y-6">
+                <div className="card-elevated p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-lg font-semibold text-foreground">
+                        Central de Suporte
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Tire suas dúvidas e receba ajuda da nossa equipe
+                      </p>
+                    </div>
+                    <SupportTicketForm />
+                  </div>
+
+                  <UserTicketsList />
                 </div>
               </AnimatedTabsContent>
             </AnimatedTabs>

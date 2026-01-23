@@ -249,22 +249,11 @@ export const HeroMigreiWheel = () => {
           className="relative z-10"
           style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.08))' }}
         >
-          {/* Definições de gradientes e filtros - igual ao Dashboard */}
+          {/* Definições de filtros */}
           <defs>
-            {phases.map((phase) => (
-              <linearGradient 
-                key={`gradient-${phase.id}`}
-                id={`landing-gradient-${phase.id}`}
-                x1="0%" y1="0%" x2="100%" y2="100%"
-              >
-                <stop offset="0%" stopColor={phase.bgColor} stopOpacity={1} />
-                <stop offset="100%" stopColor={phase.bgColor} stopOpacity={0.85} />
-              </linearGradient>
-            ))}
-            
             {/* Glow filter para fase ativa */}
             <filter id="landing-glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
               <feMerge>
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
@@ -272,7 +261,7 @@ export const HeroMigreiWheel = () => {
             </filter>
           </defs>
 
-          {/* Segmentos - TODOS com opacidade total */}
+          {/* Segmentos - CORES SÓLIDAS */}
           {phases.map((phase, index) => {
             const isActive = currentActivePhase === phase.id;
             const isHovered = hoveredPhase === phase.id;
@@ -282,27 +271,18 @@ export const HeroMigreiWheel = () => {
               <g key={phase.id}>
                 {/* Glow da fase ativa */}
                 {isActive && (
-                  <motion.path
-                    d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
+                  <path
+                    d={createRoundedSegmentPath(index, outerRadius + 6, innerRadius - 3)}
                     fill={phase.glowColor}
-                    initial={{ opacity: 0.3 }}
-                    animate={{ 
-                      opacity: [0.3, 0.5, 0.3],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    style={{ transformOrigin: `${center}px ${center}px` }}
+                    opacity={0.5}
+                    style={{ pointerEvents: 'none' }}
                   />
                 )}
 
-                {/* Segmento principal - SEM animação de opacidade */}
+                {/* Segmento principal - COR SÓLIDA */}
                 <motion.path
                   d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
-                  fill={`url(#landing-gradient-${phase.id})`}
+                  fill={phase.bgColor}
                   className="cursor-pointer"
                   style={{
                     filter: isActive ? 'url(#landing-glow)' : 'none',

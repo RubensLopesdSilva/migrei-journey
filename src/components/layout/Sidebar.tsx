@@ -71,6 +71,11 @@ const mainNavItems: NavItem[] = [
     icon: GraduationCap,
     label: "Mentoria",
     href: "/mentoria"
+  },
+  {
+    icon: Headphones,
+    label: "Suporte",
+    href: "/suporte"
   }
 ];
 

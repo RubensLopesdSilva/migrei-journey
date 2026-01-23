@@ -30,7 +30,7 @@ export const LandingHero = () => {
         <div className="flex flex-col items-center text-center lg:hidden">
           {/* Eyebrow badge */}
           <motion.div 
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4" 
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6" 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
@@ -44,7 +44,7 @@ export const LandingHero = () => {
 
           {/* Headline */}
           <motion.h1 
-            className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-3 mt-36"
+            className="text-2xl sm:text-3xl font-bold text-foreground leading-tight mb-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -59,31 +59,31 @@ export const LandingHero = () => {
             na transição de carreira
           </motion.h1>
 
-          {/* Migrei Wheel - Compact spacing */}
-          <motion.div 
-            className="-my-20 sm:-my-16"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="scale-[0.40] sm:scale-[0.45] origin-center">
-              <HeroMigreiWheel />
-            </div>
-          </motion.div>
-
-          {/* Subheadline */}
+          {/* Subheadline - Above wheel */}
           <motion.p 
-            className="text-base sm:text-lg text-muted-foreground max-w-sm mb-5 leading-relaxed"
+            className="text-sm sm:text-base text-muted-foreground max-w-xs mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
           >
             O Ciclo Migrei te guia em 6 fases simples.
           </motion.p>
 
+          {/* Migrei Wheel - Clean and centered */}
+          <motion.div 
+            className="relative -my-8 sm:-my-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="scale-[0.48] sm:scale-[0.55] origin-center">
+              <HeroMigreiWheel hideTooltip />
+            </div>
+          </motion.div>
+
           {/* CTAs */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto"
+            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -99,7 +99,7 @@ export const LandingHero = () => {
 
           {/* Trust indicators */}
           <motion.div 
-            className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground"
+            className="flex items-center justify-center gap-4 mt-5 text-xs text-muted-foreground"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}

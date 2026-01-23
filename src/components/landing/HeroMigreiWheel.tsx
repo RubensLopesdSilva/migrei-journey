@@ -322,14 +322,12 @@ export const HeroMigreiWheel = () => {
                     filter: isActive ? 'url(#landing-glow)' : 'none',
                     transformOrigin: `${center}px ${center}px`,
                   }}
-                  initial={{ scale: 1, opacity: 1 }}
+                  initial={{ scale: 1 }}
                   animate={{ 
                     scale: segmentScale,
-                    opacity: isActive ? 1 : 0.9,
                   }}
                   whileHover={{ 
                     scale: 1.04,
-                    opacity: 1,
                     transition: { duration: 0.2 }
                   }}
                   onMouseEnter={() => setHoveredPhase(phase.id)}

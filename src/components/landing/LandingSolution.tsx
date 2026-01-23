@@ -39,7 +39,7 @@ const benefits = [
 
 export const LandingSolution = () => {
   return (
-    <section id="como-funciona" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-background to-muted/30 relative">
+    <section id="como-funciona" className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-background to-muted/30 relative scroll-mt-20">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Header */}
         <motion.div 

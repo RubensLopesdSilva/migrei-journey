@@ -71,7 +71,7 @@ export const LandingHero = () => {
 
           {/* Migrei Wheel - Clean and centered */}
           <motion.div 
-            className="relative -my-8 sm:-my-6"
+            className="relative -my-16 sm:-my-14"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}

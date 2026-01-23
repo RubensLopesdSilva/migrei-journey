@@ -260,7 +260,7 @@ export const HeroMigreiWheel = () => {
           className="relative z-10"
           style={{ filter: 'drop-shadow(0 4px 20px rgba(0, 0, 0, 0.08))' }}
         >
-          {/* Definições de gradientes e filtros */}
+          {/* Definições de gradientes e filtros - igual ao Dashboard */}
           <defs>
             {phases.map((phase) => (
               <linearGradient 
@@ -269,7 +269,7 @@ export const HeroMigreiWheel = () => {
                 x1="0%" y1="0%" x2="100%" y2="100%"
               >
                 <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
-                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="1" />
+                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
               </linearGradient>
             ))}
             

@@ -132,7 +132,7 @@ const Index = () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => navigate("/conta?tab=support")}
+            onClick={() => navigate("/configuracoes?tab=support")}
             size="icon"
             variant="outline"
             className="fixed bottom-6 right-6 h-12 w-12 rounded-full shadow-lg bg-background/95 backdrop-blur-sm border-border/50 hover:bg-primary hover:text-primary-foreground transition-all z-40"

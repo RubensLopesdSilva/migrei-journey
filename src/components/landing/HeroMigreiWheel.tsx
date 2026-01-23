@@ -95,7 +95,11 @@ const phases: Phase[] = [
   },
 ];
 
-export const HeroMigreiWheel = () => {
+interface HeroMigreiWheelProps {
+  hideTooltip?: boolean;
+}
+
+export const HeroMigreiWheel = ({ hideTooltip = false }: HeroMigreiWheelProps) => {
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
   const [isEntered, setIsEntered] = useState(false);
   const [activePhaseIndex, setActivePhaseIndex] = useState(0);
@@ -368,7 +372,7 @@ export const HeroMigreiWheel = () => {
 
         {/* Tooltip elegante - acompanha a fase ativa */}
         <AnimatePresence>
-          {currentActivePhase && currentPhase && tooltipAnchor && (
+          {!hideTooltip && currentActivePhase && currentPhase && tooltipAnchor && (
             <motion.div 
               className="absolute bg-card/95 backdrop-blur-md border border-border/50 rounded-xl px-4 py-3 shadow-xl z-20 w-[220px]"
               style={{

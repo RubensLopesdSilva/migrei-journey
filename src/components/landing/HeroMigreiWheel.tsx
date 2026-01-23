@@ -269,7 +269,7 @@ export const HeroMigreiWheel = () => {
                 x1="0%" y1="0%" x2="100%" y2="100%"
               >
                 <stop offset="0%" stopColor={phase.bgColor} stopOpacity="1" />
-                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="0.85" />
+                <stop offset="100%" stopColor={phase.bgColor} stopOpacity="1" />
               </linearGradient>
             ))}
             
@@ -325,7 +325,7 @@ export const HeroMigreiWheel = () => {
                   initial={{ scale: 1, opacity: 1 }}
                   animate={{ 
                     scale: segmentScale,
-                    opacity: isActive ? 1 : 0.7,
+                    opacity: isActive ? 1 : 0.9,
                   }}
                   whileHover={{ 
                     scale: 1.04,

@@ -2594,6 +2594,8 @@ export type Database = {
       }
       ticket_messages: {
         Row: {
+          attachment_name: string | null
+          attachment_url: string | null
           created_at: string
           id: string
           is_admin: boolean
@@ -2602,6 +2604,8 @@ export type Database = {
           ticket_id: string
         }
         Insert: {
+          attachment_name?: string | null
+          attachment_url?: string | null
           created_at?: string
           id?: string
           is_admin?: boolean
@@ -2610,6 +2614,8 @@ export type Database = {
           ticket_id: string
         }
         Update: {
+          attachment_name?: string | null
+          attachment_url?: string | null
           created_at?: string
           id?: string
           is_admin?: boolean

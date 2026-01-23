@@ -71,7 +71,7 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
             </a>
             <span aria-hidden="true">•</span>
             <a 
-              href={user ? "/conta?tab=support" : "/auth"} 
+              href={user ? "/configuracoes?tab=support" : "/auth"} 
               className="hover:text-white transition-colors"
               rel="noopener noreferrer"
             >

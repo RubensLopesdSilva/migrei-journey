@@ -3,10 +3,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { TicketChat } from "./TicketChat";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { MessageSquare, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { MessageSquare, Clock, CheckCircle, AlertCircle, MessagesSquare } from "lucide-react";
 
 interface SupportTicket {
   id: string;
@@ -15,9 +23,8 @@ interface SupportTicket {
   category: string;
   status: string;
   priority: string;
-  admin_response: string | null;
-  responded_at: string | null;
   created_at: string;
+  messages_count?: number;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline"; icon: React.ElementType }> = {
@@ -40,6 +47,7 @@ export function UserTicketsList() {
   const { user } = useAuth();
   const [tickets, setTickets] = useState<SupportTicket[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -58,7 +66,19 @@ export function UserTicketsList() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      setTickets(data || []);
+
+      // Get message counts for each ticket
+      const ticketsWithCounts = await Promise.all(
+        (data || []).map(async (ticket) => {
+          const { count } = await supabase
+            .from("ticket_messages")
+            .select("*", { count: "exact", head: true })
+            .eq("ticket_id", ticket.id);
+          return { ...ticket, messages_count: count || 0 };
+        })
+      );
+
+      setTickets(ticketsWithCounts);
     } catch (error) {
       console.error("Error fetching tickets:", error);
     } finally {
@@ -86,59 +106,90 @@ export function UserTicketsList() {
   }
 
   return (
-    <div className="space-y-4">
-      {tickets.map((ticket) => {
-        const statusConfig = STATUS_CONFIG[ticket.status] || STATUS_CONFIG.open;
-        const StatusIcon = statusConfig.icon;
+    <>
+      <div className="space-y-4">
+        {tickets.map((ticket) => {
+          const statusConfig = STATUS_CONFIG[ticket.status] || STATUS_CONFIG.open;
+          const StatusIcon = statusConfig.icon;
 
-        return (
-          <Card key={ticket.id}>
-            <CardHeader className="pb-2">
-              <div className="flex items-start justify-between gap-2">
-                <CardTitle className="text-base font-medium">
-                  {ticket.subject}
-                </CardTitle>
-                <Badge variant={statusConfig.variant} className="shrink-0">
-                  <StatusIcon className="h-3 w-3 mr-1" />
-                  {statusConfig.label}
-                </Badge>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Badge variant="outline" className="text-xs">
-                  {CATEGORY_LABELS[ticket.category] || ticket.category}
-                </Badge>
-                <span>•</span>
-                <span>
-                  {format(new Date(ticket.created_at), "dd 'de' MMM, HH:mm", {
-                    locale: ptBR,
-                  })}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-sm text-muted-foreground line-clamp-2">
-                {ticket.message}
-              </p>
-
-              {ticket.admin_response && (
-                <div className="bg-muted/50 rounded-lg p-3 border-l-2 border-primary">
-                  <p className="text-xs font-medium text-primary mb-1">
-                    Resposta da equipe
-                  </p>
-                  <p className="text-sm">{ticket.admin_response}</p>
-                  {ticket.responded_at && (
-                    <p className="text-xs text-muted-foreground mt-2">
-                      {format(new Date(ticket.responded_at), "dd/MM/yyyy 'às' HH:mm", {
-                        locale: ptBR,
-                      })}
-                    </p>
+          return (
+            <Card key={ticket.id} className="hover:shadow-md transition-shadow">
+              <CardHeader className="pb-2">
+                <div className="flex items-start justify-between gap-2">
+                  <CardTitle className="text-base font-medium">
+                    {ticket.subject}
+                  </CardTitle>
+                  <Badge variant={statusConfig.variant} className="shrink-0">
+                    <StatusIcon className="h-3 w-3 mr-1" />
+                    {statusConfig.label}
+                  </Badge>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Badge variant="outline" className="text-xs">
+                    {CATEGORY_LABELS[ticket.category] || ticket.category}
+                  </Badge>
+                  <span>•</span>
+                  <span>
+                    {format(new Date(ticket.created_at), "dd 'de' MMM, HH:mm", {
+                      locale: ptBR,
+                    })}
+                  </span>
+                  {ticket.messages_count! > 0 && (
+                    <>
+                      <span>•</span>
+                      <span className="flex items-center gap-1">
+                        <MessagesSquare className="h-3 w-3" />
+                        {ticket.messages_count} mensagens
+                      </span>
+                    </>
                   )}
                 </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {ticket.message}
+                </p>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedTicket(ticket)}
+                  className="gap-2"
+                >
+                  <MessagesSquare className="h-4 w-4" />
+                  Ver conversa
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* Chat Dialog */}
+      <Dialog open={!!selectedTicket} onOpenChange={() => setSelectedTicket(null)}>
+        <DialogContent className="sm:max-w-[600px] h-[80vh] flex flex-col p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="flex items-center justify-between">
+              <span className="truncate pr-4">{selectedTicket?.subject}</span>
+              {selectedTicket && (
+                <Badge variant={STATUS_CONFIG[selectedTicket.status]?.variant}>
+                  {STATUS_CONFIG[selectedTicket.status]?.label}
+                </Badge>
               )}
-            </CardContent>
-          </Card>
-        );
-      })}
-    </div>
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedTicket && (
+            <div className="flex-1 overflow-hidden">
+              <TicketChat
+                ticketId={selectedTicket.id}
+                isAdmin={false}
+                onMessageSent={fetchTickets}
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

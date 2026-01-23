@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -18,7 +17,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -34,6 +32,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { TicketChat } from "@/components/support/TicketChat";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -43,10 +42,9 @@ import {
   CheckCircle,
   AlertCircle,
   MessageSquare,
-  Send,
-  Loader2,
   User,
   Calendar,
+  MessagesSquare,
 } from "lucide-react";
 
 interface SupportTicket {
@@ -57,11 +55,9 @@ interface SupportTicket {
   category: string;
   status: string;
   priority: string;
-  admin_response: string | null;
-  responded_at: string | null;
-  responded_by: string | null;
   created_at: string;
   updated_at: string;
+  messages_count?: number;
 }
 
 interface UserProfile {
@@ -75,13 +71,6 @@ const STATUS_OPTIONS = [
   { value: "in_progress", label: "Em Andamento", color: "bg-blue-500" },
   { value: "resolved", label: "Resolvido", color: "bg-green-500" },
   { value: "closed", label: "Fechado", color: "bg-gray-500" },
-];
-
-const PRIORITY_OPTIONS = [
-  { value: "low", label: "Baixa" },
-  { value: "medium", label: "Média" },
-  { value: "high", label: "Alta" },
-  { value: "urgent", label: "Urgente" },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -125,9 +114,6 @@ export default function AdminSupport() {
   const [profiles, setProfiles] = useState<Record<string, UserProfile>>({});
   const [loading, setLoading] = useState(true);
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
-  const [response, setResponse] = useState("");
-  const [newStatus, setNewStatus] = useState("");
-  const [submitting, setSubmitting] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
@@ -141,10 +127,22 @@ export default function AdminSupport() {
       const { data, error } = await supabase
         .from("support_tickets")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("updated_at", { ascending: false });
 
       if (error) throw error;
-      setTickets(data || []);
+
+      // Get message counts for each ticket
+      const ticketsWithCounts = await Promise.all(
+        (data || []).map(async (ticket) => {
+          const { count } = await supabase
+            .from("ticket_messages")
+            .select("*", { count: "exact", head: true })
+            .eq("ticket_id", ticket.id);
+          return { ...ticket, messages_count: count || 0 };
+        })
+      );
+
+      setTickets(ticketsWithCounts);
 
       // Fetch user profiles
       const userIds = [...new Set((data || []).map((t) => t.user_id))];
@@ -169,50 +167,32 @@ export default function AdminSupport() {
     }
   };
 
-  const handleOpenTicket = (ticket: SupportTicket) => {
-    setSelectedTicket(ticket);
-    setResponse(ticket.admin_response || "");
-    setNewStatus(ticket.status);
-  };
-
-  const handleSubmitResponse = async () => {
-    if (!selectedTicket || !user) return;
-
-    setSubmitting(true);
+  const handleStatusChange = async (ticketId: string, newStatus: string) => {
     try {
-      const updates: Record<string, unknown> = {
-        status: newStatus,
-      };
-
-      if (response.trim() && response !== selectedTicket.admin_response) {
-        updates.admin_response = response.trim();
-        updates.responded_at = new Date().toISOString();
-        updates.responded_by = user.id;
-      }
-
       const { error } = await supabase
         .from("support_tickets")
-        .update(updates)
-        .eq("id", selectedTicket.id);
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .eq("id", ticketId);
 
       if (error) throw error;
 
       toast({
-        title: "Ticket atualizado",
-        description: "A resposta foi enviada com sucesso.",
+        title: "Status atualizado",
+        description: "O status do ticket foi alterado com sucesso.",
       });
 
-      setSelectedTicket(null);
       fetchTickets();
+      
+      if (selectedTicket?.id === ticketId) {
+        setSelectedTicket({ ...selectedTicket, status: newStatus });
+      }
     } catch (error) {
-      console.error("Error updating ticket:", error);
+      console.error("Error updating status:", error);
       toast({
         title: "Erro ao atualizar",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
       });
-    } finally {
-      setSubmitting(false);
     }
   };
 
@@ -324,8 +304,9 @@ export default function AdminSupport() {
                       <TableHead>Usuário</TableHead>
                       <TableHead>Assunto</TableHead>
                       <TableHead>Categoria</TableHead>
+                      <TableHead>Mensagens</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Data</TableHead>
+                      <TableHead>Atualizado</TableHead>
                       <TableHead className="text-right">Ações</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -357,16 +338,34 @@ export default function AdminSupport() {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            <Badge
-                              className={`${statusConfig?.color} text-white`}
+                            <div className="flex items-center gap-1 text-sm">
+                              <MessagesSquare className="h-4 w-4 text-muted-foreground" />
+                              {ticket.messages_count || 0}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={ticket.status}
+                              onValueChange={(value) => handleStatusChange(ticket.id, value)}
                             >
-                              {statusConfig?.label}
-                            </Badge>
+                              <SelectTrigger className="w-[130px] h-8">
+                                <Badge className={`${statusConfig?.color} text-white`}>
+                                  {statusConfig?.label}
+                                </Badge>
+                              </SelectTrigger>
+                              <SelectContent>
+                                {STATUS_OPTIONS.map((status) => (
+                                  <SelectItem key={status.value} value={status.value}>
+                                    {status.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
                           </TableCell>
                           <TableCell>
                             <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Calendar className="h-3 w-3" />
-                              {format(new Date(ticket.created_at), "dd/MM/yy", {
+                              {format(new Date(ticket.updated_at), "dd/MM HH:mm", {
                                 locale: ptBR,
                               })}
                             </div>
@@ -375,9 +374,11 @@ export default function AdminSupport() {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleOpenTicket(ticket)}
+                              onClick={() => setSelectedTicket(ticket)}
+                              className="gap-2"
                             >
-                              Responder
+                              <MessagesSquare className="h-4 w-4" />
+                              Conversa
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -390,39 +391,32 @@ export default function AdminSupport() {
           </Card>
         </div>
 
-        {/* Response Dialog */}
-        <Dialog
-          open={!!selectedTicket}
-          onOpenChange={() => setSelectedTicket(null)}
-        >
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>Responder Solicitação</DialogTitle>
-              <DialogDescription>
-                {selectedTicket?.subject}
-              </DialogDescription>
-            </DialogHeader>
-
-            {selectedTicket && (
-              <div className="space-y-4">
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">
-                      {profiles[selectedTicket.user_id]?.full_name || "Usuário"}
+        {/* Chat Dialog */}
+        <Dialog open={!!selectedTicket} onOpenChange={() => setSelectedTicket(null)}>
+          <DialogContent className="sm:max-w-[700px] h-[85vh] flex flex-col p-0">
+            <DialogHeader className="p-6 pb-4 border-b">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <DialogTitle className="truncate mb-1">
+                    {selectedTicket?.subject}
+                  </DialogTitle>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <User className="h-4 w-4" />
+                    <span>
+                      {selectedTicket && profiles[selectedTicket.user_id]?.full_name || "Usuário"}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      {format(new Date(selectedTicket.created_at), "dd/MM/yyyy 'às' HH:mm", {
-                        locale: ptBR,
-                      })}
-                    </span>
+                    <span>•</span>
+                    <Badge variant="outline">
+                      {selectedTicket && CATEGORY_LABELS[selectedTicket.category]}
+                    </Badge>
                   </div>
-                  <p className="text-sm">{selectedTicket.message}</p>
                 </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Status</label>
-                  <Select value={newStatus} onValueChange={setNewStatus}>
-                    <SelectTrigger>
+                {selectedTicket && (
+                  <Select
+                    value={selectedTicket.status}
+                    onValueChange={(value) => handleStatusChange(selectedTicket.id, value)}
+                  >
+                    <SelectTrigger className="w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -433,40 +427,25 @@ export default function AdminSupport() {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
+                )}
+              </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Resposta</label>
-                  <Textarea
-                    value={response}
-                    onChange={(e) => setResponse(e.target.value)}
-                    placeholder="Digite sua resposta..."
-                    rows={5}
-                    disabled={submitting}
-                  />
+              {/* Original message */}
+              {selectedTicket && (
+                <div className="mt-4 p-3 bg-muted/50 rounded-lg">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">Mensagem original:</p>
+                  <p className="text-sm">{selectedTicket.message}</p>
                 </div>
+              )}
+            </DialogHeader>
 
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setSelectedTicket(null)}
-                    disabled={submitting}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    onClick={handleSubmitResponse}
-                    disabled={submitting}
-                    className="gap-2"
-                  >
-                    {submitting ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Send className="h-4 w-4" />
-                    )}
-                    Enviar Resposta
-                  </Button>
-                </div>
+            {selectedTicket && (
+              <div className="flex-1 overflow-hidden">
+                <TicketChat
+                  ticketId={selectedTicket.id}
+                  isAdmin={true}
+                  onMessageSent={fetchTickets}
+                />
               </div>
             )}
           </DialogContent>

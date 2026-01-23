@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
+import { useAuth } from "@/hooks/useAuth";
 
 export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
+  const { user } = useAuth();
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
 
@@ -69,7 +71,7 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
             </a>
             <span aria-hidden="true">•</span>
             <a 
-              href="/auth" 
+              href={user ? "/conta?tab=support" : "/auth"} 
               className="hover:text-white transition-colors"
               rel="noopener noreferrer"
             >

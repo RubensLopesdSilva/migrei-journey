@@ -527,7 +527,7 @@ const features = [{
   icon: Target,
   title: "Plano de 90 Dias",
   subtitle: "Sua transição com prazo e foco",
-  description: "Cronograma dividido em 3 meses com metas SMART. Saiba exatamente o que fazer a cada semana.",
+  description: "Cronograma de 3 meses com metas claras. Saiba o que fazer a cada semana.",
   highlights: ["Cronograma semanal", "Metas mensuráveis", "Progresso em tempo real"],
   illustration: <Plan90Mockup />,
   gradient: "from-blue-500/10 via-transparent to-indigo-500/10",

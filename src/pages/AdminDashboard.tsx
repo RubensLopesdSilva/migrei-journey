@@ -16,6 +16,7 @@ import {
   ArrowRight,
   BarChart3,
   Headphones,
+  Mail,
 } from "lucide-react";
 
 const adminModules = [
@@ -26,6 +27,14 @@ const adminModules = [
     href: "/admin/metricas",
     color: "text-amber-600",
     bgColor: "bg-amber-500/10",
+  },
+  {
+    icon: Mail,
+    title: "Newsletter",
+    description: "Gerencie inscrições e exporte a lista de emails",
+    href: "/admin/newsletter",
+    color: "text-rose-600",
+    bgColor: "bg-rose-500/10",
   },
   {
     icon: UserCog,

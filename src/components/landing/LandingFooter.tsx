@@ -1,14 +1,52 @@
 import { useState, forwardRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2, Check } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
   const { user } = useAuth();
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes("@")) {
+      toast.error("Por favor, insira um email válido");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from("newsletter_subscriptions")
+        .insert({ email: email.toLowerCase().trim() });
+
+      if (error) {
+        if (error.code === "23505") {
+          toast.info("Este email já está inscrito na newsletter");
+        } else {
+          throw error;
+        }
+      } else {
+        setIsSubscribed(true);
+        toast.success("Inscrição realizada com sucesso!");
+        setEmail("");
+      }
+    } catch (error) {
+      console.error("Newsletter subscription error:", error);
+      toast.error("Erro ao realizar inscrição. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <footer ref={ref} className="bg-slate-900 text-white py-16">
@@ -26,24 +64,42 @@ export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
                 height="32"
               />
             </div>
-            <p className="text-slate-400 text-sm mb-6">
-              Comece agora e experimente nossa plataforma
+            <p className="text-slate-400 text-sm mb-2">
+              Receba dicas exclusivas sobre transição de carreira
             </p>
-            <div className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Digite seu email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl flex-1 max-w-xs"
-              />
-              <Button
-                size="icon"
-                className="bg-primary hover:bg-primary/90 rounded-xl h-10 w-10"
-              >
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
+            <p className="text-slate-500 text-xs mb-4">
+              Sem spam, apenas conteúdo relevante para sua jornada profissional.
+            </p>
+            
+            {isSubscribed ? (
+              <div className="flex items-center gap-2 text-green-400 bg-green-400/10 rounded-xl px-4 py-3">
+                <Check className="h-5 w-5" />
+                <span className="text-sm">Obrigado por se inscrever!</span>
+              </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="Digite seu email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 rounded-xl flex-1 max-w-xs"
+                  disabled={isSubmitting}
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  className="bg-primary hover:bg-primary/90 rounded-xl h-10 w-10"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
+                </Button>
+              </form>
+            )}
           </div>
         </div>
 

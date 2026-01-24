@@ -70,12 +70,9 @@ export const LandingPricing = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 md:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
             Invista na sua transição
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-md mx-auto">
-            Comece grátis. Evolua quando estiver pronto.
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto items-stretch">

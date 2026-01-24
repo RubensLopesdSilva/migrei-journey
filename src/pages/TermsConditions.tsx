@@ -2,7 +2,7 @@ import { SEOHead, SEOBreadcrumbs } from "@/components/seo";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { Card, CardContent } from "@/components/ui/card";
-import { FileText, Users, CreditCard, Shield, AlertTriangle, Scale, Ban, RefreshCw, Mail } from "lucide-react";
+import { FileText, Users, CreditCard, Shield, AlertTriangle, Scale, Ban, RefreshCw } from "lucide-react";
 
 const TermsConditions = () => {
   const lastUpdated = "20 de Janeiro de 2026";
@@ -80,7 +80,7 @@ const TermsConditions = () => {
         },
         {
           subtitle: "4.4 Reembolso",
-          text: "Oferecemos garantia de 7 dias para novas assinaturas. Se não estiver satisfeito, solicite reembolso integral dentro deste período através do e-mail contato@migrei.com. Após este prazo, não realizamos reembolsos proporcionais."
+          text: "Oferecemos garantia de 7 dias para novas assinaturas. Se não estiver satisfeito, solicite reembolso integral dentro deste período através das configurações da sua conta. Após este prazo, não realizamos reembolsos proporcionais."
         },
         {
           subtitle: "4.5 Alteração de Preços",
@@ -261,29 +261,6 @@ const TermsConditions = () => {
             ))}
           </div>
 
-          {/* Contact Section */}
-          <Card className="mt-8 border-primary/20">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Mail className="w-5 h-5 text-primary" />
-                10. Contato
-              </h2>
-              <p className="text-muted-foreground mb-4">
-                Para dúvidas sobre estes Termos e Condições, entre em contato:
-              </p>
-              <div className="bg-muted/50 rounded-lg p-4">
-                <p className="text-foreground">
-                  <strong>E-mail:</strong>{" "}
-                  <a 
-                    href="mailto:contato@migrei.com" 
-                    className="text-primary hover:underline"
-                  >
-                    contato@migrei.com
-                  </a>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Related Links */}
           <Card className="mt-8 bg-muted/30">

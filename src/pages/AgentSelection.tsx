@@ -152,7 +152,7 @@ export default function AgentSelection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Cada mentor tem uma abordagem diferente. Escolha o estilo que combina com você.
+            Cada um tem seu estilo. Qual combina com você?
           </motion.p>
         </motion.div>
 

@@ -96,31 +96,6 @@ export const LandingHero = () => {
               Ver como funciona
             </Button>
           </motion.div>
-
-          {/* Trust indicators */}
-          <motion.div 
-            className="flex items-center justify-center gap-4 mt-5 text-xs text-muted-foreground"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <svg className="w-2.5 h-2.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span>Gratuito para começar</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <svg className="w-2.5 h-2.5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span>Sem compromisso</span>
-            </div>
-          </motion.div>
         </div>
 
         {/* Desktop Layout - Side by side */}
@@ -186,30 +161,6 @@ export const LandingHero = () => {
               </Button>
             </motion.div>
 
-            {/* Trust indicators */}
-            <motion.div 
-              className="flex items-center gap-4 mt-8 text-sm text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span>Gratuito para começar</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span>Sem compromisso</span>
-              </div>
-            </motion.div>
           </div>
 
           {/* Migrei Wheel */}

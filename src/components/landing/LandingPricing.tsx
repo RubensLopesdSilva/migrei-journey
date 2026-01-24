@@ -61,7 +61,7 @@ export const LandingPricing = () => {
   const navigate = useNavigate();
 
   return (
-    <section id="planos" className="py-16 md:py-24 lg:py-36 bg-gradient-to-b from-background to-muted/30">
+    <section id="planos" className="py-20 md:py-28 bg-gradient-to-b from-muted/20 via-background to-muted/20">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         <motion.div
           className="text-center mb-8 md:mb-12"

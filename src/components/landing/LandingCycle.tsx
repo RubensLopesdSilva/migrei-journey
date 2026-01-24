@@ -90,7 +90,7 @@ const PhaseCard = ({ phase, index, align = "left" }: { phase: typeof phases[0]; 
 
 export const LandingCycle = () => {
   return (
-    <section id="ciclo-migrei" className="py-16 md:py-24 lg:py-36 bg-muted/30">
+    <section id="ciclo-migrei" className="py-20 md:py-28 bg-gradient-to-b from-muted/20 via-muted/30 to-muted/20">
       <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
         {/* Header */}
         <motion.div

@@ -226,46 +226,10 @@ export default function Auth() {
                 ? "Bem-vindo de volta!" 
                 : "Crie sua conta grátis"}
           </h2>
-          <p className="text-muted-foreground mb-6">
-            {isForgotPassword
-              ? "Digite seu email para receber um link de recuperação"
-              : isLogin 
-                ? "Entre para continuar sua jornada de transição" 
-                : "Em 5 minutos você terá seu primeiro diagnóstico de carreira"}
-          </p>
-
-          {/* What happens next - only for signup */}
-          {!isLogin && !isForgotPassword && (
-            <motion.div
-              className="mb-6 p-4 rounded-xl bg-primary/5 border border-primary/10"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <p className="text-sm font-medium text-foreground mb-3">
-                O que acontece depois do cadastro:
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">1</span>
-                  </div>
-                  <span>Escolha seu mentor IA (30 seg)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">2</span>
-                  </div>
-                  <span>Faça seu 1º diagnóstico (5 min)</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-bold text-primary">3</span>
-                  </div>
-                  <span>Receba seu plano personalizado</span>
-                </div>
-              </div>
-            </motion.div>
+          {isForgotPassword && (
+            <p className="text-muted-foreground mb-6">
+              Digite seu email para receber um link de recuperação
+            </p>
           )}
 
           {/* Forgot Password Form */}

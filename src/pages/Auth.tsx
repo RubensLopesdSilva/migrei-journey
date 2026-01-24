@@ -10,7 +10,7 @@ import logoMigrei from "@/assets/logo-migrei.png";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { PasswordStrengthIndicator } from "@/components/PasswordStrengthIndicator";
-import { AuthMigreiWheel } from "@/components/auth/AuthMigreiWheel";
+import { HeroMigreiWheel } from "@/components/landing/HeroMigreiWheel";
 import { motion } from "framer-motion";
 
 const emailSchema = z.string().email("Email inválido");
@@ -519,7 +519,12 @@ export default function Auth() {
 
       {/* Right Side - Roda Migrei */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-muted/50 via-background to-muted/30 items-center justify-center p-12">
-        <AuthMigreiWheel />
+        <div className="flex flex-col items-center gap-6">
+          <HeroMigreiWheel />
+          <p className="text-center text-muted-foreground max-w-sm">
+            Clique em uma fase do <span className="font-semibold text-foreground">Ciclo Migrei</span> para saber mais sobre sua jornada de transição.
+          </p>
+        </div>
       </div>
     </div>
   );

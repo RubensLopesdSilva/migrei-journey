@@ -80,8 +80,7 @@ export default function Mentoring() {
   );
 
   const isPremiumPlan = planSlug === "premium";
-  const isEssentialPlan = planSlug === "essential";
-  const isFreePlan = planSlug === "free" || !planSlug;
+  const isEssentialPlan = planSlug === "essential" || !planSlug;
 
   if (loading) {
     return (
@@ -164,14 +163,14 @@ export default function Mentoring() {
             mentors={mentors}
             loading={loading}
             canBookSessions={canBookSessions}
-            isFreePlan={isFreePlan}
+            isFreePlan={false}
             remainingSessions={remainingSessions}
             onSchedule={handleSchedule}
             onUpgrade={handleUpgrade}
           />
 
-          {/* My Sessions - Only for paid users */}
-          {!isFreePlan && (
+          {/* My Sessions - for all users */}
+          {(
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

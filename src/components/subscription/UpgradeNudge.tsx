@@ -58,8 +58,8 @@ export function UpgradeNudge({ trigger, context, onDismiss }: UpgradeNudgeProps)
   const [dismissed, setDismissed] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Don't show to paid users
-  if (planSlug !== 'free' || dismissed || isLoading) {
+  // Don't show upgrade nudge (no free plan anymore)
+  if (dismissed || isLoading) {
     return null;
   }
 
@@ -188,16 +188,13 @@ export function useUpgradeNudgeTrigger() {
   const { userProgress, overallProgress } = useProgress();
 
   const shouldShowNudge = () => {
-    if (planSlug !== 'free') return null;
-    
-    // Check for phase completion trigger - when user is near end of phase 2
-    if (userProgress?.current_phase_number === 2 && overallProgress >= 30) {
-      return { trigger: 'phase_complete' as const, context: { phaseName: 'Descobrir' } };
-    }
-
-    // Check for XP milestone
-    if (userProgress?.total_xp && userProgress.total_xp >= 500 && userProgress.total_xp < 600) {
-      return { trigger: 'xp_milestone' as const, context: { xpEarned: userProgress.total_xp } };
+    // No free plan anymore - upgrade nudges not needed for essential plan users
+    // Only show for premium upgrade from essential
+    if (planSlug === 'essential') {
+      // Check for XP milestone to suggest premium
+      if (userProgress?.total_xp && userProgress.total_xp >= 500 && userProgress.total_xp < 600) {
+        return { trigger: 'xp_milestone' as const, context: { xpEarned: userProgress.total_xp } };
+      }
     }
 
     return null;

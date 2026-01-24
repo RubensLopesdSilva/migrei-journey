@@ -222,13 +222,6 @@ export function PhaseAccessGate({ phaseNumber, phaseName, children }: PhaseAcces
             </p>
           </div>
 
-          {planSlug === "free" && (
-            <p className="text-center text-xs text-muted-foreground">
-              Você está no plano Gratuito, com acesso às fases 1 e 2. 
-              <br />
-              <span className="text-foreground font-medium">Faça upgrade para continuar sua jornada.</span>
-            </p>
-          )}
         </Card>
       </motion.div>
     </div>

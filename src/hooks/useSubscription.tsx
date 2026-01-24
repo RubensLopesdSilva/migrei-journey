@@ -55,8 +55,8 @@ const initialState: SubscriptionState = {
   isLoading: true,
   isSubscribed: false,
   status: null,
-  planSlug: "free",
-  planName: "Gratuito",
+  planSlug: "essential",
+  planName: "Essencial",
   subscriptionEnd: null,
   cancelAtPeriodEnd: false,
   trialEnd: null,
@@ -107,8 +107,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
         isLoading: false,
         isSubscribed: data.subscribed || false,
         status: data.status,
-        planSlug: data.plan_slug || "free",
-        planName: data.plan_name || "Gratuito",
+        planSlug: data.plan_slug || "essential",
+        planName: data.plan_name || "Essencial",
         subscriptionEnd: data.subscription_end,
         cancelAtPeriodEnd: data.cancel_at_period_end || false,
         trialEnd: data.trial_end,
@@ -221,8 +221,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   const getMaxPhaseAccess = useCallback((): number => {
     const maxPhase = state.features.max_phase_access;
     if (typeof maxPhase === "number") return maxPhase;
-    // Default: free plan = 2, others = 6
-    return state.planSlug === "free" ? 2 : 6;
+    // Default: all plans have full access (6 phases)
+    return 6;
   }, [state.features, state.planSlug]);
 
   const canAccessPhase = useCallback(

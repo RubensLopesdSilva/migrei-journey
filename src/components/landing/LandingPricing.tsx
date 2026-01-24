@@ -7,20 +7,6 @@ import { ScrollToNextButton } from "./ScrollToNextButton";
 
 const plans = [
   {
-    name: "Gratuito",
-    price: "0",
-    period: "",
-    description: "Explore e descubra seu caminho",
-    features: [
-      "Fases 1 e 2 do Ciclo Migrei",
-      "Acompanhamento de progresso",
-    ],
-    mentoring: null,
-    cta: "Começar grátis",
-    popular: false,
-    highlighted: false,
-  },
-  {
     name: "Essencial",
     price: "59",
     period: "/mês",

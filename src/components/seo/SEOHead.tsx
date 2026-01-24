@@ -16,7 +16,7 @@ interface SEOHeadProps {
  */
 export const SEOHead = ({
   title = "Migrei | Transição de Carreira em 6 Fases",
-  description = "Descubra o Ciclo Migrei: método estruturado em 6 fases para transição de carreira com clareza. Gratuito para começar.",
+  description = "Descubra o Ciclo Migrei: método estruturado em 6 fases para transição de carreira com clareza. 87% relatam mais clareza em 30 dias.",
   canonical,
   ogImage = "https://migrei.com/og-image.png",
   ogType = "website",

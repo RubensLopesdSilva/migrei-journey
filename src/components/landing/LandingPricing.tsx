@@ -71,7 +71,14 @@ export const LandingPricing = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
-            Invista na sua transição
+            Facilite a sua{" "}
+            <span className="relative inline-block text-primary">
+              transição
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
+                <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+            </span>{" "}
+            de carreira
           </h2>
         </motion.div>
 

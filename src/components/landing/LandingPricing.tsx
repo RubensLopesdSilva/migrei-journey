@@ -41,7 +41,7 @@ const plans = [
     cta: "Começar com Premium",
     popular: false,
     highlighted: false,
-    cancellationNote: null,
+    cancellationNote: "Cancele quando quiser, sem reembolso",
   },
 ];
 

@@ -423,7 +423,7 @@ export function SubscriptionCard() {
 
           <PlanCard
             name="Essencial"
-            price="R$ 49"
+            price="R$ 59"
             period="/mês"
             description="Acesso completo ao ciclo"
             phasesAccess={6}
@@ -442,7 +442,7 @@ export function SubscriptionCard() {
 
           <PlanCard
             name="Premium"
-            price="R$ 149"
+            price="R$ 169"
             period="/mês"
             description="Experiência completa"
             phasesAccess={6}

@@ -22,7 +22,7 @@ const plans = [
   },
   {
     name: "Essencial",
-    price: "49",
+    price: "59",
     period: "/mês",
     description: "Tudo para sua transição completa",
     features: [
@@ -38,7 +38,7 @@ const plans = [
   },
   {
     name: "Premium",
-    price: "149",
+    price: "169",
     period: "/mês",
     description: "Acelere com mentoria 1:1",
     features: [

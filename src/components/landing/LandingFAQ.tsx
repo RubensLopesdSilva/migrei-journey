@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     question: "Posso cancelar quando quiser?",
-    answer: "Sim. Não há fidelidade ou multa. Você pode cancelar sua assinatura a qualquer momento diretamente na plataforma.",
+    answer: "No plano Essencial, você pode cancelar a qualquer momento. Já no plano Premium, por incluir mentoria especializada agendada, não há possibilidade de cancelamento após a contratação.",
   },
   {
     question: "As mentorias são ao vivo?",
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     question: "E se eu não gostar?",
-    answer: "Você tem 7 dias para testar qualquer plano pago e pedir reembolso integral se não ficar satisfeito. Sem perguntas.",
+    answer: "No plano Essencial, você tem 7 dias para testar e pedir reembolso integral se não ficar satisfeito. O plano Premium não permite cancelamento devido à mentoria especializada inclusa.",
   },
   {
     question: "Funciona para qualquer área?",

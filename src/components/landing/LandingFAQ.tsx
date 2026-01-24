@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     question: "Posso cancelar quando quiser?",
-    answer: "No plano Essencial, você pode cancelar a qualquer momento. Já no plano Premium, por incluir mentoria especializada agendada, não há possibilidade de cancelamento após a contratação.",
+    answer: "Sim, ambos os planos podem ser cancelados a qualquer momento. No Essencial, você tem 7 dias para reembolso integral. No Premium, o cancelamento encerra a renovação, mas não há reembolso dos valores já pagos devido à mentoria especializada.",
   },
   {
     question: "As mentorias são ao vivo?",
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     question: "E se eu não gostar?",
-    answer: "No plano Essencial, você tem 7 dias para testar e pedir reembolso integral se não ficar satisfeito. O plano Premium não permite cancelamento devido à mentoria especializada inclusa.",
+    answer: "No plano Essencial, você tem 7 dias para testar e pedir reembolso integral. No plano Premium, você pode cancelar a renovação a qualquer momento, porém não há reembolso devido à mentoria especializada já agendada.",
   },
   {
     question: "Funciona para qualquer área?",

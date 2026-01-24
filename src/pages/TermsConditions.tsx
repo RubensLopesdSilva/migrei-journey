@@ -80,7 +80,7 @@ const TermsConditions = () => {
         },
         {
           subtitle: "4.4 Cancelamento - Plano Premium",
-          text: "O Plano Premium NÃO permite cancelamento após a contratação. Por incluir mentoria especializada com agendamento de sessões ao vivo (1:1), a assinatura Premium é um compromisso firmado para o período contratado. Ao assinar o Premium, você reconhece e aceita esta condição."
+          text: "No Plano Premium, você pode cancelar a renovação da assinatura a qualquer momento através das configurações da conta. O cancelamento encerra as cobranças futuras, mas não há reembolso dos valores já pagos, devido à natureza personalizada das mentorias especializadas inclusas."
         },
         {
           subtitle: "4.5 Reembolso - Plano Essencial",
@@ -88,7 +88,7 @@ const TermsConditions = () => {
         },
         {
           subtitle: "4.6 Reembolso - Plano Premium",
-          text: "O Plano Premium NÃO oferece reembolso em nenhuma circunstância, devido à natureza personalizada das mentorias especializadas inclusas. Ao contratar o Premium, você concorda que não haverá devolução de valores."
+          text: "O Plano Premium NÃO oferece reembolso em nenhuma circunstância, devido à natureza personalizada das mentorias especializadas inclusas. Você pode cancelar a renovação, mas os valores já pagos não serão devolvidos."
         },
         {
           subtitle: "4.7 Alteração de Preços",

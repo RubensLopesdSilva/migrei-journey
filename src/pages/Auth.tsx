@@ -224,7 +224,7 @@ export default function Auth() {
               ? "Recuperar senha" 
               : isLogin 
                 ? "Bem-vindo de volta!" 
-                : "Crie sua conta grátis"}
+                : "Crie a sua conta"}
           </h2>
           {isForgotPassword && (
             <p className="text-muted-foreground mb-6">

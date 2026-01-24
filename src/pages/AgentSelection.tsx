@@ -147,7 +147,7 @@ export default function AgentSelection() {
             Escolha o seu mentor
           </motion.h1>
           <motion.p 
-            className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto"
+            className="text-muted-foreground text-sm md:text-base"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}

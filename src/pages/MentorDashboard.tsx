@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AnimatedTabs, AnimatedTabsContent, AnimatedTabsList, AnimatedTabsTrigger } from "@/components/ui/animated-tabs";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
+import { VideoCallModal } from "@/components/mentoring/VideoCallModal";
 import {
   Dialog,
   DialogContent,
@@ -332,6 +333,7 @@ export default function MentorDashboard() {
   const [selectedSession, setSelectedSession] = useState<MentorSession | null>(null);
   const [notesModalOpen, setNotesModalOpen] = useState(false);
   const [meetingLinkModalOpen, setMeetingLinkModalOpen] = useState(false);
+  const [videoCallModalOpen, setVideoCallModalOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [sessionToCancel, setSessionToCancel] = useState<string | null>(null);
   const [updatingAvailability, setUpdatingAvailability] = useState<number | null>(null);
@@ -395,14 +397,21 @@ export default function MentorDashboard() {
     setMeetingLinkModalOpen(true);
   };
 
+  const openVideoCall = (session: MentorSession) => {
+    setSelectedSession(session);
+    setVideoCallModalOpen(true);
+  };
+
   const confirmCancelSession = (sessionId: string) => {
     setSessionToCancel(sessionId);
     setCancelDialogOpen(true);
   };
 
-  const getMeetingUrl = (session: MentorSession) => {
-    if (session.meeting_url) return session.meeting_url;
-    return `https://meet.google.com/migrei-${session.id.slice(0, 8)}`;
+  // Check if session can be joined (10 minutes before)
+  const canJoinSession = (session: MentorSession) => {
+    const scheduledDate = new Date(session.scheduled_at);
+    const now = new Date();
+    return scheduledDate.getTime() - now.getTime() <= 10 * 60 * 1000 && now < scheduledDate;
   };
 
   return (
@@ -568,13 +577,13 @@ export default function MentorDashboard() {
                                 </Button>
                                 <Button
                                   size="sm"
-                                  className="gap-1"
-                                  onClick={() => window.open(getMeetingUrl(session), "_blank")}
-                                  disabled={!session.meeting_url}
-                                  title={!session.meeting_url ? "Adicione o link primeiro" : ""}
+                                  className={`gap-1 ${canJoinSession(session) ? 'bg-green-600 hover:bg-green-700' : ''}`}
+                                  onClick={() => openVideoCall(session)}
+                                  disabled={!canJoinSession(session)}
+                                  title={!canJoinSession(session) ? "Disponível 10 minutos antes da sessão" : ""}
                                 >
                                   <Video className="h-3 w-3" />
-                                  Entrar
+                                  {canJoinSession(session) ? "Entrar na Sala" : "Entrar"}
                                 </Button>
                                 <Button
                                   size="sm"
@@ -729,6 +738,13 @@ export default function MentorDashboard() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {/* Video Call Modal */}
+        <VideoCallModal
+          session={selectedSession}
+          open={videoCallModalOpen}
+          onOpenChange={setVideoCallModalOpen}
+        />
       </PageContent>
     </PageLayout>
   );

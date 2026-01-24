@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MentoringSession, Mentor } from "@/hooks/useMentoring";
 import { CancellationInfo } from "@/hooks/useMentoringBooking";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,9 +16,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Calendar, Clock, Video, X, RefreshCw, ExternalLink } from "lucide-react";
+import { Calendar, Clock, Video, X, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { VideoCallModal } from "./VideoCallModal";
 
 interface SessionCardProps {
   session: MentoringSession;
@@ -33,11 +35,17 @@ const statusLabels: Record<string, { label: string; variant: "default" | "second
 };
 
 export function SessionCard({ session, onCancel, onReschedule, cancellationInfo }: SessionCardProps) {
+  const [videoCallOpen, setVideoCallOpen] = useState(false);
   const mentor = session.mentor as Mentor | undefined;
   const status = statusLabels[session.status];
   const scheduledDate = new Date(session.scheduled_at);
   const isPast = scheduledDate < new Date();
   const canModify = session.status === "scheduled" && !isPast;
+  
+  // Allow joining 10 minutes before the scheduled time
+  const canJoinNow = session.status === "scheduled" && 
+    scheduledDate.getTime() - Date.now() <= 10 * 60 * 1000 &&
+    !isPast;
 
   const initials = mentor
     ? mentor.name
@@ -47,9 +55,6 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
         .toUpperCase()
         .slice(0, 2)
     : "??";
-
-  // Use the meeting URL from the session
-  const hasMeetingUrl = !!session.meeting_url;
 
   return (
     <Card className={session.status === "cancelled" ? "opacity-60" : ""}>
@@ -85,20 +90,21 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
           <div className="flex flex-col items-end gap-2">
             <Badge variant={status.variant}>{status.label}</Badge>
 
-            {/* Join button with meeting URL */}
+            {/* Join button */}
             {session.status === "scheduled" && !isPast && (
-              hasMeetingUrl ? (
-                <Button size="sm" variant="outline" className="gap-1" asChild>
-                  <a href={session.meeting_url!} target="_blank" rel="noopener noreferrer">
-                    <Video className="h-3 w-3" />
-                    Entrar
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
+              canJoinNow ? (
+                <Button 
+                  size="sm" 
+                  className="gap-1 bg-green-600 hover:bg-green-700"
+                  onClick={() => setVideoCallOpen(true)}
+                >
+                  <Video className="h-3 w-3" />
+                  Entrar na Sala
                 </Button>
               ) : (
                 <Badge variant="secondary" className="text-xs gap-1">
                   <Clock className="h-3 w-3" />
-                  Aguardando link
+                  Disponível 10min antes
                 </Badge>
               )
             )}
@@ -161,6 +167,13 @@ export function SessionCard({ session, onCancel, onReschedule, cancellationInfo 
           </div>
         </div>
       </CardContent>
+      
+      {/* Video Call Modal */}
+      <VideoCallModal
+        session={session}
+        open={videoCallOpen}
+        onOpenChange={setVideoCallOpen}
+      />
     </Card>
   );
 }

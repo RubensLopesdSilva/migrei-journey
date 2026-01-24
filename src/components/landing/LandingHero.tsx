@@ -71,12 +71,12 @@ export const LandingHero = () => {
 
           {/* Migrei Wheel - Clean and centered */}
           <motion.div 
-            className="relative -my-32 sm:-my-24"
+            className="relative -mt-36 -mb-20"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="scale-[0.48] sm:scale-[0.55] origin-center">
+            <div className="scale-[0.50] origin-center">
               <HeroMigreiWheel hideTooltip />
             </div>
           </motion.div>

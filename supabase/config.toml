@@ -17,3 +17,9 @@ verify_jwt = false
 
 [functions.avatar-coach]
 verify_jwt = false
+
+[functions.daily-room]
+verify_jwt = false
+
+[functions.profession-recommendations]
+verify_jwt = false

@@ -703,7 +703,6 @@ export const LandingFeatures = () => {
               </span>{" "}
               de carreira
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">Ferramentas práticas, metodologia testada e práticas de networking.</p>
           </motion.div>
         </div>
       </div>

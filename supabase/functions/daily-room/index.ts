@@ -32,7 +32,10 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    // Service role client for database operations
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
     // Verify user authentication
     const authHeader = req.headers.get("Authorization");
@@ -43,8 +46,14 @@ serve(async (req) => {
       );
     }
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    // Create a client with the user's JWT to verify authentication
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: {
+        headers: { Authorization: authHeader },
+      },
+    });
+
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
     
     if (authError || !user) {
       console.error("Auth error:", authError);
@@ -70,7 +79,7 @@ serve(async (req) => {
       }
 
       // Get session details and verify user is part of this session
-      const { data: session, error: sessionError } = await supabase
+      const { data: session, error: sessionError } = await supabaseAdmin
         .from("mentoring_sessions")
         .select(`
           id,
@@ -198,7 +207,7 @@ serve(async (req) => {
             const roomUrl = existingRoom.url;
             
             // Update session with room URL
-            await supabase
+            await supabaseAdmin
               .from("mentoring_sessions")
               .update({ meeting_url: roomUrl })
               .eq("id", session_id);
@@ -246,7 +255,7 @@ serve(async (req) => {
       console.log("Room created:", roomUrl);
 
       // Update session with room URL
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabaseAdmin
         .from("mentoring_sessions")
         .update({ meeting_url: roomUrl })
         .eq("id", session_id);

@@ -24,6 +24,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminMetrics from "./pages/AdminMetrics";
 import AdminSupport from "./pages/AdminSupport";
+import AdminNewsletter from "./pages/AdminNewsletter";
 import Progress from "./pages/Progress";
 import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -74,6 +75,7 @@ const App = () => (
                       <Route path="/admin/configuracoes" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
                       <Route path="/admin/metricas" element={<ProtectedRoute><AdminMetrics /></ProtectedRoute>} />
                       <Route path="/admin/suporte" element={<ProtectedRoute><AdminSupport /></ProtectedRoute>} />
+                      <Route path="/admin/newsletter" element={<ProtectedRoute><AdminNewsletter /></ProtectedRoute>} />
                       <Route path="/progresso" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                       <Route path="/suporte" element={<ProtectedRoute><Support /></ProtectedRoute>} />
                       <Route path="/networking" element={<ProtectedRoute><PositioningAcademy /></ProtectedRoute>} />

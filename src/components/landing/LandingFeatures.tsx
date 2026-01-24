@@ -691,10 +691,15 @@ export const LandingFeatures = () => {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               Recursos para a sua{" "}
-              <span className="text-primary">transição de carreira</span>
+              <span className="relative inline-block text-primary">
+                transição
+                <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
+                  <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+              </span>{" "}
+              de carreira
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">Ferramentas práticas, metodologia testada e práticas de networking. 
-Descubra cada recurso que vai te ajudar a conquistar sua nova carreira.</p>
+            <p className="text-xl text-muted-foreground leading-relaxed">Ferramentas práticas, metodologia testada e práticas de networking.</p>
           </motion.div>
         </div>
       </div>

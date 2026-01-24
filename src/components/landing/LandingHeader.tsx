@@ -64,6 +64,12 @@ export const LandingHeader = () => {
               Como funciona
             </button>
             <button
+              onClick={() => scrollToSection("ciclo-migrei")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Método
+            </button>
+            <button
               onClick={() => scrollToSection("recursos")}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -122,6 +128,12 @@ export const LandingHeader = () => {
                 className="text-left text-muted-foreground hover:text-foreground"
               >
                 Como funciona
+              </button>
+              <button
+                onClick={() => scrollToSection("ciclo-migrei")}
+                className="text-left text-muted-foreground hover:text-foreground"
+              >
+                Método
               </button>
               <button
                 onClick={() => scrollToSection("recursos")}

@@ -49,14 +49,14 @@ export const LandingHero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            Tenha{" "}
+            Facilite a sua{" "}
             <span className="relative inline-block text-primary">
-              clareza
+              transição
               <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
                 <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>{" "}
-            na transição de carreira
+            de carreira
           </motion.h1>
 
           {/* Subheadline - Above wheel */}
@@ -125,14 +125,14 @@ export const LandingHero = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              Tenha{" "}
+              Facilite a sua{" "}
               <span className="relative inline-block text-primary">
-                clareza
+                transição
                 <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 200 8" fill="none" aria-hidden="true">
                   <path d="M2 6C50 2 150 2 198 6" stroke="hsl(var(--primary))" strokeWidth="3" strokeLinecap="round" />
                 </svg>
               </span>{" "}
-              na transição de carreira
+              de carreira
             </motion.h1>
 
             {/* Subheadline */}

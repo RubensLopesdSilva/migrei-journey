@@ -96,7 +96,7 @@ export const LandingHeader = () => {
               className="bg-primary hover:bg-primary/90"
               onClick={() => navigate("/auth?tab=signup")}
             >
-              Começar grátis
+              Iniciar transição
             </Button>
           </div>
 
@@ -156,7 +156,7 @@ export const LandingHeader = () => {
                   Entrar
                 </Button>
                 <Button onClick={() => navigate("/auth?tab=signup")}>
-                  Começar grátis
+                  Iniciar transição
                 </Button>
               </div>
             </nav>

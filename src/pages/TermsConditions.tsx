@@ -68,23 +68,31 @@ const TermsConditions = () => {
       content: [
         {
           subtitle: "4.1 Planos Disponíveis",
-          text: "Oferecemos diferentes planos de assinatura: Plano Gratuito com acesso limitado a recursos básicos, e Planos Premium com acesso completo a todas as funcionalidades, incluindo coach de IA ilimitado, mentorias e networking exclusivo."
+          text: "Oferecemos diferentes planos de assinatura: Plano Essencial (R$ 59/mês) com acesso completo às 6 fases do ciclo, networking, acompanhamento de progresso e assistente IA; e Plano Premium (R$ 169/mês) que inclui tudo do Essencial mais mentoria ao vivo 1:1 com especialistas, suporte prioritário e conteúdos exclusivos."
         },
         {
           subtitle: "4.2 Cobrança",
-          text: "As assinaturas premium são cobradas de forma recorrente (mensal ou anual) através do Stripe. O valor será debitado automaticamente no método de pagamento cadastrado na data de renovação."
+          text: "As assinaturas são cobradas de forma recorrente mensal através do Stripe. O valor será debitado automaticamente no método de pagamento cadastrado na data de renovação."
         },
         {
-          subtitle: "4.3 Cancelamento",
-          text: "Você pode cancelar sua assinatura a qualquer momento através das configurações da conta. O cancelamento será efetivo ao final do período já pago, mantendo o acesso até essa data."
+          subtitle: "4.3 Cancelamento - Plano Essencial",
+          text: "No Plano Essencial, você pode cancelar sua assinatura a qualquer momento através das configurações da conta. O cancelamento será efetivo ao final do período já pago, mantendo o acesso até essa data."
         },
         {
-          subtitle: "4.4 Reembolso",
-          text: "Oferecemos garantia de 7 dias para novas assinaturas. Se não estiver satisfeito, solicite reembolso integral dentro deste período através das configurações da sua conta. Após este prazo, não realizamos reembolsos proporcionais."
+          subtitle: "4.4 Cancelamento - Plano Premium",
+          text: "O Plano Premium NÃO permite cancelamento após a contratação. Por incluir mentoria especializada com agendamento de sessões ao vivo (1:1), a assinatura Premium é um compromisso firmado para o período contratado. Ao assinar o Premium, você reconhece e aceita esta condição."
         },
         {
-          subtitle: "4.5 Alteração de Preços",
-          text: "Podemos alterar os preços dos planos com aviso prévio de 30 dias. Assinantes ativos serão notificados e poderão cancelar antes da aplicação do novo valor."
+          subtitle: "4.5 Reembolso - Plano Essencial",
+          text: "Oferecemos garantia de 7 dias para novas assinaturas do Plano Essencial. Se não estiver satisfeito, solicite reembolso integral dentro deste período através das configurações da sua conta. Após este prazo, não realizamos reembolsos proporcionais."
+        },
+        {
+          subtitle: "4.6 Reembolso - Plano Premium",
+          text: "O Plano Premium NÃO oferece reembolso em nenhuma circunstância, devido à natureza personalizada das mentorias especializadas inclusas. Ao contratar o Premium, você concorda que não haverá devolução de valores."
+        },
+        {
+          subtitle: "4.7 Alteração de Preços",
+          text: "Podemos alterar os preços dos planos com aviso prévio de 30 dias. Assinantes ativos serão notificados e poderão cancelar antes da aplicação do novo valor (aplicável apenas ao Plano Essencial)."
         }
       ]
     },

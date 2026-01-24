@@ -75,7 +75,7 @@ export const LandingHero = () => {
 
           {/* Migrei Wheel - Clean and centered */}
           <motion.div 
-            className="relative -mt-36 -mb-32"
+            className="relative -mt-36 -mb-32 pointer-events-none"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -87,7 +87,7 @@ export const LandingHero = () => {
 
           {/* CTAs */}
           <motion.div 
-            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-2"
+            className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto mt-2 relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}

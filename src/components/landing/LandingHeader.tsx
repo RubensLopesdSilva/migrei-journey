@@ -49,10 +49,8 @@ export const LandingHeader = () => {
           <img 
             src={logoMigrei} 
             alt="Migrei - Plataforma de Transição de Carreira" 
-            className="h-12 md:h-16"
+            className="h-10 md:h-14 w-auto object-contain"
             loading="eager"
-            width="128"
-            height="64"
           />
 
           {/* Desktop Navigation - Simplified to 4 main links */}

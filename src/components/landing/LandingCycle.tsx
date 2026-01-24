@@ -194,47 +194,63 @@ export const LandingCycle = () => {
           </div>
         </div>
 
-        {/* Mobile Layout - 2 columns grid */}
-        <div className="md:hidden grid grid-cols-2 gap-3">
-          {phases.map((phase, index) => (
-            <motion.div
-              key={phase.number}
-              className="relative p-4 rounded-2xl bg-card border border-border/40 shadow-sm"
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-            >
-              {/* Phase number badge */}
-              <div 
-                className="absolute -top-2 -left-1 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-md"
-                style={{ backgroundColor: phase.color }}
+        {/* Mobile Layout - Wheel + 2 columns grid */}
+        <div className="md:hidden">
+          {/* Compact Wheel for Mobile */}
+          <motion.div
+            className="flex justify-center mb-6"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="scale-[0.55]">
+              <HeroMigreiWheel hideTooltip />
+            </div>
+          </motion.div>
+          
+          {/* Phase Cards Grid */}
+          <div className="grid grid-cols-2 gap-3">
+            {phases.map((phase, index) => (
+              <motion.div
+                key={phase.number}
+                className="relative p-4 rounded-2xl bg-card border border-border/40 shadow-sm"
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
               >
-                {phase.number}
-              </div>
-              
-              {/* Icon centered */}
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
-                style={{ backgroundColor: `${phase.color}15` }}
-              >
-                <phase.icon className="h-6 w-6" style={{ color: phase.color }} />
-              </div>
-              
-              {/* Content centered */}
-              <div className="text-center">
-                <span 
-                  className="font-bold text-sm block mb-1"
-                  style={{ color: phase.color }}
+                {/* Phase number badge */}
+                <div 
+                  className="absolute -top-2 -left-1 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white shadow-md"
+                  style={{ backgroundColor: phase.color }}
                 >
-                  {phase.name}
-                </span>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {phase.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+                  {phase.number}
+                </div>
+                
+                {/* Icon centered */}
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3"
+                  style={{ backgroundColor: `${phase.color}15` }}
+                >
+                  <phase.icon className="h-6 w-6" style={{ color: phase.color }} />
+                </div>
+                
+                {/* Content centered */}
+                <div className="text-center">
+                  <span 
+                    className="font-bold text-sm block mb-1"
+                    style={{ color: phase.color }}
+                  >
+                    {phase.name}
+                  </span>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {phase.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* Simple CTA */}

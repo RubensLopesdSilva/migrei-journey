@@ -88,6 +88,14 @@ export const LandingPricing = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="relative"
             >
+              {/* Popular Badge */}
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+                  <span className="bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                    ⭐ Mais popular
+                  </span>
+                </div>
+              )}
               <Card 
                 className={`p-5 md:p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
                   plan.highlighted 

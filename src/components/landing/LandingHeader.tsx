@@ -55,19 +55,13 @@ export const LandingHeader = () => {
             height="64"
           />
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Simplified to 4 main links */}
           <nav className="hidden md:flex items-center gap-8">
             <button
               onClick={() => scrollToSection("como-funciona")}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Como funciona
-            </button>
-            <button
-              onClick={() => scrollToSection("ciclo-migrei")}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Método
             </button>
             <button
               onClick={() => scrollToSection("recursos")}
@@ -128,12 +122,6 @@ export const LandingHeader = () => {
                 className="text-left text-muted-foreground hover:text-foreground"
               >
                 Como funciona
-              </button>
-              <button
-                onClick={() => scrollToSection("ciclo-migrei")}
-                className="text-left text-muted-foreground hover:text-foreground"
-              >
-                Método
               </button>
               <button
                 onClick={() => scrollToSection("recursos")}

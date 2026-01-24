@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -121,22 +121,6 @@ const FinalCTA = () => {
               Começar grátis agora
               <ArrowRight className="h-5 w-5" />
             </motion.a>
-          </div>
-          
-          {/* Trust indicators */}
-          <div className="flex items-center justify-center gap-6 mt-8 text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <Check className="w-3 h-3 text-emerald-500" />
-              </div>
-              <span>Gratuito para começar</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                <Check className="w-3 h-3 text-emerald-500" />
-              </div>
-              <span>Sem cartão de crédito</span>
-            </div>
           </div>
         </motion.div>
       </div>

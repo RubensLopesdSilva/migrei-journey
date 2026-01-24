@@ -42,11 +42,13 @@ const phases = [{
 
 // Mockup: Interactive Roda Migrei - using HeroMigreiWheel component
 const CycleMockup = () => {
-  return <div className="flex items-center justify-center h-[420px] relative -mt-28 -mb-24 md:mt-0 md:mb-0">
-      <div className="scale-[0.50] md:scale-100">
-        <HeroMigreiWheel hideTooltip />
+  return (
+    <div className="flex items-center justify-center h-[320px] md:h-[420px] relative">
+      <div className="scale-[0.55] md:scale-[0.85] lg:scale-100 origin-center">
+        <HeroMigreiWheel />
       </div>
-    </div>;
+    </div>
+  );
 };
 
 // Mockup: Plano de 90 Dias - Matching actual Plan90Days component
@@ -515,12 +517,12 @@ const CommunityMockup = () => {
 const features = [{
   icon: Brain,
   title: "Ciclo de Transição",
-  subtitle: "Visualize sua jornada completa",
-  description: "Acompanhe sua evolução através das 6 fases do Ciclo Migrei. Cada fase foi desenhada para te guiar do despertar até a conquista do seu novo momento profissional.",
-  highlights: ["6 fases estruturadas com objetivos claros", "Progresso visual que te mantém motivado", "Atividades práticas em cada etapa"],
+  subtitle: "Metodologia testada em 6 fases",
+  description: "Saia da incerteza com um passo de cada vez. O Ciclo Migrei transforma a complexidade da transição em etapas claras — do despertar até sua nova identidade profissional.",
+  highlights: ["Cada fase com atividades práticas e objetivos claros", "Acompanhe seu progresso visual em tempo real", "Avance no seu ritmo, sem pressa"],
   illustration: <CycleMockup />,
   gradient: "from-amber-500/10 via-transparent to-emerald-500/10",
-  accentColor: "text-amber-500"
+  accentColor: "text-primary"
 }, {
   icon: Target,
   title: "Plano de 90 Dias",

@@ -198,7 +198,7 @@ export const LandingCycle = () => {
         <div className="md:hidden">
           {/* Compact Wheel for Mobile */}
           <motion.div
-            className="flex justify-center -my-24"
+            className="flex justify-center -mt-28 -mb-20"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}

@@ -152,7 +152,7 @@ export default function AgentSelection() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Cada um tem seu estilo. Qual combina com você?
+            Qual estilo combina com você?
           </motion.p>
         </motion.div>
 

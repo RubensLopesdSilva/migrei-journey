@@ -11,12 +11,16 @@ import avatar4 from "@/assets/avatars/avatar-4.jpg";
 export const LandingHero = () => {
   const navigate = useNavigate();
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth"
-      });
-    }
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    }, 100);
   };
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20 pb-8 bg-gradient-to-b from-muted/50 via-background to-background">
       {/* Background decoration */}

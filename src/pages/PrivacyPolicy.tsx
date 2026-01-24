@@ -80,7 +80,7 @@ const PrivacyPolicy = () => {
         },
         {
           subtitle: "4.2 Como Exercer seus Direitos",
-          text: "Para exercer qualquer direito, entre em contato através do e-mail contato@migrei.com ou através das configurações da sua conta na plataforma. Responderemos em até 15 dias úteis."
+          text: "Para exercer qualquer direito, acesse as configurações da sua conta na plataforma. Responderemos em até 15 dias úteis."
         }
       ]
     },
@@ -227,39 +227,12 @@ const PrivacyPolicy = () => {
             ))}
           </div>
 
-          {/* Contact Section */}
-          <Card className="mt-8 border-primary/20">
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                <Mail className="w-5 h-5 text-primary" />
-                9. Contato e Dúvidas
-              </h2>
-              <p className="text-muted-foreground mb-4">
-                Para questões sobre esta política, exercício de direitos ou qualquer dúvida 
-                relacionada à privacidade, entre em contato:
-              </p>
-              <div className="bg-muted/50 rounded-lg p-4">
-                <p className="text-foreground">
-                  <strong>E-mail:</strong>{" "}
-                  <a 
-                    href="mailto:contato@migrei.com" 
-                    className="text-primary hover:underline"
-                  >
-                    contato@migrei.com
-                  </a>
-                </p>
-                <p className="text-foreground mt-2">
-                  <strong>Encarregado de Dados (DPO):</strong> Equipe Migrei
-                </p>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Updates Notice */}
           <Card className="mt-8 bg-muted/30">
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                10. Alterações nesta Política
+                9. Alterações nesta Política
               </h2>
               <p className="text-muted-foreground">
                 Podemos atualizar esta Política de Privacidade periodicamente. Notificaremos 

@@ -122,13 +122,13 @@ serve(async (req) => {
     const customers = await stripe.customers.list({ email: userEmail, limit: 1 });
 
     if (customers.data.length === 0) {
-      logStep("No Stripe customer found");
+      logStep("No Stripe customer found - defaulting to essential");
       return new Response(
         JSON.stringify({
           subscribed: false,
           status: null,
-          plan_slug: "free",
-          plan_name: "Gratuito",
+          plan_slug: "essential",
+          plan_name: "Essencial",
           features: {},
         }),
         {
@@ -156,13 +156,13 @@ serve(async (req) => {
       });
 
       if (trialingSubscriptions.data.length === 0) {
-        logStep("No active subscription found");
+        logStep("No active subscription found - defaulting to essential");
         return new Response(
           JSON.stringify({
             subscribed: false,
             status: null,
-            plan_slug: "free",
-            plan_name: "Gratuito",
+            plan_slug: "essential",
+            plan_name: "Essencial",
             features: {},
           }),
           {
@@ -184,8 +184,8 @@ serve(async (req) => {
         JSON.stringify({
           subscribed: false,
           status: null,
-          plan_slug: "free",
-          plan_name: "Gratuito",
+          plan_slug: "essential",
+          plan_name: "Essencial",
           features: {},
         }),
         {

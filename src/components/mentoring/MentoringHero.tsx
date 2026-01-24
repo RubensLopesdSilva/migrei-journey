@@ -30,9 +30,8 @@ export function MentoringHero({
   onUpgrade,
 }: MentoringHeroProps) {
   const isPremium = planSlug === "premium";
-  const isEssential = planSlug === "essential";
-  const isFree = planSlug === "free" || !planSlug;
-  const needsUpgrade = isFree || isEssential;
+  const isEssential = planSlug === "essential" || !planSlug;
+  const needsUpgrade = isEssential; // Only essential users need upgrade to premium
 
   const sessionUsagePercent = sessionLimit > 0 
     ? ((sessionLimit - remainingSessions) / sessionLimit) * 100 
@@ -69,16 +68,13 @@ export function MentoringHero({
                   text-sm font-semibold px-3 py-1 border
                   ${isPremium 
                     ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-700 dark:text-amber-400 border-amber-500/40" 
-                    : isEssential 
-                      ? "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-700 dark:text-blue-400 border-blue-500/40"
-                      : "bg-primary/10 text-primary border-primary/30"
+                    : "bg-gradient-to-r from-blue-500/20 to-indigo-500/20 text-blue-700 dark:text-blue-400 border-blue-500/40"
                   }
                 `}
               >
                 {isPremium && <Crown className="h-3.5 w-3.5 mr-1.5" />}
                 {isEssential && <Sparkles className="h-3.5 w-3.5 mr-1.5" />}
-                {isFree && <Users className="h-3.5 w-3.5 mr-1.5" />}
-                {planName || "Gratuito"}
+                {planName || "Essencial"}
               </Badge>
             </div>
 

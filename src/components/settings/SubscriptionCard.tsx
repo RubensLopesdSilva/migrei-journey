@@ -25,12 +25,6 @@ import { ptBR } from "date-fns/locale";
 import { useToast } from "@/hooks/use-toast";
 
 const planConfig: Record<string, { color: string; icon: typeof Crown; gradient: string; bgGradient: string }> = {
-  free: {
-    color: "bg-muted text-muted-foreground",
-    icon: Zap,
-    gradient: "from-muted to-muted",
-    bgGradient: "from-muted/50 to-muted/30",
-  },
   essential: {
     color: "bg-blue-500/10 text-blue-600",
     icon: Sparkles,
@@ -403,23 +397,7 @@ export function SubscriptionCard() {
           {planSlug === "premium" ? "Seu plano inclui" : "Compare os planos"}
         </h3>
         
-        <div className="grid md:grid-cols-3 gap-4">
-          <PlanCard
-            name="Gratuito"
-            price="R$ 0"
-            period=""
-            description="Para começar sua jornada"
-            phasesAccess={2}
-            features={[
-              { label: "Fases 1 e 2 do Ciclo Migrei", included: true },
-              { label: "Acesso ao Networking", included: true },
-              { label: "Meu progresso", included: true },
-              { label: "Assistente IA (Mentor IA)", included: false },
-              { label: "Mentoria mensal", included: false },
-            ]}
-            isCurrentPlan={planSlug === "free"}
-            variant="free"
-          />
+        <div className="grid md:grid-cols-2 gap-4">
 
           <PlanCard
             name="Essencial"

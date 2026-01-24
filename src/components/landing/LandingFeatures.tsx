@@ -519,7 +519,7 @@ const features = [{
   title: "Ciclo de Transição",
   subtitle: "Metodologia testada em 6 fases",
   description: "Saia da incerteza com um passo de cada vez. O Ciclo Migrei transforma a complexidade da transição em etapas claras — do despertar até sua nova identidade profissional.",
-  highlights: ["Cada fase com atividades práticas e objetivos claros", "Acompanhe seu progresso visual em tempo real", "Avance no seu ritmo, sem pressa"],
+  highlights: ["Atividades práticas por fase", "Progresso visual em tempo real", "Avance no seu ritmo"],
   illustration: <CycleMockup />,
   gradient: "from-amber-500/10 via-transparent to-emerald-500/10",
   accentColor: "text-primary"
@@ -528,7 +528,7 @@ const features = [{
   title: "Plano de 90 Dias",
   subtitle: "Sua transição com prazo e foco",
   description: "Metas SMART e cronograma personalizado dividido em 3 meses. Cada semana você sabe exatamente o que fazer para avançar na sua transição de carreira.",
-  highlights: ["Cronograma semanal personalizado", "Metas mensuráveis e alcançáveis", "Acompanhamento de progresso em tempo real"],
+  highlights: ["Cronograma semanal", "Metas mensuráveis", "Progresso em tempo real"],
   illustration: <Plan90Mockup />,
   gradient: "from-blue-500/10 via-transparent to-indigo-500/10",
   accentColor: "text-blue-500"
@@ -537,7 +537,7 @@ const features = [{
   title: "Networking Prático",
   subtitle: "Conexões que abrem portas",
   description: "Rotina diária de 10 minutos que transforma sua rede de contatos. Ações simples e consistentes que constroem relacionamentos profissionais genuínos.",
-  highlights: ["Rotina diária de apenas 10 minutos", "Sugestões inteligentes de ações", "Acompanhamento de conexões feitas"],
+  highlights: ["Rotina diária de 10 minutos", "Sugestões inteligentes", "Conexões acompanhadas"],
   illustration: <NetworkingMockup />,
   gradient: "from-violet-500/10 via-transparent to-purple-500/10",
   accentColor: "text-violet-500"
@@ -546,7 +546,7 @@ const features = [{
   title: "Mentoria Especializada",
   subtitle: "Você não está sozinho nessa",
   description: "Receba orientação personalizada de mentores experientes que já realizaram transições de carreira bem-sucedidas. Sessões individuais para acelerar seus resultados.",
-  highlights: ["Mentores especializados disponíveis", "Agende no seu tempo a mentoria", "50 minutos de orientação"],
+  highlights: ["Mentores especializados", "Agende no seu tempo", "50 minutos por sessão"],
   illustration: <CommunityMockup />,
   gradient: "from-emerald-500/10 via-transparent to-teal-500/10",
   accentColor: "text-emerald-500"

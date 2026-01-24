@@ -456,28 +456,6 @@ export default function Auth() {
             </p>
           )}
 
-          {/* Quick benefits for signup */}
-          {!isLogin && !isForgotPassword && (
-            <motion.div
-              className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-primary" />
-                <span>Resultado em 5 min</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Target className="h-3.5 w-3.5 text-primary" />
-                <span>Plano personalizado</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <span>100% grátis</span>
-              </div>
-            </motion.div>
-          )}
         </div>
       </div>
 

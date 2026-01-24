@@ -42,8 +42,10 @@ const phases = [{
 
 // Mockup: Interactive Roda Migrei - using HeroMigreiWheel component
 const CycleMockup = () => {
-  return <div className="flex items-center justify-center h-[420px] relative">
-      <HeroMigreiWheel />
+  return <div className="flex items-center justify-center h-[420px] relative -mt-28 -mb-24 md:mt-0 md:mb-0">
+      <div className="scale-[0.50] md:scale-100">
+        <HeroMigreiWheel hideTooltip />
+      </div>
     </div>;
 };
 

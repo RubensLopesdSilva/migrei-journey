@@ -172,6 +172,8 @@ export default function AgentSelection() {
               onSelect={() => setSelectedAgentId(agent.id)}
               onHover={() => setHoveredAgentId(agent.id)}
               onLeave={() => setHoveredAgentId(null)}
+              onConfirm={handleConfirm}
+              isSubmitting={isSubmitting}
               index={index}
             />
           ))}
@@ -336,7 +338,19 @@ interface AgentCardProps {
   index: number;
 }
 
-function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, index }: AgentCardProps) {
+interface AgentCardProps {
+  agent: AIAgent;
+  isSelected: boolean;
+  isHovered: boolean;
+  onSelect: () => void;
+  onHover: () => void;
+  onLeave: () => void;
+  onConfirm: () => void;
+  isSubmitting: boolean;
+  index: number;
+}
+
+function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, onConfirm, isSubmitting, index }: AgentCardProps) {
   const avatarUrl = agentAvatars[agent.name] || lumiAvatar;
   const personality = agentPersonalities[agent.name];
 
@@ -433,10 +447,47 @@ function AgentCard({ agent, isSelected, isHovered, onSelect, onHover, onLeave, i
           {agent.title}
         </p>
         
-        {/* Quick personality hint */}
-        <p className="text-xs text-muted-foreground/80 line-clamp-1">
-          {personality?.style || "Estilo adaptável"}
-        </p>
+        {/* Quick personality hint or Advance button */}
+        <AnimatePresence mode="wait">
+          {isSelected ? (
+            <motion.div
+              key="advance-button"
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Button
+                size="sm"
+                className="btn-primary-gradient gap-1.5 text-sm px-4"
+                disabled={isSubmitting}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onConfirm();
+                }}
+              >
+                {isSubmitting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    Avançar
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </motion.div>
+          ) : (
+            <motion.p
+              key="personality-hint"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-xs text-muted-foreground/80 line-clamp-1"
+            >
+              {personality?.style || "Estilo adaptável"}
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

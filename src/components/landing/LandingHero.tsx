@@ -89,7 +89,7 @@ export const LandingHero = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <Button size="lg" className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-5 text-base rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
-              Começar
+              Iniciar transição
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button size="lg" variant="outline" className="w-full sm:w-auto px-5 py-5 text-base rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>
@@ -153,7 +153,7 @@ export const LandingHero = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full group shadow-lg shadow-primary/20" onClick={() => navigate("/auth?tab=signup")}>
-                Começar
+                Iniciar transição
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button size="lg" variant="outline" className="px-6 py-6 text-lg rounded-full" onClick={() => scrollToSection("ciclo-migrei")}>

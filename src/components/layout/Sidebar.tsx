@@ -49,7 +49,7 @@ const mainNavItems: NavItem[] = [
   {
     icon: Home,
     label: "Início",
-    href: "/"
+    href: "/dashboard"
   },
   {
     icon: Layers,

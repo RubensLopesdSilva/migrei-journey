@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ArrowRight, Check } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -35,43 +36,105 @@ const faqs = [
 
 export const LandingFAQ = () => {
   return (
-    <section id="faq" className="py-24 md:py-36 bg-muted/30">
-      <div className="container mx-auto px-6 md:px-12 lg:px-16">
+    <>
+      <section id="faq" className="py-24 md:py-36 bg-muted/30">
+        <div className="container mx-auto px-6 md:px-12 lg:px-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Dúvidas frequentes sobre transição de carreira
+            </h2>
+          </motion.div>
+
+          <motion.div
+            className="max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqs.map((faq, index) => (
+                <AccordionItem
+                  key={index}
+                  value={`item-${index}`}
+                  className="bg-card border border-border/50 rounded-xl px-6 data-[state=open]:border-primary/30"
+                >
+                  <AccordionTrigger className="text-left text-foreground hover:no-underline py-5">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground pb-5">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <FinalCTA />
+    </>
+  );
+};
+
+const FinalCTA = () => {
+  return (
+    <section className="py-20 md:py-28 bg-gradient-to-b from-muted/30 to-primary/5 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+      </div>
+      
+      <div className="container mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         <motion.div
-          className="text-center mb-16"
+          className="text-center max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Dúvidas frequentes sobre transição de carreira
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+            Pronto para começar sua{" "}
+            <span className="text-primary">transição</span>?
           </h2>
-        </motion.div>
-
-        <motion.div
-          className="max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <Accordion type="single" collapsible className="space-y-4">
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={index}
-                value={`item-${index}`}
-                className="bg-card border border-border/50 rounded-xl px-6 data-[state=open]:border-primary/30"
-              >
-                <AccordionTrigger className="text-left text-foreground hover:no-underline py-5">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground pb-5">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <p className="text-lg text-muted-foreground mb-8">
+            Junte-se a milhares de profissionais que já descobriram clareza em suas carreiras com o Ciclo Migrei.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <motion.a
+              href="/auth?tab=signup"
+              className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-full shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Começar grátis agora
+              <ArrowRight className="h-5 w-5" />
+            </motion.a>
+          </div>
+          
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-6 mt-8 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <Check className="w-3 h-3 text-emerald-500" />
+              </div>
+              <span>Gratuito para começar</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <Check className="w-3 h-3 text-emerald-500" />
+              </div>
+              <span>Sem cartão de crédito</span>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

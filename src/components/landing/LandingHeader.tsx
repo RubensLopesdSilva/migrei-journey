@@ -35,7 +35,7 @@ export const LandingHeader = () => {
   return (
     <motion.header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
+        isScrolled || isMobileMenuOpen
           ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm"
           : "bg-transparent"
       }`}
@@ -116,7 +116,7 @@ export const LandingHeader = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden mt-4 pb-4 border-t border-border pt-4"
+            className="md:hidden mt-4 pb-4 border-t border-border pt-4 bg-background"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
           >

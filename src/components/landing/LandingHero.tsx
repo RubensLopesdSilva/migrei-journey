@@ -39,7 +39,7 @@ export const LandingHero = () => {
               <img src={avatar1} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
               <img src={avatar2} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
             </div>
-            <span className="text-xs font-medium text-primary">51% consideram mudar de carreira</span>
+            <span className="text-xs font-medium text-primary whitespace-nowrap">51% consideram mudar de carreira</span>
           </motion.div>
 
           {/* Headline */}

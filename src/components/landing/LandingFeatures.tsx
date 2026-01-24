@@ -676,7 +676,7 @@ export const LandingFeatures = () => {
   const navigate = useNavigate();
   return <section id="recursos" className="relative overflow-hidden">
       {/* Section Header */}
-      <div className="py-20 md:py-28 bg-muted/20">
+      <div className="py-20 md:py-28 bg-gradient-to-b from-muted/20 to-muted/30">
         <div className="container mx-auto px-4">
           <motion.div className="text-center max-w-3xl mx-auto" initial={{
           opacity: 0,

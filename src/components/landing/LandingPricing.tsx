@@ -10,10 +10,10 @@ const plans = [
     name: "Gratuito",
     price: "0",
     period: "",
-    description: "Comece a explorar sua transição",
+    description: "Explore e descubra seu caminho",
     features: [
       "Fases 1 e 2 do Ciclo Migrei",
-      "Meu progresso",
+      "Acompanhamento de progresso",
     ],
     mentoring: null,
     cta: "Começar grátis",
@@ -24,15 +24,15 @@ const plans = [
     name: "Essencial",
     price: "49",
     period: "/mês",
-    description: "Experimente todo o poder da plataforma",
+    description: "Tudo para sua transição completa",
     features: [
-      "Todas as 6 fases do Ciclo Migrei",
-      "Acesso ao Networking",
-      "Meu progresso",
-      "Assistente IA (Mentor IA)",
+      "Todas as 6 fases do Ciclo",
+      "Networking com a comunidade",
+      "Acompanhamento de progresso",
+      "Assistente IA personalizado",
     ],
     mentoring: null,
-    cta: "Assinar Essencial",
+    cta: "Começar com Essencial",
     popular: true,
     highlighted: true,
   },
@@ -40,18 +40,18 @@ const plans = [
     name: "Premium",
     price: "149",
     period: "/mês",
-    description: "Experiência completa com mentoria",
+    description: "Acelere com mentoria 1:1",
     features: [
-      "Tudo do plano Essencial",
-      "Prioridade no suporte",
+      "Tudo do Essencial",
+      "Suporte prioritário",
       "Conteúdos exclusivos",
     ],
     mentoring: {
       sessions: 1,
-      label: "1 mentoria/mês",
+      label: "1 mentoria ao vivo/mês",
       description: "Sessão 1:1 com especialista",
     },
-    cta: "Assinar Premium",
+    cta: "Começar com Premium",
     popular: false,
     highlighted: false,
   },
@@ -71,10 +71,10 @@ export const LandingPricing = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 md:mb-4">
-            Escolha o plano ideal para você
+            Invista na sua transição
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-md mx-auto">
-            Escolha o plano que funciona melhor para você.
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-md mx-auto">
+            Comece grátis. Evolua quando estiver pronto.
           </p>
         </motion.div>
 

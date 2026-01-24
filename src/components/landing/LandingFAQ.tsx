@@ -37,18 +37,21 @@ const faqs = [
 export const LandingFAQ = () => {
   return (
     <>
-      <section id="faq" className="py-24 md:py-36 bg-muted/30">
-        <div className="container mx-auto px-6 md:px-12 lg:px-16">
+      <section id="faq" className="py-16 md:py-24 lg:py-36 bg-muted/30">
+        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Dúvidas frequentes sobre transição de carreira
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2 md:mb-4">
+              Perguntas frequentes
             </h2>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
+              Tire suas dúvidas sobre a Migrei e transição de carreira.
+            </p>
           </motion.div>
 
           <motion.div
@@ -100,12 +103,12 @@ const FinalCTA = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Pronto para começar sua{" "}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 md:mb-4">
+            Pronto para a sua{" "}
             <span className="text-primary">transição</span>?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            Junte-se a milhares de profissionais que já descobriram clareza em suas carreiras com o Ciclo Migrei.
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-lg mx-auto">
+            Milhares de profissionais já encontraram clareza com o Ciclo Migrei.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

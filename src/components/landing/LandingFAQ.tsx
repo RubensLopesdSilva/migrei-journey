@@ -9,11 +9,11 @@ import {
 
 const faqs = [
   {
-    question: "Preciso saber para onde quero ir?",
+    question: "Preciso saber para onde ir?",
     answer: "Não. O Migrei te ajuda justamente a descobrir isso. As primeiras fases são dedicadas ao autoconhecimento e exploração de possibilidades.",
   },
   {
-    question: "Quanto tempo leva uma transição de carreira?",
+    question: "Quanto tempo leva a transição?",
     answer: "Depende do seu ritmo e disponibilidade. Em média, nossos usuários levam de 3 a 6 meses para concluir todo o ciclo e iniciar a nova carreira.",
   },
   {
@@ -29,7 +29,7 @@ const faqs = [
     answer: "Você tem 7 dias para testar qualquer plano pago e pedir reembolso integral se não ficar satisfeito. Sem perguntas.",
   },
   {
-    question: "O Migrei funciona para qualquer área?",
+    question: "Funciona para qualquer área?",
     answer: "Sim. Nossa metodologia é baseada em princípios universais de transição de carreira que funcionam independente da área de origem ou destino.",
   },
 ];

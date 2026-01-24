@@ -21,6 +21,7 @@ const plans = [
     cta: "Começar com Essencial",
     popular: true,
     highlighted: true,
+    cancellationNote: "Cancele em até 7 dias sem compromisso",
   },
   {
     name: "Premium",
@@ -40,6 +41,7 @@ const plans = [
     cta: "Começar com Premium",
     popular: false,
     highlighted: false,
+    cancellationNote: null,
   },
 ];
 
@@ -151,6 +153,13 @@ export const LandingPricing = () => {
                 >
                   {plan.cta}
                 </Button>
+
+                {/* Cancellation Note */}
+                {plan.cancellationNote && (
+                  <p className={`text-xs text-center mt-3 ${plan.highlighted ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                    {plan.cancellationNote}
+                  </p>
+                )}
               </Card>
             </motion.div>
           ))}

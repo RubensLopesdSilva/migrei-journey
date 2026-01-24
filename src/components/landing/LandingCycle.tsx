@@ -198,13 +198,13 @@ export const LandingCycle = () => {
         <div className="md:hidden">
           {/* Compact Wheel for Mobile */}
           <motion.div
-            className="flex justify-center -my-32"
+            className="flex justify-center -my-24"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="scale-[0.30]">
+            <div className="scale-[0.50]">
               <HeroMigreiWheel hideTooltip />
             </div>
           </motion.div>

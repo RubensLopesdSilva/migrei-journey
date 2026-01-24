@@ -46,12 +46,9 @@ export const LandingFAQ = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-2 md:mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
               Perguntas frequentes
             </h2>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
-              Tire suas dúvidas sobre a Migrei e transição de carreira.
-            </p>
           </motion.div>
 
           <motion.div
@@ -103,13 +100,10 @@ const FinalCTA = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 md:mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 md:mb-8">
             Pronto para a sua{" "}
             <span className="text-primary">transição</span>?
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-lg mx-auto">
-            Milhares de profissionais já encontraram clareza com o Ciclo Migrei.
-          </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <motion.a

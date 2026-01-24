@@ -27,7 +27,7 @@ export const LandingHeader = () => {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      navigate(`/landing#${id}`);
+      navigate(`/#${id}`);
     }
     setIsMobileMenuOpen(false);
   };

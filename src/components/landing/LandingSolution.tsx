@@ -133,7 +133,7 @@ export const LandingSolution = () => {
           </Button>
         </motion.div>
 
-        <ScrollToNextButton targetId="funcionalidades" />
+        <ScrollToNextButton targetId="ciclo-migrei" />
       </div>
     </section>
   );

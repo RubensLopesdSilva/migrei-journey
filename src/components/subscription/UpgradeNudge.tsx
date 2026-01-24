@@ -172,7 +172,7 @@ export function UpgradeNudge({ trigger, context, onDismiss }: UpgradeNudgeProps)
 
               {/* Price anchor */}
               <p className="text-center text-[10px] text-muted-foreground">
-                A partir de R$ 49/mês • Sem compromisso
+                A partir de R$ 59/mês • Sem compromisso
               </p>
             </div>
           </Card>

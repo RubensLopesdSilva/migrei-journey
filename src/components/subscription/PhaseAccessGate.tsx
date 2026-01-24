@@ -218,7 +218,7 @@ export function PhaseAccessGate({ phaseNumber, phaseName, children }: PhaseAcces
             </div>
 
             <p className="text-center text-xs text-muted-foreground">
-              A partir de R$ 49/mês • Cancele quando quiser
+              A partir de R$ 59/mês • Cancele quando quiser
             </p>
           </div>
 

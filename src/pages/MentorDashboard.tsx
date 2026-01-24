@@ -48,7 +48,6 @@ import {
   Settings,
   ShieldCheck,
   AlertTriangle,
-  Link2,
 } from "lucide-react";
 
 function MentorDashboardSkeleton() {
@@ -151,73 +150,6 @@ function SessionNotesModal({ session, open, onOpenChange, onSave }: SessionNotes
     </Dialog>
   );
 }
-
-interface MeetingLinkModalProps {
-  session: MentorSession | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave: (sessionId: string, meetingUrl: string) => Promise<boolean>;
-}
-
-function MeetingLinkModal({ session, open, onOpenChange, onSave }: MeetingLinkModalProps) {
-  const [meetingUrl, setMeetingUrl] = useState(session?.meeting_url || "");
-  const [saving, setSaving] = useState(false);
-
-  const handleSave = async () => {
-    if (!session || !meetingUrl.trim()) return;
-    setSaving(true);
-    const success = await onSave(session.id, meetingUrl.trim());
-    setSaving(false);
-    if (success) {
-      onOpenChange(false);
-    }
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Video className="h-5 w-5 text-primary" />
-            Link da Reunião
-          </DialogTitle>
-          <DialogDescription>
-            {session && (
-              <>
-                Adicione o link do Google Meet para a sessão com{" "}
-                <span className="font-medium">{session.mentee?.full_name || "Mentorado"}</span>
-              </>
-            )}
-          </DialogDescription>
-        </DialogHeader>
-        <div className="py-4 space-y-3">
-          <div className="space-y-2">
-            <Label htmlFor="meeting-url">Link do Google Meet</Label>
-            <Input
-              id="meeting-url"
-              type="url"
-              placeholder="https://meet.google.com/xxx-xxxx-xxx"
-              value={meetingUrl}
-              onChange={(e) => setMeetingUrl(e.target.value)}
-            />
-            <p className="text-xs text-muted-foreground">
-              Cole o link da sala do Google Meet que você criou para esta sessão.
-            </p>
-          </div>
-        </div>
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancelar
-          </Button>
-          <Button onClick={handleSave} disabled={saving || !meetingUrl.trim()}>
-            {saving ? "Salvando..." : "Salvar Link"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
 interface AvailabilitySlot {
   day: number;
   name: string;
@@ -332,7 +264,6 @@ export default function MentorDashboard() {
 
   const [selectedSession, setSelectedSession] = useState<MentorSession | null>(null);
   const [notesModalOpen, setNotesModalOpen] = useState(false);
-  const [meetingLinkModalOpen, setMeetingLinkModalOpen] = useState(false);
   const [videoCallModalOpen, setVideoCallModalOpen] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [sessionToCancel, setSessionToCancel] = useState<string | null>(null);
@@ -392,11 +323,6 @@ export default function MentorDashboard() {
     setNotesModalOpen(true);
   };
 
-  const openMeetingLinkModal = (session: MentorSession) => {
-    setSelectedSession(session);
-    setMeetingLinkModalOpen(true);
-  };
-
   const openVideoCall = (session: MentorSession) => {
     setSelectedSession(session);
     setVideoCallModalOpen(true);
@@ -407,11 +333,9 @@ export default function MentorDashboard() {
     setCancelDialogOpen(true);
   };
 
-  // Check if session can be joined (10 minutes before)
+  // Check if session can be joined - mentors can always join their scheduled sessions
   const canJoinSession = (session: MentorSession) => {
-    const scheduledDate = new Date(session.scheduled_at);
-    const now = new Date();
-    return scheduledDate.getTime() - now.getTime() <= 10 * 60 * 1000 && now < scheduledDate;
+    return session.status === 'scheduled';
   };
 
   return (
@@ -561,15 +485,6 @@ export default function MentorDashboard() {
                                   size="sm"
                                   variant="outline"
                                   className="gap-1"
-                                  onClick={() => openMeetingLinkModal(session)}
-                                >
-                                  <Link2 className="h-3 w-3" />
-                                  {session.meeting_url ? "Editar Link" : "Add Link"}
-                                </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="gap-1"
                                   onClick={() => openNotesModal(session)}
                                 >
                                   <FileText className="h-3 w-3" />
@@ -577,13 +492,11 @@ export default function MentorDashboard() {
                                 </Button>
                                 <Button
                                   size="sm"
-                                  className={`gap-1 ${canJoinSession(session) ? 'bg-green-600 hover:bg-green-700' : ''}`}
+                                  className="gap-1 bg-green-600 hover:bg-green-700"
                                   onClick={() => openVideoCall(session)}
-                                  disabled={!canJoinSession(session)}
-                                  title={!canJoinSession(session) ? "Disponível 10 minutos antes da sessão" : ""}
                                 >
                                   <Video className="h-3 w-3" />
-                                  {canJoinSession(session) ? "Entrar na Sala" : "Entrar"}
+                                  Entrar na Sala
                                 </Button>
                                 <Button
                                   size="sm"
@@ -709,13 +622,6 @@ export default function MentorDashboard() {
           onSave={addSessionNotes}
         />
 
-        {/* Meeting Link Modal */}
-        <MeetingLinkModal
-          session={selectedSession}
-          open={meetingLinkModalOpen}
-          onOpenChange={setMeetingLinkModalOpen}
-          onSave={updateMeetingUrl}
-        />
 
         {/* Cancel Confirmation Dialog */}
         <AlertDialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>

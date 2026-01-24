@@ -6,24 +6,24 @@ import { Button } from "@/components/ui/button";
 const steps = [
   {
     icon: Compass,
-    title: "Entenda quem você é",
-    description: "Descubra seus talentos e valores.",
+    title: "Descubra seu potencial",
+    description: "Mapeie talentos, valores e o que te faz único.",
     color: "text-amber-500",
     bgColor: "bg-amber-500/10",
     borderColor: "group-hover:border-amber-500/40",
   },
   {
     icon: ClipboardList,
-    title: "Monte seu plano",
-    description: "Plano de 90 dias executável.",
+    title: "Crie seu plano de ação",
+    description: "90 dias com metas claras e passos práticos.",
     color: "text-blue-500",
     bgColor: "bg-blue-500/10",
     borderColor: "group-hover:border-blue-500/40",
   },
   {
     icon: Rocket,
-    title: "Entre em ação",
-    description: "Execute com acompanhamento.",
+    title: "Execute com suporte",
+    description: "Avance com IA, mentores e comunidade ao seu lado.",
     color: "text-emerald-500",
     bgColor: "bg-emerald-500/10",
     borderColor: "group-hover:border-emerald-500/40",
@@ -49,10 +49,10 @@ export const LandingSolution = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-2">
-            Como a <span className="text-primary">Migrei</span> te ajuda
+            Como a <span className="text-primary font-display">Migrei</span> te ajuda
           </h2>
-          <p className="text-sm sm:text-base text-muted-foreground">
-            Da confusão à clareza em 3 etapas simples.
+          <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
+            Sua transição de carreira, simplificada em 3 passos.
           </p>
         </motion.div>
 

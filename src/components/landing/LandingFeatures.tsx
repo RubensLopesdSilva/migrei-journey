@@ -690,7 +690,7 @@ export const LandingFeatures = () => {
               Recursos exclusivos
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Tudo que você precisa para sua{" "}
+              Recursos para a sua{" "}
               <span className="text-primary">transição de carreira</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">Ferramentas práticas, metodologia testada e práticas de networking. 

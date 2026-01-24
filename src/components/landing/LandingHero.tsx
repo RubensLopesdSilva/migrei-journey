@@ -30,16 +30,16 @@ export const LandingHero = () => {
         <div className="flex flex-col items-center text-center lg:hidden">
           {/* Eyebrow badge */}
           <motion.div 
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6" 
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6 max-w-full" 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="flex -space-x-2">
+            <div className="flex -space-x-2 flex-shrink-0">
               <img src={avatar1} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
               <img src={avatar2} alt="" className="w-6 h-6 rounded-full border-2 border-background object-cover" />
             </div>
-            <span className="text-xs font-medium text-primary whitespace-nowrap">51% consideram mudar de carreira</span>
+            <span className="text-[11px] font-medium text-primary whitespace-nowrap">51% consideram mudar de carreira</span>
           </motion.div>
 
           {/* Headline */}

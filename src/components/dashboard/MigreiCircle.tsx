@@ -523,7 +523,7 @@ export function MigreiCircle() {
 
       {/* Phase Legend - Horizontal at bottom */}
       <motion.div 
-        className="flex items-center justify-center gap-1 flex-wrap"
+        className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap max-w-[340px] sm:max-w-none mx-auto"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.4 }}
@@ -537,7 +537,7 @@ export function MigreiCircle() {
               onClick={() => handlePhaseClick(phase)}
               disabled={isLocked}
               className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-full text-left transition-all duration-200",
+                "flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-left transition-all duration-200",
                 isCurrent && "bg-card border border-primary/30 shadow-sm",
                 !isCurrent && !isLocked && "hover:bg-muted/50",
                 isLocked && "opacity-40 cursor-not-allowed"
@@ -547,7 +547,7 @@ export function MigreiCircle() {
             >
               <div 
                 className={cn(
-                  "w-2.5 h-2.5 rounded-full transition-all duration-300 flex-shrink-0",
+                  "w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full transition-all duration-300 flex-shrink-0",
                   isCompleted && "ring-1 ring-offset-1 ring-offset-background ring-muted-foreground/30"
                 )}
                 style={{ 
@@ -557,7 +557,7 @@ export function MigreiCircle() {
               />
               <span 
                 className={cn(
-                  "text-xs font-medium leading-tight whitespace-nowrap",
+                  "text-[10px] sm:text-xs font-medium leading-tight whitespace-nowrap",
                   isCurrent ? "text-foreground font-semibold" : "text-muted-foreground"
                 )}
               >

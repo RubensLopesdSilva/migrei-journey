@@ -135,7 +135,7 @@ export default function AgentSelection() {
             transition={{ delay: 0.1 }}
           >
             <MessageCircle className="h-4 w-4" />
-            Seu mentor vai te acompanhar 24/7
+            Seu mentor te apoia em sua transição
           </motion.div>
           
           <motion.h1 

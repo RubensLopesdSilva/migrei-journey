@@ -94,23 +94,40 @@ export default function Auth() {
     setErrors({});
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/configuracoes`,
+      // First, trigger the native Supabase password reset (this creates the token)
+      const resetUrl = `${window.location.origin}/redefinir-senha`;
+      
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: resetUrl,
       });
 
-      if (error) {
+      if (resetError) {
         toast({
           title: "Erro ao enviar email",
-          description: error.message,
+          description: resetError.message,
           variant: "destructive",
         });
-      } else {
-        setIsResetEmailSent(true);
-        toast({
-          title: "Email enviado!",
-          description: "Verifique sua caixa de entrada para redefinir sua senha.",
-        });
+        return;
       }
+
+      // Also send our custom branded email
+      try {
+        await supabase.functions.invoke('send-password-reset', {
+          body: {
+            email,
+            resetUrl,
+          },
+        });
+      } catch (emailError) {
+        // Don't block the flow if custom email fails - Supabase already sent one
+        console.warn("Custom email failed, using Supabase default:", emailError);
+      }
+
+      setIsResetEmailSent(true);
+      toast({
+        title: "Email enviado!",
+        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+      });
     } finally {
       setIsSubmitting(false);
     }

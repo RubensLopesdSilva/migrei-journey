@@ -162,10 +162,10 @@ export function MigreiCircle() {
   }, []);
 
   // Dimensões responsivas - baseadas no viewport
-  const size = isMobile ? 300 : 420;
+  const size = isMobile ? 300 : 480;
   const center = size / 2;
-  const outerRadius = isMobile ? 138 : 195;
-  const innerRadius = isMobile ? 50 : 70;
+  const outerRadius = isMobile ? 138 : 220;
+  const innerRadius = isMobile ? 50 : 80;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = isMobile ? 4 : 5;
@@ -523,7 +523,7 @@ export function MigreiCircle() {
 
       {/* Phase Legend - Horizontal at bottom */}
       <motion.div 
-        className="flex items-center justify-center gap-0.5 sm:gap-1 flex-wrap max-w-[340px] sm:max-w-none mx-auto"
+        className="flex items-center justify-center gap-0.5 sm:gap-2 lg:gap-3 flex-wrap max-w-[340px] sm:max-w-none"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.4 }}

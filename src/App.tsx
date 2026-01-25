@@ -38,6 +38,7 @@ import Landing from "./pages/Landing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import Support from "./pages/Support";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
                       {/* Public routes */}
                       <Route path="/" element={<Landing />} />
                       <Route path="/auth" element={<Auth />} />
+                      <Route path="/redefinir-senha" element={<ResetPassword />} />
                       <Route path="/privacidade" element={<PrivacyPolicy />} />
                       <Route path="/termos" element={<TermsConditions />} />
                       

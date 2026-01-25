@@ -32,7 +32,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     const emailResponse = await resend.emails.send({
-      from: "Migrei <noreply@resend.dev>",
+      from: "Migrei <noreply@migrei.org>",
       to: [email],
       subject: "Redefinir sua senha - Migrei",
       html: `

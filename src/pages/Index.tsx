@@ -7,6 +7,7 @@ import { DailyTipCard } from "@/components/dashboard/DailyTipCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 import { PhaseWelcomeModal } from "@/components/dashboard/PhaseWelcomeModal";
+import { CurrentPhaseButton } from "@/components/dashboard/CurrentPhaseButton";
 
 import { UpgradeNudge, useUpgradeNudgeTrigger } from "@/components/subscription/UpgradeNudge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -77,6 +78,9 @@ const Index = () => {
               </>
             ) : (
               <>
+                {/* Current Phase Action Button */}
+                <CurrentPhaseButton />
+
                 {/* Daily Tip Card - new AI widget */}
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}

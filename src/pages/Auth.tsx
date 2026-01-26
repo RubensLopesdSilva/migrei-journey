@@ -94,7 +94,8 @@ export default function Auth() {
     setErrors({});
 
     try {
-      // First, trigger the native Supabase password reset (this creates the token)
+      // Trigger Supabase password reset with custom template
+      // The email template should be configured in Supabase Auth settings
       const resetUrl = `${window.location.origin}/redefinir-senha`;
       
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
@@ -108,19 +109,6 @@ export default function Auth() {
           variant: "destructive",
         });
         return;
-      }
-
-      // Also send our custom branded email
-      try {
-        await supabase.functions.invoke('send-password-reset', {
-          body: {
-            email,
-            resetUrl,
-          },
-        });
-      } catch (emailError) {
-        // Don't block the flow if custom email fails - Supabase already sent one
-        console.warn("Custom email failed, using Supabase default:", emailError);
       }
 
       setIsResetEmailSent(true);

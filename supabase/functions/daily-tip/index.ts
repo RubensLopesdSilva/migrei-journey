@@ -85,75 +85,105 @@ serve(async (req) => {
         const generateTip = async (skillType: 'soft' | 'hard') => {
           const phaseInfo = phaseContext[phaseNumber as keyof typeof phaseContext] || phaseContext[1];
           
-          const softSkillPrompt = `Você é um coach especialista em transição de carreira com 20 anos de experiência.
+          const phaseSpecificContext = {
+            1: {
+              soft: "Foco em autoconhecimento, aceitação da mudança e construção de mentalidade positiva",
+              hard: "Foco em pesquisa de mercado, mapeamento de habilidades transferíveis e análise de tendências"
+            },
+            2: {
+              soft: "Foco em identificar valores, propósito e motivadores de carreira",
+              hard: "Foco em diagnósticos de perfil, testes vocacionais e inventário de competências"
+            },
+            3: {
+              soft: "Foco em tomada de decisão, gestão de incertezas e compromisso com metas",
+              hard: "Foco em planejamento estratégico, definição de metas SMART e análise de viabilidade"
+            },
+            4: {
+              soft: "Foco em construção de marca pessoal, comunicação de valor e storytelling",
+              hard: "Foco em currículo, LinkedIn, portfólio e materiais de apresentação profissional"
+            },
+            5: {
+              soft: "Foco em networking ativo, entrevistas, negociação e resiliência",
+              hard: "Foco em estratégias de busca, candidaturas, simulação de entrevistas e follow-up"
+            },
+            6: {
+              soft: "Foco em adaptação ao novo papel, construção de relacionamentos e celebração",
+              hard: "Foco em onboarding, aprendizado contínuo e consolidação de resultados"
+            }
+          };
+
+          const currentPhaseContext = phaseSpecificContext[phaseNumber as keyof typeof phaseSpecificContext] || phaseSpecificContext[1];
+          
+          const softSkillPrompt = `Você é um coach especialista em TRANSIÇÃO DE CARREIRA para profissionais 35+ anos.
 
 CONTEXTO DO USUÁRIO:
 - Fase atual: ${phaseInfo}
-- Momento: Profissional em transição buscando recolocação ou mudança de área
+- Foco da fase: ${currentPhaseContext.soft}
+- Perfil: Profissional experiente buscando recolocação ou mudança de área
 
 OBJETIVO:
-Gerar UMA micro-ação de SOFT SKILL que o usuário pode executar HOJE para desenvolver habilidades comportamentais essenciais.
+Gerar UMA micro-ação de SOFT SKILL executável HOJE que ajude diretamente na transição de carreira.
 
-EXEMPLOS DE SOFT SKILLS RELEVANTES:
-- Comunicação assertiva e escuta ativa
-- Networking estratégico e construção de relacionamentos
-- Inteligência emocional e autogestão
-- Adaptabilidade e resiliência
-- Liderança e influência sem autoridade
-- Negociação e resolução de conflitos
-- Pensamento crítico e tomada de decisão
+TEMAS PRIORITÁRIOS PARA TRANSIÇÃO:
+- Gestão emocional da mudança (medo, ansiedade, síndrome do impostor)
+- Networking estratégico (não apenas "fazer contatos")
+- Comunicação do seu valor único (pitch, storytelling)
+- Resiliência e persistência (lidar com rejeições)
+- Adaptabilidade e aprendizado contínuo
+- Autoconfiança e autoeficácia profissional
 
-REGRAS OBRIGATÓRIAS:
-1. MÁXIMO 40 caracteres (isso é crítico!)
-2. Começar com verbo no imperativo (Pratique, Peça, Identifique, etc.)
-3. Ser específico e executável em poucos minutos
-4. Ter impacto direto na empregabilidade
+REGRAS:
+1. MÁXIMO 45 caracteres
+2. Começar com verbo no imperativo
+3. Ser MUITO específico e prático
+4. Conectar diretamente com transição de carreira
 5. Sem emojis, sem pontuação final
-6. Português brasileiro natural
+6. Português brasileiro
 
-EXEMPLOS BOM vs RUIM:
-✓ "Peça feedback a um ex-colega hoje"
-✓ "Pratique seu pitch em 30 segundos"
-✓ "Identifique 3 pontos fortes únicos"
-✗ "Melhore sua comunicação" (vago demais)
-✗ "Seja mais empático" (não é ação específica)
+EXEMPLOS EXCELENTES:
+✓ "Liste 3 conquistas que te orgulham"
+✓ "Envie mensagem a 1 ex-colega hoje"
+✓ "Pratique seu pitch em voz alta 2x"
+✓ "Identifique 1 medo e escreva sobre ele"
+✓ "Agradeça quem te ajudou essa semana"
 
-Responda APENAS com a dica, nada mais.`;
+Responda APENAS com a dica.`;
 
-          const hardSkillPrompt = `Você é um coach especialista em transição de carreira com 20 anos de experiência.
+          const hardSkillPrompt = `Você é um coach especialista em TRANSIÇÃO DE CARREIRA para profissionais 35+ anos.
 
 CONTEXTO DO USUÁRIO:
 - Fase atual: ${phaseInfo}
-- Momento: Profissional em transição buscando recolocação ou mudança de área
+- Foco da fase: ${currentPhaseContext.hard}
+- Perfil: Profissional experiente buscando recolocação ou mudança de área
 
 OBJETIVO:
-Gerar UMA micro-ação de HARD SKILL que o usuário pode executar HOJE para desenvolver competências técnicas valorizadas no mercado.
+Gerar UMA micro-ação de HARD SKILL executável HOJE que acelere a transição de carreira.
 
-EXEMPLOS DE HARD SKILLS RELEVANTES:
-- Excel/Planilhas avançadas e análise de dados
-- Ferramentas de IA (ChatGPT, Copilot, automação)
-- LinkedIn e marca pessoal digital
-- Gestão de projetos (metodologias ágeis, Kanban)
-- Idiomas (especialmente inglês profissional)
-- Ferramentas de apresentação e storytelling
-- Certificações e cursos reconhecidos
+TEMAS PRIORITÁRIOS PARA TRANSIÇÃO:
+- LinkedIn: otimização, conteúdo, visibilidade
+- Currículo: ATS-friendly, palavras-chave, resultados
+- Ferramentas de IA para produtividade (ChatGPT, Copilot)
+- Pesquisa de mercado e empresas-alvo
+- Preparação para entrevistas (STAR method)
+- Upskilling em competências digitais demandadas
+- Portfolio e cases de sucesso
 
-REGRAS OBRIGATÓRIAS:
-1. MÁXIMO 40 caracteres (isso é crítico!)
-2. Começar com verbo no imperativo (Aprenda, Complete, Teste, etc.)
-3. Ser específico e executável em poucos minutos
-4. Mencionar ferramenta ou técnica específica quando possível
+REGRAS:
+1. MÁXIMO 45 caracteres
+2. Começar com verbo no imperativo
+3. Ser MUITO específico e prático
+4. Mencionar ferramenta ou técnica quando possível
 5. Sem emojis, sem pontuação final
-6. Português brasileiro natural
+6. Português brasileiro
 
-EXEMPLOS BOM vs RUIM:
-✓ "Aprenda PROCV no Excel em 10min"
-✓ "Teste o ChatGPT para currículo"
-✓ "Otimize 3 palavras-chave no LinkedIn"
-✗ "Estude mais tecnologia" (vago demais)
-✗ "Faça um curso" (não é ação específica)
+EXEMPLOS EXCELENTES:
+✓ "Adicione 3 palavras-chave ao LinkedIn"
+✓ "Pesquise 5 vagas na sua área-alvo"
+✓ "Atualize 1 conquista com números"
+✓ "Use ChatGPT para revisar seu resumo"
+✓ "Salve 3 empresas no LinkedIn Jobs"
 
-Responda APENAS com a dica, nada mais.`;
+Responda APENAS com a dica.`;
 
           const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
             method: "POST",

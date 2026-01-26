@@ -41,62 +41,93 @@ const handler = async (req: Request): Promise<Response> => {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Redefinir Senha</title>
+          <title>Redefinir Senha - Migrei</title>
         </head>
-        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5;">
+        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc;">
           <table role="presentation" style="width: 100%; border-collapse: collapse;">
             <tr>
-              <td style="padding: 40px 0;">
-                <table role="presentation" style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+              <td style="padding: 48px 24px;">
+                <table role="presentation" style="max-width: 520px; margin: 0 auto; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px -10px rgba(13, 59, 76, 0.15);">
+                  
                   <!-- Header with Logo -->
                   <tr>
-                    <td style="background: linear-gradient(135deg, #0D3B4C 0%, #145566 50%, #0F766E 100%); padding: 32px 40px; text-align: center;">
-                      <img src="https://migrei-compass.lovable.app/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png" alt="Migrei" style="height: 48px; width: auto;" />
-                      <p style="margin: 12px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
-                        Sua jornada de transição profissional
-                      </p>
+                    <td style="background: linear-gradient(145deg, #0D3B4C 0%, #0F5F5C 60%, #0F766E 100%); padding: 40px 48px 36px; text-align: center;">
+                      <img src="https://migrei-compass.lovable.app/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png" alt="Migrei" style="height: 44px; width: auto; display: inline-block;" />
+                    </td>
+                  </tr>
+                  
+                  <!-- Icon Section -->
+                  <tr>
+                    <td style="padding: 40px 48px 0; text-align: center;">
+                      <div style="display: inline-block; width: 64px; height: 64px; background: linear-gradient(145deg, #E6F7F5 0%, #D1FAE5 100%); border-radius: 16px; line-height: 64px; margin-bottom: 24px;">
+                        <span style="font-size: 28px;">🔐</span>
+                      </div>
                     </td>
                   </tr>
                   
                   <!-- Content -->
                   <tr>
-                    <td style="padding: 40px;">
-                      <h2 style="margin: 0 0 16px; color: #0D3B4C; font-size: 22px; font-weight: 600;">
+                    <td style="padding: 0 48px 40px;">
+                      <h1 style="margin: 0 0 16px; color: #0D3B4C; font-size: 26px; font-weight: 700; text-align: center; letter-spacing: -0.5px;">
                         Redefinir sua senha
-                      </h2>
-                      <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-                        Recebemos uma solicitação para redefinir a senha da sua conta. Clique no botão abaixo para criar uma nova senha:
+                      </h1>
+                      <p style="margin: 0 0 32px; color: #64748b; font-size: 16px; line-height: 1.7; text-align: center;">
+                        Recebemos uma solicitação para redefinir a senha da sua conta. Clique no botão abaixo para criar uma nova senha segura.
                       </p>
                       
                       <!-- CTA Button -->
                       <table role="presentation" style="width: 100%; border-collapse: collapse;">
                         <tr>
-                          <td style="text-align: center; padding: 8px 0 32px;">
+                          <td style="text-align: center; padding: 0 0 32px;">
                             <a href="${resetUrl}" 
-                               style="display: inline-block; background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; box-shadow: 0 4px 14px 0 rgba(20, 184, 166, 0.4);">
+                               style="display: inline-block; background: linear-gradient(145deg, #0F766E 0%, #14B8A6 100%); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 8px 24px -4px rgba(15, 118, 110, 0.45); letter-spacing: 0.3px;">
                               Redefinir Senha
                             </a>
                           </td>
                         </tr>
                       </table>
                       
-                      <p style="margin: 0 0 16px; color: #71717a; font-size: 14px; line-height: 1.6;">
-                        Este link expira em <strong style="color: #0D3B4C;">1 hora</strong>. Se você não solicitou a redefinição de senha, pode ignorar este email com segurança.
-                      </p>
-                      
-                      <hr style="border: none; border-top: 1px solid #e4e4e7; margin: 24px 0;">
-                      
-                      <p style="margin: 0; color: #a1a1aa; font-size: 12px; line-height: 1.5;">
-                        Se o botão não funcionar, copie e cole este link no seu navegador:<br>
-                        <a href="${resetUrl}" style="color: #0F766E; word-break: break-all;">${resetUrl}</a>
+                      <!-- Info Box -->
+                      <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                          <td style="background-color: #F8FAFC; border-radius: 12px; padding: 20px 24px; border: 1px solid #E2E8F0;">
+                            <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.6; text-align: center;">
+                              ⏱️ Este link expira em <strong style="color: #0D3B4C;">1 hora</strong><br>
+                              <span style="color: #94a3b8; font-size: 13px;">Se você não solicitou esta redefinição, ignore este email.</span>
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  
+                  <!-- Divider -->
+                  <tr>
+                    <td style="padding: 0 48px;">
+                      <div style="border-top: 1px solid #E2E8F0;"></div>
+                    </td>
+                  </tr>
+                  
+                  <!-- Fallback Link -->
+                  <tr>
+                    <td style="padding: 24px 48px 32px;">
+                      <p style="margin: 0; color: #94a3b8; font-size: 12px; line-height: 1.6; text-align: center;">
+                        Se o botão não funcionar, copie e cole este link:<br>
+                        <a href="${resetUrl}" style="color: #0F766E; word-break: break-all; font-size: 11px;">${resetUrl}</a>
                       </p>
                     </td>
                   </tr>
                   
                   <!-- Footer -->
                   <tr>
-                    <td style="background-color: #fafafa; padding: 24px 40px; text-align: center; border-top: 1px solid #e4e4e7;">
-                      <p style="margin: 0; color: #a1a1aa; font-size: 12px;">
+                    <td style="background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%); padding: 28px 48px; text-align: center; border-top: 1px solid #E2E8F0;">
+                      <p style="margin: 0 0 8px; color: #64748b; font-size: 13px; font-weight: 500;">
+                        Migrei
+                      </p>
+                      <p style="margin: 0; color: #94a3b8; font-size: 12px;">
+                        Sua jornada de transição profissional
+                      </p>
+                      <p style="margin: 16px 0 0; color: #cbd5e1; font-size: 11px;">
                         © ${new Date().getFullYear()} Migrei. Todos os direitos reservados.
                       </p>
                     </td>

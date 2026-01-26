@@ -457,20 +457,20 @@ export function MigreiCircle() {
                   <motion.div 
                     className={cn(
                       "flex items-center justify-center h-full w-full rounded-full",
-                      isCompleted && "ring-2 ring-white/30"
+                      isCompleted && "ring-2 ring-white/30",
+                      isCurrent && "ring-2 ring-white/50"
                     )}
                     style={{ 
-                      backgroundColor: isCompleted ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.2)',
-                      backdropFilter: 'blur(8px)'
+                      backgroundColor: isCurrent 
+                        ? 'rgba(255,255,255,0.25)' 
+                        : isCompleted 
+                          ? 'rgba(255,255,255,0.15)' 
+                          : 'rgba(255,255,255,0.2)',
                     }}
                     animate={isCurrent ? {
-                      boxShadow: [
-                        '0 0 0 0 rgba(255,255,255,0)',
-                        '0 0 0 6px rgba(255,255,255,0.15)',
-                        '0 0 0 0 rgba(255,255,255,0)'
-                      ]
+                      scale: [1, 1.1, 1],
                     } : {}}
-                    transition={{ duration: 2.5, repeat: Infinity }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
                   >
                     {isCompleted ? (
                       <Check 

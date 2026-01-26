@@ -48,13 +48,11 @@ const handler = async (req: Request): Promise<Response> => {
             <tr>
               <td style="padding: 40px 0;">
                 <table role="presentation" style="max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                  <!-- Header -->
+                  <!-- Header with Logo -->
                   <tr>
-                    <td style="background: linear-gradient(135deg, #0F766E 0%, #14B8A6 100%); padding: 32px 40px; text-align: center;">
-                      <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
-                        Migrei
-                      </h1>
-                      <p style="margin: 8px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
+                    <td style="background: linear-gradient(135deg, #0D3B4C 0%, #145566 50%, #0F766E 100%); padding: 32px 40px; text-align: center;">
+                      <img src="https://migrei-compass.lovable.app/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png" alt="Migrei" style="height: 48px; width: auto;" />
+                      <p style="margin: 12px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">
                         Sua jornada de transição profissional
                       </p>
                     </td>
@@ -63,7 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
                   <!-- Content -->
                   <tr>
                     <td style="padding: 40px;">
-                      <h2 style="margin: 0 0 16px; color: #18181b; font-size: 22px; font-weight: 600;">
+                      <h2 style="margin: 0 0 16px; color: #0D3B4C; font-size: 22px; font-weight: 600;">
                         Redefinir sua senha
                       </h2>
                       <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
@@ -83,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
                       </table>
                       
                       <p style="margin: 0 0 16px; color: #71717a; font-size: 14px; line-height: 1.6;">
-                        Este link expira em <strong>1 hora</strong>. Se você não solicitou a redefinição de senha, pode ignorar este email com segurança.
+                        Este link expira em <strong style="color: #0D3B4C;">1 hora</strong>. Se você não solicitou a redefinição de senha, pode ignorar este email com segurança.
                       </p>
                       
                       <hr style="border: none; border-top: 1px solid #e4e4e7; margin: 24px 0;">

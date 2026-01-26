@@ -52,7 +52,7 @@ const handler = async (req: Request): Promise<Response> => {
                   <!-- Header with Logo -->
                   <tr>
                     <td style="background: linear-gradient(145deg, #0D3B4C 0%, #0F5F5C 60%, #0F766E 100%); padding: 40px 48px 36px; text-align: center;">
-                      <img src="https://migrei-compass.lovable.app/lovable-uploads/dfb4152f-5ee8-460f-b92f-b4276968713b.png" alt="Migrei" style="height: 44px; width: auto; display: inline-block; filter: brightness(0) invert(1);" />
+                      <img src="https://migrei-compass.lovable.app/images/logo-migrei-white.png" alt="Migrei" style="height: 44px; width: auto; display: inline-block;" />
                     </td>
                   </tr>
                   

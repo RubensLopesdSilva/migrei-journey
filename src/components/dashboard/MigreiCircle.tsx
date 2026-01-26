@@ -164,15 +164,15 @@ export function MigreiCircle() {
     return () => clearInterval(interval);
   }, []);
 
-  // Dimensões responsivas - baseadas no viewport
-  const size = isMobile ? 300 : 480;
+  // Dimensões responsivas - baseadas no viewport (aumentado para desktop)
+  const size = isMobile ? 320 : 540;
   const center = size / 2;
-  const outerRadius = isMobile ? 138 : 220;
-  const innerRadius = isMobile ? 50 : 80;
+  const outerRadius = isMobile ? 145 : 250;
+  const innerRadius = isMobile ? 52 : 90;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = isMobile ? 4 : 5;
-  const cornerRadius = isMobile ? 8 : 10;
+  const cornerRadius = isMobile ? 8 : 12;
 
   // Criar caminho do segmento arredondado
   const createRoundedSegmentPath = (index: number, outer: number, inner: number) => {

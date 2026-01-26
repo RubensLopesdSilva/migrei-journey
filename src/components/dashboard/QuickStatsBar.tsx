@@ -19,6 +19,7 @@ interface StatItem {
   label: string;
   color: string;
   bgColor: string;
+  borderColor: string;
   description: string;
   isStreak?: boolean;
 }
@@ -29,22 +30,22 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.06,
-      delayChildren: 0.02
+      staggerChildren: 0.08,
+      delayChildren: 0.05
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 8, scale: 0.98 },
+  hidden: { opacity: 0, y: 6, scale: 0.96 },
   visible: { 
     opacity: 1, 
     y: 0, 
     scale: 1,
     transition: { 
       type: "spring" as const,
-      stiffness: 500,
-      damping: 30
+      stiffness: 400,
+      damping: 25
     }
   }
 };
@@ -64,7 +65,8 @@ export function QuickStatsBar({
       value: streak.current_streak.toString(),
       label: streak.current_streak === 1 ? "dia" : "dias",
       color: streak.current_streak >= 7 ? "hsl(25, 95%, 53%)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47%)" : "hsl(var(--muted-foreground))",
-      bgColor: streak.current_streak >= 7 ? "hsl(25, 95%, 53% / 0.15)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47% / 0.15)" : "hsl(var(--muted) / 0.5)",
+      bgColor: streak.current_streak >= 7 ? "hsl(25, 95%, 53% / 0.12)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47% / 0.12)" : "hsl(var(--muted) / 0.4)",
+      borderColor: streak.current_streak >= 7 ? "hsl(25, 95%, 53% / 0.25)" : streak.current_streak >= 3 ? "hsl(45, 93%, 47% / 0.25)" : "hsl(var(--border))",
       description: `🔥 Streak: ${streak.current_streak} dias seguidos${streak.longest_streak > streak.current_streak ? ` (recorde: ${streak.longest_streak})` : ""}`,
       isStreak: true,
     }] : []),
@@ -73,7 +75,8 @@ export function QuickStatsBar({
       value: points.toLocaleString(),
       label: "XP",
       color: "hsl(var(--phase-despertar))",
-      bgColor: "hsl(var(--phase-despertar) / 0.15)",
+      bgColor: "hsl(var(--phase-despertar) / 0.12)",
+      borderColor: "hsl(var(--phase-despertar) / 0.25)",
       description: "Pontos de experiência acumulados"
     },
     {
@@ -81,7 +84,8 @@ export function QuickStatsBar({
       value: days.toString(),
       label: "dias",
       color: "hsl(var(--primary))",
-      bgColor: "hsl(var(--primary) / 0.15)",
+      bgColor: "hsl(var(--primary) / 0.12)",
+      borderColor: "hsl(var(--primary) / 0.25)",
       description: "Dias na jornada"
     },
     {
@@ -89,7 +93,8 @@ export function QuickStatsBar({
       value: `${weeklyProgress}%`,
       label: "semana",
       color: "hsl(var(--phase-descobrir))",
-      bgColor: "hsl(var(--phase-descobrir) / 0.15)",
+      bgColor: "hsl(var(--phase-descobrir) / 0.12)",
+      borderColor: "hsl(var(--phase-descobrir) / 0.25)",
       description: "Progresso semanal"
     },
     {
@@ -97,14 +102,15 @@ export function QuickStatsBar({
       value: `F${currentPhase.number}`,
       label: currentPhase.name,
       color: "hsl(var(--phase-decidir))",
-      bgColor: "hsl(var(--phase-decidir) / 0.15)",
+      bgColor: "hsl(var(--phase-decidir) / 0.12)",
+      borderColor: "hsl(var(--phase-decidir) / 0.25)",
       description: `Fase ${currentPhase.number}: ${currentPhase.name}`
     }
   ];
 
   return (
     <motion.div 
-      className="flex items-center gap-2"
+      className="flex items-center gap-2 sm:gap-2.5"
       data-tour="stats-bar"
       variants={containerVariants}
       initial="hidden"
@@ -121,34 +127,44 @@ export function QuickStatsBar({
             variants={itemVariants}
             whileHover={{ 
               y: -2, 
-              boxShadow: "var(--shadow-md)",
+              scale: 1.02,
               transition: { duration: 0.15 }
             }}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-card border border-border rounded-xl cursor-default"
-            style={{ boxShadow: "var(--shadow-xs)" }}
+            className="flex items-center gap-2 px-3 py-2 bg-card/80 backdrop-blur-sm rounded-xl cursor-default transition-shadow duration-200"
+            style={{ 
+              border: `1px solid ${stat.borderColor}`,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            }}
           >
+            {/* Icon Container */}
             <motion.div 
-              className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ backgroundColor: stat.bgColor }}
+              className="h-8 w-8 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm"
+              style={{ 
+                backgroundColor: stat.bgColor,
+                border: `1px solid ${stat.borderColor}`
+              }}
               animate={stat.isStreak ? {
-                rotate: [-5, 5, -5],
+                rotate: [-3, 3, -3],
                 scale: [1, 1.05, 1],
               } : {}}
-              transition={{ repeat: Infinity, duration: 1.5 }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
             >
               <stat.icon 
-                className="h-3 w-3 sm:h-3.5 sm:w-3.5" 
+                className="h-4 w-4" 
                 style={{ color: stat.color }}
+                strokeWidth={2.5}
               />
             </motion.div>
+            
+            {/* Value and Label */}
             <div className="flex items-baseline gap-1">
               <span 
-                className="text-sm sm:text-base font-bold tabular-nums"
+                className="text-sm sm:text-base font-bold tabular-nums leading-none"
                 style={{ color: stat.color }}
               >
                 {stat.value}
               </span>
-              <span className="text-[10px] sm:text-xs text-muted-foreground font-medium hidden sm:inline">
+              <span className="text-[10px] sm:text-xs text-muted-foreground/80 font-medium hidden sm:inline leading-none">
                 {stat.label}
               </span>
             </div>

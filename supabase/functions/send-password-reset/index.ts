@@ -86,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
                   <!-- Header with Logo -->
                   <tr>
                     <td style="background: linear-gradient(145deg, #0D3B4C 0%, #0F5F5C 60%, #0F766E 100%); padding: 40px 48px 36px; text-align: center;">
-                      <img src="https://migrei-compass.lovable.app/images/logo-migrei-white.png" alt="Migrei" style="height: 44px; width: auto; display: inline-block;" />
+                      <img src="https://zyxuqoxczkyufbngvcgx.supabase.co/storage/v1/object/public/email-assets/logo-migrei-white.png?v=1" alt="Migrei" style="height: 44px; width: auto; display: inline-block;" />
                     </td>
                   </tr>
                   

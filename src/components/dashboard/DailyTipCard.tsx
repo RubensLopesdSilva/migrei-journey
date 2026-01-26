@@ -37,12 +37,24 @@ export function DailyTipCard() {
       const today = new Date().toISOString().split('T')[0];
       const cacheKey = `daily_tips_v2_${today}_${phaseNumber}`;
       
+      // Clear old format cache keys
+      const oldCacheKey = `daily_tip_${today}_${phaseNumber}`;
+      localStorage.removeItem(oldCacheKey);
+      
       if (!forceRefresh) {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-          setTips(JSON.parse(cached));
-          setLoading(false);
-          return;
+          try {
+            const parsedCache = JSON.parse(cached);
+            // Validate cache has new format
+            if (parsedCache.softSkill && parsedCache.hardSkill) {
+              setTips(parsedCache);
+              setLoading(false);
+              return;
+            }
+          } catch {
+            // Invalid cache, continue to fetch
+          }
         }
       }
 
@@ -52,11 +64,15 @@ export function DailyTipCard() {
 
       if (error) throw error;
 
-      const tipsData: DailyTips = data;
-      setTips(tipsData);
-      
-      // Cache for today
-      localStorage.setItem(cacheKey, JSON.stringify(tipsData));
+      // Validate response structure
+      if (data && data.softSkill && data.hardSkill) {
+        const tipsData: DailyTips = data;
+        setTips(tipsData);
+        // Cache for today
+        localStorage.setItem(cacheKey, JSON.stringify(tipsData));
+      } else {
+        throw new Error('Invalid response format');
+      }
       
     } catch (error) {
       console.error("Failed to fetch daily tips:", error);

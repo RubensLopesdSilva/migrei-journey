@@ -94,9 +94,9 @@ export default function Auth() {
     setErrors({});
 
     try {
-      // Trigger Supabase password reset - the email hook will send our custom branded email
       const resetUrl = `${window.location.origin}/redefinir-senha`;
       
+      // First trigger Supabase to create the recovery token
       const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: resetUrl,
       });
@@ -109,6 +109,14 @@ export default function Auth() {
         });
         return;
       }
+
+      // Also send our custom branded email via Edge Function
+      await supabase.functions.invoke('send-password-reset', {
+        body: {
+          email,
+          resetUrl,
+        },
+      });
 
       setIsResetEmailSent(true);
       toast({

@@ -41,7 +41,7 @@ const Index = () => {
 
         {/* Main Content Grid */}
         <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mt-6"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mt-6 lg:items-start"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -49,12 +49,12 @@ const Index = () => {
           {/* Left: Migrei Circle */}
           <div className="lg:col-span-8 order-2 lg:order-1">
             <motion.div 
-              className="relative w-full flex justify-center items-center"
+              className="relative w-full flex justify-center items-center h-full"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <div className="relative p-4 sm:p-6 lg:p-8 w-full">
+              <div className="relative p-4 sm:p-6 lg:p-8 w-full h-full">
                 <div 
                   className="absolute inset-0 bg-gradient-to-br from-card to-card/60 rounded-3xl border border-border/40"
                   style={{
@@ -68,8 +68,8 @@ const Index = () => {
             </motion.div>
           </div>
 
-          {/* Right: Action Cards - stacked */}
-          <div className="lg:col-span-4 flex flex-col gap-4 order-1 lg:order-2">
+          {/* Right: Action Cards - stacked and aligned */}
+          <div className="lg:col-span-4 flex flex-col gap-3 order-1 lg:order-2 lg:self-stretch">
             {loading ? (
               <>
                 <Skeleton className="h-14 rounded-2xl" />

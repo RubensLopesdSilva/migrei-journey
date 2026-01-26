@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Heart, Wrench, RefreshCw, Sparkles } from "lucide-react";
+import { Heart, Wrench, RefreshCw, Sparkles, Play, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useProgress } from "@/hooks/useProgress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
+import { PHASE_COLORS } from "@/data/phaseIntroData";
 
 interface TipData {
   tip: string;
@@ -22,8 +24,30 @@ export function DailyTipCard() {
   const [tips, setTips] = useState<DailyTips | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const navigate = useNavigate();
 
   const phaseNumber = userProgress?.current_phase_number || 1;
+  const hasStartedPhase = phaseNumber > 0;
+
+  const phaseRoutes: Record<number, string> = {
+    1: '/fase-1-despertar',
+    2: '/fase-2-descobrir',
+    3: '/fase-3-decidir',
+    4: '/fase-4-desenvolver',
+    5: '/fase-5-deslanchar',
+    6: '/fase-6-desfrutar'
+  };
+
+  const phaseNames: Record<number, string> = {
+    1: 'Despertar',
+    2: 'Descobrir',
+    3: 'Decidir',
+    4: 'Desenvolver',
+    5: 'Deslanchar',
+    6: 'Desfrutar'
+  };
+
+  const currentPhaseColor = PHASE_COLORS[phaseNumber] || PHASE_COLORS[1];
 
   const fetchTips = async (forceRefresh = false) => {
     if (forceRefresh) {
@@ -202,6 +226,21 @@ export function DailyTipCard() {
             </AnimatePresence>
           </motion.div>
         </div>
+
+        {/* CTA Button - Continue Phase */}
+        <motion.button
+          onClick={() => navigate(phaseRoutes[phaseNumber])}
+          className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-white text-xs font-semibold transition-all shadow-md hover:shadow-lg"
+          style={{ 
+            background: `linear-gradient(135deg, ${currentPhaseColor} 0%, ${currentPhaseColor}dd 100%)`,
+          }}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+        >
+          <Play className="h-3.5 w-3.5" fill="currentColor" />
+          <span>Continuar Fase {phaseNumber}: {phaseNames[phaseNumber]}</span>
+          <ArrowRight className="h-3.5 w-3.5 ml-auto" />
+        </motion.button>
       </div>
     </motion.div>
   );

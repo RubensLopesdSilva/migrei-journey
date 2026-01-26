@@ -5,63 +5,52 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Career migration tips database - practical, under 50 chars each
-const careerTips = [
-  // Networking
-  "Conecte com 3 pessoas da nova área por semana",
-  "Comente posts de líderes da sua área-alvo",
-  "Peça 15 min de café virtual, não emprego",
-  "Agradeça quem te ajudou essa semana",
-  "Participe de eventos online da nova área",
-  
-  // LinkedIn & Personal Branding
-  "Atualize seu headline no LinkedIn hoje",
-  "Publique um aprendizado da sua transição",
-  "Peça uma recomendação no LinkedIn",
-  "Adicione skills da nova área ao perfil",
-  "Siga hashtags relevantes da nova carreira",
-  
-  // Skills & Learning
-  "Dedique 30 min/dia à nova habilidade",
-  "Complete 1 módulo de curso por semana",
-  "Aplique o que aprendeu em um projeto",
-  "Documente suas conquistas de aprendizado",
-  "Ensine algo que aprendeu recentemente",
-  
-  // Mindset
-  "Celebre pequenas vitórias diárias",
-  "Anote 3 gratidões da sua jornada",
-  "Visualize você na nova carreira",
-  "Aceite que errar faz parte do processo",
-  "Compare-se só com você de ontem",
-  
-  // Job Search
-  "Candidate-se a 5 vagas por semana",
-  "Personalize cada candidatura enviada",
-  "Pesquise a empresa antes da entrevista",
-  "Prepare 3 histórias de sucesso",
-  "Faça follow-up após cada entrevista",
-  
-  // Self-care
-  "Cuide do sono durante a transição",
-  "Mantenha uma rotina mesmo sem emprego",
-  "Converse com quem já fez transição",
-  "Tire pausas para evitar burnout",
-  "Exercite-se para manter energia alta",
-  
-  // Strategy
-  "Defina sua meta SMART do mês",
-  "Revise seu plano de 90 dias",
-  "Identifique 1 gap para desenvolver",
-  "Mapeie empresas-alvo da nova área",
-  "Crie um portfólio mesmo sem emprego",
-  
-  // Action
-  "Faça algo pela transição agora",
-  "Envie 1 mensagem de networking hoje",
-  "Atualize seu currículo esta semana",
-  "Pratique seu pitch de 30 segundos",
-  "Pesquise 1 vaga que te interesse"
+// Soft Skills tips - comportamentais e interpessoais
+const softSkillsTips = [
+  "Pratique escuta ativa em conversas",
+  "Peça feedback construtivo hoje",
+  "Comunique com clareza e empatia",
+  "Colabore com alguém novo hoje",
+  "Gerencie seu tempo com prioridades",
+  "Adapte-se a uma mudança hoje",
+  "Resolva um conflito com diplomacia",
+  "Demonstre proatividade no trabalho",
+  "Desenvolva sua inteligência emocional",
+  "Pratique resiliência ante desafios",
+  "Lidere pelo exemplo hoje",
+  "Negocie com foco em ganha-ganha",
+  "Seja flexível com planos hoje",
+  "Melhore sua comunicação escrita",
+  "Cultive relacionamentos profissionais",
+  "Aceite críticas como crescimento",
+  "Delegue uma tarefa com clareza",
+  "Inspire confiança com consistência",
+  "Pratique a arte de persuadir",
+  "Gerencie expectativas com clareza",
+];
+
+// Hard Skills tips - técnicas e específicas
+const hardSkillsTips = [
+  "Aprenda uma função nova do Excel",
+  "Complete um módulo de curso online",
+  "Pratique idiomas por 15 minutos",
+  "Atualize seu portfólio digital",
+  "Estude uma ferramenta da nova área",
+  "Crie um projeto-piloto pessoal",
+  "Obtenha uma certificação gratuita",
+  "Analise dados para tomar decisões",
+  "Aprenda um atalho de produtividade",
+  "Documente um processo que domina",
+  "Estude tendências do seu setor",
+  "Pratique apresentações com slides",
+  "Automatize uma tarefa repetitiva",
+  "Aprenda sobre IA na sua área",
+  "Melhore sua escrita técnica",
+  "Estude métricas do seu mercado",
+  "Crie conteúdo sobre sua expertise",
+  "Faça um curso de gestão de projetos",
+  "Aprenda básico de análise de dados",
+  "Desenvolva uma skill digital nova",
 ];
 
 serve(async (req) => {
@@ -74,88 +63,125 @@ serve(async (req) => {
     
     // Get date-based seed for daily consistency
     const today = new Date().toISOString().split('T')[0];
-    const { phaseNumber = 1, userName = '' } = await req.json().catch(() => ({}));
+    const { phaseNumber = 1, tipType = 'both' } = await req.json().catch(() => ({}));
     
-    // Try AI-generated tip first, fallback to database
+    const phaseContext = {
+      1: "despertar - tomando consciência da necessidade de mudança",
+      2: "descobrir - fazendo autoconhecimento e diagnóstico",
+      3: "decidir - definindo rota e planejamento",
+      4: "desenvolver - construindo materiais e presença",
+      5: "deslanchar - buscando oportunidades ativamente",
+      6: "desfrutar - consolidando conquistas"
+    };
+
+    let softSkillTip = "";
+    let hardSkillTip = "";
+    let softSource: 'ai' | 'database' | 'fallback' = 'database';
+    let hardSource: 'ai' | 'database' | 'fallback' = 'database';
+
+    // Try AI-generated tips first
     if (LOVABLE_API_KEY) {
       try {
-        const phaseContext = {
-          1: "despertar - tomando consciência da necessidade de mudança",
-          2: "descobrir - fazendo autoconhecimento e diagnóstico",
-          3: "decidir - definindo rota e planejamento",
-          4: "desenvolver - construindo materiais e presença",
-          5: "deslanchar - buscando oportunidades ativamente",
-          6: "desfrutar - consolidando conquistas"
-        };
+        const generateTip = async (skillType: 'soft' | 'hard') => {
+          const skillDescription = skillType === 'soft' 
+            ? "SOFT SKILL (comportamental/interpessoal): comunicação, liderança, trabalho em equipe, adaptabilidade, inteligência emocional, resolução de conflitos"
+            : "HARD SKILL (técnica/específica): Excel, ferramentas digitais, análise de dados, idiomas, certificações, gestão de projetos";
 
-        const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-2.5-flash",
-            messages: [
-              {
-                role: "system",
-                content: `Você é um coach de transição de carreira. Gere UMA dica prática e acionável para alguém em transição de carreira.
+          const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${LOVABLE_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "google/gemini-2.5-flash",
+              messages: [
+                {
+                  role: "system",
+                  content: `Você é um coach de transição de carreira. Gere UMA dica prática de ${skillType === 'soft' ? 'SOFT SKILL' : 'HARD SKILL'}.
+
+TIPO DE HABILIDADE:
+${skillDescription}
 
 REGRAS OBRIGATÓRIAS:
-- Máximo 50 caracteres
+- Máximo 40 caracteres
 - Em português brasileiro
-- Ação específica e prática
+- Ação específica e prática para hoje
 - Tom motivador mas direto
 - Sem emojis
 - Comece com verbo de ação
 
-O usuário está na fase: ${phaseContext[phaseNumber as keyof typeof phaseContext] || phaseContext[1]}
-Data de hoje: ${today}
+Fase do usuário: ${phaseContext[phaseNumber as keyof typeof phaseContext] || phaseContext[1]}
 
 Responda APENAS com a dica, nada mais.`
-              },
-              {
-                role: "user",
-                content: `Gere uma dica de carreira para hoje (${today}). Seja específico e prático.`
-              }
-            ],
-            max_tokens: 60,
-            temperature: 0.7,
-          }),
-        });
+                },
+                {
+                  role: "user",
+                  content: `Gere uma dica de ${skillType} skill para hoje (${today}). Seja específico e prático.`
+                }
+              ],
+              max_tokens: 50,
+              temperature: 0.8,
+            }),
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          const aiTip = data.choices?.[0]?.message?.content?.trim();
-          
-          if (aiTip && aiTip.length <= 55) {
-            console.log("AI tip generated:", aiTip);
-            return new Response(
-              JSON.stringify({ 
-                tip: aiTip,
-                source: 'ai',
-                date: today 
-              }),
-              { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-            );
+          if (response.ok) {
+            const data = await response.json();
+            const tip = data.choices?.[0]?.message?.content?.trim();
+            if (tip && tip.length <= 50) {
+              return { tip, source: 'ai' as const };
+            }
           }
+          return null;
+        };
+
+        // Generate both tips in parallel
+        const [softResult, hardResult] = await Promise.all([
+          generateTip('soft'),
+          generateTip('hard')
+        ]);
+
+        if (softResult) {
+          softSkillTip = softResult.tip;
+          softSource = 'ai';
         }
+        if (hardResult) {
+          hardSkillTip = hardResult.tip;
+          hardSource = 'ai';
+        }
+
       } catch (aiError) {
         console.error("AI generation failed, using fallback:", aiError);
       }
     }
 
-    // Fallback: Use date + phase as seed for consistent daily tip
+    // Fallback: Use date + phase as seed for consistent daily tips
     const seed = today.split('-').reduce((acc, n) => acc + parseInt(n), 0) + phaseNumber;
-    const tipIndex = seed % careerTips.length;
-    const fallbackTip = careerTips[tipIndex];
+    
+    if (!softSkillTip) {
+      const softIndex = seed % softSkillsTips.length;
+      softSkillTip = softSkillsTips[softIndex];
+      softSource = 'database';
+    }
+    
+    if (!hardSkillTip) {
+      const hardIndex = (seed + 7) % hardSkillsTips.length; // Different offset for variety
+      hardSkillTip = hardSkillsTips[hardIndex];
+      hardSource = 'database';
+    }
 
-    console.log("Using fallback tip:", fallbackTip);
+    console.log("Tips generated:", { softSkillTip, hardSkillTip, softSource, hardSource });
     
     return new Response(
       JSON.stringify({ 
-        tip: fallbackTip,
-        source: 'database',
+        softSkill: {
+          tip: softSkillTip,
+          source: softSource,
+        },
+        hardSkill: {
+          tip: hardSkillTip,
+          source: hardSource,
+        },
         date: today 
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -167,8 +193,14 @@ Responda APENAS com a dica, nada mais.`
     // Ultimate fallback
     return new Response(
       JSON.stringify({ 
-        tip: "Faça algo pela transição hoje",
-        source: 'fallback',
+        softSkill: {
+          tip: "Pratique escuta ativa hoje",
+          source: 'fallback',
+        },
+        hardSkill: {
+          tip: "Complete um módulo de curso",
+          source: 'fallback',
+        },
         date: new Date().toISOString().split('T')[0]
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }

@@ -7,7 +7,7 @@ import { DailyTipCard } from "@/components/dashboard/DailyTipCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 import { PhaseWelcomeModal } from "@/components/dashboard/PhaseWelcomeModal";
-import { ReengagementCard } from "@/components/dashboard/ReengagementCard";
+
 import { UpgradeNudge, useUpgradeNudgeTrigger } from "@/components/subscription/UpgradeNudge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
@@ -86,8 +86,6 @@ const Index = () => {
                   <DailyTipCard />
                 </motion.div>
 
-                {/* Reengagement Card - for inactive users */}
-                <ReengagementCard />
 
                 {/* Upgrade Nudge */}
                 {nudgeData && (

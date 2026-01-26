@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { MigreiCircle } from "@/components/dashboard/MigreiCircle";
 import { MissionCard } from "@/components/dashboard/MissionCard";
 import { NetworkingCard } from "@/components/dashboard/NetworkingCard";
+import { DailyTipCard } from "@/components/dashboard/DailyTipCard";
 import { HeroMotivational } from "@/components/dashboard/HeroMotivational";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 import { PhaseWelcomeModal } from "@/components/dashboard/PhaseWelcomeModal";
@@ -28,7 +29,6 @@ const Index = () => {
   const nudgeData = shouldShowNudge();
 
   const handleTourComplete = () => {
-    // Show phase modal after tour completes
     setTimeout(() => setShowPhaseModal(true), 300);
   };
 
@@ -38,14 +38,14 @@ const Index = () => {
         {/* Top Bar: Hero (greeting + stats) */}
         <HeroMotivational />
 
-        {/* Main Content Grid - Circle takes most space, cards on right */}
+        {/* Main Content Grid */}
         <motion.div 
           className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mt-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {/* Left: Migrei Circle - Hero element, fills most space */}
+          {/* Left: Migrei Circle */}
           <div className="lg:col-span-8 order-2 lg:order-1">
             <motion.div 
               className="relative w-full flex justify-center items-center"
@@ -53,17 +53,13 @@ const Index = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              {/* Clean container with subtle elevation */}
               <div className="relative p-4 sm:p-6 lg:p-8 w-full">
-                {/* Subtle background */}
                 <div 
                   className="absolute inset-0 bg-gradient-to-br from-card to-card/60 rounded-3xl border border-border/40"
                   style={{
                     boxShadow: 'var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.05)'
                   }}
                 />
-                
-                {/* The Circle - main element */}
                 <div className="relative z-10 flex justify-center">
                   <MigreiCircle />
                 </div>
@@ -71,19 +67,29 @@ const Index = () => {
             </motion.div>
           </div>
 
-          {/* Right: Action Cards - stacked to fill height */}
+          {/* Right: Action Cards - stacked */}
           <div className="lg:col-span-4 flex flex-col gap-4 order-1 lg:order-2">
             {loading ? (
               <>
-                <Skeleton className="flex-1 min-h-[200px] rounded-2xl" />
-                <Skeleton className="flex-1 min-h-[200px] rounded-2xl" />
+                <Skeleton className="h-14 rounded-2xl" />
+                <Skeleton className="flex-1 min-h-[180px] rounded-2xl" />
+                <Skeleton className="flex-1 min-h-[180px] rounded-2xl" />
               </>
             ) : (
               <>
+                {/* Daily Tip Card - new AI widget */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <DailyTipCard />
+                </motion.div>
+
                 {/* Reengagement Card - for inactive users */}
                 <ReengagementCard />
 
-                {/* Upgrade Nudge - appears after achievements for free users */}
+                {/* Upgrade Nudge */}
                 {nudgeData && (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
@@ -97,22 +103,22 @@ const Index = () => {
                   </motion.div>
                 )}
 
-                {/* Missions Card - Phase contextual */}
+                {/* Missions Card */}
+                <motion.div
+                  className="flex-1"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.35, duration: 0.4 }}
+                >
+                  <MissionCard />
+                </motion.div>
+
+                {/* Networking Card */}
                 <motion.div
                   className="flex-1"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4, duration: 0.4 }}
-                >
-                  <MissionCard />
-                </motion.div>
-
-                {/* Networking Card - Same height as Missions */}
-                <motion.div
-                  className="flex-1"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
                 >
                   <NetworkingCard />
                 </motion.div>
@@ -122,10 +128,10 @@ const Index = () => {
         </motion.div>
       </PageContent>
 
-      {/* Onboarding Tour - only on first visit */}
+      {/* Onboarding Tour */}
       <DashboardTour onTourComplete={handleTourComplete} />
       
-      {/* Phase Welcome Modal - shown after tour completes */}
+      {/* Phase Welcome Modal */}
       <PhaseWelcomeModal forceOpen={showPhaseModal} />
 
       {/* Floating Support Button */}

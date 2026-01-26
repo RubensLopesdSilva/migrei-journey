@@ -83,9 +83,77 @@ serve(async (req) => {
     if (LOVABLE_API_KEY) {
       try {
         const generateTip = async (skillType: 'soft' | 'hard') => {
-          const skillDescription = skillType === 'soft' 
-            ? "SOFT SKILL (comportamental/interpessoal): comunicação, liderança, trabalho em equipe, adaptabilidade, inteligência emocional, resolução de conflitos"
-            : "HARD SKILL (técnica/específica): Excel, ferramentas digitais, análise de dados, idiomas, certificações, gestão de projetos";
+          const phaseInfo = phaseContext[phaseNumber as keyof typeof phaseContext] || phaseContext[1];
+          
+          const softSkillPrompt = `Você é um coach especialista em transição de carreira com 20 anos de experiência.
+
+CONTEXTO DO USUÁRIO:
+- Fase atual: ${phaseInfo}
+- Momento: Profissional em transição buscando recolocação ou mudança de área
+
+OBJETIVO:
+Gerar UMA micro-ação de SOFT SKILL que o usuário pode executar HOJE para desenvolver habilidades comportamentais essenciais.
+
+EXEMPLOS DE SOFT SKILLS RELEVANTES:
+- Comunicação assertiva e escuta ativa
+- Networking estratégico e construção de relacionamentos
+- Inteligência emocional e autogestão
+- Adaptabilidade e resiliência
+- Liderança e influência sem autoridade
+- Negociação e resolução de conflitos
+- Pensamento crítico e tomada de decisão
+
+REGRAS OBRIGATÓRIAS:
+1. MÁXIMO 40 caracteres (isso é crítico!)
+2. Começar com verbo no imperativo (Pratique, Peça, Identifique, etc.)
+3. Ser específico e executável em poucos minutos
+4. Ter impacto direto na empregabilidade
+5. Sem emojis, sem pontuação final
+6. Português brasileiro natural
+
+EXEMPLOS BOM vs RUIM:
+✓ "Peça feedback a um ex-colega hoje"
+✓ "Pratique seu pitch em 30 segundos"
+✓ "Identifique 3 pontos fortes únicos"
+✗ "Melhore sua comunicação" (vago demais)
+✗ "Seja mais empático" (não é ação específica)
+
+Responda APENAS com a dica, nada mais.`;
+
+          const hardSkillPrompt = `Você é um coach especialista em transição de carreira com 20 anos de experiência.
+
+CONTEXTO DO USUÁRIO:
+- Fase atual: ${phaseInfo}
+- Momento: Profissional em transição buscando recolocação ou mudança de área
+
+OBJETIVO:
+Gerar UMA micro-ação de HARD SKILL que o usuário pode executar HOJE para desenvolver competências técnicas valorizadas no mercado.
+
+EXEMPLOS DE HARD SKILLS RELEVANTES:
+- Excel/Planilhas avançadas e análise de dados
+- Ferramentas de IA (ChatGPT, Copilot, automação)
+- LinkedIn e marca pessoal digital
+- Gestão de projetos (metodologias ágeis, Kanban)
+- Idiomas (especialmente inglês profissional)
+- Ferramentas de apresentação e storytelling
+- Certificações e cursos reconhecidos
+
+REGRAS OBRIGATÓRIAS:
+1. MÁXIMO 40 caracteres (isso é crítico!)
+2. Começar com verbo no imperativo (Aprenda, Complete, Teste, etc.)
+3. Ser específico e executável em poucos minutos
+4. Mencionar ferramenta ou técnica específica quando possível
+5. Sem emojis, sem pontuação final
+6. Português brasileiro natural
+
+EXEMPLOS BOM vs RUIM:
+✓ "Aprenda PROCV no Excel em 10min"
+✓ "Teste o ChatGPT para currículo"
+✓ "Otimize 3 palavras-chave no LinkedIn"
+✗ "Estude mais tecnologia" (vago demais)
+✗ "Faça um curso" (não é ação específica)
+
+Responda APENAS com a dica, nada mais.`;
 
           const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
             method: "POST",
@@ -98,30 +166,15 @@ serve(async (req) => {
               messages: [
                 {
                   role: "system",
-                  content: `Você é um coach de transição de carreira. Gere UMA dica prática de ${skillType === 'soft' ? 'SOFT SKILL' : 'HARD SKILL'}.
-
-TIPO DE HABILIDADE:
-${skillDescription}
-
-REGRAS OBRIGATÓRIAS:
-- Máximo 40 caracteres
-- Em português brasileiro
-- Ação específica e prática para hoje
-- Tom motivador mas direto
-- Sem emojis
-- Comece com verbo de ação
-
-Fase do usuário: ${phaseContext[phaseNumber as keyof typeof phaseContext] || phaseContext[1]}
-
-Responda APENAS com a dica, nada mais.`
+                  content: skillType === 'soft' ? softSkillPrompt : hardSkillPrompt
                 },
                 {
                   role: "user",
-                  content: `Gere uma dica de ${skillType} skill para hoje (${today}). Seja específico e prático.`
+                  content: `Data: ${today}. Gere uma dica única e assertiva.`
                 }
               ],
-              max_tokens: 50,
-              temperature: 0.8,
+              max_tokens: 60,
+              temperature: 0.7,
             }),
           });
 

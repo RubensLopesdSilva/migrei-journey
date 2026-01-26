@@ -165,10 +165,10 @@ export function MigreiCircle() {
   }, []);
 
   // Dimensões responsivas - baseadas no viewport (aumentado para desktop)
-  const size = isMobile ? 320 : 540;
+  const size = isMobile ? 320 : 580;
   const center = size / 2;
-  const outerRadius = isMobile ? 145 : 250;
-  const innerRadius = isMobile ? 52 : 90;
+  const outerRadius = isMobile ? 145 : 268;
+  const innerRadius = isMobile ? 52 : 95;
   const numSegments = 6;
   const segmentAngle = 360 / numSegments;
   const gapAngle = isMobile ? 4 : 5;

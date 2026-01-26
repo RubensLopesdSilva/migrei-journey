@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -11,7 +12,7 @@ const corsHeaders = {
 
 interface PasswordResetRequest {
   email: string;
-  resetUrl: string;
+  redirectTo: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -21,15 +22,48 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { email, resetUrl }: PasswordResetRequest = await req.json();
+    const { email, redirectTo }: PasswordResetRequest = await req.json();
 
-    console.log("Sending password reset email to:", email);
-    console.log("Reset URL:", resetUrl);
+    console.log("Generating password reset link for:", email);
+    console.log("Redirect to:", redirectTo);
 
     // Validate required fields
-    if (!email || !resetUrl) {
-      throw new Error("Missing required fields: email and resetUrl");
+    if (!email || !redirectTo) {
+      throw new Error("Missing required fields: email and redirectTo");
     }
+
+    // Create Supabase admin client to generate the recovery link
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
+    );
+
+    // Generate the recovery link using admin API
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: "recovery",
+      email: email,
+      options: {
+        redirectTo: redirectTo,
+      },
+    });
+
+    if (linkError) {
+      console.error("Error generating recovery link:", linkError);
+      throw new Error(`Failed to generate recovery link: ${linkError.message}`);
+    }
+
+    if (!linkData?.properties?.action_link) {
+      throw new Error("No recovery link generated");
+    }
+
+    const resetUrl = linkData.properties.action_link;
+    console.log("Generated reset URL successfully");
 
     const emailResponse = await resend.emails.send({
       from: "Migrei <noreply@migrei.org>",

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { 
   Lightbulb, 
   Search, 
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { AgentCenterAvatar } from "./AgentCenterAvatar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { PHASE_COLORS } from "@/data/phaseIntroData";
+import { PhaseActionModal } from "./PhaseActionModal";
 
 interface Phase {
   id: string;
@@ -129,6 +130,8 @@ export function MigreiCircle() {
   const [isEntered, setIsEntered] = useState(false);
   const [pulseScale, setPulseScale] = useState(1);
   const [celebratingPhase, setCelebratingPhase] = useState<string | null>(null);
+  const [selectedPhase, setSelectedPhase] = useState<Phase | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Fase atual do banco
   const currentPhaseId = currentPhase?.slug || "despertar";
@@ -252,9 +255,21 @@ export function MigreiCircle() {
 
   const handlePhaseClick = (phase: Phase) => {
     const { isLocked } = getPhaseVisualState(phase);
-    if (!isLocked) {
-      navigate(phase.route);
-    }
+    // Abrir modal para todas as fases (mostra bloqueado se necessário)
+    setSelectedPhase(phase);
+    setModalOpen(true);
+  };
+
+  const getSelectedPhaseStatus = () => {
+    if (!selectedPhase) return 'locked';
+    const progress = phaseProgressMap[selectedPhase.id];
+    return (progress?.status || 'locked') as 'locked' | 'available' | 'in_progress' | 'completed';
+  };
+
+  const getSelectedPhaseProgress = () => {
+    if (!selectedPhase) return 0;
+    const progress = phaseProgressMap[selectedPhase.id];
+    return progress?.progress || 0;
   };
 
   return (
@@ -567,6 +582,15 @@ export function MigreiCircle() {
           );
         })}
       </motion.div>
+
+      {/* Modal de ação da fase */}
+      <PhaseActionModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        phase={selectedPhase}
+        status={getSelectedPhaseStatus()}
+        progress={getSelectedPhaseProgress()}
+      />
     </motion.div>
   );
 }

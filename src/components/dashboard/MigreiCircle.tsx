@@ -324,10 +324,11 @@ export function MigreiCircle() {
               </linearGradient>
             ))}
             
-            {/* Glow filter para fase atual */}
+            {/* Glow filter mais intenso para fase atual */}
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+              <feGaussianBlur stdDeviation="6" result="coloredBlur" />
               <feMerge>
+                <feMergeNode in="coloredBlur" />
                 <feMergeNode in="coloredBlur" />
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
@@ -352,42 +353,64 @@ export function MigreiCircle() {
 
             return (
               <g key={phase.id}>
-                {/* Glow da fase atual */}
+                {/* Glow da fase atual - mais intenso e visível */}
                 {isCurrent && (
-                  <motion.path
-                    d={createRoundedSegmentPath(index, outerRadius + 8, innerRadius - 4)}
-                    fill={phase.glowColor}
-                    initial={{ opacity: 0 }}
-                    animate={{ 
-                      opacity: [0.3, 0.5, 0.3],
-                      scale: [1, 1.02, 1]
-                    }}
-                    transition={{ 
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    style={{ transformOrigin: `${center}px ${center}px` }}
-                  />
+                  <>
+                    {/* Outer glow ring */}
+                    <motion.path
+                      d={createRoundedSegmentPath(index, outerRadius + 12, innerRadius - 6)}
+                      fill={phase.bgColor}
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: [0.2, 0.4, 0.2],
+                        scale: [1, 1.03, 1]
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      style={{ transformOrigin: `${center}px ${center}px` }}
+                    />
+                    {/* Inner pulse */}
+                    <motion.path
+                      d={createRoundedSegmentPath(index, outerRadius + 6, innerRadius - 3)}
+                      fill={phase.glowColor}
+                      initial={{ opacity: 0 }}
+                      animate={{ 
+                        opacity: [0.4, 0.7, 0.4],
+                        scale: [1, 1.02, 1]
+                      }}
+                      transition={{ 
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      style={{ transformOrigin: `${center}px ${center}px` }}
+                    />
+                  </>
                 )}
 
                 {/* Segmento principal */}
                 <motion.path
                   d={createRoundedSegmentPath(index, outerRadius, innerRadius)}
-                  fill={isCompleted ? phase.completedColor : `url(#gradient-${phase.id})`}
+                  fill={isCompleted ? phase.completedColor : isCurrent ? phase.bgColor : `url(#gradient-${phase.id})`}
                   className={cn(
                     "transition-all duration-300",
                     isLocked ? "cursor-not-allowed" : "cursor-pointer"
                   )}
                   style={{
-                    filter: isCurrent ? 'url(#glow)' : isCompleted ? 'url(#completed)' : 'none',
+                    filter: isCompleted ? 'url(#completed)' : 'none',
                     transformOrigin: `${center}px ${center}px`,
                   }}
                   initial={{ scale: 1, opacity: segmentOpacity }}
                   animate={{ 
-                    scale: segmentScale,
-                    opacity: segmentOpacity,
+                    scale: isCurrent ? [1, 1.02, 1] : segmentScale,
+                    opacity: isCurrent ? 1 : segmentOpacity,
                   }}
+                  transition={isCurrent ? {
+                    scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                  } : undefined}
                   whileHover={!isLocked ? { 
                     scale: 1.04,
                     transition: { duration: 0.2 }

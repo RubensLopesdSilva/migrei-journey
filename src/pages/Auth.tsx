@@ -96,27 +96,32 @@ export default function Auth() {
     try {
       const resetUrl = `${window.location.origin}/redefinir-senha`;
       
-      // First trigger Supabase to create the recovery token
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: resetUrl,
+      // Use our custom Edge Function that generates a valid recovery link via admin API
+      // and sends the branded email - this bypasses the default Supabase email
+      const { data, error: functionError } = await supabase.functions.invoke('send-password-reset', {
+        body: {
+          email,
+          redirectTo: resetUrl,
+        },
       });
 
-      if (resetError) {
+      if (functionError) {
         toast({
           title: "Erro ao enviar email",
-          description: resetError.message,
+          description: functionError.message || "Não foi possível enviar o email de recuperação.",
           variant: "destructive",
         });
         return;
       }
 
-      // Also send our custom branded email via Edge Function
-      await supabase.functions.invoke('send-password-reset', {
-        body: {
-          email,
-          resetUrl,
-        },
-      });
+      if (data?.error) {
+        toast({
+          title: "Erro ao enviar email",
+          description: data.error,
+          variant: "destructive",
+        });
+        return;
+      }
 
       setIsResetEmailSent(true);
       toast({

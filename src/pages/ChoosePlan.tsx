@@ -68,16 +68,35 @@ export default function ChoosePlan() {
     setLoadingPlan(planSlug);
     try {
       const url = await createCheckout(planSlug);
+      console.log("Checkout URL received:", url);
+      
       if (url) {
+        // Use window.open as fallback if location.href doesn't work
         window.location.href = url;
+      } else {
+        throw new Error("URL de checkout não retornada");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Checkout error:", error);
-      toast({
-        title: "Erro ao iniciar checkout",
-        description: "Tente novamente em alguns instantes.",
-        variant: "destructive",
-      });
+      
+      const errorMessage = error?.message || "Erro desconhecido";
+      
+      // Check for specific error messages
+      if (errorMessage.includes("active subscription")) {
+        toast({
+          title: "Você já possui uma assinatura ativa",
+          description: "Vá para Configurações para gerenciar sua assinatura.",
+          variant: "default",
+        });
+        // Redirect to dashboard if already subscribed
+        setTimeout(() => navigate("/dashboard"), 2000);
+      } else {
+        toast({
+          title: "Erro ao iniciar checkout",
+          description: errorMessage || "Tente novamente em alguns instantes.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoadingPlan(null);
     }

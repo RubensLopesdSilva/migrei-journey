@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ArrowRight, Loader2, Star, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { useAgent } from "@/hooks/useAgent";
 import { useToast } from "@/hooks/use-toast";
 import { AIAgent } from "@/types/agent";
 import { cn } from "@/lib/utils";
+import { useSubscription } from "@/hooks/useSubscription";
 
 // Import agent avatar images
 import lumiAvatar from "@/assets/agents/lumi.png";
@@ -62,11 +63,28 @@ const agentPersonalities: Record<string, { approach: string; bestFor: string; st
 
 export default function AgentSelection() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { agents, selectAgent, loading: agentsLoading } = useAgent();
+  const { checkSubscription } = useSubscription();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [hoveredAgentId, setHoveredAgentId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Handle subscription success redirect
+  useEffect(() => {
+    const subscriptionStatus = searchParams.get("subscription");
+    if (subscriptionStatus === "success") {
+      // Refresh subscription status
+      checkSubscription();
+      toast({
+        title: "🎉 Assinatura ativada!",
+        description: "Agora escolha seu mentor IA para começar sua jornada.",
+      });
+      // Clean up URL
+      window.history.replaceState({}, "", "/escolher-agente");
+    }
+  }, [searchParams, checkSubscription, toast]);
 
   const selectedAgent = agents.find(a => a.id === selectedAgentId);
   const hoveredAgent = agents.find(a => a.id === hoveredAgentId);

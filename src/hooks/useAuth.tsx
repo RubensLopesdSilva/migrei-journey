@@ -47,7 +47,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const redirectUrl = `${window.location.origin}/escolher-agente`;
+    // Redirect to subscription page after signup
+    const redirectUrl = `${window.location.origin}/assinar`;
     
     const { data, error } = await supabase.auth.signUp({
       email,

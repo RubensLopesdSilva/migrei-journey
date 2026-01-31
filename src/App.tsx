@@ -14,6 +14,7 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Dashboard from "./pages/Index";
 import Auth from "./pages/Auth";
 import AgentSelection from "./pages/AgentSelection";
+import ChoosePlan from "./pages/ChoosePlan";
 import Settings from "./pages/Settings";
 import Mentoring from "./pages/Mentoring";
 import MentorDashboard from "./pages/MentorDashboard";
@@ -66,7 +67,8 @@ const App = () => (
                       
                       {/* Protected routes */}
                       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                      <Route path="/escolher-agente" element={<ProtectedRoute><AgentSelection /></ProtectedRoute>} />
+                      <Route path="/assinar" element={<ProtectedRoute requireSubscription={false}><ChoosePlan /></ProtectedRoute>} />
+                      <Route path="/escolher-agente" element={<ProtectedRoute requireSubscription={false}><AgentSelection /></ProtectedRoute>} />
                       <Route path="/configuracoes" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
                       <Route path="/mentoria" element={<ProtectedRoute><Mentoring /></ProtectedRoute>} />
                       <Route path="/mentor" element={<ProtectedRoute><MentorDashboard /></ProtectedRoute>} />

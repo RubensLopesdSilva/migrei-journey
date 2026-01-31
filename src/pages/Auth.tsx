@@ -53,6 +53,7 @@ export default function Auth() {
       setPendingRedirect(null);
     } else if (user && !pendingRedirect && !isNewUser) {
       // User was already logged in or just logged in (not signup)
+      // Redirect to dashboard - ProtectedRoute will handle subscription check
       navigate("/dashboard");
     }
   }, [user, pendingRedirect, navigate, isNewUser]);
@@ -63,6 +64,7 @@ export default function Auth() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
+          // Redirect to dashboard - ProtectedRoute will check subscription
           redirectTo: `${window.location.origin}/dashboard`,
         },
       });
@@ -196,12 +198,12 @@ export default function Auth() {
             variant: "destructive",
           });
         } else {
-          // Set pending redirect for after user state updates
+          // Set pending redirect to subscription page after signup
           setIsNewUser(true);
-          setPendingRedirect("/escolher-agente");
+          setPendingRedirect("/assinar");
           toast({
             title: "🎉 Conta criada com sucesso!",
-            description: "Agora você vai escolher seu mentor IA personalizado.",
+            description: "Agora escolha seu plano para começar.",
           });
         }
       }

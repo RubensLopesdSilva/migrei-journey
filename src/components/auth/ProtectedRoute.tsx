@@ -55,7 +55,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   // Check subscription only for non-exempt routes
   if (requireSubscription && !isExemptRoute) {
     // Wait for subscription check to complete
-    if (subLoading || agentLoading) {
+    if (subLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="flex flex-col items-center gap-4">
@@ -73,8 +73,12 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
       return <Navigate to="/assinar" replace />;
     }
 
-    // If user has subscription but hasn't selected an agent, redirect to agent selection
-    if (hasActiveSubscription && !hasSelectedAgent && location.pathname !== "/escolher-agente") {
+    // Only redirect to agent selection if:
+    // 1. Has active subscription
+    // 2. Agent loading is complete (not loading)
+    // 3. No agent selected
+    // 4. Not already on agent selection page
+    if (hasActiveSubscription && !agentLoading && !hasSelectedAgent && location.pathname !== "/escolher-agente") {
       return <Navigate to="/escolher-agente" replace />;
     }
   }

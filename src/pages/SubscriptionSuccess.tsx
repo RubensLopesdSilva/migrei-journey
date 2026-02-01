@@ -1,57 +1,42 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Loader2, CheckCircle } from "lucide-react";
 
 export default function SubscriptionSuccess() {
   const navigate = useNavigate();
-  const { checkSubscription, isSubscribed, status } = useSubscription();
+  const { checkSubscription } = useSubscription();
   const [verified, setVerified] = useState(false);
-  const attemptsRef = useRef(0);
-  const maxAttempts = 15;
-  const pollingIntervalMs = 1000; // Polling mais rápido: 1 segundo
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | null = null;
     let mounted = true;
 
-    const verifySubscription = async () => {
+    const processSuccess = async () => {
+      // Dispara verificação em background (não bloqueia)
+      checkSubscription();
+      
+      // Aguarda 2 segundos para dar feedback visual
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       if (!mounted) return;
       
-      attemptsRef.current += 1;
+      // Mostra confirmação
+      setVerified(true);
       
-      // Force refresh subscription status
-      await checkSubscription();
-      
-      // Check if subscription is now active
-      const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing";
-      
-      if (hasActiveSubscription) {
-        setVerified(true);
-        // Redirect imediatamente para escolher agente
-        setTimeout(() => {
-          if (mounted) {
-            navigate("/escolher-agente", { replace: true });
-          }
-        }, 800);
-      } else if (attemptsRef.current < maxAttempts) {
-        // Retry com polling mais rápido
-        timeoutId = setTimeout(verifySubscription, pollingIntervalMs);
-      } else {
-        // Após máximo de tentativas, redireciona mesmo assim
-        // O webhook pode sincronizar depois
-        navigate("/escolher-agente", { replace: true });
-      }
+      // Redireciona após 1 segundo (total: 3s)
+      setTimeout(() => {
+        if (mounted) {
+          navigate("/escolher-agente", { replace: true });
+        }
+      }, 1000);
     };
 
-    // Iniciar verificação imediatamente
-    verifySubscription();
+    processSuccess();
 
     return () => {
       mounted = false;
-      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [checkSubscription, isSubscribed, status, navigate]);
+  }, [checkSubscription, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -79,9 +64,6 @@ export default function SubscriptionSuccess() {
               </h1>
               <p className="text-muted-foreground">
                 Aguarde enquanto processamos sua assinatura
-              </p>
-              <p className="text-xs text-muted-foreground/60 mt-2">
-                Tentativa {attemptsRef.current} de {maxAttempts}
               </p>
             </div>
           </>

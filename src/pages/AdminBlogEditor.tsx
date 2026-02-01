@@ -370,7 +370,33 @@ export default function AdminBlogEditor() {
 
                     {/* Schedule */}
                     <div className="space-y-4 pt-4 border-t">
-                      <h3 className="font-semibold">Agendamento</h3>
+                      <h3 className="font-semibold">Publicação</h3>
+                      
+                      {/* Publish Now */}
+                      <Button
+                        className="w-full"
+                        onClick={handlePublish}
+                        disabled={!title || !content || isSaving}
+                      >
+                        {isSaving ? (
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                          <Send className="h-4 w-4 mr-2" />
+                        )}
+                        Publicar agora
+                      </Button>
+
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-background px-2 text-muted-foreground">
+                            ou agendar
+                          </span>
+                        </div>
+                      </div>
+
                       <div className="space-y-2">
                         <Label>Data de publicação</Label>
                         <Popover>

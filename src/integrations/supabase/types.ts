@@ -156,6 +156,107 @@ export type Database = {
           },
         ]
       }
+      blog_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          author_id: string
+          category_id: string | null
+          content: string
+          content_format: string
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          meta_description: string | null
+          meta_title: string | null
+          published_at: string | null
+          reading_time_minutes: number | null
+          scheduled_at: string | null
+          slug: string
+          status: Database["public"]["Enums"]["blog_post_status"]
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author_id: string
+          category_id?: string | null
+          content: string
+          content_format?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          scheduled_at?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["blog_post_status"]
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author_id?: string
+          category_id?: string | null
+          content?: string
+          content_format?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          reading_time_minutes?: number | null
+          scheduled_at?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["blog_post_status"]
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "blog_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       career_wheel_assessments: {
         Row: {
           created_at: string
@@ -3390,6 +3491,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      publish_scheduled_posts: { Args: never; Returns: undefined }
       update_user_streak: {
         Args: { p_user_id: string }
         Returns: {
@@ -3418,6 +3520,7 @@ export type Database = {
         | "quiz"
         | "reflection"
       app_role: "admin" | "moderator" | "user"
+      blog_post_status: "draft" | "scheduled" | "published"
       connection_status: "pending" | "accepted" | "rejected" | "blocked"
       conversation_status:
         | "pending"
@@ -3596,6 +3699,7 @@ export const Constants = {
     Enums: {
       activity_type: ["lesson", "exercise", "checkpoint", "quiz", "reflection"],
       app_role: ["admin", "moderator", "user"],
+      blog_post_status: ["draft", "scheduled", "published"],
       connection_status: ["pending", "accepted", "rejected", "blocked"],
       conversation_status: [
         "pending",

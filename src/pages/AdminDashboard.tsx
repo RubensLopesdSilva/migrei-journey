@@ -17,6 +17,7 @@ import {
   BarChart3,
   Headphones,
   Mail,
+  FileText,
 } from "lucide-react";
 
 const adminModules = [
@@ -27,6 +28,14 @@ const adminModules = [
     href: "/admin/metricas",
     color: "text-amber-600",
     bgColor: "bg-amber-500/10",
+  },
+  {
+    icon: FileText,
+    title: "Blog",
+    description: "Crie e gerencie artigos do blog",
+    href: "/admin/blog",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-500/10",
   },
   {
     icon: Mail,

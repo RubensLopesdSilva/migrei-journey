@@ -26,6 +26,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminMetrics from "./pages/AdminMetrics";
 import AdminSupport from "./pages/AdminSupport";
 import AdminNewsletter from "./pages/AdminNewsletter";
+import AdminBlog from "./pages/AdminBlog";
+import AdminBlogEditor from "./pages/AdminBlogEditor";
 import Progress from "./pages/Progress";
 import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -36,6 +38,8 @@ import Fase5Deslanchar from "./pages/Fase5Deslanchar";
 import Fase6Desfrutar from "./pages/Fase6Desfrutar";
 import Community from "./pages/Community";
 import Landing from "./pages/Landing";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import Support from "./pages/Support";
@@ -64,6 +68,8 @@ const App = () => (
                       <Route path="/redefinir-senha" element={<ResetPassword />} />
                       <Route path="/privacidade" element={<PrivacyPolicy />} />
                       <Route path="/termos" element={<TermsConditions />} />
+                      <Route path="/blog" element={<Blog />} />
+                      <Route path="/blog/:slug" element={<BlogPost />} />
                       
                       {/* Protected routes */}
                       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -80,6 +86,8 @@ const App = () => (
                       <Route path="/admin/metricas" element={<ProtectedRoute><AdminMetrics /></ProtectedRoute>} />
                       <Route path="/admin/suporte" element={<ProtectedRoute><AdminSupport /></ProtectedRoute>} />
                       <Route path="/admin/newsletter" element={<ProtectedRoute><AdminNewsletter /></ProtectedRoute>} />
+                      <Route path="/admin/blog" element={<ProtectedRoute><AdminBlog /></ProtectedRoute>} />
+                      <Route path="/admin/blog/:id" element={<ProtectedRoute><AdminBlogEditor /></ProtectedRoute>} />
                       <Route path="/progresso" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                       <Route path="/suporte" element={<ProtectedRoute><Support /></ProtectedRoute>} />
                       <Route path="/networking" element={<ProtectedRoute><PositioningAcademy /></ProtectedRoute>} />

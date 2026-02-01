@@ -119,7 +119,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "subscription",
-      success_url: successUrl || `${req.headers.get("origin")}/escolher-agente?subscription=success`,
+      success_url: successUrl || `${req.headers.get("origin")}/assinatura-sucesso`,
       cancel_url: cancelUrl || `${req.headers.get("origin")}/assinar?subscription=canceled`,
       subscription_data: {
         trial_period_days: plan.trial_days > 0 ? plan.trial_days : undefined,

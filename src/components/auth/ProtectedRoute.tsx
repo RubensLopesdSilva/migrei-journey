@@ -15,6 +15,11 @@ const SUBSCRIPTION_EXEMPT_ROUTES = [
   "/configuracoes",
 ];
 
+// Admin users exempt from payment requirement
+const PAYMENT_EXEMPT_EMAILS = [
+  "rubenslopesdsilva@gmail.com",
+];
+
 export function ProtectedRoute({ children, requireSubscription = true }: ProtectedRouteProps) {
   const { user, loading: authLoading } = useAuth();
   const { isSubscribed, isLoading: subLoading, status } = useSubscription();
@@ -24,6 +29,9 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   const isExemptRoute = SUBSCRIPTION_EXEMPT_ROUTES.some(route => 
     location.pathname.startsWith(route)
   );
+
+  // Check if user is exempt from payment
+  const isPaymentExemptUser = user?.email && PAYMENT_EXEMPT_EMAILS.includes(user.email);
 
   if (authLoading) {
     return (
@@ -55,8 +63,8 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
       );
     }
 
-    // Redirect to subscription page if no active subscription
-    const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing";
+    // Redirect to subscription page if no active subscription (unless exempt)
+    const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing" || isPaymentExemptUser;
     if (!hasActiveSubscription) {
       return <Navigate to="/assinar" replace />;
     }

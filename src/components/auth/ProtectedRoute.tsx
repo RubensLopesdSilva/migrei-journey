@@ -11,6 +11,7 @@ interface ProtectedRouteProps {
 // Routes that don't require subscription check
 const SUBSCRIPTION_EXEMPT_ROUTES = [
   "/assinar",
+  "/assinatura-sucesso",
   "/escolher-agente",
   "/configuracoes",
 ];

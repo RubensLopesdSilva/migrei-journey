@@ -85,6 +85,12 @@ export const LandingHeader = () => {
             >
               FAQ
             </button>
+            <button
+              onClick={() => navigate("/blog")}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Blog
+            </button>
           </nav>
 
           {/* CTA Buttons */}
@@ -150,6 +156,12 @@ export const LandingHeader = () => {
                 className="text-left text-muted-foreground hover:text-foreground"
               >
                 FAQ
+              </button>
+              <button
+                onClick={() => navigate("/blog")}
+                className="text-left text-muted-foreground hover:text-foreground"
+              >
+                Blog
               </button>
               <div className="flex flex-col gap-2 mt-4">
                 <Button variant="outline" onClick={() => navigate("/auth?tab=login")}>

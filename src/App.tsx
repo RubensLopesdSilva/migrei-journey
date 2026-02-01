@@ -44,6 +44,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import Support from "./pages/Support";
 import ResetPassword from "./pages/ResetPassword";
+import SubscriptionSuccess from "./pages/SubscriptionSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +74,7 @@ const App = () => (
                       
                       {/* Protected routes */}
                       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                      <Route path="/assinatura-sucesso" element={<ProtectedRoute requireSubscription={false}><SubscriptionSuccess /></ProtectedRoute>} />
                       <Route path="/assinar" element={<ProtectedRoute requireSubscription={false}><ChoosePlan /></ProtectedRoute>} />
                       <Route path="/escolher-agente" element={<ProtectedRoute requireSubscription={false}><AgentSelection /></ProtectedRoute>} />
                       <Route path="/configuracoes" element={<ProtectedRoute><Settings /></ProtectedRoute>} />

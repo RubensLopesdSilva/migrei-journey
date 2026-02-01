@@ -21,7 +21,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
   const [currentAgent, setCurrentAgent] = useState<AIAgent | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchAgents = useCallback(async () => {
+  const fetchAgents = useCallback(async (): Promise<AIAgent[]> => {
     const { data, error } = await supabase
       .from("ai_agents")
       .select("*")
@@ -30,13 +30,15 @@ export function AgentProvider({ children }: { children: ReactNode }) {
 
     if (error) {
       console.error("Error fetching agents:", error);
-      return;
+      return [];
     }
 
-    setAgents(data || []);
+    const fetchedAgents = data || [];
+    setAgents(fetchedAgents);
+    return fetchedAgents;
   }, []);
 
-  const fetchUserAgent = useCallback(async () => {
+  const fetchUserAgent = useCallback(async (agentsList: AIAgent[]) => {
     if (!user) {
       setCurrentAgent(null);
       setLoading(false);
@@ -56,45 +58,54 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     }
 
     if (profile?.agent_id) {
-      const agent = agents.find(a => a.id === profile.agent_id);
+      const agent = agentsList.find(a => a.id === profile.agent_id);
       setCurrentAgent(agent || null);
     } else {
       setCurrentAgent(null);
     }
 
     setLoading(false);
-  }, [user, agents]);
+  }, [user]);
 
+  // Core refetch function that fetches everything fresh
   const refetch = useCallback(async () => {
     setLoading(true);
-    await fetchAgents();
-    // Also refetch user's selected agent
+    
+    // Fetch agents first and get the result directly
+    const freshAgents = await fetchAgents();
+    
+    // Then fetch user's agent using the FRESH agents list
     if (user) {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from("profiles")
         .select("agent_id")
         .eq("user_id", user.id)
         .maybeSingle();
-      
-      if (profile?.agent_id) {
-        const agent = agents.find(a => a.id === profile.agent_id);
+
+      if (!error && profile?.agent_id) {
+        // Use the freshly fetched agents, NOT the stale state
+        const agent = freshAgents.find(a => a.id === profile.agent_id);
         setCurrentAgent(agent || null);
+      } else {
+        setCurrentAgent(null);
       }
     }
+    
     setLoading(false);
-  }, [fetchAgents, user, agents]);
+  }, [fetchAgents, user]);
 
+  // Initial load
   useEffect(() => {
-    fetchAgents();
-  }, [fetchAgents]);
-
-  useEffect(() => {
-    if (!authLoading && agents.length > 0) {
-      fetchUserAgent();
-    } else if (!authLoading && !user) {
-      setLoading(false);
-    }
-  }, [authLoading, user, agents, fetchUserAgent]);
+    const init = async () => {
+      const fetchedAgents = await fetchAgents();
+      if (!authLoading && user) {
+        await fetchUserAgent(fetchedAgents);
+      } else if (!authLoading) {
+        setLoading(false);
+      }
+    };
+    init();
+  }, [authLoading, user, fetchAgents, fetchUserAgent]);
 
   const selectAgent = async (agentId: string) => {
     if (!user) return;
@@ -109,6 +120,7 @@ export function AgentProvider({ children }: { children: ReactNode }) {
       throw error;
     }
 
+    // Immediately update current agent from existing agents list
     const agent = agents.find(a => a.id === agentId);
     setCurrentAgent(agent || null);
   };

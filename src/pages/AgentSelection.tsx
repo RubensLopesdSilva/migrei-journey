@@ -96,21 +96,21 @@ export default function AgentSelection() {
     setIsSubmitting(true);
     try {
       await selectAgent(selectedAgentId);
-      // Refetch para garantir que o estado está atualizado antes de navegar
-      await refetch();
+      
       toast({
         title: `🎉 ${selectedAgent?.name} está pronto para te guiar!`,
         description: "Agora vamos começar seu diagnóstico de carreira.",
       });
-      // Navega direto sem passar pelo ProtectedRoute verificar novamente
-      window.location.href = "/dashboard";
+      
+      // Use React Router navigation instead of full page reload
+      // The agent is already set in memory via selectAgent
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       toast({
         title: "Erro ao selecionar mentor",
         description: "Tente novamente.",
         variant: "destructive",
       });
-    } finally {
       setIsSubmitting(false);
     }
   };

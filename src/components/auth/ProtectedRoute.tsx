@@ -36,6 +36,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   // Check if user is exempt from payment
   const isPaymentExemptUser = user?.email && PAYMENT_EXEMPT_EMAILS.includes(user.email);
 
+  // 1. Wait for auth to load
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -47,38 +48,37 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
     );
   }
 
+  // 2. Redirect to auth if not logged in
   if (!user) {
-    // Save the attempted URL for redirecting after login
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Check subscription only for non-exempt routes
+  // 3. For non-exempt routes, check subscription
   if (requireSubscription && !isExemptRoute) {
-    // Wait for subscription check to complete
-    if (subLoading) {
+    // Wait for BOTH subscription AND agent loading to complete
+    // This prevents premature redirects based on initial/stale state
+    if (subLoading || agentLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="text-muted-foreground">Verificando assinatura...</p>
+            <p className="text-muted-foreground">Verificando conta...</p>
           </div>
         </div>
       );
     }
 
-    // Redirect to subscription page if no active subscription (unless exempt)
+    // Now both are loaded - make decision
     const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing" || isPaymentExemptUser;
     
+    // No subscription? Redirect to subscribe
     if (!hasActiveSubscription) {
       return <Navigate to="/assinar" replace />;
     }
 
-    // Only redirect to agent selection if:
-    // 1. Has active subscription
-    // 2. Agent loading is complete (not loading)
-    // 3. No agent selected
-    // 4. Not already on agent selection page
-    if (hasActiveSubscription && !agentLoading && !hasSelectedAgent && location.pathname !== "/escolher-agente") {
+    // Has subscription but no agent? Redirect to agent selection
+    // (agentLoading is already false at this point)
+    if (!hasSelectedAgent) {
       return <Navigate to="/escolher-agente" replace />;
     }
   }

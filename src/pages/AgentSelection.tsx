@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ArrowRight, Loader2, Star, MessageCircle, Sparkles } from "lucide-react";
+import { Check, ArrowRight, Loader2, Star, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAgent } from "@/hooks/useAgent";
 import { useToast } from "@/hooks/use-toast";
@@ -87,25 +87,28 @@ export default function AgentSelection() {
   }, [searchParams, checkSubscription, toast]);
 
   const selectedAgent = agents.find(a => a.id === selectedAgentId);
-  const hoveredAgent = agents.find(a => a.id === hoveredAgentId);
-  const displayAgent = hoveredAgent || selectedAgent;
 
   const handleConfirm = async () => {
-    if (!selectedAgentId) return;
+    if (!selectedAgentId || !selectedAgent) return;
 
     setIsSubmitting(true);
     try {
+      // 1. Save agent selection to database
       await selectAgent(selectedAgentId);
       
+      // 2. Refetch to update local state with fresh data from DB
+      await refetch();
+      
       toast({
-        title: `🎉 ${selectedAgent?.name} está pronto para te guiar!`,
+        title: `🎉 ${selectedAgent.name} está pronto para te guiar!`,
         description: "Agora vamos começar seu diagnóstico de carreira.",
       });
       
-      // Use React Router navigation instead of full page reload
-      // The agent is already set in memory via selectAgent
-      navigate("/dashboard", { replace: true });
+      // 3. Use full page reload to ensure all guards re-initialize with fresh state
+      // This is intentional - it guarantees clean state across all providers
+      window.location.href = "/dashboard";
     } catch (error) {
+      console.error("Error selecting agent:", error);
       toast({
         title: "Erro ao selecionar mentor",
         description: "Tente novamente.",
@@ -228,16 +231,6 @@ export default function AgentSelection() {
       </div>
     </div>
   );
-}
-
-interface AgentCardProps {
-  agent: AIAgent;
-  isSelected: boolean;
-  isHovered: boolean;
-  onSelect: () => void;
-  onHover: () => void;
-  onLeave: () => void;
-  index: number;
 }
 
 interface AgentCardProps {

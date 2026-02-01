@@ -53,8 +53,13 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // 3. For non-exempt routes, check subscription
-  if (requireSubscription && !isExemptRoute) {
+  // 3. For exempt routes, allow access immediately (no more checks needed)
+  if (isExemptRoute) {
+    return <>{children}</>;
+  }
+
+  // 4. For non-exempt routes, check subscription
+  if (requireSubscription) {
     // Wait for BOTH subscription AND agent loading to complete
     // This prevents premature redirects based on initial/stale state
     if (subLoading || agentLoading) {

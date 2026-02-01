@@ -67,15 +67,20 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, [user]);
 
-  // Core refetch function that fetches everything fresh
+  // Core refetch function that fetches everything fresh from the database
   const refetch = useCallback(async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    
     setLoading(true);
     
-    // Fetch agents first and get the result directly
-    const freshAgents = await fetchAgents();
-    
-    // Then fetch user's agent using the FRESH agents list
-    if (user) {
+    try {
+      // Fetch agents first and get the result directly
+      const freshAgents = await fetchAgents();
+      
+      // Fetch user's agent using the FRESH agents list from DB
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("agent_id")
@@ -89,18 +94,22 @@ export function AgentProvider({ children }: { children: ReactNode }) {
       } else {
         setCurrentAgent(null);
       }
+    } catch (err) {
+      console.error("Error in refetch:", err);
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   }, [fetchAgents, user]);
 
   // Initial load
   useEffect(() => {
     const init = async () => {
+      if (authLoading) return;
+      
       const fetchedAgents = await fetchAgents();
-      if (!authLoading && user) {
+      if (user) {
         await fetchUserAgent(fetchedAgents);
-      } else if (!authLoading) {
+      } else {
         setLoading(false);
       }
     };

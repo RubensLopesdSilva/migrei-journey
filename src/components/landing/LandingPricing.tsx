@@ -1,44 +1,47 @@
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Target, Brain, Users, Headphones, BookOpen, Crown, ArrowRight } from "lucide-react";
+import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollToNextButton } from "./ScrollToNextButton";
 
 const plans = [
   {
     name: "Essencial",
-    price: "49",
+    price: "59",
     period: "/mês",
-    description: "Para quem quer começar sua transição de carreira com suporte completo",
+    description: "Tudo para sua transição completa",
     features: [
-      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
-      { icon: Brain, text: "Coach IA personalizado", included: true },
-      { icon: Users, text: "Comunidade de transição", included: true },
-      { icon: Headphones, text: "Suporte por email", included: true },
-      { icon: BookOpen, text: "Conteúdo exclusivo", included: false },
-      { icon: Crown, text: "Mentoria individual", included: false },
+      "Todas as 6 fases do Ciclo",
+      "Networking com a comunidade",
+      "Acompanhamento de progresso",
+      "Assistente IA personalizado",
     ],
-    cta: "Assinar Essencial",
+    mentoring: null,
+    cta: "Começar com Essencial",
     popular: true,
     highlighted: true,
+    cancellationNote: "Cancele em até 7 dias sem compromisso",
   },
   {
     name: "Premium",
-    price: "99",
+    price: "169",
     period: "/mês",
-    description: "Experiência completa com mentoria especializada",
+    description: "Acelere com mentoria 1:1",
     features: [
-      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
-      { icon: Brain, text: "Coach IA personalizado", included: true },
-      { icon: Users, text: "Comunidade de transição", included: true },
-      { icon: Headphones, text: "Suporte prioritário", included: true },
-      { icon: BookOpen, text: "Conteúdo exclusivo", included: true },
-      { icon: Crown, text: "1 sessão de mentoria/mês", included: true },
+      "Tudo do Essencial",
+      "Suporte prioritário",
+      "Conteúdos exclusivos",
     ],
-    cta: "Assinar Premium",
+    mentoring: {
+      sessions: 1,
+      label: "1 mentoria ao vivo/mês",
+      description: "Sessão 1:1 com especialista",
+    },
+    cta: "Começar com Premium",
     popular: false,
     highlighted: false,
+    cancellationNote: "Cancele quando quiser, sem reembolso",
   },
 ];
 
@@ -73,35 +76,35 @@ export const LandingPricing = () => {
               {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
-                  <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
-                    Mais popular
+                  <span className="bg-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                    ⭐ Mais popular
                   </span>
                 </div>
               )}
               <Card 
                 className={`p-5 md:p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
                   plan.highlighted 
-                    ? "border-primary shadow-xl border-2" 
+                    ? "bg-primary text-primary-foreground border-primary shadow-xl md:scale-105 z-10" 
                     : "bg-card border-border/50 hover:border-primary/30"
                 }`}
               >
                 {/* Plan Name */}
                 <div className="text-center mb-6">
-                  <h3 className="text-xl font-bold mb-2 text-foreground">
+                  <h3 className={`text-xl font-bold mb-2 ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground'}`}>
                     {plan.name}
                   </h3>
-                  <p className="text-sm mb-4 text-muted-foreground">
+                  <p className={`text-sm mb-4 ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
                     {plan.description}
                   </p>
                   
                   {/* Price */}
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-sm text-muted-foreground">R$</span>
-                    <span className="text-5xl font-bold text-foreground">
+                    <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>R$</span>
+                    <span className={`text-5xl font-bold ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground'}`}>
                       {plan.price}
                     </span>
                     {plan.period && (
-                      <span className="text-sm text-muted-foreground">
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground/80' : 'text-muted-foreground'}`}>
                         {plan.period}
                       </span>
                     )}
@@ -110,27 +113,29 @@ export const LandingPricing = () => {
 
                 {/* Features */}
                 <ul className="space-y-3 mb-6 flex-grow">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li 
-                      key={featureIndex} 
-                      className={`flex items-center gap-3 ${
-                        feature.included ? "" : "opacity-50"
-                      }`}
-                    >
-                      {feature.included ? (
-                        <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                      ) : (
-                        <div className="h-4 w-4 flex-shrink-0" />
-                      )}
-                      <feature.icon className={`h-4 w-4 flex-shrink-0 ${
-                        feature.included ? "text-muted-foreground" : "text-muted-foreground/50"
-                      }`} />
-                      <span className={`text-sm ${
-                        feature.included 
-                          ? "text-foreground" 
-                          : "text-muted-foreground line-through"
+                  {/* Mentoring Feature */}
+                  {plan.mentoring && (
+                    <li className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                        plan.highlighted ? 'bg-primary-foreground/20' : 'bg-primary/10'
                       }`}>
-                        {feature.text}
+                        <Check className={`h-3 w-3 ${plan.highlighted ? 'text-primary-foreground' : 'text-primary'}`} />
+                      </div>
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground/80'}`}>
+                        {plan.mentoring.label}
+                      </span>
+                    </li>
+                  )}
+                  
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                        plan.highlighted ? 'bg-primary-foreground/20' : 'bg-primary/10'
+                      }`}>
+                        <Check className={`h-3 w-3 ${plan.highlighted ? 'text-primary-foreground' : 'text-primary'}`} />
+                      </div>
+                      <span className={`text-sm ${plan.highlighted ? 'text-primary-foreground' : 'text-foreground/80'}`}>
+                        {feature}
                       </span>
                     </li>
                   ))}
@@ -138,18 +143,23 @@ export const LandingPricing = () => {
 
                 {/* CTA Button */}
                 <Button
-                  variant={plan.highlighted ? "default" : "outline"}
-                  className={`w-full ${
+                  variant={plan.highlighted ? "secondary" : "outline"}
+                  className={`w-full rounded-xl ${
                     plan.highlighted 
-                      ? "btn-primary-gradient" 
-                      : ""
+                      ? "bg-primary-foreground text-primary hover:bg-primary-foreground/90" 
+                      : "border-primary/30 text-primary hover:bg-primary/10"
                   }`}
-                  size="lg"
                   onClick={() => navigate("/auth?tab=signup")}
                 >
                   {plan.cta}
-                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
+
+                {/* Cancellation Note */}
+                {plan.cancellationNote && (
+                  <p className={`text-xs text-center mt-3 ${plan.highlighted ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                    {plan.cancellationNote}
+                  </p>
+                )}
               </Card>
             </motion.div>
           ))}

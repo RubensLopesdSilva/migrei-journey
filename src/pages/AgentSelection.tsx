@@ -65,7 +65,7 @@ export default function AgentSelection() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
-  const { agents, selectAgent, loading: agentsLoading } = useAgent();
+  const { agents, selectAgent, loading: agentsLoading, refetch } = useAgent();
   const { checkSubscription } = useSubscription();
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const [hoveredAgentId, setHoveredAgentId] = useState<string | null>(null);
@@ -96,11 +96,14 @@ export default function AgentSelection() {
     setIsSubmitting(true);
     try {
       await selectAgent(selectedAgentId);
+      // Refetch para garantir que o estado está atualizado antes de navegar
+      await refetch();
       toast({
         title: `🎉 ${selectedAgent?.name} está pronto para te guiar!`,
         description: "Agora vamos começar seu diagnóstico de carreira.",
       });
-      navigate("/dashboard");
+      // Navega direto sem passar pelo ProtectedRoute verificar novamente
+      window.location.href = "/dashboard";
     } catch (error) {
       toast({
         title: "Erro ao selecionar mentor",

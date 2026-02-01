@@ -127,6 +127,11 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       }
 
       try {
+        // Build explicit URLs using window.location.origin to ensure correct redirect
+        const currentOrigin = window.location.origin;
+        const successUrl = `${currentOrigin}/assinatura-sucesso`;
+        const cancelUrl = `${currentOrigin}/assinar?subscription=canceled`;
+
         const { data, error } = await supabase.functions.invoke("create-checkout", {
           headers: {
             Authorization: `Bearer ${session.access_token}`,
@@ -134,6 +139,8 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
           body: {
             planSlug,
             couponCode,
+            successUrl,
+            cancelUrl,
           },
         });
 

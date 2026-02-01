@@ -47,13 +47,15 @@ export default function Auth() {
   const [pendingRedirect, setPendingRedirect] = useState<string | null>(null);
 
   // Handle redirect after user is authenticated
+  // For existing users (login), always go to dashboard - ProtectedRoute handles subscription check
+  // For new users (signup), go to subscription page
   useEffect(() => {
     if (user && pendingRedirect) {
       navigate(pendingRedirect);
       setPendingRedirect(null);
     } else if (user && !pendingRedirect && !isNewUser) {
-      // User was already logged in or just logged in (not signup)
-      // Redirect to dashboard - ProtectedRoute will handle subscription check
+      // Existing user logging in - go directly to dashboard
+      // ProtectedRoute will check subscription and redirect to /assinar if needed
       navigate("/dashboard");
     }
   }, [user, pendingRedirect, navigate, isNewUser]);

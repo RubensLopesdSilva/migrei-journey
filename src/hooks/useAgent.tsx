@@ -68,7 +68,21 @@ export function AgentProvider({ children }: { children: ReactNode }) {
   const refetch = useCallback(async () => {
     setLoading(true);
     await fetchAgents();
-  }, [fetchAgents]);
+    // Also refetch user's selected agent
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("agent_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      
+      if (profile?.agent_id) {
+        const agent = agents.find(a => a.id === profile.agent_id);
+        setCurrentAgent(agent || null);
+      }
+    }
+    setLoading(false);
+  }, [fetchAgents, user, agents]);
 
   useEffect(() => {
     fetchAgents();

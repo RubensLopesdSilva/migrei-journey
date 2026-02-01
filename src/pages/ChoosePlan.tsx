@@ -3,19 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   Check, 
-  Crown, 
   Sparkles, 
   Loader2, 
-  ArrowRight,
-  Users,
-  Brain,
-  Target,
-  Headphones,
-  BookOpen,
   LogOut
 } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
@@ -26,34 +19,43 @@ const plans = [
   {
     slug: "essential",
     name: "Essencial",
-    price: 49,
-    priceId: "price_1SoqPeBiU5uGvruv4j4CJoOI",
+    price: "49",
+    period: "/mês",
     description: "Para quem quer começar sua transição de carreira com suporte completo",
-    popular: true,
     features: [
-      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
-      { icon: Brain, text: "Coach IA personalizado", included: true },
-      { icon: Users, text: "Comunidade de transição", included: true },
-      { icon: Headphones, text: "Suporte por email", included: true },
-      { icon: BookOpen, text: "Conteúdo exclusivo", included: false },
-      { icon: Crown, text: "Mentoria individual", included: false },
+      "Acesso às 6 fases do Ciclo Migrei",
+      "Coach IA personalizado",
+      "Comunidade de transição",
+      "Suporte por email",
     ],
+    disabledFeatures: [
+      "Conteúdo exclusivo",
+      "Mentoria individual",
+    ],
+    cta: "Assinar Essencial",
+    popular: true,
+    highlighted: true,
+    cancellationNote: "Garantia de 7 dias para reembolso",
   },
   {
     slug: "premium",
     name: "Premium",
-    price: 99,
-    priceId: "price_1SoqTbBiU5uGvruvkaRk0PNh",
+    price: "99",
+    period: "/mês",
     description: "Experiência completa com mentoria especializada",
-    popular: false,
     features: [
-      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
-      { icon: Brain, text: "Coach IA personalizado", included: true },
-      { icon: Users, text: "Comunidade de transição", included: true },
-      { icon: Headphones, text: "Suporte prioritário", included: true },
-      { icon: BookOpen, text: "Conteúdo exclusivo", included: true },
-      { icon: Crown, text: "1 sessão de mentoria/mês", included: true },
+      "Acesso às 6 fases do Ciclo Migrei",
+      "Coach IA personalizado",
+      "Comunidade de transição",
+      "Suporte prioritário",
+      "Conteúdo exclusivo",
+      "1 sessão de mentoria/mês",
     ],
+    disabledFeatures: [],
+    cta: "Assinar Premium",
+    popular: false,
+    highlighted: false,
+    cancellationNote: "Cancele quando quiser, sem reembolso",
   },
 ];
 
@@ -71,7 +73,6 @@ export default function ChoosePlan() {
       console.log("Checkout URL received:", url);
       
       if (url) {
-        // Use window.open as fallback if location.href doesn't work
         window.location.href = url;
       } else {
         throw new Error("URL de checkout não retornada");
@@ -81,14 +82,12 @@ export default function ChoosePlan() {
       
       const errorMessage = error?.message || "Erro desconhecido";
       
-      // Check for specific error messages
       if (errorMessage.includes("active subscription")) {
         toast({
           title: "Você já possui uma assinatura ativa",
           description: "Vá para Configurações para gerenciar sua assinatura.",
           variant: "default",
         });
-        // Redirect to dashboard if already subscribed
         setTimeout(() => navigate("/dashboard"), 2000);
       } else {
         toast({
@@ -108,8 +107,8 @@ export default function ChoosePlan() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
-      <div className="container mx-auto px-4 py-8 max-w-5xl">
+    <div className="min-h-screen bg-gradient-to-b from-muted/20 via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <img src={logoMigrei} alt="Migrei" className="h-12 w-auto" />
@@ -120,7 +119,7 @@ export default function ChoosePlan() {
         </div>
 
         {/* Hero */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,81 +140,103 @@ export default function ChoosePlan() {
         </div>
 
         {/* Plans Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto items-stretch mb-10">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.slug}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="relative"
             >
+              {/* Popular Badge */}
+              {plan.popular && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+                  <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap">
+                    Mais popular
+                  </span>
+                </div>
+              )}
               <Card 
-                className={`relative h-full transition-all duration-300 hover:shadow-lg ${
-                  plan.popular 
-                    ? "border-primary shadow-primary/10 shadow-md" 
-                    : "border-border"
+                className={`p-5 md:p-6 h-full flex flex-col rounded-2xl transition-all duration-300 ${
+                  plan.highlighted 
+                    ? "border-primary shadow-xl border-2" 
+                    : "bg-card border-border/50 hover:border-primary/30"
                 }`}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-primary text-primary-foreground shadow-sm">
-                      Mais popular
-                    </Badge>
-                  </div>
-                )}
-                
-                <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription className="text-sm">
+                {/* Plan Name */}
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-bold mb-2 text-foreground">
+                    {plan.name}
+                  </h3>
+                  <p className="text-sm mb-4 text-muted-foreground">
                     {plan.description}
-                  </CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold text-foreground">
-                      R$ {plan.price}
-                    </span>
-                    <span className="text-muted-foreground">/mês</span>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, i) => (
-                      <li 
-                        key={i} 
-                        className={`flex items-center gap-3 text-sm ${
-                          feature.included ? "text-foreground" : "text-muted-foreground line-through"
-                        }`}
-                      >
-                        {feature.included ? (
-                          <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                        ) : (
-                          <div className="h-4 w-4 flex-shrink-0" />
-                        )}
-                        <feature.icon className="h-4 w-4 flex-shrink-0" />
-                        <span>{feature.text}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  </p>
                   
-                  <Button
-                    className={`w-full mt-6 ${
-                      plan.popular ? "btn-primary-gradient" : ""
-                    }`}
-                    variant={plan.popular ? "default" : "outline"}
-                    size="lg"
-                    onClick={() => handleSelectPlan(plan.slug)}
-                    disabled={loadingPlan !== null || subLoading}
-                  >
-                    {loadingPlan === plan.slug ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <>
-                        Assinar {plan.name}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </>
+                  {/* Price */}
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-sm text-muted-foreground">R$</span>
+                    <span className="text-5xl font-bold text-foreground">
+                      {plan.price}
+                    </span>
+                    {plan.period && (
+                      <span className="text-sm text-muted-foreground">
+                        {plan.period}
+                      </span>
                     )}
-                  </Button>
-                </CardContent>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <ul className="space-y-3 mb-6 flex-grow">
+                  {plan.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-3">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center bg-primary/10">
+                        <Check className="h-3 w-3 text-primary" />
+                      </div>
+                      <span className="text-sm text-foreground/80">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                  
+                  {/* Disabled Features */}
+                  {plan.disabledFeatures.map((feature, featureIndex) => (
+                    <li key={`disabled-${featureIndex}`} className="flex items-center gap-3 opacity-50">
+                      <div className="w-5 h-5 rounded-full flex items-center justify-center bg-muted">
+                        <span className="h-0.5 w-2 bg-muted-foreground"></span>
+                      </div>
+                      <span className="text-sm text-muted-foreground line-through">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA Button */}
+                <Button
+                  variant={plan.highlighted ? "default" : "outline"}
+                  className={`w-full rounded-xl ${
+                    plan.highlighted 
+                      ? "btn-primary-gradient" 
+                      : "border-primary/30 text-primary hover:bg-primary/10"
+                  }`}
+                  onClick={() => handleSelectPlan(plan.slug)}
+                  disabled={loadingPlan !== null || subLoading}
+                >
+                  {loadingPlan === plan.slug ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : (
+                    plan.cta
+                  )}
+                </Button>
+
+                {/* Cancellation Note */}
+                {plan.cancellationNote && (
+                  <p className="text-xs text-center mt-3 text-muted-foreground">
+                    {plan.cancellationNote}
+                  </p>
+                )}
               </Card>
             </motion.div>
           ))}

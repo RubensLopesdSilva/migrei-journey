@@ -9,7 +9,14 @@ import {
   Check, 
   Sparkles, 
   Loader2, 
-  LogOut
+  LogOut,
+  Target,
+  Brain,
+  Users,
+  Headphones,
+  BookOpen,
+  Crown,
+  ArrowRight
 } from "lucide-react";
 import logoMigrei from "@/assets/logo-migrei.png";
 import { motion } from "framer-motion";
@@ -23,19 +30,16 @@ const plans = [
     period: "/mês",
     description: "Para quem quer começar sua transição de carreira com suporte completo",
     features: [
-      "Acesso às 6 fases do Ciclo Migrei",
-      "Coach IA personalizado",
-      "Comunidade de transição",
-      "Suporte por email",
-    ],
-    disabledFeatures: [
-      "Conteúdo exclusivo",
-      "Mentoria individual",
+      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
+      { icon: Brain, text: "Coach IA personalizado", included: true },
+      { icon: Users, text: "Comunidade de transição", included: true },
+      { icon: Headphones, text: "Suporte por email", included: true },
+      { icon: BookOpen, text: "Conteúdo exclusivo", included: false },
+      { icon: Crown, text: "Mentoria individual", included: false },
     ],
     cta: "Assinar Essencial",
     popular: true,
     highlighted: true,
-    cancellationNote: "Garantia de 7 dias para reembolso",
   },
   {
     slug: "premium",
@@ -44,18 +48,16 @@ const plans = [
     period: "/mês",
     description: "Experiência completa com mentoria especializada",
     features: [
-      "Acesso às 6 fases do Ciclo Migrei",
-      "Coach IA personalizado",
-      "Comunidade de transição",
-      "Suporte prioritário",
-      "Conteúdo exclusivo",
-      "1 sessão de mentoria/mês",
+      { icon: Target, text: "Acesso às 6 fases do Ciclo Migrei", included: true },
+      { icon: Brain, text: "Coach IA personalizado", included: true },
+      { icon: Users, text: "Comunidade de transição", included: true },
+      { icon: Headphones, text: "Suporte prioritário", included: true },
+      { icon: BookOpen, text: "Conteúdo exclusivo", included: true },
+      { icon: Crown, text: "1 sessão de mentoria/mês", included: true },
     ],
-    disabledFeatures: [],
     cta: "Assinar Premium",
     popular: false,
     highlighted: false,
-    cancellationNote: "Cancele quando quiser, sem reembolso",
   },
 ];
 
@@ -190,24 +192,26 @@ export default function ChoosePlan() {
                 {/* Features */}
                 <ul className="space-y-3 mb-6 flex-grow">
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center bg-primary/10">
-                        <Check className="h-3 w-3 text-primary" />
-                      </div>
-                      <span className="text-sm text-foreground/80">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                  
-                  {/* Disabled Features */}
-                  {plan.disabledFeatures.map((feature, featureIndex) => (
-                    <li key={`disabled-${featureIndex}`} className="flex items-center gap-3 opacity-50">
-                      <div className="w-5 h-5 rounded-full flex items-center justify-center bg-muted">
-                        <span className="h-0.5 w-2 bg-muted-foreground"></span>
-                      </div>
-                      <span className="text-sm text-muted-foreground line-through">
-                        {feature}
+                    <li 
+                      key={featureIndex} 
+                      className={`flex items-center gap-3 ${
+                        feature.included ? "" : "opacity-50"
+                      }`}
+                    >
+                      {feature.included ? (
+                        <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                      ) : (
+                        <div className="h-4 w-4 flex-shrink-0" />
+                      )}
+                      <feature.icon className={`h-4 w-4 flex-shrink-0 ${
+                        feature.included ? "text-muted-foreground" : "text-muted-foreground/50"
+                      }`} />
+                      <span className={`text-sm ${
+                        feature.included 
+                          ? "text-foreground" 
+                          : "text-muted-foreground line-through"
+                      }`}>
+                        {feature.text}
                       </span>
                     </li>
                   ))}
@@ -216,27 +220,24 @@ export default function ChoosePlan() {
                 {/* CTA Button */}
                 <Button
                   variant={plan.highlighted ? "default" : "outline"}
-                  className={`w-full rounded-xl ${
+                  className={`w-full ${
                     plan.highlighted 
                       ? "btn-primary-gradient" 
-                      : "border-primary/30 text-primary hover:bg-primary/10"
+                      : ""
                   }`}
+                  size="lg"
                   onClick={() => handleSelectPlan(plan.slug)}
                   disabled={loadingPlan !== null || subLoading}
                 >
                   {loadingPlan === plan.slug ? (
                     <Loader2 className="h-5 w-5 animate-spin" />
                   ) : (
-                    plan.cta
+                    <>
+                      {plan.cta}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
-
-                {/* Cancellation Note */}
-                {plan.cancellationNote && (
-                  <p className="text-xs text-center mt-3 text-muted-foreground">
-                    {plan.cancellationNote}
-                  </p>
-                )}
               </Card>
             </motion.div>
           ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 import { Loader2, CheckCircle } from "lucide-react";
@@ -6,12 +6,20 @@ import { Loader2, CheckCircle } from "lucide-react";
 export default function SubscriptionSuccess() {
   const navigate = useNavigate();
   const { checkSubscription, isSubscribed, status } = useSubscription();
-  const [attempts, setAttempts] = useState(0);
   const [verified, setVerified] = useState(false);
-  const maxAttempts = 10;
+  const attemptsRef = useRef(0);
+  const maxAttempts = 15;
+  const pollingIntervalMs = 1000; // Polling mais rápido: 1 segundo
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+    let mounted = true;
+
     const verifySubscription = async () => {
+      if (!mounted) return;
+      
+      attemptsRef.current += 1;
+      
       // Force refresh subscription status
       await checkSubscription();
       
@@ -20,23 +28,30 @@ export default function SubscriptionSuccess() {
       
       if (hasActiveSubscription) {
         setVerified(true);
-        // Wait a moment to show success state, then redirect
+        // Redirect imediatamente para escolher agente
         setTimeout(() => {
-          navigate("/escolher-agente", { replace: true });
-        }, 1500);
-      } else if (attempts < maxAttempts) {
-        // Retry after 2 seconds if not yet active (webhook might be processing)
-        setTimeout(() => {
-          setAttempts(prev => prev + 1);
-        }, 2000);
+          if (mounted) {
+            navigate("/escolher-agente", { replace: true });
+          }
+        }, 800);
+      } else if (attemptsRef.current < maxAttempts) {
+        // Retry com polling mais rápido
+        timeoutId = setTimeout(verifySubscription, pollingIntervalMs);
       } else {
-        // After max attempts, redirect anyway - subscription might sync later
+        // Após máximo de tentativas, redireciona mesmo assim
+        // O webhook pode sincronizar depois
         navigate("/escolher-agente", { replace: true });
       }
     };
 
+    // Iniciar verificação imediatamente
     verifySubscription();
-  }, [attempts, checkSubscription, isSubscribed, status, navigate]);
+
+    return () => {
+      mounted = false;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [checkSubscription, isSubscribed, status, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -51,7 +66,7 @@ export default function SubscriptionSuccess() {
                 Pagamento confirmado!
               </h1>
               <p className="text-muted-foreground">
-                Redirecionando para escolher seu agente...
+                Redirecionando para escolher seu mentor...
               </p>
             </div>
           </>
@@ -64,6 +79,9 @@ export default function SubscriptionSuccess() {
               </h1>
               <p className="text-muted-foreground">
                 Aguarde enquanto processamos sua assinatura
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-2">
+                Tentativa {attemptsRef.current} de {maxAttempts}
               </p>
             </div>
           </>

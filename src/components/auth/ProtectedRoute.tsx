@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useAgent } from "@/hooks/useAgent";
 import { Loader2 } from "lucide-react";
 
 interface ProtectedRouteProps {
@@ -24,6 +25,7 @@ const PAYMENT_EXEMPT_EMAILS = [
 export function ProtectedRoute({ children, requireSubscription = true }: ProtectedRouteProps) {
   const { user, loading: authLoading } = useAuth();
   const { isSubscribed, isLoading: subLoading, status } = useSubscription();
+  const { hasSelectedAgent, loading: agentLoading } = useAgent();
   const location = useLocation();
 
   // Check if current route is exempt from subscription check
@@ -53,7 +55,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   // Check subscription only for non-exempt routes
   if (requireSubscription && !isExemptRoute) {
     // Wait for subscription check to complete
-    if (subLoading) {
+    if (subLoading || agentLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="flex flex-col items-center gap-4">
@@ -66,8 +68,14 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
 
     // Redirect to subscription page if no active subscription (unless exempt)
     const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing" || isPaymentExemptUser;
+    
     if (!hasActiveSubscription) {
       return <Navigate to="/assinar" replace />;
+    }
+
+    // If user has subscription but hasn't selected an agent, redirect to agent selection
+    if (hasActiveSubscription && !hasSelectedAgent && location.pathname !== "/escolher-agente") {
+      return <Navigate to="/escolher-agente" replace />;
     }
   }
 

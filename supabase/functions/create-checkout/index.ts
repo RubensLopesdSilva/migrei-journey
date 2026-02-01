@@ -114,13 +114,19 @@ serve(async (req) => {
     }
 
     // Build checkout session options
+    const origin = req.headers.get("origin") || "https://migrei-compass.lovable.app";
+    const successUrlFinal = successUrl || `${origin}/assinatura-sucesso`;
+    const cancelUrlFinal = cancelUrl || `${origin}/assinar?subscription=canceled`;
+    
+    logStep("Building checkout session", { origin, successUrl: successUrlFinal, cancelUrl: cancelUrlFinal });
+    
     const sessionOptions: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: "subscription",
-      success_url: successUrl || `${req.headers.get("origin") || "https://migrei-compass.lovable.app"}/assinatura-sucesso`,
-      cancel_url: cancelUrl || `${req.headers.get("origin") || "https://migrei-compass.lovable.app"}/assinar?subscription=canceled`,
+      success_url: successUrlFinal,
+      cancel_url: cancelUrlFinal,
       subscription_data: {
         trial_period_days: plan.trial_days > 0 ? plan.trial_days : undefined,
         metadata: {

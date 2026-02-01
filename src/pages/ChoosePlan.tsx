@@ -58,13 +58,27 @@ const plans = [
 ];
 
 export default function ChoosePlan() {
-  const { createCheckout, isLoading: subLoading } = useSubscription();
+  const { createCheckout, isLoading: subLoading, isSubscribed, status } = useSubscription();
   const { signOut, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
+  // Redirect if user already has active subscription
+  const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing";
+
   const handleSelectPlan = async (planSlug: string) => {
+    // Check subscription status before attempting checkout
+    if (hasActiveSubscription) {
+      toast({
+        title: "Você já possui uma assinatura ativa",
+        description: "Redirecionando para o dashboard...",
+        variant: "default",
+      });
+      setTimeout(() => navigate("/dashboard"), 1500);
+      return;
+    }
+
     setLoadingPlan(planSlug);
     try {
       const url = await createCheckout(planSlug);
@@ -80,17 +94,18 @@ export default function ChoosePlan() {
       
       const errorMessage = error?.message || "Erro desconhecido";
       
-      if (errorMessage.includes("active subscription")) {
+      // Check for active subscription error from backend
+      if (errorMessage.includes("active subscription") || errorMessage.includes("already have")) {
         toast({
           title: "Você já possui uma assinatura ativa",
-          description: "Vá para Configurações para gerenciar sua assinatura.",
+          description: "Redirecionando para o dashboard...",
           variant: "default",
         });
-        setTimeout(() => navigate("/dashboard"), 2000);
+        setTimeout(() => navigate("/dashboard"), 1500);
       } else {
         toast({
           title: "Erro ao iniciar checkout",
-          description: errorMessage || "Tente novamente em alguns instantes.",
+          description: "Tente novamente em alguns instantes.",
           variant: "destructive",
         });
       }

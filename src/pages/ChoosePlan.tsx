@@ -265,7 +265,10 @@ export default function ChoosePlan() {
                   disabled={loadingPlan !== null || subLoading}
                 >
                   {loadingPlan === plan.slug ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>Redirecionando para pagamento...</span>
+                    </span>
                   ) : (
                     plan.cta
                   )}

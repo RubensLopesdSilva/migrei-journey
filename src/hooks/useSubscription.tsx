@@ -64,10 +64,17 @@ const initialState: SubscriptionState = {
 };
 
 export function SubscriptionProvider({ children }: { children: ReactNode }) {
-  const { user, session } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const [state, setState] = useState<SubscriptionState>(initialState);
 
   const checkSubscription = useCallback(async () => {
+    // CRITICAL: Don't check subscription if auth is still loading
+    // This prevents race conditions where we check before session is available
+    if (authLoading) {
+      return;
+    }
+
+    // If no session after auth is done loading, user is not logged in
     if (!session?.access_token) {
       setState({ ...initialState, isLoading: false });
       return;
@@ -118,7 +125,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
       console.error("Error checking subscription:", error);
       setState({ ...initialState, isLoading: false });
     }
-  }, [session?.access_token]);
+  }, [session?.access_token, authLoading]);
 
   const createCheckout = useCallback(
     async (planSlug: string, couponCode?: string): Promise<string | null> => {
@@ -239,14 +246,20 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     [getMaxPhaseAccess]
   );
 
-  // Check subscription on mount and when user changes
+  // Check subscription on mount and when user/auth changes
+  // CRITICAL: Only run when authLoading is false to prevent race conditions
   useEffect(() => {
+    // Wait for auth to finish loading before making any decisions
+    if (authLoading) {
+      return;
+    }
+    
     if (user) {
       checkSubscription();
     } else {
       setState({ ...initialState, isLoading: false });
     }
-  }, [user, checkSubscription]);
+  }, [user, authLoading, checkSubscription]);
 
   // Auto-refresh subscription every minute
   useEffect(() => {

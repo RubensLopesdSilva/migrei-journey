@@ -36,7 +36,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   // Check if user is exempt from payment
   const isPaymentExemptUser = user?.email && PAYMENT_EXEMPT_EMAILS.includes(user.email);
 
-  // 1. Wait for auth to load
+  // 1. Wait for auth to load FIRST - this is the foundation
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -48,7 +48,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
     );
   }
 
-  // 2. Redirect to auth if not logged in
+  // 2. Redirect to auth if not logged in (auth is done loading at this point)
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
@@ -61,7 +61,8 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
   // 4. For non-exempt routes, check subscription
   if (requireSubscription) {
     // Wait for BOTH subscription AND agent loading to complete
-    // This prevents premature redirects based on initial/stale state
+    // CRITICAL: Both hooks now properly wait for auth to finish before setting their loading to false
+    // This prevents race conditions where we redirect based on stale/initial state
     if (subLoading || agentLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
@@ -73,7 +74,7 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
       );
     }
 
-    // Now both are loaded - make decision
+    // Now ALL data is loaded - make decision based on complete state
     const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing" || isPaymentExemptUser;
     
     // No subscription? Redirect to subscribe
@@ -82,7 +83,6 @@ export function ProtectedRoute({ children, requireSubscription = true }: Protect
     }
 
     // Has subscription but no agent? Redirect to agent selection
-    // (agentLoading is already false at this point)
     if (!hasSelectedAgent) {
       return <Navigate to="/escolher-agente" replace />;
     }

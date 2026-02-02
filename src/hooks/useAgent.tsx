@@ -101,15 +101,19 @@ export function AgentProvider({ children }: { children: ReactNode }) {
     }
   }, [fetchAgents, user]);
 
-  // Initial load
+  // Initial load - CRITICAL: Only run after auth is done loading
   useEffect(() => {
     const init = async () => {
-      if (authLoading) return;
+      // Wait for auth to finish loading before making any decisions
+      if (authLoading) {
+        return;
+      }
       
       const fetchedAgents = await fetchAgents();
       if (user) {
         await fetchUserAgent(fetchedAgents);
       } else {
+        setCurrentAgent(null);
         setLoading(false);
       }
     };

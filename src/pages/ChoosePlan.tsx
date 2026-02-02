@@ -59,13 +59,36 @@ const plans = [
 
 export default function ChoosePlan() {
   const { createCheckout, isLoading: subLoading, isSubscribed, status } = useSubscription();
-  const { signOut, user } = useAuth();
+  const { signOut, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
-  // Redirect if user already has active subscription
+  // Check if user has active subscription
   const hasActiveSubscription = isSubscribed || status === "active" || status === "trialing";
+
+  // CRITICAL: Auto-redirect if user already has active subscription
+  // Must wait for both auth AND subscription to finish loading
+  if (!authLoading && !subLoading && hasActiveSubscription && !hasRedirected) {
+    setHasRedirected(true);
+    // Use setTimeout to avoid setState during render
+    setTimeout(() => {
+      navigate("/escolher-agente", { replace: true });
+    }, 0);
+  }
+
+  // Show loading while checking subscription status
+  if (authLoading || subLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Verificando sua conta...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSelectPlan = async (planSlug: string) => {
     // Check subscription status before attempting checkout

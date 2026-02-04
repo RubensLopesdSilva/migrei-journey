@@ -18,12 +18,11 @@ serve(async (req) => {
   }
 
   try {
-    logStep("Function started");
+    logStep("Function started v2");
 
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
 
-    // Validate key format - must be secret key (sk_), not publishable (pk_)
     if (stripeKey.startsWith("pk_")) {
       throw new Error("STRIPE_SECRET_KEY contains a publishable key (pk_*). Please configure a secret key (sk_live_* or sk_test_*) in Settings → Connectors → Stripe.");
     }
@@ -36,14 +35,12 @@ serve(async (req) => {
       );
     }
 
-    // Create client with user's auth context
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? "",
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    // Use getClaims to validate the JWT
     const token = authHeader.replace("Bearer ", "");
     const { data: claimsData, error: claimsError } = await supabaseClient.auth.getClaims(token);
     
@@ -67,7 +64,6 @@ serve(async (req) => {
     
     logStep("User authenticated", { userId, email: userEmail });
 
-    // Create service role client for database queries
     const serviceClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -93,7 +89,6 @@ serve(async (req) => {
         status: dbSubscription.status,
       });
 
-      // Get plan features
       const { data: features } = await serviceClient
         .from("plan_features")
         .select("feature_key, feature_value")
@@ -146,45 +141,30 @@ serve(async (req) => {
     const customerId = customers.data[0].id;
     logStep("Found Stripe customer", { customerId });
 
-    const subscriptions = await stripe.subscriptions.list({
+    // Get active or trialing subscriptions
+    let subscription: Stripe.Subscription | null = null;
+    
+    const activeSubscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
       limit: 1,
     });
 
-    if (subscriptions.data.length === 0) {
-      // Check for trialing
+    if (activeSubscriptions.data.length > 0) {
+      subscription = activeSubscriptions.data[0];
+    } else {
       const trialingSubscriptions = await stripe.subscriptions.list({
         customer: customerId,
         status: "trialing",
         limit: 1,
       });
-
-      if (trialingSubscriptions.data.length === 0) {
-        logStep("No active subscription found - defaulting to essential");
-        return new Response(
-          JSON.stringify({
-            subscribed: false,
-            status: null,
-            plan_slug: "essential",
-            plan_name: "Essencial",
-            features: {},
-          }),
-          {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-          }
-        );
+      if (trialingSubscriptions.data.length > 0) {
+        subscription = trialingSubscriptions.data[0];
       }
     }
 
-    const subscription = subscriptions.data[0] || (await stripe.subscriptions.list({
-      customer: customerId,
-      status: "trialing",
-      limit: 1,
-    })).data[0];
-
     if (!subscription) {
+      logStep("No active subscription found - defaulting to essential");
       return new Response(
         JSON.stringify({
           subscribed: false,
@@ -229,17 +209,37 @@ serve(async (req) => {
       planSlug: plan?.slug,
     });
 
+    // Convert timestamps safely - avoid Invalid Date errors
+    let subscriptionEnd: string | null = null;
+    let trialEnd: string | null = null;
+
+    try {
+      if (subscription.current_period_end && typeof subscription.current_period_end === 'number' && subscription.current_period_end > 0) {
+        subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
+      }
+    } catch (e) {
+      logStep("Warning: Could not parse subscription end date", { value: subscription.current_period_end });
+    }
+
+    try {
+      if (subscription.trial_end && typeof subscription.trial_end === 'number' && subscription.trial_end > 0) {
+        trialEnd = new Date(subscription.trial_end * 1000).toISOString();
+      }
+    } catch (e) {
+      logStep("Warning: Could not parse trial end date", { value: subscription.trial_end });
+    }
+
+    logStep("Returning subscription data v2", { subscribed: true, subscriptionEnd, trialEnd });
+
     return new Response(
       JSON.stringify({
         subscribed: true,
         status: subscription.status,
-        plan_slug: plan?.slug || "premium",
-        plan_name: plan?.name || "Premium",
-        subscription_end: new Date(subscription.current_period_end * 1000).toISOString(),
-        cancel_at_period_end: subscription.cancel_at_period_end,
-        trial_end: subscription.trial_end
-          ? new Date(subscription.trial_end * 1000).toISOString()
-          : null,
+        plan_slug: plan?.slug || "essential",
+        plan_name: plan?.name || "Essencial",
+        subscription_end: subscriptionEnd,
+        cancel_at_period_end: subscription.cancel_at_period_end || false,
+        trial_end: trialEnd,
         features: featuresMap,
       }),
       {

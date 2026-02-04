@@ -23,6 +23,11 @@ serve(async (req) => {
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
 
+    // Validate key format - must be secret key (sk_), not publishable (pk_)
+    if (stripeKey.startsWith("pk_")) {
+      throw new Error("STRIPE_SECRET_KEY contains a publishable key (pk_*). Please configure a secret key (sk_live_* or sk_test_*) in Settings → Connectors → Stripe.");
+    }
+
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",

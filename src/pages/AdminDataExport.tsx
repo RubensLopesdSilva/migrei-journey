@@ -6,14 +6,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageBreadcrumb } from "@/components/ui/page-breadcrumb";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { SQLSchemaExport } from "@/components/admin/SQLSchemaExport";
 import {
   Database,
   Users,
-  HardDrive,
   Bot,
   Calendar,
   FileText,
@@ -27,6 +28,8 @@ import {
   TrendingUp,
   Briefcase,
   Heart,
+  Code2,
+  Table,
 } from "lucide-react";
 
 // Helper function to convert data to CSV
@@ -347,89 +350,129 @@ export default function AdminDataExport() {
               Exportar Dados
             </h1>
             <p className="text-muted-foreground">
-              Exporte os dados do sistema em formato CSV organizados por categoria
+              Exporte dados em CSV ou copie os SQLs para migrar a estrutura do banco
             </p>
           </div>
 
-          {/* Export Categories Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {exportCategories.map((category) => (
-              <Card key={category.id} className="overflow-hidden">
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`h-12 w-12 rounded-xl ${category.bgColor} flex items-center justify-center`}>
-                        <category.icon className={`h-6 w-6 ${category.color}`} />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">{category.title}</CardTitle>
-                        <CardDescription>{category.description}</CardDescription>
-                      </div>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleExportAll(category)}
-                      className="shrink-0"
-                    >
-                      <Download className="h-4 w-4 mr-1" />
-                      Exportar Todos
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {category.items.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm">{item.label}</p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </p>
+          {/* Tabs */}
+          <Tabs defaultValue="csv" className="w-full">
+            <TabsList className="grid w-full max-w-md grid-cols-2">
+              <TabsTrigger value="csv" className="flex items-center gap-2">
+                <Table className="h-4 w-4" />
+                Exportar CSV
+              </TabsTrigger>
+              <TabsTrigger value="sql" className="flex items-center gap-2">
+                <Code2 className="h-4 w-4" />
+                SQL das Tabelas
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="csv" className="mt-6">
+              {/* Export Categories Grid */}
+              <div className="grid md:grid-cols-2 gap-6">
+                {exportCategories.map((category) => (
+                  <Card key={category.id} className="overflow-hidden">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`h-12 w-12 rounded-xl ${category.bgColor} flex items-center justify-center`}>
+                            <category.icon className={`h-6 w-6 ${category.color}`} />
+                          </div>
+                          <div>
+                            <CardTitle className="text-lg">{category.title}</CardTitle>
+                            <CardDescription>{category.description}</CardDescription>
+                          </div>
                         </div>
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
-                          onClick={() => handleExport(item)}
-                          disabled={loadingItems[item.id]}
-                          className="shrink-0 ml-2"
+                          onClick={() => handleExportAll(category)}
+                          className="shrink-0"
                         >
-                          {loadingItems[item.id] ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Download className="h-4 w-4" />
-                          )}
+                          <Download className="h-4 w-4 mr-1" />
+                          Exportar Todos
                         </Button>
                       </div>
-                    ))}
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        {category.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-sm">{item.label}</p>
+                              <p className="text-xs text-muted-foreground truncate">
+                                {item.description}
+                              </p>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleExport(item)}
+                              disabled={loadingItems[item.id]}
+                              className="shrink-0 ml-2"
+                            >
+                              {loadingItems[item.id] ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                <Download className="h-4 w-4" />
+                              )}
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Info Card */}
+              <Card className="bg-muted/30 border-dashed mt-6">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Informações sobre Exportação</h3>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Os arquivos são exportados em formato CSV compatível com Excel</li>
+                        <li>• Dados sensíveis como senhas e tokens não são incluídos</li>
+                        <li>• O limite máximo por exportação é de 50.000 registros</li>
+                        <li>• Os arquivos incluem a data de exportação no nome</li>
+                      </ul>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
+            </TabsContent>
 
-          {/* Info Card */}
-          <Card className="bg-muted/30 border-dashed">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-4">
-                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-semibold mb-1">Informações sobre Exportação</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Os arquivos são exportados em formato CSV compatível com Excel</li>
-                    <li>• Dados sensíveis como senhas e tokens não são incluídos</li>
-                    <li>• O limite máximo por exportação é de 50.000 registros</li>
-                    <li>• Os arquivos incluem a data de exportação no nome</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            <TabsContent value="sql" className="mt-6">
+              <SQLSchemaExport />
+              
+              {/* SQL Info Card */}
+              <Card className="bg-muted/30 border-dashed mt-6">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="h-10 w-10 rounded-full bg-violet-500/10 flex items-center justify-center shrink-0">
+                      <Code2 className="h-5 w-5 text-violet-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">Sobre os SQLs</h3>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• Os comandos CREATE TABLE recriam a estrutura das tabelas</li>
+                        <li>• Inclui definições de tipos (ENUM), políticas RLS e constraints</li>
+                        <li>• Execute os comandos na ordem correta (tabelas base antes das dependentes)</li>
+                        <li>• Adapte as foreign keys conforme necessário no novo ambiente</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </PageContent>
     </PageLayout>

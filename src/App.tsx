@@ -28,6 +28,7 @@ import AdminSupport from "./pages/AdminSupport";
 import AdminNewsletter from "./pages/AdminNewsletter";
 import AdminBlog from "./pages/AdminBlog";
 import AdminBlogEditor from "./pages/AdminBlogEditor";
+import AdminDataExport from "./pages/AdminDataExport";
 import Progress from "./pages/Progress";
 import PositioningAcademy from "./pages/PositioningAcademy";
 import Fase1Despertar from "./pages/Fase1Despertar";
@@ -90,6 +91,7 @@ const App = () => (
                       <Route path="/admin/newsletter" element={<ProtectedRoute><AdminNewsletter /></ProtectedRoute>} />
                       <Route path="/admin/blog" element={<ProtectedRoute><AdminBlog /></ProtectedRoute>} />
                       <Route path="/admin/blog/:id" element={<ProtectedRoute><AdminBlogEditor /></ProtectedRoute>} />
+                      <Route path="/admin/exportar" element={<ProtectedRoute><AdminDataExport /></ProtectedRoute>} />
                       <Route path="/progresso" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                       <Route path="/suporte" element={<ProtectedRoute><Support /></ProtectedRoute>} />
                       <Route path="/networking" element={<ProtectedRoute><PositioningAcademy /></ProtectedRoute>} />

@@ -18,6 +18,7 @@ import {
   Headphones,
   Mail,
   FileText,
+  Database,
 } from "lucide-react";
 
 const adminModules = [
@@ -44,6 +45,14 @@ const adminModules = [
     href: "/admin/newsletter",
     color: "text-rose-600",
     bgColor: "bg-rose-500/10",
+  },
+  {
+    icon: Database,
+    title: "Exportar Dados",
+    description: "Exporte dados do sistema em CSV",
+    href: "/admin/exportar",
+    color: "text-cyan-600",
+    bgColor: "bg-cyan-500/10",
   },
   {
     icon: UserCog,
